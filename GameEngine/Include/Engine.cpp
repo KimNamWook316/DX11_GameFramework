@@ -1,13 +1,17 @@
 #include "Engine.h"
+#include "Device.h"
 
 DEFINITION_SINGLE(CEngine)
 
 bool CEngine::mLoop = true;
 
 CEngine::CEngine() {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(100);
 }
 
 CEngine::~CEngine() {
+	CDevice::DestroyInst();
 }
 
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* name, unsigned int width, 
@@ -20,6 +24,18 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* name, unsigned int width,
 	Register(name, iconID);
 	Create(name);
 
+	return Init(hInst, mhWnd, width, height, windowMode);
+}
+
+bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int height, bool windowMode) {
+	mhInst = hInst;
+
+	mRS.Width = width;
+	mRS.Height = height;
+
+	if (!CDevice::GetInst()->Init(mhWnd, width, height, windowMode)) {
+		return false;
+	}
 	return true;
 }
 

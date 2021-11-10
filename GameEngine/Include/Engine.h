@@ -7,6 +7,9 @@ public:
 	bool Init(HINSTANCE hInst, const TCHAR* name, 
 		unsigned int width, unsigned int height, int iconID, 
 		bool windowMode = true);
+
+	bool Init(HINSTANCE hInst, HWND hWnd, unsigned int Width,
+		unsigned int height, bool windowMode = true);
 	
 	int Run();
 
