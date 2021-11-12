@@ -2,7 +2,8 @@
 
 #include "GameInfo.h"
 
-class CEngine {
+class CEngine 
+{
 public:
 	bool Init(HINSTANCE hInst, const TCHAR* name, 
 		unsigned int width, unsigned int height, int iconID, 
@@ -12,6 +13,12 @@ public:
 		unsigned int height, bool windowMode = true);
 	
 	int Run();
+	void Logic();
+
+private:
+	bool update(float deltaTime);
+	bool postUpdate(float deltaTime);
+	bool render(float deltaTime);
 
 private:
 	ATOM Register(const TCHAR* name, int iconID);
@@ -25,5 +32,6 @@ private:
 	HINSTANCE	mhInst;
 	HWND		mhWnd;
 	Resolution	mRS;
+	float		mClearColor[4];
 };
 

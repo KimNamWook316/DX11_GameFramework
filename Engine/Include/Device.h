@@ -2,9 +2,14 @@
 
 #include "GameInfo.h"
 
-class CDevice {
+class CDevice 
+{
 public:
 	bool Init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode);
+	void ClearRenderTarget(float clearColor[4]);
+	void ClearDepthStencil(float depth, unsigned char stencil);
+	void RenderStart();
+	void Flip();
 	DECLARE_SINGLE(CDevice)
 
 private:

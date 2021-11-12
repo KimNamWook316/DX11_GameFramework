@@ -5,17 +5,21 @@ DEFINITION_SINGLE(CEngine)
 
 bool CEngine::mLoop = true;
 
-CEngine::CEngine() {
+CEngine::CEngine() 
+	:mClearColor{}
+{
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(100);
 }
 
-CEngine::~CEngine() {
+CEngine::~CEngine() 
+{
 	CDevice::DestroyInst();
 }
 
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* name, unsigned int width, 
-	unsigned int height, int iconID, bool windowMode) {
+	unsigned int height, int iconID, bool windowMode) 
+{
 	mhInst = hInst;
 
 	mRS.Width = width;
@@ -27,22 +31,26 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* name, unsigned int width,
 	return Init(hInst, mhWnd, width, height, windowMode);
 }
 
-bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int height, bool windowMode) {
+bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int height, bool windowMode) 
+{
 	mhInst = hInst;
 
 	mRS.Width = width;
 	mRS.Height = height;
 
-	if (!CDevice::GetInst()->Init(mhWnd, width, height, windowMode)) {
+	if (!CDevice::GetInst()->Init(mhWnd, width, height, windowMode)) 
+	{
 		return false;
 	}
 	return true;
 }
 
-int CEngine::Run() {
+int CEngine::Run() 
+{
 	MSG msg;
 
-	while (mLoop) {
+	while (mLoop) 
+	{
 		// GetMessage는 메세지가 없을 경우 다른일을 할 수 없다.
 		// 메세지가 올때까지 대기하고 있는 시간을 윈도우의 데드타임이라고 한다.
 		// 실제로 메세지가 있는 시간보다 없는 시간이 훨씬 길다.
@@ -50,7 +58,8 @@ int CEngine::Run() {
 		// PeekMessage는 메세지큐에서 메세지를 얻어온다.
 		// 그런데 만약 메세지가 없다면 false를 리턴하면서 바로 빠져나오고
 		// 메세지가 있다면 true를 리턴하면서 해당 메세지를 꺼내온다.
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) 
+		{
 			// WM_KEYDOWN 이라는 메세지가 있다. 이는 키보드 키를 눌렀을때 발생되는 메세지
 			// 이다. TranslateMessage 함수에서는 메세지를 전달해주면 WM_KEYDOWN 인지를
 			// 판단해주고 눌려진 키가 문자 키인지를 판단해서 일반 무자 키라면 WM_CHAR라는
@@ -62,14 +71,45 @@ int CEngine::Run() {
 		}
 
 		// 윈도우가 데드타임일 경우 여기로 들어오게 된다.
-		else {
+		else 
+		{
+			Logic();
 		}
 	}
 
 	return (int)msg.wParam;
 }
 
-ATOM CEngine::Register(const TCHAR* name, int iconID) {
+void CEngine::Logic()
+{
+	update(0.f);
+	postUpdate(0.f);
+	render(0.f);
+}
+
+bool CEngine::update(float deltaTime)
+{
+	return false;
+}
+
+bool CEngine::postUpdate(float deltaTime)
+{
+	return false;
+}
+
+bool CEngine::render(float deltaTime)
+{
+	CDevice::GetInst()->RenderStart();
+	CDevice::GetInst()->ClearRenderTarget(mClearColor);
+	CDevice::GetInst()->ClearDepthStencil(1.f, 0);
+	
+	CDevice::GetInst()->Flip();
+
+	return false;
+}
+
+ATOM CEngine::Register(const TCHAR* name, int iconID) 
+{
 	WNDCLASSEXW wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -102,7 +142,8 @@ ATOM CEngine::Register(const TCHAR* name, int iconID) {
 	return RegisterClassExW(&wcex);
 }
 
-BOOL CEngine::Create(const TCHAR* name) {
+BOOL CEngine::Create(const TCHAR* name) 
+{
 	mhWnd = CreateWindowW(name, name, WS_OVERLAPPEDWINDOW,
 		0, 0, mRS.Width, mRS.Height, nullptr, nullptr, mhInst, nullptr);
 
@@ -136,7 +177,8 @@ BOOL CEngine::Create(const TCHAR* name) {
 	return TRUE;
 }
 
-LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
 	switch (message)
 	{
 	case WM_PAINT:

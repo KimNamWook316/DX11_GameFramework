@@ -37,7 +37,8 @@ private:\
 
 #define DEFINITION_SINGLE(Type) Type* Type::mInst = nullptr;
 
-struct Resolution {
+struct Resolution 
+{
 	unsigned int Width;
 	unsigned int Height;
 };

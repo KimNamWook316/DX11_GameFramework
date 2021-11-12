@@ -19,6 +19,9 @@
     <Filter Include="01.Engine\01.Device">
       <UniqueIdentifier>{67fd4375-569e-4a44-aa17-65690d63fac4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Math">
+      <UniqueIdentifier>{858a5b89-90c4-4b3a-97e1-6c2ad5b4d7b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -30,6 +33,12 @@
     <ClInclude Include="Device.h">
       <Filter>01.Engine\01.Device</Filter>
     </ClInclude>
+    <ClInclude Include="EngineMath.h">
+      <Filter>02.Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>02.Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -37,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="Device.cpp">
       <Filter>01.Engine\01.Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>02.Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
