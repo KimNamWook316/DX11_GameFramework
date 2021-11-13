@@ -22,10 +22,17 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineMath.h" />
+    <ClInclude Include="Flag.h" />
     <ClInclude Include="GameInfo.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Vector2.cpp" />

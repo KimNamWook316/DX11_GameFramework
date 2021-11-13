@@ -39,6 +39,18 @@
     <ClInclude Include="Vector2.h">
       <Filter>02.Math</Filter>
     </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>02.Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>02.Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>02.Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Flag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -48,6 +60,15 @@
       <Filter>01.Engine\01.Device</Filter>
     </ClCompile>
     <ClCompile Include="Vector2.cpp">
+      <Filter>02.Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>02.Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector4.cpp">
+      <Filter>02.Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
       <Filter>02.Math</Filter>
     </ClCompile>
   </ItemGroup>

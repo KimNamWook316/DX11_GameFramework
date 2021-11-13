@@ -16,6 +16,11 @@
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix.h"
+
 #define SAFE_DELETE(p)  if(p) { delete p; p = nullptr; }
 #define SAFE_RELEASE(p) if(p) { p->Release(); p = nullptr; }
 
