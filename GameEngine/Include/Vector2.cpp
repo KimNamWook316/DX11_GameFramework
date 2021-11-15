@@ -1,6 +1,6 @@
 #include "Vector2.h"
 
-Vector2::Vector2()	:
+Vector2::Vector2() :
 	x(0.f),
 	y(0.f)
 {
@@ -12,15 +12,13 @@ Vector2::Vector2(float _x, float _y) :
 {
 }
 
-Vector2::Vector2(const Vector2& v)	:
+Vector2::Vector2(const Vector2& v) :
 	x(v.x),
 	y(v.y)
 {
 }
 
 Vector2::Vector2(const XMVECTOR& v)
-	: x(0.f)
-	, y(0.f)
 {
 	XMStoreFloat2((XMFLOAT2*)this, v);
 }
@@ -44,7 +42,7 @@ Vector2& Vector2::operator=(float f)
 {
 	x = f;
 	y = f;
-	
+
 	return *this;
 }
 
@@ -107,31 +105,25 @@ Vector2 Vector2::operator+(const float f) const
 }
 
 // +=
-Vector2 Vector2::operator+=(const Vector2& v)
+void Vector2::operator+=(const Vector2& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 + v2);
-
-	return *this;
 }
 
-Vector2 Vector2::operator+=(const XMVECTOR& v)
+void Vector2::operator+=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 + v);
-
-	return *this;
 }
 
-Vector2 Vector2::operator+=(const float f)
+void Vector2::operator+=(const float f)
 {
 	x += f;
 	y += f;
-
-	return *this;
 }
 
 // -
@@ -154,31 +146,25 @@ Vector2 Vector2::operator-(const float f) const
 }
 
 // -=
-Vector2 Vector2::operator-=(const Vector2& v)
+void Vector2::operator-=(const Vector2& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 - v2);
-
-	return *this;
 }
 
-Vector2 Vector2::operator-=(const XMVECTOR& v)
+void Vector2::operator-=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 - v);
-
-	return *this;
 }
 
-Vector2 Vector2::operator-=(const float f)
+void Vector2::operator-=(const float f)
 {
 	x -= f;
 	y -= f;
-
-	return *this;
 }
 
 // *
@@ -201,31 +187,25 @@ Vector2 Vector2::operator*(const float f) const
 }
 
 // *=
-Vector2 Vector2::operator*=(const Vector2& v)
+void Vector2::operator*=(const Vector2& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 * v2);
-
-	return *this;
 }
 
-Vector2 Vector2::operator*=(const XMVECTOR& v)
+void Vector2::operator*=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 * v);
-
-	return *this;
 }
 
-Vector2 Vector2::operator*=(const float f)
+void Vector2::operator*=(const float f)
 {
 	x *= f;
 	y *= f;
-
-	return *this;
 }
 
 // /
@@ -248,34 +228,28 @@ Vector2 Vector2::operator/(const float f) const
 }
 
 // /=
-Vector2 Vector2::operator/=(const Vector2& v)
+void Vector2::operator/=(const Vector2& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 / v2);
-
-	return *this;
 }
 
-Vector2 Vector2::operator/=(const XMVECTOR& v)
+void Vector2::operator/=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 / v);
-
-	return *this;
 }
 
-Vector2 Vector2::operator/=(const float f)
+void Vector2::operator/=(const float f)
 {
 	x /= f;
 	y /= f;
-
-	return *this;
 }
 
-Vector2 Vector2::operator++()
+const Vector2& Vector2::operator++()
 {
 	x += 1.f;
 	y += 1.f;
@@ -283,7 +257,7 @@ Vector2 Vector2::operator++()
 	return *this;
 }
 
-Vector2 Vector2::operator++(int)
+const Vector2& Vector2::operator++(int)
 {
 	x += 1.f;
 	y += 1.f;
@@ -291,7 +265,7 @@ Vector2 Vector2::operator++(int)
 	return *this;
 }
 
-Vector2 Vector2::operator--()
+const Vector2& Vector2::operator--()
 {
 	x -= 1.f;
 	y -= 1.f;
@@ -299,7 +273,7 @@ Vector2 Vector2::operator--()
 	return *this;
 }
 
-Vector2 Vector2::operator--(int)
+const Vector2& Vector2::operator--(int)
 {
 	x -= 1.f;
 	y -= 1.f;
@@ -327,6 +301,11 @@ void Vector2::Normalize()
 float Vector2::Dot(const Vector2& v) const
 {
 	return XMVectorGetX(XMVector2Dot(Convert(), v.Convert()));
+}
+
+float Vector2::Angle(const Vector2& v) const
+{
+	return 0.0f;
 }
 
 

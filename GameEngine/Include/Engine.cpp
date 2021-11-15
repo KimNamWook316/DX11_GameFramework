@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Device.h"
+#include "Resource/ResourceManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -14,6 +15,7 @@ CEngine::CEngine()
 
 CEngine::~CEngine() 
 {
+	CResourceManager::DestroyInst();
 	CDevice::DestroyInst();
 }
 
@@ -38,7 +40,15 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int 
 	mRS.Width = width;
 	mRS.Height = height;
 
+	// Device 초기화
 	if (!CDevice::GetInst()->Init(mhWnd, width, height, windowMode)) 
+	{
+		return false;
+	}
+	return true;
+
+	// 리소스 관리자 초기화
+	if (!CResourceManager::GetInst()->Init())
 	{
 		return false;
 	}

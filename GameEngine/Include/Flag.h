@@ -7,3 +7,9 @@ enum AXIS
 	AXIS_Z,
 	AXIS_MAX
 };
+
+enum class Buffer_Type
+{
+	VERTEX,
+	INDEX,
+};

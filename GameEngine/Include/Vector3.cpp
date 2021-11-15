@@ -31,9 +31,6 @@ Vector3::Vector3(const Vector3& v) :
 }
 
 Vector3::Vector3(const XMVECTOR& v)
-	: x(0.f)
-	, y(0.f)
-	, z(0.f)
 {
 	XMStoreFloat3((XMFLOAT3*)this, v);
 }
@@ -125,32 +122,26 @@ Vector3 Vector3::operator+(const float f) const
 }
 
 // +=
-Vector3 Vector3::operator+=(const Vector3& v)
+void Vector3::operator+=(const Vector3& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 + v2);
-
-	return *this;
 }
 
-Vector3 Vector3::operator+=(const XMVECTOR& v)
+void Vector3::operator+=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 + v);
-
-	return *this;
 }
 
-Vector3 Vector3::operator+=(const float f)
+void Vector3::operator+=(const float f)
 {
 	x += f;
 	y += f;
 	z += f;
-
-	return *this;
 }
 
 // -
@@ -173,32 +164,26 @@ Vector3 Vector3::operator-(const float f) const
 }
 
 // -=
-Vector3 Vector3::operator-=(const Vector3& v)
+void Vector3::operator-=(const Vector3& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 - v2);
-
-	return *this;
 }
 
-Vector3 Vector3::operator-=(const XMVECTOR& v)
+void Vector3::operator-=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 - v);
-
-	return *this;
 }
 
-Vector3 Vector3::operator-=(const float f)
+void Vector3::operator-=(const float f)
 {
 	x -= f;
 	y -= f;
 	z -= f;
-
-	return *this;
 }
 
 // *
@@ -221,32 +206,26 @@ Vector3 Vector3::operator*(const float f) const
 }
 
 // *=
-Vector3 Vector3::operator*=(const Vector3& v)
+void Vector3::operator*=(const Vector3& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 * v2);
-
-	return *this;
 }
 
-Vector3 Vector3::operator*=(const XMVECTOR& v)
+void Vector3::operator*=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 * v);
-
-	return *this;
 }
 
-Vector3 Vector3::operator*=(const float f)
+void Vector3::operator*=(const float f)
 {
 	x *= f;
 	y *= f;
 	z *= f;
-
-	return *this;
 }
 
 // /
@@ -269,35 +248,29 @@ Vector3 Vector3::operator/(const float f) const
 }
 
 // /=
-Vector3 Vector3::operator/=(const Vector3& v)
+void Vector3::operator/=(const Vector3& v)
 {
 	XMVECTOR	v1 = Convert();
 	XMVECTOR	v2 = v.Convert();
 
 	Convert(v1 / v2);
-
-	return *this;
 }
 
-Vector3 Vector3::operator/=(const XMVECTOR& v)
+void Vector3::operator/=(const XMVECTOR& v)
 {
 	XMVECTOR	v1 = Convert();
 
 	Convert(v1 / v);
-
-	return *this;
 }
 
-Vector3 Vector3::operator/=(const float f)
+void Vector3::operator/=(const float f)
 {
 	x /= f;
 	y /= f;
 	z /= f;
-
-	return *this;
 }
 
-Vector3 Vector3::operator++()
+const Vector3& Vector3::operator++()
 {
 	x += 1.f;
 	y += 1.f;
@@ -306,7 +279,7 @@ Vector3 Vector3::operator++()
 	return *this;
 }
 
-Vector3 Vector3::operator++(int)
+const Vector3& Vector3::operator++(int)
 {
 	x += 1.f;
 	y += 1.f;
@@ -315,7 +288,7 @@ Vector3 Vector3::operator++(int)
 	return *this;
 }
 
-Vector3 Vector3::operator--()
+const Vector3& Vector3::operator--()
 {
 	x -= 1.f;
 	y -= 1.f;
@@ -324,7 +297,7 @@ Vector3 Vector3::operator--()
 	return *this;
 }
 
-Vector3 Vector3::operator--(int)
+const Vector3& Vector3::operator--(int)
 {
 	x -= 1.f;
 	y -= 1.f;

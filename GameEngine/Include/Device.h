@@ -10,6 +10,27 @@ public:
 	void ClearDepthStencil(float depth, unsigned char stencil);
 	void RenderStart();
 	void Flip();
+
+	ID3D11Device* GetDevice() const
+	{
+		return mDevice;
+	}
+
+	ID3D11DeviceContext* GetContext() const
+	{
+		return mContext;
+	}
+
+	IDXGISwapChain* GetSwapChain() const
+	{
+		return mSwapChain;
+	}
+
+	Resolution GetResolution() const
+	{
+		return mRS;
+	}
+
 	DECLARE_SINGLE(CDevice)
 
 private:

@@ -9,67 +9,102 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="02. Resource">
+      <UniqueIdentifier>{99faa599-42c4-4b97-83d8-86c46ca85dd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Engine">
+    <Filter Include="02. Resource\01. Mesh">
+      <UniqueIdentifier>{f265b4a1-8555-4a36-88ba-a04f352f3807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine">
       <UniqueIdentifier>{9a85e0a0-1552-493d-9589-0b5db72e310c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Engine\01.Device">
+    <Filter Include="01. Engine\01. Device">
       <UniqueIdentifier>{67fd4375-569e-4a44-aa17-65690d63fac4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Math">
+    <Filter Include="01. Engine\02. Math">
       <UniqueIdentifier>{858a5b89-90c4-4b3a-97e1-6c2ad5b4d7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\03. Ref">
+      <UniqueIdentifier>{9891849e-4729-4f23-94dc-4973eb60c83b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\04. SharedPtr">
+      <UniqueIdentifier>{3d6fd3f5-a99c-41d9-a843-ccd933788f6b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
-      <Filter>01.Engine</Filter>
+      <Filter>01. Engine</Filter>
     </ClInclude>
     <ClInclude Include="GameInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Device.h">
-      <Filter>01.Engine\01.Device</Filter>
+      <Filter>01. Engine\01. Device</Filter>
     </ClInclude>
     <ClInclude Include="EngineMath.h">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClInclude>
     <ClInclude Include="Vector3.h">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClInclude>
     <ClInclude Include="Vector4.h">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.h">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClInclude>
     <ClInclude Include="Flag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ref.h">
+      <Filter>01. Engine\03. Ref</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedPtr.h">
+      <Filter>01. Engine\04. SharedPtr</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\ResourceManager.h">
+      <Filter>02. Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\CSpriteMesh.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
-      <Filter>01.Engine</Filter>
+      <Filter>01. Engine</Filter>
     </ClCompile>
     <ClCompile Include="Device.cpp">
-      <Filter>01.Engine\01.Device</Filter>
+      <Filter>01. Engine\01. Device</Filter>
     </ClCompile>
     <ClCompile Include="Vector2.cpp">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClCompile>
     <ClCompile Include="Vector3.cpp">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClCompile>
     <ClCompile Include="Vector4.cpp">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
-      <Filter>02.Math</Filter>
+      <Filter>01. Engine\02. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Ref.cpp">
+      <Filter>01. Engine\03. Ref</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\ResourceManager.cpp">
+      <Filter>02. Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\CSpriteMesh.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

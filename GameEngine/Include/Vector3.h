@@ -30,9 +30,9 @@ struct Vector3
 	Vector3 operator + (const float f)	const;
 
 	// operator +=
-	Vector3 operator += (const Vector3& v);
-	Vector3 operator += (const XMVECTOR& v);
-	Vector3 operator += (const float f);
+	void operator += (const Vector3& v);
+	void operator += (const XMVECTOR& v);
+	void operator += (const float f);
 
 	// operator -
 	Vector3 operator - (const Vector3& v)	const;
@@ -40,9 +40,9 @@ struct Vector3
 	Vector3 operator - (const float f)	const;
 
 	// operator -=
-	Vector3 operator -= (const Vector3& v);
-	Vector3 operator -= (const XMVECTOR& v);
-	Vector3 operator -= (const float f);
+	void operator -= (const Vector3& v);
+	void operator -= (const XMVECTOR& v);
+	void operator -= (const float f);
 
 	// operator *
 	Vector3 operator * (const Vector3& v)	const;
@@ -50,9 +50,9 @@ struct Vector3
 	Vector3 operator * (const float f)	const;
 
 	// operator *=
-	Vector3 operator *= (const Vector3& v);
-	Vector3 operator *= (const XMVECTOR& v);
-	Vector3 operator *= (const float f);
+	void operator *= (const Vector3& v);
+	void operator *= (const XMVECTOR& v);
+	void operator *= (const float f);
 
 	// operator /
 	Vector3 operator / (const Vector3& v)	const;
@@ -60,17 +60,17 @@ struct Vector3
 	Vector3 operator / (const float f)	const;
 
 	// operator /=
-	Vector3 operator /= (const Vector3& v);
-	Vector3 operator /= (const XMVECTOR& v);
-	Vector3 operator /= (const float f);
+	void operator /= (const Vector3& v);
+	void operator /= (const XMVECTOR& v);
+	void operator /= (const float f);
 
 	// operator ++
-	Vector3 operator ++ ();
-	Vector3 operator ++ (int);
+	const Vector3& operator ++ ();
+	const Vector3& operator ++ (int);
 
 	// operator --
-	Vector3 operator -- ();
-	Vector3 operator -- (int);
+	const Vector3& operator -- ();
+	const Vector3& operator -- (int);
 
 	float Length()	const;
 	float Distance(const Vector3& v)	const;
