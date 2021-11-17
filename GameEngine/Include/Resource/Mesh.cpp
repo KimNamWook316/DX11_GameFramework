@@ -14,7 +14,7 @@ bool CMesh::Init()
 	return true;
 }
 
-// void* 형태로 data를 받아서, 데이터 형식에 구애받지 않고 받을 수 있다. ( 다양한 Vertex구조체의 배열 형태로 전해짐 )
+// void* 형태로 data를 받아서, 데이터 형식에 구애받지 않고 받을 수 있다. ( 다양한 배열 형태로 전해짐 )
 bool CMesh::CreateBuffer(Buffer_Type eType, void* data, int size, 
 	int count, D3D11_USAGE usage, ID3D11Buffer** buffer)
 {
@@ -110,7 +110,6 @@ void CMesh::Render()
 
 	for (size_t i = 0; i < size; ++i)
 	{
-		
 		unsigned int	stride = mVecContainer[i].VB.Size;	// 데이터 간의 거리 : Vertex 자체의 크기
 		unsigned int	offset = 0;							// 시작점
 

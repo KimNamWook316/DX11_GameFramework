@@ -12,7 +12,7 @@ public:
 
 	CSharedPtr(T* ptr)
 	{
-		mPtr = Ptr;
+		mPtr = ptr;
 
 		if (mPtr)
 		{
@@ -76,7 +76,7 @@ public:
 
 	bool operator == (const CSharedPtr<T>& ptr) const
 	{
-		return mPtr == ptr;
+		return mPtr == ptr.mPtr;
 	}
 
 	bool operator != (T* ptr) const
@@ -86,7 +86,7 @@ public:
 
 	bool operator != (const CSharedPtr<T>& ptr) const
 	{
-		return mPtr != ptr;
+		return mPtr != ptr.mPtr;
 	}
 
 	// type cast operator : T* 형으로 형변환 될 때

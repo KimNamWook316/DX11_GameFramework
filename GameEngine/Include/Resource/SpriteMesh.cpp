@@ -1,4 +1,4 @@
-#include "CSpriteMesh.h"
+#include "SpriteMesh.h"
 
 CSpriteMesh::CSpriteMesh()
 {
@@ -23,17 +23,25 @@ bool CSpriteMesh::Init()
 	{
 		// 카메라가 없는 경우, 기본적으로 ViewPort의 맨 왼쪽은 -1, 맨 오른쪽은 1, 아래는 -1, 위는 1로 설정된다.
 		VertexColor(Vector3(-0.5f, 0.5f, 0.f), Vector4::Red),
-		VertexColor(Vector3(0.5f, 0.5f, 0.f), Vector4::Red),
-		VertexColor(Vector3(-0.5f, -0.5f, 0.f), Vector4::Red),
+		VertexColor(Vector3(0.5f, 0.5f, 0.f), Vector4::Green),
+		VertexColor(Vector3(-0.5f, -0.5f, 0.f), Vector4::Blue),
 		VertexColor(Vector3(0.5f, -0.5f, 0.f), Vector4(1.f, 0.f, 1.f, 1.f)),
 	};
 
+	// Vertex Buffer 생성
+	if (!CreateBuffer(Buffer_Type::VERTEX, vtx, sizeof(VertexColor),
+		4, D3D11_USAGE_IMMUTABLE, &container.VB.Buffer))
+	{
+		return false;
+	}
+
 	IndexBuffer idxBuffer;
 
-	// 삼각형 두 개로 사각형을 만들 것이기 때문
+	// 버퍼 요소 하나의 byte수. R16_UINT == 2byte
 	idxBuffer.Size = 2;
 	idxBuffer.Count = 6;
-	idxBuffer.Fmt = DXGI_FORMAT_R16_UINT; // 2byte 크기, 4byte형으로 하면 억단위의 인덱스를 저장할 수 있지만, 흔치 않다.
+	// 2byte 크기, 메쉬의 인덱스 개수가 많은 경우 4byte로 할당하는 경우도 있다.
+	idxBuffer.Fmt = DXGI_FORMAT_R16_UINT; 
 
 	// 그리기 순서 설정
 	unsigned short idx[6] = { 0,1,3,0,3,2 };
@@ -46,5 +54,8 @@ bool CSpriteMesh::Init()
 	}
 
 	container.vecIB.push_back(idxBuffer);
+
+	mVecContainer.push_back(container);
+
 	return true;
 }

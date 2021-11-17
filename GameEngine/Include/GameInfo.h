@@ -20,6 +20,10 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix.h"
+#include "SharedPtr.h"
+
+#define ROOT_PATH		"Root"
+#define SHADER_PATH		"Shader"
 
 #define SAFE_DELETE(p)  if(p) { delete p; p = nullptr; }
 #define SAFE_RELEASE(p) if(p) { p->Release(); p = nullptr; }
