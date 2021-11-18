@@ -5,6 +5,8 @@
 
 class CComputeShader : public CShader
 {
+	friend class CShaderManager;
+
 protected:
 	CComputeShader();
 	virtual ~CComputeShader() = 0;

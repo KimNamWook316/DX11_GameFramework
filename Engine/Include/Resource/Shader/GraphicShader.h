@@ -4,6 +4,8 @@
 
 class CGraphicShader : public CShader
 {
+	friend class CShaderManager;
+
 protected:
 	CGraphicShader();
 	virtual ~CGraphicShader() = 0;

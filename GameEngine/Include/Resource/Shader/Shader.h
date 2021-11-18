@@ -4,6 +4,8 @@
 
 class CShader : public CRef
 {
+	friend class CShaderManager;
+
 public:
 	virtual bool Init() = 0;
 	virtual void SetShader() = 0;

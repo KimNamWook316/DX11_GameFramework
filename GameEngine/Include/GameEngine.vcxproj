@@ -24,30 +24,46 @@
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="GameInfo.h" />
+    <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="Ref.h" />
+    <ClInclude Include="Resource\Mesh\Mesh.h" />
+    <ClInclude Include="Resource\Mesh\MeshManager.h" />
+    <ClInclude Include="Resource\Mesh\SpriteMesh.h" />
+    <ClInclude Include="Resource\Shader\ColorMeshShader.h" />
     <ClInclude Include="Resource\Shader\ComputeShader.h" />
     <ClInclude Include="Resource\Shader\GraphicShader.h" />
     <ClInclude Include="Resource\Shader\Shader.h" />
-    <ClInclude Include="Resource\SpriteMesh.h" />
-    <ClInclude Include="Resource\Mesh.h" />
     <ClInclude Include="Resource\ResourceManager.h" />
+    <ClInclude Include="Resource\Shader\ShaderManager.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\SceneMode.h" />
     <ClInclude Include="SharedPtr.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="Ref.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Resource\Mesh\Mesh.cpp" />
+    <ClCompile Include="Resource\Mesh\MeshManager.cpp" />
+    <ClCompile Include="Resource\Mesh\SpriteMesh.cpp" />
+    <ClCompile Include="Resource\Shader\ColorMeshShader.cpp" />
     <ClCompile Include="Resource\Shader\ComputeShader.cpp" />
     <ClCompile Include="Resource\Shader\GraphicShader.cpp" />
     <ClCompile Include="Resource\Shader\Shader.cpp" />
-    <ClCompile Include="Resource\SpriteMesh.cpp" />
-    <ClCompile Include="Resource\Mesh.cpp" />
     <ClCompile Include="Resource\ResourceManager.cpp" />
+    <ClCompile Include="Resource\Shader\ShaderManager.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\SceneMode.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Device.cpp" />
@@ -63,7 +79,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Bin\ColorMesh.fx">
+    <Text Include="..\..\exclude.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\ColorMesh.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ColorMeshVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -77,7 +96,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderInfo.fx">
+    <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

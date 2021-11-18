@@ -1,20 +1,28 @@
 #include "Engine.h"
 #include "Device.h"
 #include "Resource/ResourceManager.h"
+#include "Scene/SceneManager.h"
+#include "PathManager.h"
+#include "Timer.h"
+//#include "Resource/Mesh/Mesh.h";
+//#include "Resource/Shader/Shader.h"
 
 DEFINITION_SINGLE(CEngine)
 
 bool CEngine::mLoop = true;
 
 CEngine::CEngine() 
-	:mClearColor{}
+	: mClearColor{}
+	, mTimer(nullptr)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(100);
+	//_CrtSetBreakAlloc(243);
 }
 
 CEngine::~CEngine() 
 {
+	CSceneManager::DestroyInst();
+	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
 	CDevice::DestroyInst();
 }
@@ -40,18 +48,32 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int 
 	mRS.Width = width;
 	mRS.Height = height;
 
+	mTimer = new CTimer;
+
 	// Device 초기화
 	if (!CDevice::GetInst()->Init(mhWnd, width, height, windowMode)) 
 	{
 		return false;
 	}
-	return true;
+
+
+	if (!CPathManager::GetInst()->Init())
+	{
+		return false;
+	}
 
 	// 리소스 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
 	{
 		return false;
 	}
+
+	// Scene Manager
+	if (!CSceneManager::GetInst()->Init())
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -92,9 +114,19 @@ int CEngine::Run()
 
 void CEngine::Logic()
 {
-	update(0.f);
-	postUpdate(0.f);
-	render(0.f);
+	mTimer->Update();
+
+	float deltaTime = mTimer->GetDeltaTIme();
+
+	if (update(deltaTime))
+	{
+		return;
+	}
+	if (postUpdate(deltaTime))
+	{
+		return;
+	}
+	render(deltaTime);
 }
 
 bool CEngine::update(float deltaTime)
@@ -112,6 +144,12 @@ bool CEngine::render(float deltaTime)
 	CDevice::GetInst()->RenderStart();
 	CDevice::GetInst()->ClearRenderTarget(mClearColor);
 	CDevice::GetInst()->ClearDepthStencil(1.f, 0);
+
+	//CMesh* mesh = CResourceManager::GetInst()->FindMesh("SpriteMesh");
+	//CShader* shader = CResourceManager::GetInst()->FindShader("ColorMeshShader");
+
+	//shader->SetShader();
+	//mesh->Render();
 	
 	CDevice::GetInst()->Flip();
 

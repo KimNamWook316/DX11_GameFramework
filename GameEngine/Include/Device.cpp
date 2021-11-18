@@ -68,20 +68,19 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 		return false;
 	}
 
-	// 2. 백버퍼 생성
 	// SwapChain이 가지고 있는 BackBuffer를 얻어온다.
 	ID3D11Texture2D* backBuffer = nullptr;
 
 	mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
 
-	// 3. 렌더타겟뷰 생성
+	// 2. 렌더타겟뷰 생성
 	// BackBuffer와 연결된 RenderTargetView를 생성한다. 
 	mDevice->CreateRenderTargetView(backBuffer, nullptr, &mTargetView);
 
 	// GetBuffer에서 Ref Count 하나 증가시키므로, Release해준다.
 	SAFE_RELEASE(backBuffer);
 
-	// 4. 깊이 버퍼 생성
+	// 3. 깊이 버퍼 생성
 	// 깊이버퍼를 만든다.
 	D3D11_TEXTURE2D_DESC depthDesc = {};
 
@@ -98,18 +97,18 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 
 	ID3D11Texture2D* depthBuffer = nullptr;
 
-	// 5. Depth,Stencil 뷰 생성
+	// 4. Depth,Stencil 뷰 생성
 	mDevice->CreateTexture2D(&depthDesc, nullptr, &depthBuffer);
 	mDevice->CreateDepthStencilView(depthBuffer, nullptr, &mDepthView);
 	SAFE_RELEASE(depthBuffer);
 
+	// 6. 뷰포트 설정
 	D3D11_VIEWPORT vp = {};
 
 	vp.Width = (float)width;
 	vp.Height = (float)height;
 	vp.MaxDepth = 1.f;
 
-	// 6. 뷰포트 설정
 	// 렌더타겟의 렌더링 영역 설정, 래스터라이저 스테이지의 설정이므로 RS가 붙음
 	// 뷰포트는 각 렌더타겟별로 설정한다.
 	mContext->RSSetViewports(1, &vp);

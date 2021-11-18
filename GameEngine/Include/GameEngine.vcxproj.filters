@@ -42,6 +42,21 @@
     <Filter Include="02. Resource\02. Shader\02. ShaderClass">
       <UniqueIdentifier>{96ab24f1-7bcc-4231-8d1a-e9e0fe6c1cea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\01. ColorMeshShader">
+      <UniqueIdentifier>{15bd1e7b-b795-4d68-923a-0977b0e7be40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\06. Timer">
+      <UniqueIdentifier>{d15b599c-56a6-47e4-bc5c-39ed5fb50cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene">
+      <UniqueIdentifier>{d1a83940-25df-48f5-8510-d6053c4146b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\01. SceneMode">
+      <UniqueIdentifier>{76fda0c5-8f73-4617-87a5-c68d6f913704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. GameObject">
+      <UniqueIdentifier>{7dea0c11-cacb-4482-9d9e-58cace05f67f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -80,12 +95,6 @@
     <ClInclude Include="Resource\ResourceManager.h">
       <Filter>02. Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Resource\Mesh.h">
-      <Filter>02. Resource\01. Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource\SpriteMesh.h">
-      <Filter>02. Resource\01. Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="PathManager.h">
       <Filter>01. Engine\05. Path</Filter>
     </ClInclude>
@@ -97,6 +106,36 @@
     </ClInclude>
     <ClInclude Include="Resource\Shader\ComputeShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\SpriteMesh.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\Mesh.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\MeshManager.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ColorMeshShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMeshShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ShaderManager.h">
+      <Filter>02. Resource\02. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>01. Engine\06. Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>03. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\GameObject.h">
+      <Filter>04. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneMode.h">
+      <Filter>03. Scene\01. SceneMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>03. Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,12 +163,6 @@
     <ClCompile Include="Resource\ResourceManager.cpp">
       <Filter>02. Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Resource\Mesh.cpp">
-      <Filter>02. Resource\01. Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource\SpriteMesh.cpp">
-      <Filter>02. Resource\01. Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="PathManager.cpp">
       <Filter>01. Engine\05. Path</Filter>
     </ClCompile>
@@ -142,15 +175,48 @@
     <ClCompile Include="Resource\Shader\ComputeShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Mesh\SpriteMesh.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh\Mesh.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh\MeshManager.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ColorMeshShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMeshShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ShaderManager.cpp">
+      <Filter>02. Resource\02. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>01. Engine\06. Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\GameObject.cpp">
+      <Filter>04. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneMode.cpp">
+      <Filter>03. Scene\01. SceneMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>03. Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Bin\ColorMesh.fx">
+    <Text Include="..\..\exclude.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\ColorMesh.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderInfo.fx">
+    <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

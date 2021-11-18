@@ -1,5 +1,5 @@
 #include "Mesh.h"
-#include "../Device.h"
+#include "../../Device.h"
 
 CMesh::CMesh()
 {
@@ -7,6 +7,12 @@ CMesh::CMesh()
 
 CMesh::~CMesh()
 {
+	size_t size = mVecContainer.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecContainer[i]);
+	}
 }
 
 bool CMesh::Init()
@@ -110,20 +116,20 @@ void CMesh::Render()
 
 	for (size_t i = 0; i < size; ++i)
 	{
-		unsigned int	stride = mVecContainer[i].VB.Size;	// 데이터 간의 거리 : Vertex 자체의 크기
+		unsigned int	stride = mVecContainer[i]->VB.Size;	// 데이터 간의 거리 : Vertex 자체의 크기
 		unsigned int	offset = 0;							// 시작점
 
 		// Input Assembler 단계
 		// Vertex 이어주는 방식 설정
-		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(mVecContainer[i].Primitive);
+		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(mVecContainer[i]->Primitive);
 
 		// VertexBuffer 넘겨주기
 		// 여러 개의 Buffer를 넘겨줄 수 있다. 지금은 하나.
 		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1,
-			&mVecContainer[i].VB.Buffer, &stride, &offset);
+			&mVecContainer[i]->VB.Buffer, &stride, &offset);
 
 		// 인덱스 버퍼의 수
-		size_t idxCount = mVecContainer[i].vecIB.size();
+		size_t idxCount = mVecContainer[i]->vecIB.size();
 
 		// 인덱스 버퍼가 하나 이상 존재할 때
 		if (idxCount > 0)
@@ -132,12 +138,12 @@ void CMesh::Render()
 			{
 				// 인덱스 버퍼 Context에 넘겨주고
 				CDevice::GetInst()->GetContext()->IASetIndexBuffer(
-					mVecContainer[i].vecIB[j].Buffer,
-					mVecContainer[i].vecIB[j].Fmt, 0);
+					mVecContainer[i]->vecIB[j].Buffer,
+					mVecContainer[i]->vecIB[j].Fmt, 0);
 
 				// 인덱스 버퍼의 원소들 개수 넘기고, 그리기 지시한다.
 				CDevice::GetInst()->GetContext()->DrawIndexed(
-					mVecContainer[i].vecIB[j].Count, 0, 0);
+					mVecContainer[i]->vecIB[j].Count, 0, 0);
 			}
 		}
 
@@ -149,7 +155,7 @@ void CMesh::Render()
 
 			// 설정된 Topology로, VetexBuffer만으로 그린다.
 			CDevice::GetInst()->GetContext()->Draw(
-				mVecContainer[i].VB.Count, 0);
+				mVecContainer[i]->VB.Count, 0);
 		}
 	}
 }

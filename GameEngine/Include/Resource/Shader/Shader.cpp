@@ -3,3 +3,7 @@
 CShader::CShader()
 {
 }
+
+CShader::~CShader()
+{
+}

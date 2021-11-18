@@ -2,13 +2,13 @@
 #include "Mesh.h"
 class CSpriteMesh : public CMesh
 {
-	friend class CResourceManager;
+	friend class CMeshManager;
+
 protected:
 	CSpriteMesh();
 	virtual ~CSpriteMesh();
 
 public:
 	virtual bool Init();
-
 };
 

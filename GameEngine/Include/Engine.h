@@ -33,5 +33,6 @@ private:
 	HWND		mhWnd;
 	Resolution	mRS;
 	float		mClearColor[4];
+	class CTimer* mTimer;
 };
 
