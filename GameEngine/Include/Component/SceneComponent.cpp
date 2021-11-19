@@ -8,7 +8,8 @@ CSceneComponent::CSceneComponent()
 }
 
 CSceneComponent::CSceneComponent(const CSceneComponent& com)	:
-	CComponent(com)
+	CComponent(com),
+	mbIsRender(false)
 {
 }
 
@@ -43,5 +44,6 @@ void CSceneComponent::PostRender()
 
 CSceneComponent* CSceneComponent::Clone()
 {
+	// 복사되면서 복사 생성자 호출, CRef의 자식이기 때문에 SharedPtr로 관리되며, 레퍼런스 카운트 체크함
 	return new CSceneComponent(*this);
 }

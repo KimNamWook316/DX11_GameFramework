@@ -46,7 +46,7 @@ void CScene::PostUpdate(float deltaTime)
 {
 	mMode->PostUpdate(deltaTime);
 
-	mMode->Update(deltaTime);
+	mMode->PostUpdate(deltaTime);
 
 	auto iter = mObjList.begin();
 	auto iterEnd = mObjList.end();
