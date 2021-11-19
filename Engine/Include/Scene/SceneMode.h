@@ -12,5 +12,8 @@ public:
 	virtual bool Init();
 	virtual void Update(float deltaTime);
 	virtual void PostUpdate(float deltaTime);
+
+private:
+	class CScene* mScene;
 };
 

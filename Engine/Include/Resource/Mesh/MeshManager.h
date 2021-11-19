@@ -13,6 +13,7 @@ private:
 public:
 	bool Init();
 	class CMesh* FindMesh(const std::string& name);
+	void ReleaseMesh(const std::string& name);
 
 private:
 	std::unordered_map<std::string, CSharedPtr<class CMesh>> mMapMesh;

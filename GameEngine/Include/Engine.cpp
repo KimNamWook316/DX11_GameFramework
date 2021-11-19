@@ -56,7 +56,7 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int 
 		return false;
 	}
 
-
+	// Path Manager
 	if (!CPathManager::GetInst()->Init())
 	{
 		return false;

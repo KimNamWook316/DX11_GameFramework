@@ -62,10 +62,23 @@ public:
 		return mName;
 	}
 
+	template <typename T>
+	void SetTypeID()
+	{
+		mTypeID = typeid(T).hash_code();
+	}
+
+	template <typename T>
+	bool CheckType()
+	{
+		return mTypeID == typeid(T).hash_code();
+	}
+
 protected:
 	std::string mName;
 	int			mRefCount;
 	bool		mEnable;
 	bool		mActive;
+	size_t		mTypeID;
 };
 

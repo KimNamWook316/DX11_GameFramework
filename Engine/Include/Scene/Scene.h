@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneMode.h"
+#include "SceneResource.h"
 #include "../GameObject/GameObject.h"
 
 class CScene
@@ -16,10 +17,17 @@ public:
 	void PostUpdate(float deltaTime);
 
 public:
+	CSceneResource* GetResource() const
+	{
+		return mResource;
+	}
+
+public:
 	template <typename T>
 	bool CreateSceneMode()
 	{
 		mMode = new T;
+		mMode->mScene = this;
 
 		if (!mMode->Init())
 		{
@@ -37,6 +45,7 @@ public:
 
 		// CRef -> SetName
 		obj->SetName(name);
+		obj->mScene(this);
 
 		if (!obj->Init())
 		{
@@ -50,6 +59,8 @@ public:
 
 private:
 	CSharedPtr<CSceneMode> mMode;
+	CSceneResource* mResource;
+
 	std::list<CSharedPtr<CGameObject>> mObjList;
 };
 

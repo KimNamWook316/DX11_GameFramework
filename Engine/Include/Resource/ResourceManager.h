@@ -2,6 +2,7 @@
 
 #include "Mesh/MeshManager.h"
 #include "Shader/ShaderManager.h"
+#include "Material/MaterialManager.h"
 
 // 다양한 리소스들을 모두 관리할 매니저 (메쉬, 오디오 등등 모든 리소스는 이 객체에서만 관리한다.)
 // CResource라는 클래스를 만들어, 모든 리소스가 상속받게 하여, 맵 하나로 관리하는 법도 있다.
@@ -17,18 +18,33 @@ public:
 
 public: // ===================== Mesh =====================
 	class CMesh* FindMesh(const std::string& name);
+	void ReleaseMesh(const std::string& name);
 
-public:
+
+public:// ===================== Shader =====================
+	class CShader* FindShader(const std::string& name);
+	void ReleaseShader(const std::string& name);
+
 	template <typename T>
 	bool CreateShader(const std::string& name)
 	{
 		return mShaderManager->CreateShader<T>(name);
 	}
-	class CShader* FindShader(const std::string& name);
+
+public:
+	CMaterial* FindMaterial(const std::string& name);
+	void ReleaseMaterial(const std::string& name);
+
+	template <typename T>
+	bool CreateMaterial(const std::string& name)
+	{
+		return mMaterialManager->CreateMaterial<T>(name);
+	}
 
 	DECLARE_SINGLE(CResourceManager)
 private:
 	CMeshManager* mMeshManager;
 	CShaderManager* mShaderManager;
+	CMaterialManager* mMaterialManager;
 };
 

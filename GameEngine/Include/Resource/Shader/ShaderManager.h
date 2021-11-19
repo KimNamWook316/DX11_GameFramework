@@ -13,6 +13,7 @@ private:
 public:
 	bool Init();
 	class CShader* FindShader(const std::string& name);
+	void ReleaseShader(const std::string& name);
 
 public:
 	// Client를 사용하는 유저가 쉐이더를 정의할 수 있다.

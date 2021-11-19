@@ -36,3 +36,16 @@ CMesh* CMeshManager::FindMesh(const std::string& name)
 	}
 	return iter->second;
 }
+
+void CMeshManager::ReleaseMesh(const std::string& name)
+{
+	auto iter = mMapMesh.find(name);
+
+	if (iter != mMapMesh.end())
+	{
+		if (iter->second->GetRefCount() == 1)
+		{
+			mMapMesh.erase(iter);
+		}
+	}
+}

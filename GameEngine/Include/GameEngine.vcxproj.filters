@@ -57,6 +57,24 @@
     <Filter Include="04. GameObject">
       <UniqueIdentifier>{7dea0c11-cacb-4482-9d9e-58cace05f67f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component">
+      <UniqueIdentifier>{1079945f-ba7e-45b2-a88b-bb61b33ae345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. SceneComponent">
+      <UniqueIdentifier>{e2ddc586-9cdf-482a-85f8-bde826995d1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\02. ObjectComponent">
+      <UniqueIdentifier>{ed721d9d-535f-4580-8226-c6c1f079a45f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. SceneComponent\01. MeshComponent">
+      <UniqueIdentifier>{9713ff9e-dca2-4e48-96e1-f101880d1b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\03. Material">
+      <UniqueIdentifier>{f0e2ee75-be6c-4970-b39d-57e3910b6d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\02. SceneResource">
+      <UniqueIdentifier>{e0f07e6f-69c6-4d7f-a017-64c2121b4fd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -137,6 +155,27 @@
     <ClInclude Include="Scene\SceneManager.h">
       <Filter>03. Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Component\Component.h">
+      <Filter>05. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ObjectComponent.h">
+      <Filter>05. Component\02. ObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SceneComponent.h">
+      <Filter>05. Component\01. SceneComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SpriteComponent.h">
+      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Material\Material.h">
+      <Filter>02. Resource\03. Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Material\MaterialManager.h">
+      <Filter>02. Resource\03. Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneResource.h">
+      <Filter>03. Scene\02. SceneResource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -204,6 +243,27 @@
     </ClCompile>
     <ClCompile Include="Scene\SceneManager.cpp">
       <Filter>03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Component.cpp">
+      <Filter>05. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ObjectComponent.cpp">
+      <Filter>05. Component\02. ObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SceneComponent.cpp">
+      <Filter>05. Component\01. SceneComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SpriteComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Material\Material.cpp">
+      <Filter>02. Resource\03. Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Material\MaterialManager.cpp">
+      <Filter>02. Resource\03. Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneResource.cpp">
+      <Filter>03. Scene\02. SceneResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -29,3 +29,16 @@ CShader* CShaderManager::FindShader(const std::string& name)
 
 	return iter->second;
 }
+
+void CShaderManager::ReleaseShader(const std::string& name)
+{
+	auto iter = mMapShader.find(name);
+
+	if (iter != mMapShader.end())
+	{
+		if (iter->second->GetRefCount() == 1)
+		{
+			mMapShader.erase(iter);
+		}
+	}
+}

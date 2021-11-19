@@ -4,6 +4,7 @@ CRef::CRef()
 	: mRefCount(0)
 	, mEnable(true)
 	, mActive(true)
+	, mTypeID(0)
 {
 }
 

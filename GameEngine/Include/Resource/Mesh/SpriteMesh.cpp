@@ -2,6 +2,7 @@
 
 CSpriteMesh::CSpriteMesh()
 {
+	SetTypeID<CSpriteMesh>();
 }
 
 CSpriteMesh::~CSpriteMesh()
