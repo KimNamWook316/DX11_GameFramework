@@ -348,6 +348,20 @@ float Vector3::Angle(const Vector3& v) const
 	return Angle;
 }
 
+Vector3 Vector3::ConvertAngle()
+{
+	return Vector3(DegToRad(x), DegToRad(y), DegToRad(z));
+}
+
+Vector3 Vector3::TransformNormal(const Matrix& mat) const
+{
+	return Vector3(XMVector3TransformNormal(Convert(), mat.m));
+}
+
+Vector3 Vector3::TransformCoord(const Matrix& mat) const
+{
+	return Vector3(XMVector3TransformCoord(Convert(), mat.m));
+}
 
 XMVECTOR Vector3::Convert()	const
 {

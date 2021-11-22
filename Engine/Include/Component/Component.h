@@ -16,7 +16,7 @@ public:
 		return mScene;
 	}
 
-	class CGameObject* GetObject() const
+	class CGameObject* GetGameObject() const
 	{
 		return mObject;
 	}
@@ -27,8 +27,8 @@ public:
 	}
 
 public:
-	void SetScene(class CScene* scene);
-	void SetGameObject(class CGameObject* object);
+	virtual void SetScene(class CScene* scene);
+	virtual void SetGameObject(class CGameObject* object);
 
 public:
 	virtual bool Init();

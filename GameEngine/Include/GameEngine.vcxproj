@@ -23,6 +23,7 @@
     <ClInclude Include="Component\ObjectComponent.h" />
     <ClInclude Include="Component\SceneComponent.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
+    <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineMath.h" />
@@ -58,6 +59,7 @@
     <ClCompile Include="Component\ObjectComponent.cpp" />
     <ClCompile Include="Component\SceneComponent.cpp" />
     <ClCompile Include="Component\SpriteComponent.cpp" />
+    <ClCompile Include="Component\Transform.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="Ref.cpp" />

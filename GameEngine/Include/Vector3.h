@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EngineMath.h"
+#include "Matrix.h"
 
 struct Vector3
 {
@@ -45,6 +46,7 @@ struct Vector3
 	void operator -= (const float f);
 
 	// operator *
+	// !!º¤ÅÍ ¿ø¼Òº° °ö!!
 	Vector3 operator * (const Vector3& v)	const;
 	Vector3 operator * (const XMVECTOR& v)	const;
 	Vector3 operator * (const float f)	const;
@@ -78,6 +80,13 @@ struct Vector3
 	float Dot(const Vector3& v)	const;
 	Vector3 Cross(const Vector3& v)	const;
 	float Angle(const Vector3& v)	const;
+	Vector3 ConvertAngle();
+
+	// w == 0
+	Vector3 TransformNormal(const Matrix& mat) const;
+
+	// w == 1
+	Vector3 TransformCoord(const Matrix& mat) const;
 
 	XMVECTOR Convert()	const;
 	void Convert(const XMVECTOR& v);

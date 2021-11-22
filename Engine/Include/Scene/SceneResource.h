@@ -5,6 +5,7 @@
 #include "../Resource/Material/Material.h"
 #include "../Resource/ResourceManager.h"
 
+// 纠喊 府家胶 包府 按眉
 class CSceneResource
 {
 	friend class CScene;

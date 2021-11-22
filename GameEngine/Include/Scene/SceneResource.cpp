@@ -1,6 +1,7 @@
 #include "SceneResource.h"
 
-CSceneResource::CSceneResource()
+CSceneResource::CSceneResource()	:
+	mScene(nullptr)
 {
 }
 

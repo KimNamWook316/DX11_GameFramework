@@ -176,6 +176,9 @@
     <ClInclude Include="Scene\SceneResource.h">
       <Filter>03. Scene\02. SceneResource</Filter>
     </ClInclude>
+    <ClInclude Include="Component\Transform.h">
+      <Filter>05. Component\01. SceneComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -264,6 +267,9 @@
     </ClCompile>
     <ClCompile Include="Scene\SceneResource.cpp">
       <Filter>03. Scene\02. SceneResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Transform.cpp">
+      <Filter>05. Component\01. SceneComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

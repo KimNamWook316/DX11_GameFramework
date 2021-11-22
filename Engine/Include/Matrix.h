@@ -44,6 +44,7 @@ union __declspec(align(16)) Matrix
 	void RotationX(float x);
 	void RotationY(float y);
 	void RotationZ(float z);
+	void RotationQuaternion(const Vector4& qut);
 	void RotationAxis(const struct Vector3& Axis, float Angle);
 	void Translation(const struct Vector3& _v);
 	void Translation(float x, float y, float z);
@@ -62,6 +63,7 @@ union __declspec(align(16)) Matrix
 	static Matrix StaticRotationX(float x);
 	static Matrix StaticRotationY(float y);
 	static Matrix StaticRotationZ(float z);
+	static Matrix StaticRotationQuarternion(const Vector4& qut);
 	static Matrix StaticRotationAxis(const struct Vector3& Axis, float Angle);
 	static Matrix StaticTranslation(const struct Vector3& _v);
 	static Matrix StaticTranslation(float x, float y, float z);
