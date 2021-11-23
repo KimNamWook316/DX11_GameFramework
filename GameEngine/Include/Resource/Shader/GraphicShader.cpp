@@ -16,7 +16,7 @@ CGraphicShader::CGraphicShader()
 	, mDSBlob(nullptr)
 	, mGSBlob(nullptr)
 {
-	meType = Shader_Type::GRAPHIC;
+	meType = eShaderType::GRAPHIC;
 }
 
 CGraphicShader::~CGraphicShader()
@@ -84,6 +84,7 @@ bool CGraphicShader::CreateInputLayout()
 	if (FAILED(CDevice::GetInst()->GetDevice()->CreateInputLayout(&mVecInputDesc[0], (UINT)mVecInputDesc.size(),
 		mVSBlob->GetBufferPointer(), mVSBlob->GetBufferSize(), &mInputLayout)))
 	{
+		assert(false);
 		return false;
 	}
 
@@ -127,6 +128,7 @@ bool CGraphicShader::LoadVertexShader(const char* entryName, const TCHAR* fileNa
 	if (FAILED(CDevice::GetInst()->GetDevice()->CreateVertexShader(mVSBlob->GetBufferPointer(),
 		mVSBlob->GetBufferSize(), nullptr, &mVS)))
 	{
+		assert(false);
 		return false;
 	}
 
@@ -166,6 +168,7 @@ bool CGraphicShader::LoadPixelShader(const char* entryName, const TCHAR* fileNam
 	if (FAILED(CDevice::GetInst()->GetDevice()->CreatePixelShader(mPSBlob->GetBufferPointer(),
 		mPSBlob->GetBufferSize(), nullptr, &mPS)))
 	{
+		assert(false);
 		return false;
 	}
 
@@ -205,6 +208,7 @@ bool CGraphicShader::LoadHullShader(const char* entryName, const TCHAR* fileName
 	if (FAILED(CDevice::GetInst()->GetDevice()->CreateHullShader(mHSBlob->GetBufferPointer(),
 		mHSBlob->GetBufferSize(), nullptr, &mHS)))
 	{
+		assert(false);
 		return false;
 	}
 
@@ -244,6 +248,7 @@ bool CGraphicShader::LoadDomainShader(const char* entryName, const TCHAR* fileNa
 	if (FAILED(CDevice::GetInst()->GetDevice()->CreateDomainShader(mDSBlob->GetBufferPointer(),
 		mDSBlob->GetBufferSize(), nullptr, &mDS)))
 	{
+		assert(false);
 		return false;
 	}
 
@@ -283,6 +288,7 @@ bool CGraphicShader::LoadGeometryShader(const char* entryName, const TCHAR* file
 	if (FAILED(CDevice::GetInst()->GetDevice()->CreateGeometryShader(mGSBlob->GetBufferPointer(),
 		mGSBlob->GetBufferSize(), nullptr, &mGS)))
 	{
+		assert(false);
 		return false;
 	}
 

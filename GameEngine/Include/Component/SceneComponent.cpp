@@ -3,7 +3,7 @@
 CSceneComponent::CSceneComponent()
 {
 	SetTypeID<CSceneComponent>();
-	meComponentType = Component_Type::SCENE_COMP;
+	meComponentType = eComponentType::SCENE_COMP;
 	mbIsRender = false;
 
 	// 货肺款 Transform 积己

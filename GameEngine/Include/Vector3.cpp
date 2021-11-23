@@ -348,7 +348,7 @@ float Vector3::Angle(const Vector3& v) const
 	return Angle;
 }
 
-Vector3 Vector3::ConvertAngle()
+Vector3 Vector3::ConvertAngle() const
 {
 	return Vector3(DegToRad(x), DegToRad(y), DegToRad(z));
 }

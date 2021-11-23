@@ -20,7 +20,7 @@ public:
 
 	void SetRootComponent(CSceneComponent* component)
 	{
-		mRootComponent = component;
+		mRootSceneComponent = component;
 	}
 	
 public:
@@ -51,7 +51,7 @@ public:
 			return nullptr;
 		}
 
-		if (comp->GetComponentType() == Component_Type::OBJ_COMP)
+		if (comp->GetComponentType() == eComponentType::OBJ_COMP)
 		{
 			mVecObjectComponent.push_back(comp);
 		}
@@ -62,7 +62,7 @@ public:
 
 protected:
 	class CScene* mScene;
-	CSharedPtr<CSceneComponent> mRootComponent; // 씬 컴포넌트는 계층 구조로 관리
+	CSharedPtr<CSceneComponent> mRootSceneComponent; // 씬 컴포넌트는 계층 구조로 관리
 	std::vector<CSharedPtr<CObjectComponent>> mVecObjectComponent; // 삭제, 삽입 많지 않지만, 각 컴포넌트에 접근할 일 많음
 };
 

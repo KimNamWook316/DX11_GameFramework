@@ -21,7 +21,7 @@ public:
 		return mObject;
 	}
 
-	Component_Type GetComponentType() const
+	eComponentType GetComponentType() const
 	{
 		return meComponentType;
 	}
@@ -41,7 +41,7 @@ public:
 
 protected:
 	// 어떤 컴포넌트 타입인지
-	Component_Type meComponentType;
+	eComponentType meComponentType;
 
 	// 어느 씬, 어느 게임 오브젝트 소속인지
 	class CScene* mScene;

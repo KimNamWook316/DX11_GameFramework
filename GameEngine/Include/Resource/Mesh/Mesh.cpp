@@ -21,7 +21,7 @@ bool CMesh::Init()
 }
 
 // void* 형태로 data를 받아서, 데이터 형식에 구애받지 않고 받을 수 있다. ( 다양한 배열 형태로 전해짐 )
-bool CMesh::CreateBuffer(Buffer_Type eType, void* data, int size, 
+bool CMesh::CreateBuffer(eBufferType eType, void* data, int size, 
 	int count, D3D11_USAGE usage, ID3D11Buffer** buffer)
 {
 	D3D11_BUFFER_DESC desc = {};
@@ -32,7 +32,7 @@ bool CMesh::CreateBuffer(Buffer_Type eType, void* data, int size,
 	desc.Usage = usage;
 
 	// 리소스를 파이프라인에 바인딩하는 방법 설정
-	if (Buffer_Type::VERTEX == eType)
+	if (eBufferType::VERTEX == eType)
 	{
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	}
@@ -63,7 +63,7 @@ bool CMesh::CreateBuffer(Buffer_Type eType, void* data, int size,
 	}
 
 	// Vertex Buffet인 경우 위치 정보 min, max 저장
-	if (Buffer_Type::VERTEX == eType)
+	if (eBufferType::VERTEX == eType)
 	{
 		// 1byte 단위로 포인터 연산해서, data배열의 시작점에만 접근한다.
 		char* vertexData = (char*)data;

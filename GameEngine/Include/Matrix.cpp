@@ -105,18 +105,19 @@ void Matrix::Scaling(float x, float y)
 
 void Matrix::Rotation(const Vector3& _v)
 {
-	XMMATRIX	X = XMMatrixRotationX(DegToRad(_v.x));
-	XMMATRIX	Y = XMMatrixRotationY(DegToRad(_v.y));
-	XMMATRIX	Z = XMMatrixRotationZ(DegToRad(_v.z));
-	m = X * Y * Z;
+	Vector3 convertRot = _v.ConvertAngle();
+
+	XMVECTOR quarternion = XMQuaternionRotationRollPitchYaw(convertRot.x, convertRot.y, convertRot.z);
+	RotationQuaternion(quarternion);
 }
 
 void Matrix::Rotation(float x, float y, float z)
 {
-	XMMATRIX	X = XMMatrixRotationX(DegToRad(x));
-	XMMATRIX	Y = XMMatrixRotationY(DegToRad(y));
-	XMMATRIX	Z = XMMatrixRotationZ(DegToRad(z));
-	m = X * Y * Z;
+	Vector3 _v(x, y, z);
+	Vector3 convertRot = _v.ConvertAngle();
+	
+	XMVECTOR quarternion = XMQuaternionRotationRollPitchYaw(convertRot.x, convertRot.y, convertRot.z);
+	RotationQuaternion(quarternion);
 }
 
 void Matrix::RotationX(float x)

@@ -77,8 +77,8 @@ public:
 protected:
 	std::string mName;
 	int			mRefCount;
-	bool		mEnable;
-	bool		mActive;
-	size_t		mTypeID;
+	bool		mEnable;	// 이 객체가 Destroy 되어야 하는지
+	bool		mActive;	// 이 객체가 활성화 상태인지
+	size_t		mTypeID;	// 클래스의 TypeID
 };
 

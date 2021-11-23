@@ -19,6 +19,7 @@ CDevice::~CDevice()
 
 	if (mContext) 
 	{
+		// Context를 Default Setting으로 돌려줘야 함.
 		mContext->ClearState();
 	}
 	SAFE_RELEASE(mContext);
@@ -27,7 +28,7 @@ CDevice::~CDevice()
 
 bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode) 
 {
-	mhWnd = hWnd;
+	mhWnd = hWnd; // 어떤 윈도우 핸들에 출력할 것인가.
 	mRS.Width = width;
 	mRS.Height = height;
 
@@ -40,10 +41,11 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 
 #endif // _DEBUG
 
+	// 백버퍼 세부 사항, 스왑체인을 정의하는 구조체
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
 	swapDesc.BufferDesc.Width = width;
 	swapDesc.BufferDesc.Height = height;
-	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 백버퍼의 포맷 설정
+	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 백버퍼의 포맷 설정, 32비트
 	swapDesc.BufferDesc.RefreshRate.Numerator = 1;
 	swapDesc.BufferDesc.RefreshRate.Denominator = 60; // 60 프레임 설정
 	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // 스케일이 자유롭게 조정될 수 있음
@@ -64,7 +66,7 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 		0, flag, &fLevel, 1, D3D11_SDK_VERSION,
 		&swapDesc, &mSwapChain, &mDevice, &fLevel1, &mContext))) 
 	{
-		MessageBox(0, L"Failed To Create Device in CDevice.", L"Error", 0);
+		assert(false);
 		return false;
 	}
 
@@ -88,6 +90,7 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 	depthDesc.Height = height;
 	depthDesc.ArraySize = 1;
 
+	// 24Bit : Depth, 8bit : Stencil
 	depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -107,7 +110,7 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 
 	vp.Width = (float)width;
 	vp.Height = (float)height;
-	vp.MaxDepth = 1.f;
+	vp.MaxDepth = 1.f; // Depth영역 0~1까지 설정
 
 	// 렌더타겟의 렌더링 영역 설정, 래스터라이저 스테이지의 설정이므로 RS가 붙음
 	// 뷰포트는 각 렌더타겟별로 설정한다.
@@ -118,6 +121,7 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 
 void CDevice::ClearRenderTarget(float clearColor[4])
 {
+	// 렌더 타겟 뷰를 통해 백버퍼를 clearColor로 채운다.
 	mContext->ClearRenderTargetView(mTargetView, clearColor);
 }
 
@@ -130,10 +134,14 @@ void CDevice::ClearDepthStencil(float depth, unsigned char stencil)
 
 void CDevice::RenderStart()
 {
+	// 렌더 타겟과 깊이 버퍼를 Output Merger단계에 바인딩한다.
+	// 다수의 렌더 타겟이 이 단계에 바인딩 될 수 있다.
+	// 깊이 버퍼는 하나만 사용할 수 있음
 	mContext->OMSetRenderTargets(1, &mTargetView, mDepthView);
 }
 
 void CDevice::Flip()
 {
+	// 백버퍼를 프론트버퍼로 바꾸며, 실제로 화면에 표시한다.
 	mSwapChain->Present(0, 0);
 }

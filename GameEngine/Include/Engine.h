@@ -2,6 +2,7 @@
 
 #include "GameInfo.h"
 
+// 윈도우 생성 및 프로그램 로직, 디바이스 등 프로그램 전체를 관장하는 클래스
 class CEngine 
 {
 public:
@@ -25,6 +26,7 @@ private:
 	BOOL Create(const TCHAR* name);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+	// SingleTon 선언
 	DECLARE_SINGLE(CEngine)
 
 private:
@@ -32,7 +34,7 @@ private:
 	HINSTANCE	mhInst;
 	HWND		mhWnd;
 	Resolution	mRS;
-	float		mClearColor[4];
+	float		mClearColor[4]; // 화면 초기화 색상 변수
 	class CTimer* mTimer;
 };
 

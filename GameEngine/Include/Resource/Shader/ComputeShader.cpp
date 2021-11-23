@@ -2,7 +2,7 @@
 
 CComputeShader::CComputeShader()
 {
-	meType = Shader_Type::COMPUTE;
+	meType = eShaderType::COMPUTE;
 }
 
 void CComputeShader::SetShader()

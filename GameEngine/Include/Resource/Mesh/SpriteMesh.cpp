@@ -31,9 +31,10 @@ bool CSpriteMesh::Init()
 	};
 
 	// Vertex Buffer 생성
-	if (!CreateBuffer(Buffer_Type::VERTEX, vtx, sizeof(VertexColor),
+	if (!CreateBuffer(eBufferType::VERTEX, vtx, sizeof(VertexColor),
 		4, D3D11_USAGE_IMMUTABLE, &container->VB.Buffer))
 	{
+		assert(false);
 		return false;
 	}
 
@@ -49,9 +50,10 @@ bool CSpriteMesh::Init()
 	unsigned short idx[6] = { 0,1,3,0,3,2 };
 	
 	// 2byte 크기 unsigned short 배열 넘겨서, 버퍼 생성
-	if (!CreateBuffer(Buffer_Type::INDEX, idx, sizeof(unsigned short),
+	if (!CreateBuffer(eBufferType::INDEX, idx, sizeof(unsigned short),
 		6, D3D11_USAGE_IMMUTABLE, &container->vecIB[0].Buffer))
 	{
+		assert(false);
 		return false;
 	}
 

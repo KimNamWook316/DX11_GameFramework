@@ -3,7 +3,7 @@
 CObjectComponent::CObjectComponent()
 {
 	SetTypeID<CObjectComponent>();
-	meComponentType = Component_Type::OBJ_COMP;
+	meComponentType = eComponentType::OBJ_COMP;
 }
 
 CObjectComponent::CObjectComponent(const CObjectComponent& com) :

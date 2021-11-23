@@ -13,7 +13,7 @@ public:
     virtual void Render();
 
 protected:
-    bool CreateBuffer(Buffer_Type eType, void* data, int size, int count,
+    bool CreateBuffer(eBufferType eType, void* data, int size, int count,
         D3D11_USAGE usage, ID3D11Buffer** buffer);
 
 

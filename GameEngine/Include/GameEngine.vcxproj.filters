@@ -72,8 +72,14 @@
     <Filter Include="02. Resource\03. Material">
       <UniqueIdentifier>{f0e2ee75-be6c-4970-b39d-57e3910b6d04}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. Scene\02. SceneResource">
+    <Filter Include="03. Scene\01. SceneMode\02. SceneResource">
       <UniqueIdentifier>{e0f07e6f-69c6-4d7f-a017-64c2121b4fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer">
+      <UniqueIdentifier>{a59c04db-a649-41e8-98ba-04d972716413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\01. Transform">
+      <UniqueIdentifier>{55969d85-5648-49b4-9761-04e20c909d88}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,10 +180,19 @@
       <Filter>02. Resource\03. Material</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneResource.h">
-      <Filter>03. Scene\02. SceneResource</Filter>
+      <Filter>03. Scene\01. SceneMode\02. SceneResource</Filter>
     </ClInclude>
     <ClInclude Include="Component\Transform.h">
       <Filter>05. Component\01. SceneComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ConstantBufferBase.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\TransformConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\01. Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,10 +281,19 @@
       <Filter>02. Resource\03. Material</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneResource.cpp">
-      <Filter>03. Scene\02. SceneResource</Filter>
+      <Filter>03. Scene\01. SceneMode\02. SceneResource</Filter>
     </ClCompile>
     <ClCompile Include="Component\Transform.cpp">
       <Filter>05. Component\01. SceneComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ConstantBufferBase.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\01. Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

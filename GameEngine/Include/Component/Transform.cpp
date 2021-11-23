@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "../Resource/Shader/TransformConstantBuffer.h"
 
 CTransform::CTransform()	:
 	mParentTransform(nullptr),
@@ -16,7 +17,8 @@ CTransform::CTransform()	:
 	// 시작 떄 한 번은 업데이트 해 주어야 한다.
 	mbUpdateScale(true),
 	mbUpdateRot(true),
-	mbUpdatePos(true)
+	mbUpdatePos(true),
+	mCBuffer(nullptr)
 {
 	// 기본 회전축 설정
 	for (int i = 0; i < AXIS_MAX; ++i)
@@ -29,14 +31,29 @@ CTransform::CTransform()	:
 CTransform::CTransform(const CTransform& trans)
 {
 	*this = trans;
+
+	mCBuffer = trans.mCBuffer->Clone();
 }
 
 CTransform::~CTransform()
 {
+	SAFE_DELETE(mCBuffer);
+}
+
+void CTransform::Start()
+{
+	// 시작 시 한 번 위치값 갱신해주어야 한다.
+	SetInheritScaleValue();
+	SetInheritRotValue(true);
+	SetInheritPosValue();
 }
 
 void CTransform::Init()
 {
+	// 상수 버퍼 생성
+	mCBuffer = new CTransformConstantBuffer;
+
+	mCBuffer->Init();
 }
 
 CTransform* CTransform::Clone()
@@ -44,11 +61,62 @@ CTransform* CTransform::Clone()
 	return new CTransform(*this);
 }
 
+void CTransform::Update(const float deltaTime)
+{
+}
+
+// TODO : 왜 PostUpdate에서?
+// TODO : Update해주고 나면, bool 변수 false 해주어야 하지 않나?
+void CTransform::PostUpdate(const float deltaTime)
+{
+	if (mbUpdateScale)
+	{
+		mMatScale.Scaling(mWorldScale);
+	}
+
+	if (mbUpdateRot)
+	{
+		mMatRot.Rotation(mWorldRot);
+	}
+
+	if (mbUpdatePos)
+	{
+		mMatPos.Translation(mWorldPos);
+	}
+
+	if (mbUpdateScale || mbUpdateRot || mbUpdatePos)
+	{
+		mMatWorld = mMatScale * mMatRot * mMatPos;
+	}
+}
+
+void CTransform::SetTransformBuffer()
+{
+	mCBuffer->SetWorldMatrix(mMatWorld);
+	
+	// 직교 투영 행렬을 만든다., y축 아래쪽을 음수로 설정한다.
+	Matrix matProj;
+	matProj = XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f, 0.f, 1000.f);
+
+	mCBuffer->SetProjMatrix(matProj);
+
+	mCBuffer->SetPivot(mPivot);
+	mCBuffer->SetMeshSize(mMeshSize);
+
+	mCBuffer->UpdateCBuffer();
+}
+
+// 월드 행렬을 밖에서 갱신해야 할 때 호출
+void CTransform::ComputeWolrdMatrix()
+{
+	mMatWorld = mMatScale * mMatRot * mMatPos;
+}
+
 void CTransform::SetRelativeScale(const Vector3& scale)
 {
 	mRelativeScale = scale;
+
 	// 이 트랜스폼이 최상위 트랜스폼이라면 여기서 worldScale변경해줘야 한다.
-	// TODO : 월드 트랜스폼 Setter가 있는 편이 낫지 않은가?
 	mWorldScale = scale;
 
 	SetInheritScaleValue();
@@ -93,46 +161,185 @@ void CTransform::SetRelativeRotZ(const float& z)
 
 void CTransform::SetRelativePos(const Vector3& pos)
 {
+	mRelativePos = pos;
+	mWorldPos = pos;
+
+	SetInheritPosValue();
 }
 
 void CTransform::SetRelativePos(const float& x, const float& y, const float& z)
 {
+	Vector3 pos(x, y, z);
+	SetRelativePos(pos);
+}
+
+void CTransform::SetWorldScale(const Vector3& scale)
+{
+	mWorldScale = scale;
+	mRelativeScale = scale;
+	SetInheritWorldScaleValue();
+}
+
+void CTransform::SetWorldScale(const float& x, const float& y, const float& z)
+{
+	Vector3 scale(x, y, z);
+	SetWorldPos(scale);
+}
+
+void CTransform::SetWorldRot(const Vector3& rot)
+{
+	mWorldRot = rot;
+	mRelativeRot = rot;
+	SetInheritWorldRotValue(true);
+}
+
+void CTransform::SetWorldRot(const float& x, const float& y, const float& z)
+{
+	Vector3 rot(x, y, z);
+	SetWorldRot(rot);
+}
+
+void CTransform::SetWorldRotX(const float& x)
+{
+	Vector3 rot(x, mWorldRot.y, mWorldRot.z);
+	SetWorldRot(rot);
+}
+
+void CTransform::SetWorldRotY(const float& y)
+{
+	Vector3 rot(mWorldRot.x, y, mWorldRot.z);
+	SetWorldRot(rot);
+}
+
+void CTransform::SetWorldRotZ(const float& z)
+{
+	Vector3 rot(mWorldRot.x, mWorldRot.y, z);
+	SetWorldRot(rot);
+}
+
+void CTransform::SetWorldPos(const Vector3& pos)
+{
+	mWorldPos = pos;
+	SetInheritPosValue();
+}
+
+void CTransform::SetWorldPos(const float& x, const float& y, const float& z)
+{
+	Vector3 pos(x, y, z);
+	SetInheritPosValue();
 }
 
 void CTransform::AddRelativeScale(const Vector3& scale)
 {
+	mRelativeScale += scale;
+	mWorldScale = mRelativeScale;
+	SetInheritScaleValue();
 }
 
 void CTransform::AddRelativeScale(const float& x, const float& y, const float& z)
 {
+	Vector3 scale(x, y, z);
+	AddRelativeScale(scale);
 }
 
 void CTransform::AddRelativeRot(const Vector3 rot)
 {
+	mRelativeRot += rot;
+	mWorldRot = mRelativeRot;
+	SetInheritRotValue(true);
 }
 
 void CTransform::AddRelativeRot(const float& x, const float& y, const float& z)
 {
+	Vector3 rot(x, y, z);
+	AddRelativeRot(rot);
 }
 
 void CTransform::AddRelativeRotX(const float& x)
 {
+	Vector3 rot(x, mRelativeRot.y, mRelativeRot.z);
+	AddRelativeRot(rot);
 }
 
 void CTransform::AddRelativeRotY(const float& y)
 {
+	Vector3 rot(mRelativeRot.x, y, mRelativeRot.z);
+	AddRelativeRot(rot);
 }
 
 void CTransform::AddRelativeRotZ(const float& z)
 {
+	Vector3 rot(mRelativeRot.x, mRelativeRot.y, z);
+	AddRelativeRot(rot);
 }
 
 void CTransform::AddRelativePos(const Vector3& pos)
 {
+	mRelativePos += pos;
+	mWorldPos = mRelativePos;
+	SetInheritPosValue();
 }
 
 void CTransform::AddRelativePos(const float& x, const float& y, const float& z)
 {
+	Vector3 pos(x, y, z);
+	AddRelativePos(pos);
+}
+
+void CTransform::AddWorldScale(const Vector3& scale)
+{
+	mWorldScale += scale;
+	mRelativeScale = mWorldScale;
+	SetInheritWorldScaleValue();
+}
+
+void CTransform::AddWorldScale(const float& x, const float& y, const float& z)
+{
+	Vector3 scale(x, y, z);
+	AddWorldScale(scale);
+}
+
+void CTransform::AddWorldRot(const Vector3 rot)
+{
+	mWorldRot += rot;
+	mRelativeRot = mWorldRot;
+	SetInheritWorldRotValue(true);
+}
+
+void CTransform::AddWorldRot(const float& x, const float& y, const float& z)
+{
+	Vector3 rot(x, y, z);
+	AddWorldRot(rot);
+}
+
+void CTransform::AddWorldRotX(const float& x)
+{
+	Vector3 rot(x, mWorldRot.y, mWorldRot.z);
+	AddWorldRot(rot);
+}
+
+void CTransform::AddWorldRotY(const float& y)
+{
+	Vector3 rot(mWorldRot.x, y, mWorldRot.z);
+	AddWorldRot(rot);
+}
+
+void CTransform::AddWorldRotZ(const float& z)
+{
+	Vector3 rot(mWorldRot.x, mWorldRot.y, z);
+	AddWorldRot(rot);
+}
+
+void CTransform::AddWorldPos(const Vector3& pos)
+{
+	mWorldRot += pos;
+	SetInheritPosValue();
+}
+
+void CTransform::AddWorldPos(const float& x, const float& y, const float& z)
+{
+	Vector3 pos(x, y, z);
+	AddWorldPos(pos);
 }
 
 void CTransform::SetInheritScaleValue()
@@ -144,7 +351,7 @@ void CTransform::SetInheritScaleValue()
 		// Vector3 원소별 곱셈 연산임에 유의
 		mWorldScale = mRelativeScale * mParentTransform->GetWorldScale();
 	}
-	
+
 	mbUpdateScale = true;
 
 	size_t size = mVecChildTransform.size();
@@ -190,7 +397,7 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 
 	// XMVECTOR4 쿼터니언 값 받아옴
 	XMVECTOR quarternion = XMQuaternionRotationRollPitchYaw(convertRot.x, convertRot.y, convertRot.z);
-	
+
 	// 상대 회전값으로 변환하는 행렬
 	Matrix matRot;
 	matRot.RotationQuaternion(quarternion);
@@ -206,7 +413,7 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 	convertRot = mWorldRot.ConvertAngle();
 	quarternion = XMQuaternionRotationRollPitchYaw(convertRot.x, convertRot.y, convertRot.z);
 	matRot.RotationQuaternion(quarternion);
-	
+
 	// 월드 축 변환
 	for (int i = 0; i < AXIS_MAX; ++i)
 	{
@@ -217,7 +424,7 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 	mbUpdateRot = true;
 
 	size_t size = mVecChildTransform.size();
-	
+
 	// 하위 오브젝트들에도 적용
 	for (size_t i = 0; i < size; ++i)
 	{
@@ -225,6 +432,7 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 	}
 }
 
+// TODO : 회전 상속 여부 상관없이 relative position이 수정되어야 할 경우에는??
 void CTransform::SetInheritPosValue()
 {
 	if (mParentTransform)
@@ -271,8 +479,10 @@ void CTransform::SetInheritPosValue()
 			*/
 			memcpy(&matRot._41, &parentPos, sizeof(Vector3));
 
-			// 부모 회전만큼 회전시키고, 부모의 위치값만큼 이동한다.
-			mWorldPos = mRelativePos.TransformCoord(matRot);
+			// 월드 위치 = 상대 위치 * 부모 월드 변환 행렬이면,
+			// 상대 위치 = 월드 위치 * 부모 월드 변환의 역행렬이다.
+			matRot.Inverse();
+			mRelativePos = mWorldPos.TransformCoord(matRot);
 		}
 	}
 
@@ -283,5 +493,93 @@ void CTransform::SetInheritPosValue()
 	for (size_t i = 0; i < size; ++i)
 	{
 		mVecChildTransform[i]->SetInheritPosValue();
+	}
+}
+
+void CTransform::SetInheritWorldScaleValue()
+{
+	// 상위 트랜스폼이 있고, 상대적 스케일 적용받을 경우
+	if (mParentTransform && mbInheritScale)
+	{
+		// 상대 스케일 = 부모 월드스케일 대비 자신의 월드스케일 값
+		mRelativeScale = mWorldScale / mParentTransform->GetWorldScale();
+	}
+
+	mbUpdateScale = true;
+
+	size_t size = mVecChildTransform.size();
+
+	// 하위 오브젝트들도 스케일 조정
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChildTransform[i]->SetInheritWorldScaleValue();
+	}
+}
+
+void CTransform::SetInheritWorldRotValue(bool bIsCurrent)
+{
+	if (mParentTransform)
+	{
+		// 월드 회전값 변경
+		if (mbInheritRotX)
+		{
+			mRelativeRot.x = mWorldRot.x - mParentTransform->GetWorldRot().x;
+		}
+
+		if (mbInheritRotY)
+		{
+			mRelativeRot.y = mWorldRot.y - mParentTransform->GetWorldRot().y;
+		}
+
+		if (mbInheritRotZ)
+		{
+			mRelativeRot.z = mWorldRot.z - mParentTransform->GetWorldRot().z;
+		}
+
+		// 상위 트랜스폼의 Rotation값을 하나라도 적용받는 경우 and 첫 번째로 호출된 것이 아닐 경우 위치도 조정한다.
+		if ((mbInheritRotX || mbInheritRotY || mbInheritRotZ) && !bIsCurrent)
+		{
+			// 상위 트랜스폼의 회전을 적용받는 경우, 위치도 바뀌어야 함 ( 공전 )
+			SetInheritPosValue();
+		}
+	}
+
+	// 상대 회전값 라디안으로
+	Vector3 convertRot = mRelativeRot.ConvertAngle();
+
+	// XMVECTOR4 쿼터니언 값 받아옴
+	XMVECTOR quarternion = XMQuaternionRotationRollPitchYaw(convertRot.x, convertRot.y, convertRot.z);
+
+	// 상대 회전값으로 변환하는 행렬
+	Matrix matRot;
+	matRot.RotationQuaternion(quarternion);
+
+	// 상위 트랜스폼에 대한 상대 축 변환
+	for (int i = 0; i < AXIS_MAX; ++i)
+	{
+		mRelativeAxis[i] = Vector3::Axis[i].TransformNormal(matRot);
+		mRelativeAxis[i].Normalize();
+	}
+
+	// 월드 회전값에 따른 변환행렬
+	convertRot = mWorldRot.ConvertAngle();
+	quarternion = XMQuaternionRotationRollPitchYaw(convertRot.x, convertRot.y, convertRot.z);
+	matRot.RotationQuaternion(quarternion);
+
+	// 월드 축 변환
+	for (int i = 0; i < AXIS_MAX; ++i)
+	{
+		mWorldAxis[i] = Vector3::Axis[i].TransformNormal(matRot);
+		mWorldAxis[i].Normalize();
+	}
+
+	mbUpdateRot = true;
+
+	size_t size = mVecChildTransform.size();
+
+	// 하위 오브젝트들에도 적용
+	for (size_t i = 0; i < size; ++i)
+	{
+		SetInheritWorldRotValue(false);
 	}
 }

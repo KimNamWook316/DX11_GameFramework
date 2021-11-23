@@ -4,15 +4,13 @@
 #include "Scene/SceneManager.h"
 #include "PathManager.h"
 #include "Timer.h"
-//#include "Resource/Mesh/Mesh.h";
-//#include "Resource/Shader/Shader.h"
 
 DEFINITION_SINGLE(CEngine)
 
 bool CEngine::mLoop = true;
 
 CEngine::CEngine() 
-	: mClearColor{}
+	: mClearColor{0, 0, 1.0f, 1.0f}
 	, mTimer(nullptr)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -41,7 +39,8 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* name, unsigned int width,
 	return Init(hInst, mhWnd, width, height, windowMode);
 }
 
-bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int height, bool windowMode) 
+bool CEngine::Init(HINSTANCE hInst, HWND hWnd, 
+	unsigned int width, unsigned int height, bool windowMode) 
 {
 	mhInst = hInst;
 
@@ -53,24 +52,28 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int width, unsigned int 
 	// Device 초기화
 	if (!CDevice::GetInst()->Init(mhWnd, width, height, windowMode)) 
 	{
+		assert(false);
 		return false;
 	}
 
 	// Path Manager
 	if (!CPathManager::GetInst()->Init())
 	{
+		assert(false);
 		return false;
 	}
 
 	// 리소스 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
 	{
+		assert(false);
 		return false;
 	}
 
 	// Scene Manager
 	if (!CSceneManager::GetInst()->Init())
 	{
+		assert(false);
 		return false;
 	}
 
@@ -145,12 +148,6 @@ bool CEngine::render(float deltaTime)
 	CDevice::GetInst()->ClearRenderTarget(mClearColor);
 	CDevice::GetInst()->ClearDepthStencil(1.f, 0);
 
-	//CMesh* mesh = CResourceManager::GetInst()->FindMesh("SpriteMesh");
-	//CShader* shader = CResourceManager::GetInst()->FindShader("ColorMeshShader");
-
-	//shader->SetShader();
-	//mesh->Render();
-	
 	CDevice::GetInst()->Flip();
 
 	return false;

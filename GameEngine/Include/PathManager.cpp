@@ -15,6 +15,8 @@ CPathManager::~CPathManager()
     {
         SAFE_DELETE(iter->second);
     }
+
+    mMapPath.clear();
 }
 
 bool CPathManager::Init()
@@ -36,6 +38,7 @@ bool CPathManager::Init()
     {
         if ('\\' == Path[i])
         {
+            // 실행파일명부터 끝까지 잘라낸다.
             memset(&Path[i + 1], 0, sizeof(TCHAR) * (length - i - 1));
             break;
         }

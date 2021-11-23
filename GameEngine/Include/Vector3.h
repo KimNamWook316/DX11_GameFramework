@@ -80,7 +80,7 @@ struct Vector3
 	float Dot(const Vector3& v)	const;
 	Vector3 Cross(const Vector3& v)	const;
 	float Angle(const Vector3& v)	const;
-	Vector3 ConvertAngle();
+	Vector3 ConvertAngle() const;
 
 	// w == 0
 	Vector3 TransformNormal(const Matrix& mat) const;

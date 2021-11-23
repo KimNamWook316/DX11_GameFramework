@@ -94,8 +94,8 @@ struct VertexBuffer
 struct IndexBuffer
 {
 	ID3D11Buffer*	Buffer;
-	int				Size;
-	int				Count;
+	int				Size;	// Index 하나의 크기
+	int				Count;	// Index 개수
 	DXGI_FORMAT		Fmt;	// 출력할 때 필요한 Format을 담고 있다.
 
 	IndexBuffer()
@@ -125,4 +125,19 @@ struct MeshContainer
 
 	// 정점을 이어주는 방식이다.
 	D3D11_PRIMITIVE_TOPOLOGY	Primitive;	
+};
+
+// Shader cbuffer에 대응하는 버퍼 내용을 담고 있는 구조체
+struct TransformCBuffer
+{
+	Matrix MatWorld;
+	Matrix MatView;
+	Matrix MatProj;
+	Matrix MatWV;
+	Matrix MatWVP;
+	Matrix MatVP;
+	Vector3 Pivot;
+	Vector3 MeshSize;
+	// 16byte 정렬을 위한 Dummy Data.
+	Vector2 Dummy;
 };
