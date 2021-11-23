@@ -65,7 +65,6 @@ void CTransform::Update(const float deltaTime)
 {
 }
 
-// TODO : 왜 PostUpdate에서?
 // TODO : Update해주고 나면, bool 변수 false 해주어야 하지 않나?
 void CTransform::PostUpdate(const float deltaTime)
 {
@@ -332,7 +331,7 @@ void CTransform::AddWorldRotZ(const float& z)
 
 void CTransform::AddWorldPos(const Vector3& pos)
 {
-	mWorldRot += pos;
+	mWorldPos += pos;
 	SetInheritPosValue();
 }
 
@@ -432,7 +431,10 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 	}
 }
 
-// TODO : 회전 상속 여부 상관없이 relative position이 수정되어야 할 경우에는??
+// 회전 상속 여부 상관없이 relative position이 수정되어야 할 경우에는??
+// -> 상대 위치 값은 부모의 월드 위치가 바뀌더라도 바뀌지 않는다.
+// 또한, 상대 위치 값만 바뀌는 경우, 바뀐 위치 값만큼 월드 위치에 더해주기만 하면 된다.
+// 따라서, 회전하는 경우에만 자식의 position을 이 함수에서 수정해주게 된다.
 void CTransform::SetInheritPosValue()
 {
 	if (mParentTransform)
