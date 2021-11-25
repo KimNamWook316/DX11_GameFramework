@@ -127,6 +127,7 @@ struct MeshContainer
 	D3D11_PRIMITIVE_TOPOLOGY	Primitive;	
 };
 
+// Shader cbuffer에 대응하는 버퍼 내용을 담고 있는 구조체
 struct TransformCBuffer
 {
 	Matrix MatWorld;
@@ -136,6 +137,8 @@ struct TransformCBuffer
 	Matrix MatWVP;
 	Matrix MatVP;
 	Vector3 Pivot;
+	float Dummy1;
 	Vector3 MeshSize;
-	Vector2 Empty;
+	// 16byte 정렬을 위한 Dummy Data.
+	float Dummy2;
 };

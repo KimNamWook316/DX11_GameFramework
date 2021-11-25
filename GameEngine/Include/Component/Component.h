@@ -32,6 +32,7 @@ public:
 
 public:
 	virtual bool Init();
+	virtual void Start();
 	virtual void Update(float deltaTime) = 0;
 	virtual void PostUpdate(float deltaTime) = 0;
 	virtual void PrevRender() = 0;

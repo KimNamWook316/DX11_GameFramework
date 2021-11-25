@@ -14,3 +14,8 @@ CObjectComponent::CObjectComponent(const CObjectComponent& com) :
 CObjectComponent::~CObjectComponent()
 {
 }
+
+void CObjectComponent::Start()
+{
+	CComponent::Start();
+}

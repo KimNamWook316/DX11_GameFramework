@@ -24,10 +24,11 @@ bool CSpriteMesh::Init()
 	{
 		// 카메라가 없는 경우, 기본적으로 ViewPort의 맨 왼쪽은 -1, 맨 오른쪽은 1, 아래는 -1, 위는 1로 설정된다.
 		// Winding order 준수할 것.
-		VertexColor(Vector3(-0.5f, 0.5f, 0.f), Vector4::Red),
-		VertexColor(Vector3(0.5f, 0.5f, 0.f), Vector4::Green),
-		VertexColor(Vector3(-0.5f, -0.5f, 0.f), Vector4::Blue),
-		VertexColor(Vector3(0.5f, -0.5f, 0.f), Vector4(1.f, 0.f, 1.f, 1.f)),
+		// 왼쪽 아래 점 현재 Pivot
+		VertexColor(Vector3(0.f, 1.0f, 0.f), Vector4::Red),
+		VertexColor(Vector3(1.f, 1.f, 0.f), Vector4::Green),
+		VertexColor(Vector3(0.f, 0.f, 0.f), Vector4::Blue),
+		VertexColor(Vector3(1.f, 0.f, 0.f), Vector4(1.f, 0.f, 1.f, 1.f)),
 	};
 
 	// Vertex Buffer 생성

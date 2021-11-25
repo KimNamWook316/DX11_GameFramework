@@ -2,6 +2,7 @@
 
 #include "../../GameInfo.h"
 
+// 상수 버퍼를 들고 있는 객체.
 class CConstantBufferBase
 {
 public:

@@ -31,6 +31,17 @@ public:
 		return mRS;
 	}
 
+#ifdef _DEBUG
+	// COM객체 메모리 누수 추적 함수
+	void CheckMemoryLeak()
+	{
+		OutputDebugStringW(TEXT("############LEAK INFO############\n"));
+		mDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		OutputDebugStringW(TEXT("############LEAK INFO END############\n"));
+	}
+#endif // _DEBUG
+
+
 	DECLARE_SINGLE(CDevice)
 
 private:
@@ -57,5 +68,10 @@ private:
 
 	HWND mhWnd;
 	Resolution mRS;
+
+#ifdef _DEBUG
+	ID3D11Debug* mDebug;
+#endif // _DEBUG
+
 };
 

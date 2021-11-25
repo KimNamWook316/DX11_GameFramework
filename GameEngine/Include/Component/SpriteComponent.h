@@ -21,6 +21,7 @@ public:
 
 public:
 	virtual bool Init();
+	virtual void Start();
 	virtual void Update(float deltaTime);
 	virtual void PostUpdate(float deltaTime);
 	virtual void PrevRender();

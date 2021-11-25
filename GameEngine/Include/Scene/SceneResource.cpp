@@ -58,7 +58,16 @@ CMesh* CSceneResource::FindMesh(const std::string& name)
 
 	if (iter == mMapMesh.end())
 	{
-		return nullptr;
+		CMesh* findNotInScene = CResourceManager::GetInst()->FindMesh(name);
+
+		if (!findNotInScene)
+		{
+			assert(false);
+			return nullptr;
+		}
+
+		mMapMesh.insert(std::make_pair(name, findNotInScene));
+		return findNotInScene;
 	}
 
 	return iter->second;
@@ -70,7 +79,17 @@ CShader* CSceneResource::FindShader(const std::string& name)
 
 	if (iter == mMapShader.end())
 	{
-		return nullptr;
+		CShader* findNotInScene = CResourceManager::GetInst()->FindShader(name);
+
+		if (!findNotInScene)
+		{
+			assert(false);
+			return nullptr;
+		}
+
+		mMapShader.insert(std::make_pair(name, findNotInScene));
+
+		return findNotInScene;
 	}
 
 	return iter->second;
@@ -82,8 +101,17 @@ CMaterial* CSceneResource::FindMaterial(const std::string& name)
 
 	if (iter == mMapMaterial.end())
 	{
-		return nullptr;
+		CMaterial* findNotInScene = CResourceManager::GetInst()->FindMaterial(name);
+
+		if (!findNotInScene)
+		{
+			assert(false);
+			return nullptr;
+		}
+
+		mMapMaterial.insert(std::make_pair(name, findNotInScene));
+		return findNotInScene;
 	}
 
-	return iter->second;
+ 	return iter->second;
 }

@@ -5,6 +5,7 @@
 CSpriteComponent::CSpriteComponent()
 {
 	SetTypeID<CSpriteComponent>();
+	mbIsRender = true;
 }
 
 CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)
@@ -21,7 +22,14 @@ bool CSpriteComponent::Init()
 {
 	mMesh = (CSpriteMesh*)mScene->GetResource()->FindMesh("SpriteMesh");
 	mMaterial = mScene->GetResource()->FindMaterial("Color");
+
+	SetMeshSize(1.f, 1.f, 0.f);
 	return true;
+}
+
+void CSpriteComponent::Start()
+{
+	CSceneComponent::Start();
 }
 
 void CSpriteComponent::Update(float deltaTime)
@@ -41,7 +49,14 @@ void CSpriteComponent::PrevRender()
 
 void CSpriteComponent::Render()
 {
+	// 상수 버퍼 넘기고
 	CSceneComponent::Render();
+
+	// 쉐이더 바인드
+	mMaterial->Render();
+
+	// 버텍스정보 넘겨서 Draw
+	mMesh->Render();
 }
 
 void CSpriteComponent::PostRender()

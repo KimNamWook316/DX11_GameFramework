@@ -65,7 +65,7 @@ void CTransform::Update(const float deltaTime)
 {
 }
 
-// TODO : Update해주고 나면, bool 변수 false 해주어야 하지 않나?
+// TODO : Update해주고 나면, bool 변수 false?
 void CTransform::PostUpdate(const float deltaTime)
 {
 	if (mbUpdateScale)
@@ -102,6 +102,7 @@ void CTransform::SetTransformBuffer()
 	mCBuffer->SetPivot(mPivot);
 	mCBuffer->SetMeshSize(mMeshSize);
 
+	// 월드 행렬 계산하고, 쉐이더로 보냄
 	mCBuffer->UpdateCBuffer();
 }
 
@@ -182,7 +183,7 @@ void CTransform::SetWorldScale(const Vector3& scale)
 void CTransform::SetWorldScale(const float& x, const float& y, const float& z)
 {
 	Vector3 scale(x, y, z);
-	SetWorldPos(scale);
+	SetWorldScale(scale);
 }
 
 void CTransform::SetWorldRot(const Vector3& rot)
@@ -219,13 +220,14 @@ void CTransform::SetWorldRotZ(const float& z)
 void CTransform::SetWorldPos(const Vector3& pos)
 {
 	mWorldPos = pos;
+	mRelativePos = pos;
 	SetInheritPosValue();
 }
 
 void CTransform::SetWorldPos(const float& x, const float& y, const float& z)
 {
 	Vector3 pos(x, y, z);
-	SetInheritPosValue();
+	SetWorldPos(pos);
 }
 
 void CTransform::AddRelativeScale(const Vector3& scale)
@@ -332,6 +334,7 @@ void CTransform::AddWorldRotZ(const float& z)
 void CTransform::AddWorldPos(const Vector3& pos)
 {
 	mWorldPos += pos;
+	mRelativePos = mWorldPos;
 	SetInheritPosValue();
 }
 
@@ -427,21 +430,19 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 	// 하위 오브젝트들에도 적용
 	for (size_t i = 0; i < size; ++i)
 	{
-		SetInheritRotValue(false);
+		mVecChildTransform[i]->SetInheritRotValue(false);
 	}
 }
 
 // 회전 상속 여부 상관없이 relative position이 수정되어야 할 경우에는??
 // -> 상대 위치 값은 부모의 월드 위치가 바뀌더라도 바뀌지 않는다.
-// 또한, 상대 위치 값만 바뀌는 경우, 바뀐 위치 값만큼 월드 위치에 더해주기만 하면 된다.
-// 따라서, 회전하는 경우에만 자식의 position을 이 함수에서 수정해주게 된다.
 void CTransform::SetInheritPosValue()
 {
 	if (mParentTransform)
 	{
 		Vector3 parentRot;
 
-		if (mbInheritPosX)
+		if (mbInheritRotX)
 		{
 			parentRot.x = mParentTransform->GetWorldRot().x;
 		}
@@ -468,23 +469,24 @@ void CTransform::SetInheritPosValue()
 
 			// 부모 오브젝트의 Position값 얻어옴
 			Vector3 parentPos = mParentTransform->GetWorldPos();
-			
+
 			/*
 			생성된 회전행렬에 부모 오브젝트의 위치값 복사 한다.
 			11, 12, 13, 14
 			21, 22, 23, 24
 			31, 32, 33,	34
 			x,   y,   z, 1
-			
+
 			_41, _42, _43에 복사한다.
 			-> 부모 회전, 위치값 가진 변환행렬 완성
 			*/
 			memcpy(&matRot._41, &parentPos, sizeof(Vector3));
-
-			// 월드 위치 = 상대 위치 * 부모 월드 변환 행렬이면,
-			// 상대 위치 = 월드 위치 * 부모 월드 변환의 역행렬이다.
-			matRot.Inverse();
-			mRelativePos = mWorldPos.TransformCoord(matRot);
+			
+			mWorldPos = mRelativePos.TransformCoord(matRot);
+		}
+		else
+		{
+			mWorldPos = mRelativePos + mParentTransform->GetWorldPos();
 		}
 	}
 
@@ -582,6 +584,73 @@ void CTransform::SetInheritWorldRotValue(bool bIsCurrent)
 	// 하위 오브젝트들에도 적용
 	for (size_t i = 0; i < size; ++i)
 	{
-		SetInheritWorldRotValue(false);
+		mVecChildTransform[i]->SetInheritWorldRotValue(false);
+	}
+}
+
+void CTransform::SetInheritWorldPosValue()
+{
+	if (mParentTransform)
+	{
+		Vector3 parentRot;
+
+		if (mbInheritRotX)
+		{
+			parentRot.x = mParentTransform->GetWorldRot().x;
+		}
+
+		if (mbInheritRotY)
+		{
+			parentRot.y = mParentTransform->GetWorldRot().y;
+		}
+
+		if (mbInheritRotZ)
+		{
+			parentRot.z = mParentTransform->GetWorldRot().z;
+		}
+
+		if (mbInheritRotX || mbInheritRotY || mbInheritRotZ)
+		{
+			// 부모가 얼만큼 회전해 있는지 회전행렬 생성한다.
+			Vector3 convertRot = parentRot.ConvertAngle();
+
+			XMVECTOR quaternion = XMQuaternionRotationRollPitchYaw(convertRot.x, convertRot.y, convertRot.z);
+
+			Matrix matRot;
+			matRot.RotationQuaternion(quaternion);
+
+			// 부모 오브젝트의 Position값 얻어옴
+			Vector3 parentPos = mParentTransform->GetWorldPos();
+
+			/*
+			생성된 회전행렬에 부모 오브젝트의 위치값 복사 한다.
+			11, 12, 13, 14
+			21, 22, 23, 24
+			31, 32, 33,	34
+			x,   y,   z, 1
+
+			_41, _42, _43에 복사한다.
+			-> 부모 회전, 위치값 가진 변환행렬 완성
+			*/
+			memcpy(&matRot._41, &parentPos, sizeof(Vector3));
+
+			// 월드 위치 = 상대 위치 * 부모 월드 변환 행렬이면,
+			// 상대 위치 = 월드 위치 * 부모 월드 변환의 역행렬이다.
+			matRot.Inverse();
+			mRelativePos = mWorldPos.TransformCoord(matRot);
+		}
+		else
+		{
+			mWorldPos = mRelativePos + mParentTransform->GetWorldPos();
+		}
+	}
+
+	mbUpdatePos = true;
+
+	size_t size = mVecChildTransform.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChildTransform[i]->SetInheritPosValue();
 	}
 }

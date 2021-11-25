@@ -13,6 +13,7 @@ private:
 	~CScene();
 
 public:
+	void Start();
 	void Update(float deltaTime);
 	void PostUpdate(float deltaTime);
 
@@ -20,6 +21,11 @@ public:
 	CSceneResource* GetResource() const
 	{
 		return mResource;
+	}
+
+	CGameObject* GetPlayerObj() const
+	{
+		return mMode->GetPlayerObj();
 	}
 
 public:
@@ -45,15 +51,21 @@ public:
 
 		// CRef -> SetName
 		obj->SetName(name);
-		obj->mScene(this);
+		obj->mScene = this;
 
 		if (!obj->Init())
 		{
 			SAFE_RELEASE(obj);
-			return false;
+			return nullptr;
 		}
 
 		mObjList.push_back(obj);
+
+		if (mbIsStart)
+		{
+			obj->Start();
+		}
+
 		return obj;
 	}
 
@@ -62,5 +74,6 @@ private:
 	CSceneResource* mResource;
 
 	std::list<CSharedPtr<CGameObject>> mObjList;
+	bool mbIsStart;
 };
 

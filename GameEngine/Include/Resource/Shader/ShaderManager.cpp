@@ -17,7 +17,7 @@ bool CShaderManager::Init()
 		return false;
 	}
 
-	CreateConstantBuffer("TransformBuffer", sizeof(CConstantBuffer), 0,
+	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
 		(int)eConstantBufferShaderTypeFlags::Graphic);
 	
 	return true;
@@ -68,7 +68,8 @@ bool CShaderManager::CreateConstantBuffer(const std::string& name, const int siz
 	{
 		return true;
 	}
-
+	
+	buf = new CConstantBuffer;
 	buf->SetName(name);
 
 	if (!buf->Init(size, reg, eConstantBufferShaderType))

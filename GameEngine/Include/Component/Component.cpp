@@ -31,3 +31,7 @@ bool CComponent::Init()
 {
 	return true;
 }
+
+void CComponent::Start()
+{
+}

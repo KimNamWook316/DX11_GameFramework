@@ -36,11 +36,6 @@ CGraphicShader::~CGraphicShader()
 	SAFE_RELEASE(mGSBlob);
 }
 
-bool CGraphicShader::Init()
-{
-	return false;
-}
-
 // 현재 가지고 있는 쉐이더들을 파이프라인에 설정한다.
 void CGraphicShader::SetShader()
 {

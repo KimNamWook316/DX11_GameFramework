@@ -7,11 +7,28 @@ CScene::CScene()
 
 	mMode->mScene = this;
 	mResource->mScene = this;
+
+	mbIsStart = false;
 }
 
 CScene::~CScene()
 {
 	SAFE_DELETE(mResource);
+}
+
+void CScene::Start()
+{
+	mMode->Start();
+
+	auto iter = mObjList.begin();
+	auto iterEnd = mObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->Start();
+	}
+
+	mbIsStart = true;
 }
 
 void CScene::Update(float deltaTime)
@@ -44,8 +61,6 @@ void CScene::Update(float deltaTime)
 
 void CScene::PostUpdate(float deltaTime)
 {
-	mMode->PostUpdate(deltaTime);
-
 	mMode->PostUpdate(deltaTime);
 
 	auto iter = mObjList.begin();

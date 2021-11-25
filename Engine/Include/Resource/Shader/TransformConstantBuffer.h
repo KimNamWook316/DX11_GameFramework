@@ -1,5 +1,8 @@
 #pragma once
+
 #include "ConstantBufferBase.h"
+
+// Transform cbuffer에 전해질 버퍼 객체
 class CTransformConstantBuffer : public CConstantBufferBase
 {
 public:

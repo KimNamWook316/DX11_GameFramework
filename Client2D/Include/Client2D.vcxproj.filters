@@ -13,15 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="02. Object">
+      <UniqueIdentifier>{ea07e38c-4492-4765-9271-a5a8ed815a4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. SceneMode">
+      <UniqueIdentifier>{2943f565-adb2-42d0-a7de-5bddb59454a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\01. Player">
+      <UniqueIdentifier>{c12b5867-b9a5-43ef-94aa-77a20956e522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\02. Bullet">
+      <UniqueIdentifier>{058ed6fb-a044-4cf4-b722-cbc7b7042463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\03. PlayerChild">
+      <UniqueIdentifier>{78aad6d5-c590-499b-bbfc-8cf8ec2dcac6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\MainScene.cpp">
+      <Filter>01. SceneMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player2D.cpp">
+      <Filter>02. Object\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Bullet.cpp">
+      <Filter>02. Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PlayerChild.cpp">
+      <Filter>02. Object\03. PlayerChild</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\MainScene.h">
+      <Filter>01. SceneMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player2D.h">
+      <Filter>02. Object\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Bullet.h">
+      <Filter>02. Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerChild.h">
+      <Filter>02. Object\03. PlayerChild</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

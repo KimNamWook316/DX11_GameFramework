@@ -1,4 +1,6 @@
 #include "SceneComponent.h"
+#include "../Render/RenderManager.h"
+#include "../GameObject/GameObject.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -59,20 +61,60 @@ bool CSceneComponent::Init()
 	return true;
 }
 
-void CSceneComponent::Update(float DeltaTime)
+void CSceneComponent::Start()
 {
+	CComponent::Start();
+
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->Start();
+	}
 }
 
-void CSceneComponent::PostUpdate(float DeltaTime)
+void CSceneComponent::Update(float deltaTime)
 {
+	mTransform->Update(deltaTime);
+
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->Update(deltaTime);
+	}
+}
+
+void CSceneComponent::PostUpdate(float deltaTime)
+{
+	mTransform->PostUpdate(deltaTime);
+
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->PostUpdate(deltaTime);
+	}
 }
 
 void CSceneComponent::PrevRender()
 {
+	if (mbIsRender)
+	{
+		CRenderManager::GetInst()->AddRenderList(this);
+	}
+
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->PrevRender();
+	}
 }
 
 void CSceneComponent::Render()
 {
+	mTransform->SetTransformBuffer();
 }
 
 void CSceneComponent::PostRender()
@@ -83,6 +125,18 @@ CSceneComponent* CSceneComponent::Clone()
 {
 	// 복사되면서 복사 생성자 호출, CRef의 자식이기 때문에 SharedPtr로 관리되며, 레퍼런스 카운트 체크함
 	return new CSceneComponent(*this);
+}
+
+void CSceneComponent::SetThisToGameObject(CGameObject* obj)
+{
+	obj->AddSceneComponent(this);
+
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->SetThisToGameObject(obj);
+	}
 }
 
 void CSceneComponent::SetScene(CScene* scene)

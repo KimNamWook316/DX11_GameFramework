@@ -133,6 +133,11 @@ public: // getter
 		return mRelativePos;
 	}
 
+	Vector3 GetRelativeAxis(eAXIS axis)
+	{
+		return mRelativeAxis[axis];
+	}
+
 	Vector3 GetWorldScale() const
 	{
 		return mWorldScale;
@@ -163,6 +168,11 @@ public: // getter
 		return mMatWorld;
 	}
 
+	Vector3 GetWorldAxis(eAXIS axis)
+	{
+		return mWorldAxis[axis];
+	}
+
 public:
 	void SetInheritScaleValue();
 	void SetInheritRotValue(bool bIsCurrent);
@@ -170,6 +180,7 @@ public:
 
 	void SetInheritWorldScaleValue();
 	void SetInheritWorldRotValue(bool bIsCurrent);
+	void SetInheritWorldPosValue();
 
 private:
 	class CScene* mScene;
@@ -187,6 +198,7 @@ private:
 	bool mbInheritRotX;
 	bool mbInheritRotY;
 	bool mbInheritRotZ;
+
 	bool mbInheritPosX;
 	bool mbInheritPosY;
 	bool mbInheritPosZ;

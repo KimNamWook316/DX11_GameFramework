@@ -11,11 +11,12 @@ protected:
 
 public:
 	virtual bool Init() = 0;
+	virtual void Start();
 	virtual void Update(float deltaTime) = 0;
 	virtual void PostUpdate(float deltaTime) = 0;
 	virtual void PrevRender() = 0;
 	virtual void Render() = 0;
 	virtual void PostRender() = 0;
-	virtual CComponent* Clone() = 0;
+	virtual CObjectComponent* Clone() = 0;
 };
 

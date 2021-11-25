@@ -137,7 +137,8 @@ struct TransformCBuffer
 	Matrix MatWVP;
 	Matrix MatVP;
 	Vector3 Pivot;
+	float Dummy1;
 	Vector3 MeshSize;
 	// 16byte 정렬을 위한 Dummy Data.
-	Vector2 Dummy;
+	float Dummy2;
 };

@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "../Render/RenderManager.h"
 
 DEFINITION_SINGLE(CSceneManager);
 
@@ -17,6 +18,8 @@ CSceneManager::~CSceneManager()
 bool CSceneManager::Init()
 {
 	mScene = new CScene;
+	CRenderManager::GetInst()->SetObjList(&mScene->mObjList);
+	
 	return true;
 }
 

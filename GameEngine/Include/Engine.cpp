@@ -2,6 +2,7 @@
 #include "Device.h"
 #include "Resource/ResourceManager.h"
 #include "Scene/SceneManager.h"
+#include "Render/RenderManager.h"
 #include "PathManager.h"
 #include "Timer.h"
 
@@ -10,19 +11,21 @@ DEFINITION_SINGLE(CEngine)
 bool CEngine::mLoop = true;
 
 CEngine::CEngine() 
-	: mClearColor{0, 0, 1.0f, 1.0f}
+	: mClearColor{0.5f, 0.5f, 0.5f, 1.f}
 	, mTimer(nullptr)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(243);
+	//_CrtSetBreakAlloc(214);
 }
 
 CEngine::~CEngine() 
 {
 	CSceneManager::DestroyInst();
+	CRenderManager::DestroyInst();
 	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
 	CDevice::DestroyInst();
+	SAFE_DELETE(mTimer);
 }
 
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* name, unsigned int width, 
@@ -65,6 +68,13 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	// 리소스 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
+	{
+		assert(false);
+		return false;
+	}
+
+	// 렌더 관리자 초기화
+	if (!CRenderManager::GetInst()->Init())
 	{
 		assert(false);
 		return false;
@@ -121,11 +131,11 @@ void CEngine::Logic()
 
 	float deltaTime = mTimer->GetDeltaTIme();
 
-	if (update(deltaTime))
+	if (!update(deltaTime))
 	{
 		return;
 	}
-	if (postUpdate(deltaTime))
+	if (!postUpdate(deltaTime))
 	{
 		return;
 	}
@@ -134,11 +144,19 @@ void CEngine::Logic()
 
 bool CEngine::update(float deltaTime)
 {
+	if (CSceneManager::GetInst()->Update(deltaTime))
+	{
+		return true;
+	}
 	return false;
 }
 
 bool CEngine::postUpdate(float deltaTime)
 {
+	if (CSceneManager::GetInst()->PostUpdate(deltaTime))
+	{
+		return true;
+	}
 	return false;
 }
 
@@ -147,6 +165,8 @@ bool CEngine::render(float deltaTime)
 	CDevice::GetInst()->RenderStart();
 	CDevice::GetInst()->ClearRenderTarget(mClearColor);
 	CDevice::GetInst()->ClearDepthStencil(1.f, 0);
+
+	CRenderManager::GetInst()->Render();
 
 	CDevice::GetInst()->Flip();
 
