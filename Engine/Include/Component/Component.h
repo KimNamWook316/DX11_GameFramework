@@ -1,5 +1,7 @@
 #pragma once
+
 #include "../Ref.h"
+
 class CComponent : public CRef
 {
 	// GameObject에서 생성해줄 것
@@ -47,6 +49,5 @@ protected:
 	// 어느 씬, 어느 게임 오브젝트 소속인지
 	class CScene* mScene;
 	class CGameObject* mObject;
-	
 };
 

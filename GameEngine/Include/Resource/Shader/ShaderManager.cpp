@@ -12,11 +12,13 @@ CShaderManager::~CShaderManager()
 
 bool CShaderManager::Init()
 {
+	// 2D용 사각 메쉬 생성
 	if (!CreateShader<CColorMeshShader>("ColorMeshShader"))
 	{
 		return false;
 	}
 
+	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
 		(int)eConstantBufferShaderTypeFlags::Graphic);
 	

@@ -34,6 +34,7 @@ void CRenderManager::Render()
 {
 	mRenderCount = 0;
 
+	// 씬이 들고있는 오브젝트 리스트 포인터를 돌면서, 렌더 대상일 경우 렌더리스트에 추가
 	{
 		auto iter = mpObjList->begin();
 		auto iterEnd = mpObjList->end();
@@ -44,6 +45,7 @@ void CRenderManager::Render()
 		}
 	}
 
+	// 실제 렌더
 	{
 		for (int i = 0; i < mRenderCount; ++i)
 		{

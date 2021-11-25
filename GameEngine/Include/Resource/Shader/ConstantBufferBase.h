@@ -16,7 +16,7 @@ public:
 	virtual CConstantBufferBase* Clone() = 0;
 
 protected:
-	void setConstantBuffer(const std::string& name);
+	void setMyConstantBuffer(const std::string& name);
 
 protected:
 	CSharedPtr<class CConstantBuffer> mBuffer;

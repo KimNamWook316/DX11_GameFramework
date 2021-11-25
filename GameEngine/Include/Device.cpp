@@ -24,6 +24,7 @@ CDevice::~CDevice()
 	}
 	SAFE_RELEASE(mContext);
 #ifdef _DEBUG
+	mDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&mDebug));
 	//CheckMemoryLeak();
 #endif // _DEBUG
 	SAFE_RELEASE(mDebug);
@@ -73,10 +74,6 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 		assert(false);
 		return false;
 	}
-
-#ifdef _DEBUG
-	mDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&mDebug));
-#endif
 
 	// SwapChain이 가지고 있는 BackBuffer를 얻어온다.
 	ID3D11Texture2D* backBuffer = nullptr;

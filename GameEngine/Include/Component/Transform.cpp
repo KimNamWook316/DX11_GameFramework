@@ -65,7 +65,6 @@ void CTransform::Update(const float deltaTime)
 {
 }
 
-// TODO : Update해주고 나면, bool 변수 false?
 void CTransform::PostUpdate(const float deltaTime)
 {
 	if (mbUpdateScale)
@@ -87,8 +86,24 @@ void CTransform::PostUpdate(const float deltaTime)
 	{
 		mMatWorld = mMatScale * mMatRot * mMatPos;
 	}
+
+	if (mbUpdateScale)
+	{
+		mbUpdateScale = false;
+	}
+
+	if (mbUpdateRot)
+	{
+		mbUpdateRot = false;
+	}
+
+	if (mbUpdatePos)
+	{
+		mbUpdatePos = false;
+	}
 }
 
+// 상수 버퍼 갱신
 void CTransform::SetTransformBuffer()
 {
 	mCBuffer->SetWorldMatrix(mMatWorld);
@@ -115,8 +130,6 @@ void CTransform::ComputeWolrdMatrix()
 void CTransform::SetRelativeScale(const Vector3& scale)
 {
 	mRelativeScale = scale;
-
-	// 이 트랜스폼이 최상위 트랜스폼이라면 여기서 worldScale변경해줘야 한다.
 	mWorldScale = scale;
 
 	SetInheritScaleValue();
@@ -386,7 +399,6 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 		}
 
 		// 상위 트랜스폼의 Rotation값을 하나라도 적용받는 경우
-		// 
 		if ((mbInheritRotX || mbInheritRotY || mbInheritRotZ) && (!bIsCurrent))
 		{
 			// 상위 트랜스폼의 회전을 적용받는 경우, 위치도 바뀌어야 함 ( 공전 )

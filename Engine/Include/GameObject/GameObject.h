@@ -595,9 +595,9 @@ protected:
 	class CScene* mScene;
 	CSharedPtr<CSceneComponent> mRootSceneComponent; // 씬 컴포넌트는 계층 구조로 관리
 	std::vector<CSharedPtr<CObjectComponent>> mVecObjectComponent; // 삭제, 삽입 많지 않지만, 각 컴포넌트에 접근할 일 많음
-	std::list<CSceneComponent*> mSceneComponentList;
+	std::list<CSceneComponent*> mSceneComponentList; // 탐색을 위해 씬 컴포넌트를 리스트로 들고 있다.
 
-	CGameObject* mParent;
-	std::vector<CSharedPtr<CGameObject>> mVecChildGameObj;
+	CGameObject* mParent;	// 부모 게임 오브젝트
+	std::vector<CSharedPtr<CGameObject>> mVecChildGameObj; // 자식 게임 오브젝트
 };
 

@@ -34,6 +34,7 @@ public:
 	void SetThisToGameObject(class CGameObject* obj);
 
 public:
+	// 자신을 갖고 있는 씬과 오브젝트를 등록하는 setter
 	virtual void SetScene(class CScene* scene);
 	virtual void SetGameObject(class CGameObject* obj);
 

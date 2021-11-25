@@ -185,9 +185,9 @@ public:
 private:
 	class CScene* mScene;
 	class CGameObject* mObject;
-	class CSceneComponent* mOwnerComponent;
+	class CSceneComponent* mOwnerComponent;	// 이 트랜스폼의 소유자
 
-	class CTransformConstantBuffer* mCBuffer;
+	class CTransformConstantBuffer* mCBuffer; // 상수 버퍼 래퍼
 
 	CTransform* mParentTransform;
 	std::vector<CTransform*> mVecChildTransform;
@@ -220,11 +220,11 @@ private: // World
 	Vector3 mWorldRot;
 	Vector3 mWorldAxis[AXIS_MAX];
 
-private:
+private: // Pivot, Mesh
 	Vector3 mPivot;
 	Vector3 mMeshSize;
 
-private:
+private: // Matrix
 	Matrix mMatScale;
 	Matrix mMatRot;
 	Matrix mMatPos;

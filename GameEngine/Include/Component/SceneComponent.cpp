@@ -101,6 +101,7 @@ void CSceneComponent::PrevRender()
 {
 	if (mbIsRender)
 	{
+		// 렌더 대상이면 렌더 리스트에 자신 추가
 		CRenderManager::GetInst()->AddRenderList(this);
 	}
 
@@ -127,6 +128,7 @@ CSceneComponent* CSceneComponent::Clone()
 	return new CSceneComponent(*this);
 }
 
+// GameObject의 씬 컴포넌트 리스트에 이 객체를 등록한다.
 void CSceneComponent::SetThisToGameObject(CGameObject* obj)
 {
 	obj->AddSceneComponent(this);
@@ -152,6 +154,7 @@ void CSceneComponent::SetScene(CScene* scene)
 	}
 }
 
+// 이 컴포넌트의 주인 오브젝트를 등록한다.
 void CSceneComponent::SetGameObject(CGameObject* obj)
 {
 	CComponent::SetGameObject(obj);

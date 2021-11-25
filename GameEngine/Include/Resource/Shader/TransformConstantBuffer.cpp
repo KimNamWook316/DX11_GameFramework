@@ -19,7 +19,7 @@ CTransformConstantBuffer::~CTransformConstantBuffer()
 bool CTransformConstantBuffer::Init()
 {	
 	// CConstantBuffer 객체를 가져온다.
-	setConstantBuffer("TransformBuffer");
+	setMyConstantBuffer("TransformBuffer");
 	return true;
 }
 
