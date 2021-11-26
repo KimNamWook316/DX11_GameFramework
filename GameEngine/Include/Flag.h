@@ -37,3 +37,17 @@ enum class eConstantBufferShaderTypeFlags
 	Graphic = Vertex | Pixel | Domain | Hull | Geometry,
 	All = Vertex | Pixel | Domain | Hull | Geometry | Compute
 };
+
+enum class eInputType
+{
+	Direct,
+	Window
+};
+
+enum eKeyState
+{
+	KeyState_Down,
+	KeyState_Push,
+	KeyState_Up,
+	KeyState_Max
+};

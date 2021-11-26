@@ -6,6 +6,7 @@ class CSceneManager
 {
 public:
 	bool Init();
+	void Start();
 	bool Update(float deltaTime);
 	bool PostUpdate(float deltaTime);
 

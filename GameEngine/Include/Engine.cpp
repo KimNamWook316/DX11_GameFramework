@@ -4,6 +4,7 @@
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
 #include "PathManager.h"
+#include "Input.h"
 #include "Timer.h"
 
 DEFINITION_SINGLE(CEngine)
@@ -13,6 +14,7 @@ bool CEngine::mLoop = true;
 CEngine::CEngine() 
 	: mClearColor{0.5f, 0.5f, 0.5f, 1.f}
 	, mTimer(nullptr)
+	, mbIsStart(false)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(214);
@@ -21,6 +23,7 @@ CEngine::CEngine()
 CEngine::~CEngine() 
 {
 	CSceneManager::DestroyInst();
+	CInput::DestroyInst();
 	CRenderManager::DestroyInst();
 	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
@@ -80,6 +83,12 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 		return false;
 	}
 
+	if (!CInput::GetInst()->Init(mhInst, mhWnd))
+	{
+		assert(false);
+		return false;
+	}
+
 	// Scene Manager
 	if (!CSceneManager::GetInst()->Init())
 	{
@@ -127,9 +136,17 @@ int CEngine::Run()
 
 void CEngine::Logic()
 {
+	if (!mbIsStart)
+	{
+		mbIsStart = true;
+		CSceneManager::GetInst()->Start();
+	}
+
 	mTimer->Update();
 
 	float deltaTime = mTimer->GetDeltaTIme();
+
+	CInput::GetInst()->Update(deltaTime);
 
 	if (!update(deltaTime))
 	{

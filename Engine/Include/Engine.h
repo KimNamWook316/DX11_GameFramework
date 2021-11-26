@@ -36,5 +36,6 @@ private:
 	Resolution	mRS;
 	float		mClearColor[4]; // 화면 초기화 색상 변수
 	class CTimer* mTimer;
+	bool		mbIsStart;
 };
 

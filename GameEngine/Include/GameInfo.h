@@ -1,5 +1,7 @@
 #pragma once
 
+#define DIRECTINPUT_VERSION 0x8000
+
 #include <Windows.h>
 #include <list>
 #include <vector>
@@ -11,10 +13,12 @@
 #include <algorithm>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <dinput.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "dinput8.lib")
 
 #include "Vector2.h"
 #include "Vector3.h"
