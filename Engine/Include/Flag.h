@@ -51,3 +51,13 @@ enum eKeyState
 	KeyState_Up,
 	KeyState_Max
 };
+
+enum class eImageType
+{
+	Atlas,
+	Frame,
+	// 낱장 단위의 이미지 크기들이 모두 동일하다면,
+	// 텍스쳐 내부에 밉맵이라는 것이 있어서
+	// 밉맵 체인이라는 것을 이용해 arrayTexture라는 것을 만들어 쓸 수 있다.
+	Array
+};

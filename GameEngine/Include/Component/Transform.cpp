@@ -271,19 +271,19 @@ void CTransform::AddRelativeRot(const float& x, const float& y, const float& z)
 
 void CTransform::AddRelativeRotX(const float& x)
 {
-	Vector3 rot(x, mRelativeRot.y, mRelativeRot.z);
+	Vector3 rot(x, 0, 0);
 	AddRelativeRot(rot);
 }
 
 void CTransform::AddRelativeRotY(const float& y)
 {
-	Vector3 rot(mRelativeRot.x, y, mRelativeRot.z);
+	Vector3 rot(0, y, 0);
 	AddRelativeRot(rot);
 }
 
 void CTransform::AddRelativeRotZ(const float& z)
 {
-	Vector3 rot(mRelativeRot.x, mRelativeRot.y, z);
+	Vector3 rot(0, 0, z);
 	AddRelativeRot(rot);
 }
 
@@ -328,19 +328,19 @@ void CTransform::AddWorldRot(const float& x, const float& y, const float& z)
 
 void CTransform::AddWorldRotX(const float& x)
 {
-	Vector3 rot(x, mWorldRot.y, mWorldRot.z);
+	Vector3 rot(x, 0, 0);
 	AddWorldRot(rot);
 }
 
 void CTransform::AddWorldRotY(const float& y)
 {
-	Vector3 rot(mWorldRot.x, y, mWorldRot.z);
+	Vector3 rot(0, y, 0);
 	AddWorldRot(rot);
 }
 
 void CTransform::AddWorldRotZ(const float& z)
 {
-	Vector3 rot(mWorldRot.x, mWorldRot.y, z);
+	Vector3 rot(0, 0, z);
 	AddWorldRot(rot);
 }
 

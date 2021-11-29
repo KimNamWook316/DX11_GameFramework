@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClientManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\Bullet.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Scene\MainScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClientManager.h" />
     <ClInclude Include="Object\Bullet.h" />
     <ClInclude Include="Object\Player2D.h" />
     <ClInclude Include="Object\PlayerChild.h" />

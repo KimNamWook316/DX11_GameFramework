@@ -1,6 +1,6 @@
 #pragma once
 
-#define DIRECTINPUT_VERSION 0x8000
+#define DIRECTINPUT_VERSION 0x0800
 
 #include <Windows.h>
 #include <list>
@@ -28,8 +28,10 @@
 
 #define ROOT_PATH		"Root"
 #define SHADER_PATH		"Shader"
+#define TEXTURE_PATH	"Texture"
 
 #define SAFE_DELETE(p)  if(p) { delete p; p = nullptr; }
+#define SAFE_DELETE_ARRAY(p) if(p) { delete[] p; p = nullptr; }
 #define SAFE_RELEASE(p) if(p) { p->Release(); p = nullptr; }
 
 #define DECLARE_SINGLE(Type)\

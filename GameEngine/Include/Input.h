@@ -49,6 +49,20 @@ public:
 	bool SetShiftKey(const std::string& name, bool state);
 
 public:
+	void ClearCallBack();
+
+public:
+	Vector2 GetMousePos() const
+	{
+		return mMousePos;
+	}
+
+	Vector2 GetMouseMoveAmount() const
+	{
+		return mMouseMoveAmount;
+	}
+
+public:
 	// KeyInfo에 CallBack 함수를 등록하는 함수
 	// 멤버 함수를 함수 포인터 형태로 전달
 	template <typename T>
@@ -62,6 +76,11 @@ public:
 			return;
 		}
 
+		// 멤버 함수 포인터를 받는다.
+		// 멤버 함수 구조는 첫 번째 인자로 함수 자신의 포인터(this)를 받기 때문에
+		// this를 obj변수로 받아와 첫 번째 인자에 받아온 func 첫 번째 인자로 할당하고,
+		// 콜백 함수에 바인딩한다.
+		// 두 번째 인자는 CallBack의 인자인 float 형 변수
 		info->CallBack[keyState] = std::bind(func, obj, std::placeholders::_1);
 	}
 
@@ -80,7 +99,7 @@ private:
 	void updateKeyInfo(float deltaTime);
 
 private:
-	unsigned char convertDIKeyToWindowKey(const unsigned char key);
+	unsigned char convertWindowKeyToDIKey(const unsigned char key);
 
 	DECLARE_SINGLE(CInput)
 
@@ -108,6 +127,9 @@ private:
 
 	// Map에는 같은 키값이 등록될 수 있기 때문에, 등록되어있는 키를 중복 없이 저장하는 배열
 	std::vector<unsigned char> mVecAddedKey;
+
+	Vector2 mMousePos;
+	Vector2 mMouseMoveAmount;
 
 	bool mbIsCtrlPressed;
 	bool mbIsAltPressed;

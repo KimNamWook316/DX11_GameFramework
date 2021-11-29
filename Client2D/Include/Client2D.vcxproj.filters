@@ -45,6 +45,9 @@
     <ClCompile Include="Object\PlayerChild.cpp">
       <Filter>02. Object\03. PlayerChild</Filter>
     </ClCompile>
+    <ClCompile Include="ClientManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -61,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="Object\PlayerChild.h">
       <Filter>02. Object\03. PlayerChild</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

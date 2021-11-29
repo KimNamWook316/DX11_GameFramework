@@ -150,3 +150,15 @@ void CDevice::Flip()
 	// 백버퍼를 프론트버퍼로 바꾸며, 실제로 화면에 표시한다.
 	mSwapChain->Present(0, 0);
 }
+
+Vector2 CDevice::GetViewportAspectRatio()
+{
+	RECT clientRC = {};
+	GetClientRect(mhWnd, &clientRC);
+
+	float width = (float)(clientRC.right - clientRC.left);
+	float height = (float)(clientRC.bottom - clientRC.top);
+
+	// 현재 크기에 대한 해상도 비율
+	return Vector2(mRS.Width / width, mRS.Height / height);
+}

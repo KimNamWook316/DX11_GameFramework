@@ -17,6 +17,13 @@ public:
 	virtual CGameObject* Clone();
 
 private:
+	void moveUp(float deltaTime);
+	void moveDown(float deltaTime);
+	void rotationZInv(float deltaTime);
+	void rotationZ(float deltaTime);
+	void attack(float deltaTime);
+
+private:
 	CSharedPtr<CSpriteComponent> mSprite;
 	CSharedPtr<CSpriteComponent> mChildLeftSprite;
 	CSharedPtr<CSpriteComponent> mChildRightSprite;

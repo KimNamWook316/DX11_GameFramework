@@ -1,6 +1,7 @@
 #include "Player2D.h"
 #include "Bullet.h"
 #include "Scene/Scene.h"
+#include "Input.h"
 
 CPlayer2D::CPlayer2D()
 {
@@ -96,33 +97,18 @@ bool CPlayer2D::Init()
 	mChild4Sprite->SetPivot(0.5f, 0.5f, 0.f);
 	mChild4Sprite->SetBoolInheritRotZ(true);
 
+	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::moveUp);
+	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::moveDown);
+	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("RotationZInv", KeyState_Push, this, &CPlayer2D::rotationZInv);
+	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::rotationZ);
+	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::attack);
+
 	return true;
 }
 
 void CPlayer2D::Update(float deltaTime)
 {
 	CGameObject::Update(deltaTime);
-
-	if (GetAsyncKeyState('D') & 0x8000)
-	{
-		mSprite->AddRelativeRotZ(-180.f * deltaTime);
-	}
-
-	if (GetAsyncKeyState('A') & 0x8000)
-	{
-		mSprite->AddRelativeRotZ(180.f * deltaTime);
-	}
-
-
-	if (GetAsyncKeyState('W') & 0x8000)
-	{
-		mSprite->AddRelativePos(mSprite->GetWorldAxis(AXIS_Y) * 300.f * deltaTime);
-	}
-
-	if (GetAsyncKeyState('S') & 0x8000)
-	{
-		mSprite->AddRelativePos(mSprite->GetWorldAxis(AXIS_Y) * 300.f * -deltaTime);
-	}
 
 	static bool bFire = false;
 
@@ -152,4 +138,42 @@ void CPlayer2D::PostUpdate(float deltaTime)
 CGameObject* CPlayer2D::Clone()
 {
 	return new CPlayer2D(*this);
+}
+
+void CPlayer2D::moveUp(float deltaTime)
+{
+	mSprite->AddRelativePos(mSprite->GetWorldAxis(eAXIS::AXIS_Y) * 300.f * deltaTime);
+}
+
+void CPlayer2D::moveDown(float deltaTime)
+{
+	mSprite->AddRelativePos(mSprite->GetWorldAxis(eAXIS::AXIS_Y) * -300.f * deltaTime);
+}
+
+void CPlayer2D::rotationZInv(float deltaTime)
+{
+	mSprite->AddWorldRotZ(180.f * deltaTime);
+}
+
+void CPlayer2D::rotationZ(float deltaTime)
+{
+	mSprite->AddWorldRotZ(-180.f * deltaTime);
+}
+
+void CPlayer2D::attack(float deltaTime)
+{
+	CBullet* Bullet = mScene->CreateGameObject<CBullet>("Bullet");
+
+	Bullet->SetWorldPos(mMuzzle->GetWorldPos());
+	Bullet->SetWorldRot(GetWorldRot());
+
+	Bullet = mScene->CreateGameObject<CBullet>("Bullet");
+
+	Bullet->SetWorldPos(mChildLeftMuzzle->GetWorldPos());
+	Bullet->SetWorldRot(GetWorldRot());
+
+	Bullet = mScene->CreateGameObject<CBullet>("Bullet");
+
+	Bullet->SetWorldPos(mChildRightMuzzle->GetWorldPos());
+	Bullet->SetWorldRot(GetWorldRot());
 }

@@ -1,4 +1,5 @@
 #include "Input.h"
+#include "Device.h"
 
 DEFINITION_SINGLE(CInput)
 
@@ -105,7 +106,7 @@ bool CInput::CreateKey(const std::string& name, const unsigned char key)
 	info->Name = name;
 
 	// 키값 변환
-	unsigned char convertedKey = convertDIKeyToWindowKey(key);
+	unsigned char convertedKey = convertWindowKeyToDIKey(key);
 	info->State.Key = convertedKey;
 	
 	mMapKeyInfo.insert(std::make_pair(name, info));
@@ -171,9 +172,24 @@ bool CInput::SetShiftKey(const std::string& name, bool state)
 	return true;
 }
 
-KeyInfo* CInput::findKeyInfo(const std::string& name)
+// 씬 전환등의 이유로 콜백 함수들 클리어 해 주어야 할 때
+void CInput::ClearCallBack()
 {
 	auto iter = mMapKeyInfo.begin();
+	auto iterEnd = mMapKeyInfo.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		for (int i = 0; i < KeyState_Max; ++i)
+		{
+			iter->second->CallBack[i] = nullptr;
+		}
+	}
+}
+
+KeyInfo* CInput::findKeyInfo(const std::string& name)
+{
+	auto iter = mMapKeyInfo.find(name);
 
 	if (iter == mMapKeyInfo.end())
 	{
@@ -234,7 +250,7 @@ void CInput::readDirectInputKeyBoard()
 
 void CInput::readDirectInputMouse()
 {
-	HRESULT result = mMouse->GetDeviceState(256, &mMouseState);
+	HRESULT result = mMouse->GetDeviceState(sizeof(mMouseState), &mMouseState);
 
 	if (FAILED(result))
 	{
@@ -243,10 +259,33 @@ void CInput::readDirectInputMouse()
 			mMouse->Acquire();
 		}
 	}
+
+	if (mMouseState.rgbButtons[0] != '\0')
+	{
+		int a = 1;
+	}
+	if (mMouseState.rgbButtons[1] != '\0')
+	{
+		int a = 1;
+	}
 }
 
+// Mouse Position, Mouse Move Amount 업데이트
 void CInput::updateMouse(float deltaTime)
 {
+	POINT mouseWindowPos;
+
+	GetCursorPos(&mouseWindowPos);
+	ScreenToClient(mhWnd, &mouseWindowPos);
+
+	Vector2 ratio = CDevice::GetInst()->GetViewportAspectRatio();
+
+	// 비율에 의한 위치 보정
+	Vector2 mousePos = Vector2(mouseWindowPos.x * ratio.x, mouseWindowPos.y * ratio.y);
+
+	mMouseMoveAmount = mMousePos - mousePos;
+
+	mMousePos = mousePos;
 }
 
 void CInput::updateKeyState()
@@ -255,7 +294,7 @@ void CInput::updateKeyState()
 	switch (meInputType)
 	{
 	case eInputType::Direct:
-		if (mKeyArray[DIK_LCONTROL] & 0x8000)
+		if (mKeyArray[DIK_LCONTROL] & 0x80)
 		{
 			mbIsCtrlPressed = true;
 		}
@@ -264,7 +303,7 @@ void CInput::updateKeyState()
 			mbIsCtrlPressed = false;
 		}
 
-		if (mKeyArray[DIK_LALT] & 0x8000)
+		if (mKeyArray[DIK_LALT] & 0x80)
 		{
 			mbIsAltPressed = true;
 		}
@@ -273,7 +312,7 @@ void CInput::updateKeyState()
 			mbIsAltPressed = false;
 		}
 
-		if (mKeyArray[DIK_LSHIFT] & 0x8000)
+		if (mKeyArray[DIK_LSHIFT] & 0x80)
 		{
 			mbIsShiftPressed = true;
 		}
@@ -330,9 +369,19 @@ void CInput::updateKeyState()
 			switch (key)
 			{
 			case DIK_MOUSELBUTTON:
+				// 왼쪽 클릭
+				if (mMouseState.rgbButtons[0] & 0x80)
+				{
+					bIsKeyPushed = true;
+				}
 				break;
 
 			case DIK_MOUSERBUTTON:
+				// 오른쪽 클릭
+				if (mMouseState.rgbButtons[1] & 0x80)
+				{
+					bIsKeyPushed = true;
+				}
 				break;
 
 			case DIK_MOUSEWHEEL:
@@ -341,7 +390,7 @@ void CInput::updateKeyState()
 			default:
 				// 키보드 입력인 경우
 				// DirectInput의 키에서 받아온 값과 체크해서, 이 키가 현재 눌려 있다면
-				if (mKeyArray[key] & 0x8000)
+				if (mKeyArray[key] & 0x80)
 				{
 					bIsKeyPushed = true;
 				}
@@ -409,9 +458,9 @@ void CInput::updateKeyInfo(float deltaTime)
 		// 현재 눌려있는 ctrl, alt, shift값과 State 값과 KeyInfo의 값이 일치하면,
 		// 콜백 함수 호출한다.
 		if (mVecKeyState[key].State[KeyState_Down] &&
-			iter->second->bIsCtrl &&
-			iter->second->bIsAlt &&
-			iter->second->bIsShift)
+			iter->second->bIsCtrl == mbIsCtrlPressed &&
+			iter->second->bIsAlt == mbIsAltPressed &&
+			iter->second->bIsShift == mbIsShiftPressed)
 		{
 			if (iter->second->CallBack[KeyState_Down])
 			{
@@ -420,9 +469,9 @@ void CInput::updateKeyInfo(float deltaTime)
 		}
 
 		if (mVecKeyState[key].State[KeyState_Push] &&
-			iter->second->bIsCtrl &&
-			iter->second->bIsAlt &&
-			iter->second->bIsShift)
+			iter->second->bIsCtrl == mbIsCtrlPressed &&
+			iter->second->bIsAlt == mbIsAltPressed &&
+			iter->second->bIsShift == mbIsShiftPressed)
 		{
 			if (iter->second->CallBack[KeyState_Push])
 			{
@@ -431,9 +480,9 @@ void CInput::updateKeyInfo(float deltaTime)
 		}
 
 		if (mVecKeyState[key].State[KeyState_Up] &&
-			iter->second->bIsCtrl &&
-			iter->second->bIsAlt &&
-			iter->second->bIsShift)
+			iter->second->bIsCtrl == mbIsCtrlPressed &&
+			iter->second->bIsAlt == mbIsAltPressed &&
+			iter->second->bIsShift == mbIsShiftPressed)
 		{
 			if (iter->second->CallBack[KeyState_Up])
 			{
@@ -443,7 +492,7 @@ void CInput::updateKeyInfo(float deltaTime)
 	}
 }
 
-unsigned char CInput::convertDIKeyToWindowKey(const unsigned char key)
+unsigned char CInput::convertWindowKeyToDIKey(const unsigned char key)
 {
 	if (meInputType == eInputType::Direct)
 	{

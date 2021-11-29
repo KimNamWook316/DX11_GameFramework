@@ -31,6 +31,8 @@ public:
 		return mRS;
 	}
 
+	Vector2 GetViewportAspectRatio();
+
 #ifdef _DEBUG
 	// COM객체 메모리 누수 추적 함수
 	void CheckMemoryLeak()
