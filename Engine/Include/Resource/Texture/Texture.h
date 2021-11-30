@@ -65,6 +65,10 @@ public:
 	bool LoadTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
 
 public:
+	void SetShader(const int reg, const int eShaderType, const int index);
+	void ResetShader(const int reg, const int eShaderType, const int index);
+
+public:
 	eImageType GetImageType() const
 	{
 		return meImageType;
@@ -84,6 +88,9 @@ public:
 	{
 		return mVecTextureInfo.size();
 	}
+
+private:
+	bool createResource(const int index);
 
 protected:
 	class CScene* mScene;

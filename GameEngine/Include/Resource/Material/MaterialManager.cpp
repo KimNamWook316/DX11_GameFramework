@@ -1,4 +1,5 @@
 #include "MaterialManager.h"
+#include "../ResourceManager.h"
 
 CMaterialManager::CMaterialManager()
 {
@@ -16,6 +17,13 @@ bool CMaterialManager::Init()
 	CSharedPtr<CMaterial> mtrl = FindMaterial("Color");
 
 	mtrl->SetShader("ColorMeshShader");
+
+	// 텍스쳐 Material 생성
+	CreateMaterial<CMaterial>("BaseTexture");
+	mtrl = FindMaterial("BaseTexture");
+	mtrl->SetShader("Mesh2DShader");
+	CTexture* tex = CResourceManager::GetInst()->FindTexture("EngineDefaultTexture");
+	mtrl->AddTexture(0, (int)eConstantBufferShaderTypeFlags::Pixel, "EngineDefaultTexture", tex);
 
 	return true;
 }

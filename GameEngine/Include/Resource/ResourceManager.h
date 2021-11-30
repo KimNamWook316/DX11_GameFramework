@@ -3,6 +3,7 @@
 #include "Mesh/MeshManager.h"
 #include "Shader/ShaderManager.h"
 #include "Material/MaterialManager.h"
+#include "Texture/TextureManager.h"
 
 // 다양한 리소스들을 모두 관리할 매니저 (메쉬, 오디오 등등 모든 리소스는 이 객체에서만 관리한다.)
 // CResource라는 클래스를 만들어, 모든 리소스가 상속받게 하여, 맵 하나로 관리하는 법도 있다.
@@ -46,10 +47,18 @@ public: // ===================== Material =====================
 		return mMaterialManager->CreateMaterial<T>(name);
 	}
 
+public:
+	class CTexture* FindTexture(const std::string& name);
+	void ReleaseTexture(const std::string& name);
+
+	bool LoadTexture(const std::string& name, const TCHAR* fileName, 
+		const std::string& filePath = TEXTURE_PATH);
+
 	DECLARE_SINGLE(CResourceManager)
 private:
 	CMeshManager* mMeshManager;
 	CShaderManager* mShaderManager;
 	CMaterialManager* mMaterialManager;
+	CTextureManager* mTextureManager;
 };
 

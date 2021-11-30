@@ -14,9 +14,12 @@ protected:
 	virtual ~CSpriteComponent();
 
 public:
-	void SetMaterial(CMaterial* Material)
+	void SetMaterial(CMaterial* material);
+
+public:
+	CMaterial* GetMaterial()
 	{
-		mMaterial = Material;
+		return mMaterial;
 	}
 
 public:

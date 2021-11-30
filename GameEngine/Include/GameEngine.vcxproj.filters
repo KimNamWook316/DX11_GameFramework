@@ -90,6 +90,9 @@
     <Filter Include="02. Resource\04. Texture">
       <UniqueIdentifier>{fafb2701-a086-4df9-8a74-8bb5054ca94d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\02. Mesh2DShader">
+      <UniqueIdentifier>{8fbab054-6c0b-4e2e-9703-dbdb100468f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -218,6 +221,9 @@
     <ClInclude Include="Resource\Texture\TextureManager.h">
       <Filter>02. Resource\04. Texture</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\Mesh2DShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2DShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -331,6 +337,9 @@
     <ClCompile Include="Resource\Texture\TextureManager.cpp">
       <Filter>02. Resource\04. Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Shader\Mesh2DShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2DShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat" />
@@ -346,6 +355,9 @@
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Mesh2D.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

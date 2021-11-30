@@ -76,6 +76,23 @@ struct VertexColor
 	}
 };
 
+// 텍스쳐 매핑할 UV좌표를 가지고 있는 Vertex
+struct VertexUV
+{
+	Vector3 Pos;
+	Vector2 UV;
+
+	VertexUV()
+	{
+	}
+
+	VertexUV(const Vector3& pos, const Vector2& uv) :
+		Pos(pos),
+		UV(uv)
+	{
+	}
+};
+
 // 정점 정보를 담은 버퍼
 struct VertexBuffer
 {

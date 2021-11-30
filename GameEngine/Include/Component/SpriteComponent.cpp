@@ -18,10 +18,16 @@ CSpriteComponent::~CSpriteComponent()
 {
 }
 
+void CSpriteComponent::SetMaterial(CMaterial* material)
+{
+	mMaterial = material->Clone();
+}
+
 bool CSpriteComponent::Init()
 {
 	mMesh = (CSpriteMesh*)mScene->GetResource()->FindMesh("SpriteMesh");
-	mMaterial = mScene->GetResource()->FindMaterial("Color");
+	
+	mMaterial = mScene->GetResource()->FindMaterial("BaseTexture");
 
 	SetMeshSize(1.f, 1.f, 0.f);
 	return true;

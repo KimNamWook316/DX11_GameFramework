@@ -1,5 +1,6 @@
 #include "ShaderManager.h"
 #include "ColorMeshShader.h"
+#include "Mesh2DShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -15,6 +16,14 @@ bool CShaderManager::Init()
 	// 2D용 사각 메쉬 생성
 	if (!CreateShader<CColorMeshShader>("ColorMeshShader"))
 	{
+		assert(false);
+		return false;
+	}
+
+	// 텍스쳐용 쉐이더 생성
+	if (!CreateShader<CMesh2DShader>("Mesh2DShader"))
+	{
+		assert(false);
 		return false;
 	}
 

@@ -61,3 +61,10 @@ enum class eImageType
 	// 밉맵 체인이라는 것을 이용해 arrayTexture라는 것을 만들어 쓸 수 있다.
 	Array
 };
+
+enum class eSamplerType
+{
+	Point,
+	Linear,
+	Anisotropic,
+};

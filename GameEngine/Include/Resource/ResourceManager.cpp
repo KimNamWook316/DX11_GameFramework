@@ -2,15 +2,17 @@
 
 DEFINITION_SINGLE(CResourceManager)
 
-CResourceManager::CResourceManager()
-	: mMeshManager(nullptr)
-	, mShaderManager(nullptr)
-	, mMaterialManager(nullptr)
+CResourceManager::CResourceManager() :
+	mMeshManager(nullptr), 
+	mShaderManager(nullptr),
+	mMaterialManager(nullptr),
+	mTextureManager(nullptr)
 {
 }
 
 CResourceManager::~CResourceManager()
 {
+	SAFE_DELETE(mTextureManager);
 	SAFE_DELETE(mMeshManager);
 	SAFE_DELETE(mShaderManager);
 	SAFE_DELETE(mMaterialManager);
@@ -21,18 +23,28 @@ bool CResourceManager::Init()
 	mMeshManager = new CMeshManager;
 	if (!mMeshManager->Init())
 	{
+		assert(false);
 		return false;
 	}
 
 	mShaderManager = new CShaderManager;
 	if (!mShaderManager->Init())
 	{
+		assert(false);
+		return false;
+	}
+
+	mTextureManager = new CTextureManager;
+	if (!mTextureManager->Init())
+	{
+		assert(false);
 		return false;
 	}
 
 	mMaterialManager = new CMaterialManager;
 	if (!mMaterialManager->Init())
 	{
+		assert(false);
 		return false;
 	}
 
@@ -77,6 +89,21 @@ CMaterial* CResourceManager::FindMaterial(const std::string& name)
 void CResourceManager::ReleaseMaterial(const std::string& name)
 {
 	return mMaterialManager->ReleaseMaterial(name);
+}
+
+CTexture* CResourceManager::FindTexture(const std::string& name)
+{
+	return mTextureManager->FindTexture(name);
+}
+
+void CResourceManager::ReleaseTexture(const std::string& name)
+{
+	mTextureManager->ReleaseTexture(name);
+}
+
+bool CResourceManager::LoadTexture(const std::string& name, const TCHAR* fileName, const std::string& filePath)
+{
+	return mTextureManager->LoadTexture(name, fileName, filePath);
 }
 
 
