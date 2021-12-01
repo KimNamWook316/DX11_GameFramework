@@ -165,3 +165,8 @@ struct TransformCBuffer
 	// 16byte 정렬을 위한 Dummy Data.
 	float Dummy2;
 };
+
+struct MaterialCBuffer
+{
+	Vector4 BaseColor;
+};

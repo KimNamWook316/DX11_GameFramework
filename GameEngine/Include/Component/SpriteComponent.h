@@ -32,6 +32,30 @@ public:
 	virtual void PostRender();
 	virtual CSpriteComponent* Clone();
 
+public:
+	void SetBaseColor(const Vector4& color);
+	void SetBaseColor(const float r, const float g, const float b, const float a);
+
+public:
+	void AddTexture(const int reg, const int shaderType, const std::string& name,
+		class CTexture* texture);
+	void AddTexture(const int reg, const int shaderType, const std::string& name,
+		const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
+	void AddTextureFullPath(const int reg, const int shaderType, const std::string& name,
+		const TCHAR* fullPath);
+	void AddTexture(const int reg, const int shaderType, const std::string& name,
+		const std::vector<TCHAR*>& vecFileName, const std::string& pathName = TEXTURE_PATH);
+
+	void SetTexture(const int index, const int reg, const int shaderType,
+		const std::string& name, class CTexture* texture);
+	void SetTexture(const int index, const int reg, const int shaderType,
+		const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
+	void SetTextureFullPath(const int index, const int reg, const int shaderType,
+		const std::string& name, const TCHAR* fullPath);
+	void SetTexture(const int index, const int reg, const int shaderType,
+		const std::string& name, const std::vector<TCHAR*>& vecFileName,
+		const std::string& pathName = TEXTURE_PATH);
+
 protected:
 	CSharedPtr<CSpriteMesh> mMesh;
 	CSharedPtr<CMaterial> mMaterial;

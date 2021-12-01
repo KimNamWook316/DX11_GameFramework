@@ -27,6 +27,7 @@ public:
 		}
 
 		material = new T;
+		material->SetConstantBuffer(mCBuffer);
 		material->SetName(name);
 		mMapMaterial.insert(std::make_pair(name, material));
 
@@ -35,5 +36,6 @@ public:
 
 private:
 	std::unordered_map<std::string, CSharedPtr<CMaterial>> mMapMaterial;
+	class CMaterialConstantBuffer* mCBuffer;
 };
 

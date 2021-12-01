@@ -3,6 +3,7 @@
 #include "../Resource/Mesh/Mesh.h"
 #include "../Resource/Shader/Shader.h"
 #include "../Resource/Material/Material.h"
+#include "../Resource/Texture/Texture.h"
 #include "../Resource/ResourceManager.h"
 
 // 纠喊 府家胶 包府 按眉
@@ -25,10 +26,14 @@ public:
 	{
 		if (FindShader(name))
 		{
+			return true;
+		}
+
+		if (!CResourceManager::GetInst()->CreateShader<T>(name))
+		{
 			return false;
 		}
 
-		CResourceManager::GetInst()->CreateShader<T>(name);
 		mMapShader.insert(std::make_pair(name, CResourceManager::GetInst()->FindShader(name)));
 
 		return true;
@@ -42,20 +47,30 @@ public:
 	{
 		if (FindMaterial(name))
 		{
+			return true;
+		}
+
+		if (!CResourceManager::GetInst()->CreateMaterial<T>(name))
+		{
 			return false;
 		}
 
-		CResourceManager::GetInst()->CreateMaterial<T>(name);
 		mMapMaterial.insert(std::make_pair(name, CResourceManager::GetInst()->FindMaterial(name)));
 
 		return true;
 	}
-		
+	
+public:
+	bool LoadTexture(const std::string& name, const TCHAR* fileName,
+		const std::string& pathName = TEXTURE_PATH);
+
+	class CTexture* FindTexture(const std::string& name);
 
 private:
 	class CScene* mScene;
 	std::unordered_map <std::string, CSharedPtr<CMesh>> mMapMesh;
 	std::unordered_map <std::string, CSharedPtr<CShader>> mMapShader;
 	std::unordered_map <std::string, CSharedPtr<CMaterial>> mMapMaterial;
+	std::unordered_map <std::string, CSharedPtr<CTexture>> mMapTexture;
 };
 

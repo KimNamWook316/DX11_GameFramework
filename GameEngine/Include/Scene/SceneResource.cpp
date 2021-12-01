@@ -38,6 +38,21 @@ CSceneResource::~CSceneResource()
 	}
 
 	{
+		auto iter = mMapTexture.begin();
+		auto iterEnd = mMapTexture.end();
+
+		for (; iter != iterEnd;)
+		{
+			std::string name = iter->first;
+
+			iter = mMapTexture.erase(iter);
+
+			CResourceManager::GetInst()->ReleaseTexture(name);
+		}
+			
+	}
+
+	{
 		auto iter = mMapMaterial.begin();
 		auto iterEnd = mMapMaterial.end();
 
@@ -114,4 +129,43 @@ CMaterial* CSceneResource::FindMaterial(const std::string& name)
 	}
 
  	return iter->second;
+}
+
+bool CSceneResource::LoadTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+	if (FindTexture(name))
+	{
+		return true;
+	}
+
+	if (!CResourceManager::GetInst()->LoadTexture(name, fileName, pathName))
+	{
+		assert(false);
+		return false;
+	}
+
+	mMapTexture.insert(std::make_pair(name, CResourceManager::GetInst()->FindTexture(name)));
+
+	return true;
+}
+
+CTexture* CSceneResource::FindTexture(const std::string& name)
+{
+	auto iter = mMapTexture.find(name);
+
+	if (iter == mMapTexture.end())
+	{
+		CTexture* findNotInScene = CResourceManager::GetInst()->FindTexture(name);
+		
+		if (!findNotInScene)
+		{
+			return nullptr;
+		}
+
+		mMapTexture.insert(std::make_pair(name, findNotInScene));
+
+		return findNotInScene;
+	}
+
+	return iter->second;
 }

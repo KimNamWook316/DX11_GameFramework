@@ -34,7 +34,9 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="Ref.h" />
+    <ClInclude Include="Render\BlendState.h" />
     <ClInclude Include="Render\RenderManager.h" />
+    <ClInclude Include="Render\RenderState.h" />
     <ClInclude Include="Resource\Material\Material.h" />
     <ClInclude Include="Resource\Material\MaterialManager.h" />
     <ClInclude Include="Resource\Mesh\Mesh.h" />
@@ -45,6 +47,7 @@
     <ClInclude Include="Resource\Shader\ConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ConstantBufferBase.h" />
     <ClInclude Include="Resource\Shader\GraphicShader.h" />
+    <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\Mesh2DShader.h" />
     <ClInclude Include="Resource\Shader\Shader.h" />
     <ClInclude Include="Resource\ResourceManager.h" />
@@ -74,7 +77,9 @@
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="Ref.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Render\BlendState.cpp" />
     <ClCompile Include="Render\RenderManager.cpp" />
+    <ClCompile Include="Render\RenderState.cpp" />
     <ClCompile Include="Resource\Material\Material.cpp" />
     <ClCompile Include="Resource\Material\MaterialManager.cpp" />
     <ClCompile Include="Resource\Mesh\Mesh.cpp" />
@@ -85,6 +90,7 @@
     <ClCompile Include="Resource\Shader\ConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ConstantBufferBase.cpp" />
     <ClCompile Include="Resource\Shader\GraphicShader.cpp" />
+    <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp" />
     <ClCompile Include="Resource\Shader\Shader.cpp" />
     <ClCompile Include="Resource\ResourceManager.cpp" />

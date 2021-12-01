@@ -3,9 +3,12 @@
 #include "../Shader/GraphicShader.h"
 #include "../Texture/Texture.h"
 
+// Material이 들고 있는 텍스쳐와 정보
 struct MaterialTextureInfo
 {
 	std::string Name;
+	
+	// 샘플링 타입
 	eSamplerType SamplerType;
 	CSharedPtr<CTexture> Texture;
 	int Register;
@@ -35,6 +38,12 @@ public:
 	CMaterial* Clone();
 
 public:
+	void SetScene(class CScene* scene)
+	{
+		mScene = scene;
+	}
+
+public:
 	void SetBaseColor(const Vector4& color);
 	void SetBaseColor(const float r, const float g, const float b, const float a);
 
@@ -58,9 +67,23 @@ public:
 		const std::string& name, const std::vector<TCHAR*>& vecFileName, 
 		const std::string& pathName = TEXTURE_PATH);
 
+private:
+	void SetConstantBuffer(class CMaterialConstantBuffer* buffer)
+	{
+		mCBuffer = buffer;
+	}
+
 protected:
 	CSharedPtr<CGraphicShader> mShader;
 	std::vector<MaterialTextureInfo> mVecTextureInfo;
 	Vector4 mBaseColor;
+
+	// BaseColor등을 쉐이더로 보내는 용도의 상수버퍼 
+	// 단지 데이터를 쓰기 위한 것이므로 공유해도 되기 때문에, 
+	// MaterialManager에서 하나만 가지고 있다.
+	class CMaterialConstantBuffer* mCBuffer;
+
+private:
+	class CScene* mScene;
 };
 

@@ -93,6 +93,12 @@
     <Filter Include="02. Resource\02. Shader\02. ShaderClass\02. Mesh2DShader">
       <UniqueIdentifier>{8fbab054-6c0b-4e2e-9703-dbdb100468f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\02. Material">
+      <UniqueIdentifier>{ad826263-8810-4f77-aec3-d0cbdcb6cd80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Render\01. RenderState">
+      <UniqueIdentifier>{a411406a-295c-4030-9133-6c3c8b41cd83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -224,6 +230,15 @@
     <ClInclude Include="Resource\Shader\Mesh2DShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2DShader</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\02. Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderState.h">
+      <Filter>06. Render\01. RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\BlendState.h">
+      <Filter>06. Render\01. RenderState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -339,6 +354,15 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2DShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\02. Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderState.cpp">
+      <Filter>06. Render\01. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\BlendState.cpp">
+      <Filter>06. Render\01. RenderState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

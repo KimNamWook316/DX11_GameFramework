@@ -21,6 +21,8 @@ CSpriteComponent::~CSpriteComponent()
 void CSpriteComponent::SetMaterial(CMaterial* material)
 {
 	mMaterial = material->Clone();
+
+	mMaterial->SetScene(mScene);
 }
 
 bool CSpriteComponent::Init()
@@ -63,6 +65,9 @@ void CSpriteComponent::Render()
 
 	// 버텍스정보 넘겨서 Draw
 	mMesh->Render();
+
+	// 텍스쳐 정보 리셋
+	mMaterial->Reset();
 }
 
 void CSpriteComponent::PostRender()
@@ -73,4 +78,55 @@ void CSpriteComponent::PostRender()
 CSpriteComponent* CSpriteComponent::Clone()
 {
 	return new CSpriteComponent(*this);
+}
+
+void CSpriteComponent::SetBaseColor(const Vector4& color)
+{
+	mMaterial->SetBaseColor(color);
+}
+
+void CSpriteComponent::SetBaseColor(const float r, const float g, const float b, const float a)
+{
+	mMaterial->SetBaseColor(r, g, b, a);
+}
+
+void CSpriteComponent::AddTexture(const int reg, const int shaderType, const std::string& name, CTexture* texture)
+{
+	mMaterial->AddTexture(reg, shaderType, name, texture);
+}
+
+void CSpriteComponent::AddTexture(const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+	mMaterial->AddTexture(reg, shaderType, name, fileName, pathName);
+}
+
+void CSpriteComponent::AddTextureFullPath(const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
+{
+	mMaterial->AddTextureFullPath(reg, shaderType, name, fullPath);
+}
+
+void CSpriteComponent::AddTexture(const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
+{
+	mMaterial->AddTexture(reg, shaderType, name, vecFileName, pathName);
+}
+
+void CSpriteComponent::SetTexture(const int index, const int reg, const int shaderType, const std::string& name, CTexture* texture)
+{
+	mMaterial->SetTexture(index, reg, shaderType, name, texture);
+}
+
+void CSpriteComponent::SetTexture(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+
+	mMaterial->SetTexture(index, reg, shaderType, name, fileName, pathName);
+}
+
+void CSpriteComponent::SetTextureFullPath(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
+{
+	mMaterial->SetTextureFullPath(index, reg, shaderType, name, fullPath);
+}
+
+void CSpriteComponent::SetTexture(const int index, const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
+{
+	mMaterial->SetTexture(index, reg, shaderType, name, vecFileName, pathName);
 }

@@ -498,6 +498,15 @@ unsigned char CInput::convertWindowKeyToDIKey(const unsigned char key)
 	{
 		switch (key)
 		{
+		case VK_RBUTTON:
+			return DIK_MOUSERBUTTON;
+			break;
+		case VK_LBUTTON:
+			return DIK_MOUSELBUTTON;
+			break;
+		case VK_MBUTTON:
+			return DIK_MOUSEWHEEL;
+			break;
 		case VK_BACK:
 			return DIK_BACK;
 		case VK_TAB:

@@ -68,3 +68,10 @@ enum class eSamplerType
 	Linear,
 	Anisotropic,
 };
+
+enum class eRenderStateType
+{
+	Blend,
+	Rasterizer,
+	DepthStencil,
+};

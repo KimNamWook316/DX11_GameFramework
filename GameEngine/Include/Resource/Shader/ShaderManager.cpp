@@ -30,6 +30,9 @@ bool CShaderManager::Init()
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
 		(int)eConstantBufferShaderTypeFlags::Graphic);
+
+	CreateConstantBuffer("MaterialCbuffer", sizeof(MaterialCBuffer), 1,
+		(int)eConstantBufferShaderTypeFlags::Graphic);
 	
 	return true;
 }

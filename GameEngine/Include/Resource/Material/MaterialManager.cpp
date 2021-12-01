@@ -1,7 +1,9 @@
 #include "MaterialManager.h"
 #include "../ResourceManager.h"
+#include "../Shader/MaterialConstantBuffer.h"
 
-CMaterialManager::CMaterialManager()
+CMaterialManager::CMaterialManager()	:
+	mCBuffer(nullptr)
 {
 }
 
@@ -11,6 +13,9 @@ CMaterialManager::~CMaterialManager()
 
 bool CMaterialManager::Init()
 {
+	mCBuffer = new CMaterialConstantBuffer;
+	mCBuffer->Init();
+
 	// 기본 Material 생성
 	CreateMaterial<CMaterial>("Color");
 
@@ -24,6 +29,7 @@ bool CMaterialManager::Init()
 	mtrl->SetShader("Mesh2DShader");
 	CTexture* tex = CResourceManager::GetInst()->FindTexture("EngineDefaultTexture");
 	mtrl->AddTexture(0, (int)eConstantBufferShaderTypeFlags::Pixel, "EngineDefaultTexture", tex);
+	mtrl->SetBaseColor(1.f, 1.f, 1.f, 1.f);
 
 	return true;
 }

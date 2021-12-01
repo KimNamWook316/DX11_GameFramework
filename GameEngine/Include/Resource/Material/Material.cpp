@@ -1,8 +1,12 @@
 #include "Material.h"
 #include "../ResourceManager.h"
+#include "../../Scene/Scene.h"
+#include "../Shader/MaterialConstantBuffer.h"
 
 CMaterial::CMaterial()	:	
-	mBaseColor(Vector4::White)
+	mBaseColor(Vector4::White),
+	mScene(nullptr),
+	mCBuffer(nullptr)
 {
 	SetTypeID<CMaterial>();
 }
@@ -10,6 +14,8 @@ CMaterial::CMaterial()	:
 CMaterial::CMaterial(const CMaterial& mat)
 {
 	*this = mat;
+
+	mScene = nullptr;
 
 	mRefCount = 0;
 }
@@ -39,6 +45,13 @@ void CMaterial::Render()
 	if (mShader)
 	{
 		mShader->SetShader();
+	}
+
+	if (mCBuffer)
+	{
+		mCBuffer->SetBaseColor(mBaseColor);
+
+		mCBuffer->UpdateCBuffer();
 	}
 
 	size_t size = mVecTextureInfo.size();
@@ -78,10 +91,27 @@ void CMaterial::AddTexture(const int reg, const int shaderType, const std::strin
 
 void CMaterial::AddTexture(const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
 {
-	if (!CResourceManager::GetInst()->LoadTexture(name, fileName, pathName))
+	CTexture* texture = nullptr;
+
+	if (!mScene)
 	{
-		assert(false);
-		return;
+		if (!CResourceManager::GetInst()->LoadTexture(name, fileName, pathName))
+		{
+			assert(false);
+			return;
+		}
+
+		texture = CResourceManager::GetInst()->FindTexture(name);
+	}
+
+	else
+	{
+		if (!mScene->GetResource()->LoadTexture(name, fileName, pathName))
+		{
+			assert(false);
+			return;
+		}
+		texture = mScene->GetResource()->FindTexture(name);
 	}
 
 	mVecTextureInfo.push_back(MaterialTextureInfo());
@@ -91,7 +121,7 @@ void CMaterial::AddTexture(const int reg, const int shaderType, const std::strin
 	mVecTextureInfo[idx].Register = reg;
 	mVecTextureInfo[idx].ShaderType = shaderType;
 	mVecTextureInfo[idx].Name = name;
-	mVecTextureInfo[idx].Texture = CResourceManager::GetInst()->FindTexture(name);
+	mVecTextureInfo[idx].Texture = texture;
 }
 
 void CMaterial::AddTextureFullPath(const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
@@ -113,16 +143,33 @@ void CMaterial::SetTexture(const int index, const int reg, const int shaderType,
 
 void CMaterial::SetTexture(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
 {
-	if (!CResourceManager::GetInst()->LoadTexture(name, fileName, pathName))
+	CTexture* texture = nullptr;
+
+	if (!mScene)
 	{
-		assert(false);
-		return;
+		if (!CResourceManager::GetInst()->LoadTexture(name, fileName, pathName))
+		{
+			assert(false);
+			return;
+		}
+
+		texture = CResourceManager::GetInst()->FindTexture(name);
+	}
+
+	else
+	{
+		if (!mScene->GetResource()->LoadTexture(name, fileName, pathName))
+		{
+			assert(false);
+			return;
+		}
+		texture = mScene->GetResource()->FindTexture(name);
 	}
 
 	mVecTextureInfo[index].Register = reg;
 	mVecTextureInfo[index].ShaderType = shaderType;
 	mVecTextureInfo[index].Name = name;
-	mVecTextureInfo[index].Texture = CResourceManager::GetInst()->FindTexture(name);
+	mVecTextureInfo[index].Texture = texture;
 }
 
 void CMaterial::SetTextureFullPath(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
