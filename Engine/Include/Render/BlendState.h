@@ -2,9 +2,12 @@
 
 #include "RenderState.h"
 
+// 블렌딩은 추가 연산을 하기 때문에, 필요 없을 때는 하지 않아야 한다.
 class CBlendState :
     public CRenderState
 {
+    friend class CRenderStateManager;
+
 protected:
     CBlendState();
     virtual ~CBlendState();

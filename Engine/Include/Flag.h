@@ -74,4 +74,5 @@ enum class eRenderStateType
 	Blend,
 	Rasterizer,
 	DepthStencil,
+	MAX,
 };

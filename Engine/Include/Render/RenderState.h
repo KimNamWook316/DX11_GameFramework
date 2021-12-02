@@ -5,7 +5,7 @@
 class CRenderState :
     public CRef
 {
-    friend class CRenderManager;
+    friend class CRenderStateManager;
 
 protected:
     CRenderState();

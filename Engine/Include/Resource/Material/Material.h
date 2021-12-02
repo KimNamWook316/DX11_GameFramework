@@ -44,6 +44,13 @@ public:
 	}
 
 public:
+	void SetRenderState(class CRenderState* state);
+	void SetRenderState(const std::string& name);
+	void SetTransparency(bool bEnable);
+	void SetOpacity(const float val);
+	void AddOpacity(const float val);
+
+public:
 	void SetBaseColor(const Vector4& color);
 	void SetBaseColor(const float r, const float g, const float b, const float a);
 
@@ -76,12 +83,15 @@ private:
 protected:
 	CSharedPtr<CGraphicShader> mShader;
 	std::vector<MaterialTextureInfo> mVecTextureInfo;
+
 	Vector4 mBaseColor;
+	float mOpacity;
 
 	// BaseColor등을 쉐이더로 보내는 용도의 상수버퍼 
 	// 단지 데이터를 쓰기 위한 것이므로 공유해도 되기 때문에, 
 	// MaterialManager에서 하나만 가지고 있다.
 	class CMaterialConstantBuffer* mCBuffer;
+	CSharedPtr<class CRenderState> mRenderStateArray[(int)eRenderStateType::MAX];
 
 private:
 	class CScene* mScene;

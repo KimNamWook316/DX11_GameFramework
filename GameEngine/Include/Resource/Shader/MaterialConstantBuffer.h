@@ -21,6 +21,11 @@ public:
         mBufferData.BaseColor = baseColor;
     }
 
+    void SetOpacity(const float opacity)
+    {
+        mBufferData.Opacity = opacity;
+    }
+
 protected:
     MaterialCBuffer mBufferData;
 };

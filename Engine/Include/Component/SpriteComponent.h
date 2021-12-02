@@ -35,6 +35,11 @@ public:
 public:
 	void SetBaseColor(const Vector4& color);
 	void SetBaseColor(const float r, const float g, const float b, const float a);
+	void SetRenderState(class CRenderState* state);
+	void SetRenderState(const std::string& name);
+	void SetTransparency(bool bEnable);
+	void SetOpacity(const float val);
+	void AddOpacity(const float val);
 
 public:
 	void AddTexture(const int reg, const int shaderType, const std::string& name,

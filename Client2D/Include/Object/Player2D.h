@@ -38,8 +38,6 @@ private:
 	CSharedPtr<CSpriteComponent> mChild3Sprite;
 	CSharedPtr<CSpriteComponent> mChild4Sprite;
 
-	bool mIsSolW;
-	float mWDistance;
-
+	float mOpacity;
 };
 

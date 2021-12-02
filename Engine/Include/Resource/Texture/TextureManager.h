@@ -17,7 +17,18 @@ public:
 	class CTexture* FindTexture(const std::string& name);
 	void ReleaseTexture(const std::string& name);
 
+public:
+	bool CreateSampler(const std::string& name, D3D11_FILTER filter,
+		D3D11_TEXTURE_ADDRESS_MODE addressU,
+		D3D11_TEXTURE_ADDRESS_MODE addressV,
+		D3D11_TEXTURE_ADDRESS_MODE addressW,
+		float boarderColor[4]);
+	ID3D11SamplerState* FindSampler(const std::string& name);
+	void SetSampler(const std::string& name, const int reg,
+		const int shaderType = (int)eConstantBufferShaderTypeFlags::All);
+
 private:
 	std::unordered_map<std::string, CSharedPtr<class CTexture>> mMapTexture;
+	std::unordered_map<std::string, ID3D11SamplerState*> mMapSampler;
 };
 

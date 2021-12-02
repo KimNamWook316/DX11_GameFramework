@@ -9,6 +9,7 @@ CMaterialManager::CMaterialManager()	:
 
 CMaterialManager::~CMaterialManager()
 {
+	SAFE_DELETE(mCBuffer);
 }
 
 bool CMaterialManager::Init()

@@ -239,6 +239,9 @@
     <ClInclude Include="Render\BlendState.h">
       <Filter>06. Render\01. RenderState</Filter>
     </ClInclude>
+    <ClInclude Include="Render\RenderStateManager.h">
+      <Filter>06. Render\01. RenderState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -362,6 +365,9 @@
       <Filter>06. Render\01. RenderState</Filter>
     </ClCompile>
     <ClCompile Include="Render\BlendState.cpp">
+      <Filter>06. Render\01. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderStateManager.cpp">
       <Filter>06. Render\01. RenderState</Filter>
     </ClCompile>
   </ItemGroup>

@@ -169,4 +169,6 @@ struct TransformCBuffer
 struct MaterialCBuffer
 {
 	Vector4 BaseColor;
+	float	Opacity;
+	Vector3 Dummy;
 };

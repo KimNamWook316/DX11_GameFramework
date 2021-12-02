@@ -29,7 +29,8 @@ bool CSpriteComponent::Init()
 {
 	mMesh = (CSpriteMesh*)mScene->GetResource()->FindMesh("SpriteMesh");
 	
-	mMaterial = mScene->GetResource()->FindMaterial("BaseTexture");
+	// Material이 같은 텍스쳐를 공유하면 안 되기 때문에 SetMaterial로 복사해준다.
+	SetMaterial(mScene->GetResource()->FindMaterial("BaseTexture"));
 
 	SetMeshSize(1.f, 1.f, 0.f);
 	return true;
@@ -88,6 +89,31 @@ void CSpriteComponent::SetBaseColor(const Vector4& color)
 void CSpriteComponent::SetBaseColor(const float r, const float g, const float b, const float a)
 {
 	mMaterial->SetBaseColor(r, g, b, a);
+}
+
+void CSpriteComponent::SetRenderState(CRenderState* state)
+{
+	mMaterial->SetRenderState(state);
+}
+
+void CSpriteComponent::SetRenderState(const std::string& name)
+{
+	mMaterial->SetRenderState(name);
+}
+
+void CSpriteComponent::SetTransparency(bool bEnable)
+{
+	mMaterial->SetTransparency(bEnable);
+}
+
+void CSpriteComponent::SetOpacity(const float val)
+{
+	mMaterial->SetOpacity(val);
+}
+
+void CSpriteComponent::AddOpacity(const float val)
+{
+	mMaterial->AddOpacity(val);
 }
 
 void CSpriteComponent::AddTexture(const int reg, const int shaderType, const std::string& name, CTexture* texture)

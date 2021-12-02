@@ -17,13 +17,13 @@ void CBlendState::SetState()
 {
 	// 이전 상태를 받아오고, 현재 상태로 설정
 	CDevice::GetInst()->GetContext()->OMGetBlendState((ID3D11BlendState**)&mPrevState, mPrevBlendFactor, &mPrevSampleMask);
-	CDevice::GetInst()->GetContext()->OMSetBlendState((ID3D11BlendState*)&mState, mBlendFactor, mSampleMask);
+	CDevice::GetInst()->GetContext()->OMSetBlendState((ID3D11BlendState*)mState, mBlendFactor, mSampleMask);
 }
 
 void CBlendState::ResetState()
 {
 	// 이전 상태로 되돌린다.
-	CDevice::GetInst()->GetContext()->OMSetBlendState((ID3D11BlendState*)&mPrevState, mPrevBlendFactor, mPrevSampleMask);
+	CDevice::GetInst()->GetContext()->OMSetBlendState((ID3D11BlendState*)mPrevState, mPrevBlendFactor, mPrevSampleMask);
 }
 
 void CBlendState::AddBlendInfo(bool bIsBlendEnalbe, D3D11_BLEND srcBlend, 
@@ -54,6 +54,11 @@ bool CBlendState::CreateState(bool bIsAlphaToCoverageEnable, bool bIsIndependent
 
 	D3D11_BLEND_DESC desc = {};
 	
+	/*
+		AlphaToCoverageEnable : true로 한다면, 
+		백버퍼의 알파 값으로 블렌드 처리를 해 준다.
+		반드시 멀티샘플링을 사용해야 사용 가능
+	*/
 	desc.AlphaToCoverageEnable = bIsAlphaToCoverageEnable;		// multi-sampling의 alpha-to-coverage 관련
 	desc.IndependentBlendEnable = bIsIndependentBlendEnable;	// 각 Render Target마다 blend state를 따로 지정할 것인지
 

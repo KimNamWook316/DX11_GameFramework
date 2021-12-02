@@ -2,11 +2,15 @@
 #include "../ResourceManager.h"
 #include "../../Scene/Scene.h"
 #include "../Shader/MaterialConstantBuffer.h"
+#include "../../Render/RenderManager.h"
+#include "../../Render/RenderState.h"
 
 CMaterial::CMaterial()	:	
 	mBaseColor(Vector4::White),
 	mScene(nullptr),
-	mCBuffer(nullptr)
+	mCBuffer(nullptr),
+	mOpacity(1.f),
+	mRenderStateArray{}
 {
 	SetTypeID<CMaterial>();
 }
@@ -38,6 +42,14 @@ void CMaterial::Reset()
 	{
 		mVecTextureInfo[i].Texture->ResetShader(mVecTextureInfo[i].Register, mVecTextureInfo[i].ShaderType, 0);
 	}
+
+	for (int i = 0; i < (int)eRenderStateType::MAX; ++i)
+	{
+		if (mRenderStateArray[i])
+		{
+			mRenderStateArray[i]->ResetState();
+		}
+	}
 }
 
 void CMaterial::Render()
@@ -50,8 +62,17 @@ void CMaterial::Render()
 	if (mCBuffer)
 	{
 		mCBuffer->SetBaseColor(mBaseColor);
+		mCBuffer->SetOpacity(mOpacity);
 
 		mCBuffer->UpdateCBuffer();
+	}
+
+	for (int i = 0; i < (int)eRenderStateType::MAX; ++i)
+	{
+		if (mRenderStateArray[i])
+		{
+			mRenderStateArray[i]->SetState();
+		}
 	}
 
 	size_t size = mVecTextureInfo.size();
@@ -65,6 +86,52 @@ void CMaterial::Render()
 CMaterial* CMaterial::Clone()
 {
 	return new CMaterial(*this);
+}
+
+void CMaterial::SetRenderState(CRenderState* state)
+{
+	mRenderStateArray[(int)eRenderStateType::Blend] = state;
+}
+
+void CMaterial::SetRenderState(const std::string& name)
+{
+	mRenderStateArray[(int)eRenderStateType::Blend] = CRenderManager::GetInst()->FindRenderState(name);
+}
+
+void CMaterial::SetTransparency(bool bEnable)
+{
+	if (bEnable)
+	{
+		mRenderStateArray[(int)eRenderStateType::Blend] = CRenderManager::GetInst()->FindRenderState("AlphaBlend");
+	}
+}
+
+void CMaterial::SetOpacity(const float val)
+{
+	mOpacity = val;
+
+	if (mOpacity < 0)
+	{
+		mOpacity = 0.f;
+	}
+	else if (mOpacity > 1.f)
+	{
+		mOpacity = 1.f;
+	}
+}
+
+void CMaterial::AddOpacity(const float val)
+{
+	mOpacity += val;
+
+	if (mOpacity < 0)
+	{
+		mOpacity = 0.f;
+	}
+	else if (mOpacity > 1.f)
+	{
+		mOpacity = 1.f;
+	}
 }
 
 void CMaterial::SetBaseColor(const Vector4& color)

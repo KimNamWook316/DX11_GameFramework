@@ -45,6 +45,29 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 	flag |= D3D11_CREATE_DEVICE_DEBUG;
 
 #endif // _DEBUG
+	
+	// 지원 레벨
+	D3D_FEATURE_LEVEL fLevel = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL fLevel1 = D3D_FEATURE_LEVEL_11_0;
+	
+	// 1. 디바이스, 디바이스 컨텍스트 생성
+	if (FAILED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0,
+		flag, &fLevel, 1, D3D11_SDK_VERSION, &mDevice, &fLevel1, &mContext)))
+	{
+		assert(false);
+		return false;
+	}
+
+	// 멀티샘플링 퀄리티 레벨 확인
+	int availableSampleCount = 4;
+
+	UINT checkerSampleCount = 0;
+	mDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &checkerSampleCount);
+
+	if (checkerSampleCount < 1)
+	{
+		availableSampleCount = 1;
+	}
 
 	// 백버퍼 세부 사항, 스왑체인을 정의하는 구조체
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
@@ -58,22 +81,33 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 	swapDesc.BufferCount = 1; // 사용할 백 버퍼의 수
 	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 렌더 타겟의 OutPut용도로 사용
 	swapDesc.OutputWindow = hWnd; // 출력될 윈도우
-	swapDesc.SampleDesc.Count = 1;
+	swapDesc.SampleDesc.Count = availableSampleCount;
 	swapDesc.SampleDesc.Quality = 0;
 	swapDesc.Windowed = windowMode;
 	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
-	D3D_FEATURE_LEVEL fLevel = D3D_FEATURE_LEVEL_11_0;
-	D3D_FEATURE_LEVEL fLevel1 = D3D_FEATURE_LEVEL_11_0;
+	IDXGIDevice* dxgiDevice = nullptr;
+	mDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 
-	// 1. 디바이스, 디바이스 컨텍스트, 스왑체인 생성
-	if (FAILED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
-		0, flag, &fLevel, 1, D3D11_SDK_VERSION,
-		&swapDesc, &mSwapChain, &mDevice, &fLevel1, &mContext))) 
+	IDXGIAdapter* adapter = nullptr;
+	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&adapter);
+
+	IDXGIFactory* factory = nullptr;
+	adapter->GetParent(__uuidof(IDXGIFactory), (void**)&factory);
+
+	// 스왑체인 생성
+	if (FAILED(factory->CreateSwapChain(mDevice, &swapDesc, &mSwapChain)))
 	{
+		SAFE_RELEASE(dxgiDevice);
+		SAFE_RELEASE(adapter);
+		SAFE_RELEASE(factory);
 		assert(false);
 		return false;
 	}
+
+	SAFE_RELEASE(dxgiDevice);
+	SAFE_RELEASE(adapter);
+	SAFE_RELEASE(factory);
 
 	// SwapChain이 가지고 있는 BackBuffer를 얻어온다.
 	ID3D11Texture2D* backBuffer = nullptr;
@@ -99,7 +133,7 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 	depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthDesc.SampleDesc.Count = 1;
+	depthDesc.SampleDesc.Count = availableSampleCount;
 	depthDesc.SampleDesc.Quality = 0;
 	depthDesc.MipLevels = 1;
 

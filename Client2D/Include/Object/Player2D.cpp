@@ -3,7 +3,8 @@
 #include "Scene/Scene.h"
 #include "Input.h"
 
-CPlayer2D::CPlayer2D()
+CPlayer2D::CPlayer2D()	:
+	mOpacity(1.f)
 {
 }
 
@@ -103,6 +104,8 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::rotationZ);
 	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::attack);
 
+	mSprite->SetTransparency(true);
+
 	return true;
 }
 
@@ -112,22 +115,26 @@ void CPlayer2D::Update(float deltaTime)
 
 	static bool bFire = false;
 
+	static bool bHide = false;
+
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
-		bFire = true;
-	}
-
-	else if (bFire)
-	{
-		bFire = false;
-
-		CBullet* bullet = mScene->CreateGameObject<CBullet>("Bullet");
-
-		bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(eAXIS::AXIS_Y) * 75.f);
-		bullet->SetWorldRot(GetWorldRot());
+		bHide = true;
 	}
 
 	mChildRoot->AddWorldRotZ(180.f * deltaTime);
+
+	if (bHide)
+	{
+		mOpacity -= deltaTime;
+
+		if (mOpacity < 0.f)
+		{
+			mOpacity = 0.f;
+		}
+
+		mSprite->SetOpacity(mOpacity);
+	}
 }
 
 void CPlayer2D::PostUpdate(float deltaTime)
