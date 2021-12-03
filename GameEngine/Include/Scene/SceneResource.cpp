@@ -169,3 +169,65 @@ CTexture* CSceneResource::FindTexture(const std::string& name)
 
 	return iter->second;
 }
+
+bool CSceneResource::CreateAnimationSequence2D(const std::string& name, const std::string& textureName, const TCHAR* fileName, const std::string& pathName)
+{
+	if (FindAnimationSequece2D(name))
+	{
+		return true;
+	}
+
+	if (!CResourceManager::GetInst()->CreateAnimationSequence2D(name, textureName, fileName, pathName))
+	{
+		assert(false);
+		return false;
+	}
+
+	mMapSequence2D.insert(std::make_pair(name, CResourceManager::GetInst()->FindAnimationSequece2D(name)));
+	return true;
+}
+
+void CSceneResource::AddAnimationSequece2DFrame(const std::string& name, const Vector2& start, const Vector2& size)
+{
+	CAnimationSequence2D* anim = FindAnimationSequece2D(name);
+
+	if (!anim)
+	{
+		return;
+	}
+
+	anim->AddFrame(start, size);
+}
+
+void CSceneResource::AddAnimationSequece2DFrame(const std::string& name, const float startX, const float startY, const float width, const float height)
+{
+	CAnimationSequence2D* anim = FindAnimationSequece2D(name);
+
+	if (!anim)
+	{
+		return;
+	}
+
+	anim->AddFrame(startX, startY, width, height);
+}
+
+CAnimationSequence2D* CSceneResource::FindAnimationSequece2D(const std::string& name)
+{
+	auto iter = mMapSequence2D.find(name);
+
+	if (iter == mMapSequence2D.end())
+	{
+		CAnimationSequence2D* findNotInScene = CResourceManager::GetInst()->FindAnimationSequece2D(name);
+
+		if (!findNotInScene)
+		{
+			return nullptr;
+		}
+
+		mMapSequence2D.insert(std::make_pair(name, findNotInScene));
+
+		return findNotInScene;
+	}
+
+	return iter->second;
+}

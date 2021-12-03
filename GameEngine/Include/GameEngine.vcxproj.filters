@@ -84,9 +84,6 @@
     <Filter Include="06. Render">
       <UniqueIdentifier>{a80cf218-9c92-4860-9bfa-bab3208c2be5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07. Input">
-      <UniqueIdentifier>{d1a2ef3e-849e-4d6f-9565-aadad3ede17f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. Resource\04. Texture">
       <UniqueIdentifier>{fafb2701-a086-4df9-8a74-8bb5054ca94d}</UniqueIdentifier>
     </Filter>
@@ -98,6 +95,15 @@
     </Filter>
     <Filter Include="06. Render\01. RenderState">
       <UniqueIdentifier>{a411406a-295c-4030-9133-6c3c8b41cd83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\05. Animation">
+      <UniqueIdentifier>{b3126237-7870-46a8-a9a0-df704e5b05f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\07. Input">
+      <UniqueIdentifier>{d1a2ef3e-849e-4d6f-9565-aadad3ede17f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. Animation">
+      <UniqueIdentifier>{ae94bcbc-534d-4c87-9573-6a756791f5ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -216,7 +222,7 @@
       <Filter>06. Render</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>07. Input</Filter>
+      <Filter>01. Engine\07. Input</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Texture\DirectXTex.h">
       <Filter>02. Resource\04. Texture</Filter>
@@ -241,6 +247,18 @@
     </ClInclude>
     <ClInclude Include="Render\RenderStateManager.h">
       <Filter>06. Render\01. RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Animation\AnimationSequence2D.h">
+      <Filter>02. Resource\05. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationSequence2DData.h">
+      <Filter>07. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationSequence2DInstance.h">
+      <Filter>07. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Animation\AnimationManager.h">
+      <Filter>02. Resource\05. Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -347,7 +365,7 @@
       <Filter>06. Render</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>07. Input</Filter>
+      <Filter>01. Engine\07. Input</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Texture\Texture.cpp">
       <Filter>02. Resource\04. Texture</Filter>
@@ -369,6 +387,18 @@
     </ClCompile>
     <ClCompile Include="Render\RenderStateManager.cpp">
       <Filter>06. Render\01. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Animation\AnimationSequence2D.cpp">
+      <Filter>02. Resource\05. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationSequence2DData.cpp">
+      <Filter>07. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationSequence2DInstance.cpp">
+      <Filter>07. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Animation\AnimationManager.cpp">
+      <Filter>02. Resource\05. Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

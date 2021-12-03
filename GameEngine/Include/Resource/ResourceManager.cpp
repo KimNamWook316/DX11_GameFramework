@@ -3,19 +3,21 @@
 DEFINITION_SINGLE(CResourceManager)
 
 CResourceManager::CResourceManager() :
-	mMeshManager(nullptr), 
+	mMeshManager(nullptr),
 	mShaderManager(nullptr),
 	mMaterialManager(nullptr),
-	mTextureManager(nullptr)
+	mTextureManager(nullptr),
+	mAnimationManager(nullptr)
 {
 }
 
 CResourceManager::~CResourceManager()
 {
-	SAFE_DELETE(mTextureManager);
+	SAFE_DELETE(mAnimationManager);
 	SAFE_DELETE(mMeshManager);
 	SAFE_DELETE(mShaderManager);
 	SAFE_DELETE(mMaterialManager);
+	SAFE_DELETE(mTextureManager);
 }
 
 bool CResourceManager::Init()
@@ -43,6 +45,13 @@ bool CResourceManager::Init()
 
 	mMaterialManager = new CMaterialManager;
 	if (!mMaterialManager->Init())
+	{
+		assert(false);
+		return false;
+	}
+
+	mAnimationManager = new CAnimationManager;
+	if (!mAnimationManager->Init())
 	{
 		assert(false);
 		return false;
@@ -104,6 +113,31 @@ void CResourceManager::ReleaseTexture(const std::string& name)
 bool CResourceManager::LoadTexture(const std::string& name, const TCHAR* fileName, const std::string& filePath)
 {
 	return mTextureManager->LoadTexture(name, fileName, filePath);
+}
+
+bool CResourceManager::CreateAnimationSequence2D(const std::string& name, const std::string& textureName, const TCHAR* fileName, const std::string& pathName)
+{
+	return mAnimationManager->CreateAnimationSequence(name, textureName, fileName, pathName);
+}
+
+void CResourceManager::AddAnimationSequece2DFrame(const std::string& name, const Vector2& start, const Vector2& size)
+{
+	mAnimationManager->AddFrame(name, start, size);
+}
+
+void CResourceManager::AddAnimationSequece2DFrame(const std::string& name, const float startX, const float startY, const float width, const float height)
+{
+	mAnimationManager->AddFrame(name, startX, startY, width, height);
+}
+
+CAnimationSequence2D* CResourceManager::FindAnimationSequece2D(const std::string& name)
+{
+	return mAnimationManager->FindSequence(name);
+}
+
+void CResourceManager::ReleaseAnimationSequece2D(const std::string& name)
+{
+	mAnimationManager->ReleaseSequence(name);
 }
 
 

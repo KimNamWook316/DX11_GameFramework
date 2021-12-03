@@ -172,3 +172,9 @@ struct MaterialCBuffer
 	float	Opacity;
 	Vector3 Dummy;
 };
+
+struct AnimationFrameData
+{
+	Vector2 Start;
+	Vector2 Size;
+};

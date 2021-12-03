@@ -125,10 +125,12 @@ bool CTextureManager::CreateSampler(const std::string& name, D3D11_FILTER filter
 	desc.AddressU = addressU;				// [0,1] 범위를 넘어선 텍스쳐 좌표에 대한 처리방식
 	desc.AddressV = addressV;
 	desc.AddressW = addressW;
-	desc.BorderColor[0] = boarderColor[0];	// 경계선 컬러
-	desc.BorderColor[1] = boarderColor[1];
-	desc.BorderColor[2] = boarderColor[2];
-	desc.BorderColor[3] = boarderColor[3];
+	desc.MipLODBias = 0.f;
+	desc.MaxAnisotropy = 1;
+	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	desc.MinLOD = -FLT_MAX;
+	desc.MaxLOD = FLT_MAX;
+	memcpy(desc.BorderColor, boarderColor, sizeof(float) * 4);
 
 	if (FAILED(CDevice::GetInst()->GetDevice()->CreateSamplerState(&desc, &sampler)))
 	{
