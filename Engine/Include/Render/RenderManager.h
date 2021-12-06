@@ -34,11 +34,18 @@ public:
 
 	DECLARE_SINGLE(CRenderManager)
 
+public:
+	class CStandard2DConstantBuffer* GetStandard2DCBuffer() const
+	{
+		return mStandard2DBuffer;
+	}
+
 private:
 	class CRenderStateManager* mRenderStateManager;
 
 	int mRenderCount;
 	std::vector<class CSceneComponent*> mVecRender;
 	const std::list<CSharedPtr<class CGameObject>>* mpObjList;
+	class CStandard2DConstantBuffer* mStandard2DBuffer;
 };
 

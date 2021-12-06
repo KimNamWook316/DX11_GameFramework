@@ -140,4 +140,9 @@ void CResourceManager::ReleaseAnimationSequece2D(const std::string& name)
 	mAnimationManager->ReleaseSequence(name);
 }
 
+CAnimation2DConstantBuffer* CResourceManager::GetAnimation2DCBuffer() const
+{
+	return mAnimationManager->GetAnimation2DCBuffer();
+}
+
 

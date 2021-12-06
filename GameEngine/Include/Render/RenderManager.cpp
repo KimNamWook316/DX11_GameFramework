@@ -1,17 +1,20 @@
 #include "RenderManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Component/SceneComponent.h"
+#include "../Resource/Shader/Standard2DConstantBuffer.h"
 #include "RenderStateManager.h"
 
 DEFINITION_SINGLE(CRenderManager)
 
 CRenderManager::CRenderManager()	:
-	mRenderStateManager(nullptr)
+	mRenderStateManager(nullptr),
+	mStandard2DBuffer(nullptr)
 {
 }
 
 CRenderManager::~CRenderManager()
 {
+	SAFE_DELETE(mStandard2DBuffer);
 	SAFE_DELETE(mRenderStateManager);
 }
 
@@ -33,6 +36,9 @@ bool CRenderManager::Init()
 
 	mRenderStateManager = new CRenderStateManager;
 	mRenderStateManager->Init();
+
+	mStandard2DBuffer = new CStandard2DConstantBuffer;
+	mStandard2DBuffer->Init();
 
 	return true;
 }

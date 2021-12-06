@@ -105,6 +105,24 @@
     <Filter Include="07. Animation">
       <UniqueIdentifier>{ae94bcbc-534d-4c87-9573-6a756791f5ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\04. Standard2D">
+      <UniqueIdentifier>{dbb8cf28-c15b-48df-a13e-dbf3d4a30519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D">
+      <UniqueIdentifier>{9d648976-75b6-4d35-966f-5b39594a6fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\08. IMGUI">
+      <UniqueIdentifier>{d0166517-227b-4c89-bf48-226aefe31a56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\08. IMGUI\00. Library">
+      <UniqueIdentifier>{c9709c54-fccf-4fd5-b7fe-338b87ba6826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\08. IMGUI\01. Window">
+      <UniqueIdentifier>{ce59e725-e814-405f-a8bb-fac25f0a1571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Engine\08. IMGUI\02. Widget">
+      <UniqueIdentifier>{caf075b2-558c-4c2e-8b82-7caa9babe763}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -260,6 +278,51 @@
     <ClInclude Include="Resource\Animation\AnimationManager.h">
       <Filter>02. Resource\05. Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\Animation2DConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\Standard2DConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\04. Standard2D</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIManager.h">
+      <Filter>01. Engine\08. IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Library\imgui-docking\imconfig.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Library\imgui-docking\imgui.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Library\imgui-docking\imgui_internal.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Library\imgui-docking\imstb_rectpack.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Library\imgui-docking\imstb_textedit.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Library\imgui-docking\imstb_truetype.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIWindow.h">
+      <Filter>01. Engine\08. IMGUI\01. Window</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIWidget.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIButton.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUITestWindow.h">
+      <Filter>01. Engine\08. IMGUI\01. Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -399,6 +462,48 @@
     </ClCompile>
     <ClCompile Include="Resource\Animation\AnimationManager.cpp">
       <Filter>02. Resource\05. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Animation2DConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Standard2DConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\04. Standard2D</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIManager.cpp">
+      <Filter>01. Engine\08. IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Library\imgui-docking\imgui.cpp">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Library\imgui-docking\imgui_demo.cpp">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Library\imgui-docking\imgui_draw.cpp">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Library\imgui-docking\imgui_tables.cpp">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Library\imgui-docking\imgui_widgets.cpp">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>01. Engine\08. IMGUI\00. Library</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIWindow.cpp">
+      <Filter>01. Engine\08. IMGUI\01. Window</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIWidget.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIButton.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUITestWindow.cpp">
+      <Filter>01. Engine\08. IMGUI\01. Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

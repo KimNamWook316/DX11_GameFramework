@@ -35,7 +35,7 @@ void CBullet::PostUpdate(float deltaTime)
 {
 	CGameObject::PostUpdate(deltaTime);
 	
-	AddWorldPos(GetWorldAxis(AXIS_Y) * 500.f * deltaTime);
+	AddWorldPos(GetWorldAxis(AXIS_Y) * 800.f * deltaTime);
 }
 
 CBullet* CBullet::Clone()

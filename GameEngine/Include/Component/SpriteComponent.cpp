@@ -1,6 +1,9 @@
 #include "SpriteComponent.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Animation/AnimationSequence2DInstance.h"
+#include "../Render/RenderManager.h"
+#include "../Resource/Shader/Standard2DConstantBuffer.h"
 
 CSpriteComponent::CSpriteComponent()
 {
@@ -12,10 +15,16 @@ CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)
 	: CSceneComponent(com)
 {
 	mMesh = com.mMesh;
+
+	if (com.mAnimation)
+	{
+		mAnimation = com.mAnimation->Clone();
+	}
 }
 
 CSpriteComponent::~CSpriteComponent()
 {
+	SAFE_DELETE(mAnimation);
 }
 
 void CSpriteComponent::SetMaterial(CMaterial* material)
@@ -39,11 +48,21 @@ bool CSpriteComponent::Init()
 void CSpriteComponent::Start()
 {
 	CSceneComponent::Start();
+
+	if (mAnimation)
+	{
+		mAnimation->Start();
+	}
 }
 
 void CSpriteComponent::Update(float deltaTime)
 {
 	CSceneComponent::Update(deltaTime);
+
+	if (mAnimation)
+	{
+		mAnimation->Update(deltaTime);
+	}
 }
 
 void CSpriteComponent::PostUpdate(float deltaTime)
@@ -60,6 +79,15 @@ void CSpriteComponent::Render()
 {
 	// 상수 버퍼 넘기고
 	CSceneComponent::Render();
+
+	// 애니메이션이 있으면
+	if (mAnimation)
+	{
+		CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(true);
+		CRenderManager::GetInst()->GetStandard2DCBuffer()->UpdateCBuffer();
+
+		mAnimation->SetShader();
+	}
 
 	// 쉐이더 바인드
 	mMaterial->Render();
@@ -155,4 +183,68 @@ void CSpriteComponent::SetTextureFullPath(const int index, const int reg, const 
 void CSpriteComponent::SetTexture(const int index, const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
 {
 	mMaterial->SetTexture(index, reg, shaderType, name, vecFileName, pathName);
+}
+
+void CSpriteComponent::ChangeAnimation(const std::string& name)
+{
+	if (mAnimation)
+	{
+		mAnimation->ChangeAnimation(name);
+	}
+}
+
+void CSpriteComponent::AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
+{
+	if (mAnimation)
+	{
+		mAnimation->AddAnimation(sequenceName, name, bIsLoop, playTime, playScale, bIsReverse);
+	}
+}
+
+bool CSpriteComponent::CheckCurrentAnimation(const std::string& name)
+{
+	if (mAnimation)
+	{
+		return mAnimation->CheckCurrentAnimation(name);
+	}
+}
+
+void CSpriteComponent::SetPlayTime(const std::string& name, const float playTime)
+{
+	if (mAnimation)
+	{
+		mAnimation->SetPlayTime(name, playTime);
+	}
+}
+
+void CSpriteComponent::SetPlayScale(const std::string& name, const float playScale)
+{
+	if (mAnimation)
+	{
+		mAnimation->SetPlayScale(name, playScale);
+	}
+}
+
+void CSpriteComponent::SetLoop(const std::string& name, bool bLoop)
+{
+	if (mAnimation)
+	{
+		mAnimation->SetLoop(name, bLoop);
+	}
+}
+
+void CSpriteComponent::SetReverse(const std::string& name, bool bReverse)
+{
+	if (mAnimation)
+	{
+		mAnimation->SetReverse(name, bReverse);
+	}
+}
+
+void CSpriteComponent::SetCurrentAnimation(const std::string& name)
+{
+	if (mAnimation)
+	{
+		mAnimation->SetCurrentAnimation(name);
+	}
 }

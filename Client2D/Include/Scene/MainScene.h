@@ -11,5 +11,9 @@ public:
 
 public:
     virtual bool Init();
+
+private:
+    void createMaterial();
+    void createAnimationSequence();
 };
 

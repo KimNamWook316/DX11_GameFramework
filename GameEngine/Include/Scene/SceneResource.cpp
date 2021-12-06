@@ -172,7 +172,7 @@ CTexture* CSceneResource::FindTexture(const std::string& name)
 
 bool CSceneResource::CreateAnimationSequence2D(const std::string& name, const std::string& textureName, const TCHAR* fileName, const std::string& pathName)
 {
-	if (FindAnimationSequece2D(name))
+	if (FindAnimationSequence2D(name))
 	{
 		return true;
 	}
@@ -189,7 +189,7 @@ bool CSceneResource::CreateAnimationSequence2D(const std::string& name, const st
 
 void CSceneResource::AddAnimationSequece2DFrame(const std::string& name, const Vector2& start, const Vector2& size)
 {
-	CAnimationSequence2D* anim = FindAnimationSequece2D(name);
+	CAnimationSequence2D* anim = FindAnimationSequence2D(name);
 
 	if (!anim)
 	{
@@ -201,7 +201,7 @@ void CSceneResource::AddAnimationSequece2DFrame(const std::string& name, const V
 
 void CSceneResource::AddAnimationSequece2DFrame(const std::string& name, const float startX, const float startY, const float width, const float height)
 {
-	CAnimationSequence2D* anim = FindAnimationSequece2D(name);
+	CAnimationSequence2D* anim = FindAnimationSequence2D(name);
 
 	if (!anim)
 	{
@@ -211,7 +211,7 @@ void CSceneResource::AddAnimationSequece2DFrame(const std::string& name, const f
 	anim->AddFrame(startX, startY, width, height);
 }
 
-CAnimationSequence2D* CSceneResource::FindAnimationSequece2D(const std::string& name)
+CAnimationSequence2D* CSceneResource::FindAnimationSequence2D(const std::string& name)
 {
 	auto iter = mMapSequence2D.find(name);
 
@@ -230,4 +230,9 @@ CAnimationSequence2D* CSceneResource::FindAnimationSequece2D(const std::string& 
 	}
 
 	return iter->second;
+}
+
+CAnimation2DConstantBuffer* CSceneResource::GetAnimation2DCBuffer() const
+{
+	return CResourceManager::GetInst()->GetAnimation2DCBuffer();
 }

@@ -48,6 +48,9 @@
     <ClCompile Include="ClientManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PlayerAnimation2D.cpp">
+      <Filter>02. Object\01. Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="ClientManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerAnimation2D.h">
+      <Filter>02. Object\01. Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

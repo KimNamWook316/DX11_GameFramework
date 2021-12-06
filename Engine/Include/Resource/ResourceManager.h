@@ -63,6 +63,7 @@ public: // ===================== Sequence2D =====================
 		const float width, const float height);
 	CAnimationSequence2D* FindAnimationSequece2D(const std::string& name);
 	void ReleaseAnimationSequece2D(const std::string& name);
+	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer() const;
 
 	DECLARE_SINGLE(CResourceManager)
 private:

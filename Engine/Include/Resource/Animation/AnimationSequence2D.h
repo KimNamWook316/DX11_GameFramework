@@ -33,7 +33,7 @@ public:
 		return mVecFrameData[index];
 	}
 
-	int GetFrameCome() const
+	int GetFrameCount() const
 	{
 		return (int)mVecFrameData.size();
 	}

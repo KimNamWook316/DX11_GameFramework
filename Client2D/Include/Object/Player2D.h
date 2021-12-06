@@ -17,27 +17,22 @@ public:
 	virtual CGameObject* Clone();
 
 private:
+	void move(float deltaTime);
 	void moveUp(float deltaTime);
 	void moveDown(float deltaTime);
 	void rotationZInv(float deltaTime);
 	void rotationZ(float deltaTime);
-	void attack(float deltaTime);
+	void attack();
+	
+	void playAttackAnim(float deltaTime);
 
 private:
 	CSharedPtr<CSpriteComponent> mSprite;
-	CSharedPtr<CSpriteComponent> mChildLeftSprite;
-	CSharedPtr<CSpriteComponent> mChildRightSprite;
-
-	CSharedPtr<CSceneComponent> mChildLeftMuzzle;
-	CSharedPtr<CSceneComponent> mChildRightMuzzle;
-	CSharedPtr<CSceneComponent> mChildRoot;
-	CSharedPtr<CSceneComponent> mMuzzle;
-
-	CSharedPtr<CSpriteComponent> mChild1Sprite;
-	CSharedPtr<CSpriteComponent> mChild2Sprite;
-	CSharedPtr<CSpriteComponent> mChild3Sprite;
-	CSharedPtr<CSpriteComponent> mChild4Sprite;
 
 	float mOpacity;
+	float mSpeed;
+	bool mbIsMoving;
+	Vector3 mMovePosition;
+	Vector3 mDirection;
 };
 

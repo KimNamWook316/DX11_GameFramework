@@ -7,18 +7,22 @@ class CAnimationSequence2DInstance
 {
 	friend class CSpriteComponent;
 
-private:
+protected:
 	CAnimationSequence2DInstance();
 	CAnimationSequence2DInstance(const CAnimationSequence2DInstance& anim);
-	~CAnimationSequence2DInstance();
+	virtual ~CAnimationSequence2DInstance();
 
 public:
-	void Update(float deltaTime);
-	CAnimationSequence2DInstance* Clone();
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float deltaTime);
+	void SetShader();
+	void ResetShader();
+	virtual CAnimationSequence2DInstance* Clone();
 
 public:
-	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop,
-		const float playTime, const float playScale, bool bIsReverse);
+	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop = true,
+		const float playTime = 1.f, const float playScale = 1.f, bool bIsReverse = false);
 	void ChangeAnimation(const std::string& name);
 	bool CheckCurrentAnimation(const std::string& name);
 
@@ -30,10 +34,21 @@ public:
 	void SetCurrentAnimation(const std::string& name);
 
 public:
+	void SetScene(class CScene* scene)
+	{
+		mScene = scene;
+	}
+
+	void SetOwner(class CSpriteComponent* owner)
+	{
+		mOwner = owner;
+	}
+
+public:
 	template <typename T>
 	void SetEndCallBack(const std::string& name, T* obj, void(T::* func)())
 	{
-		CAnimationSequence2DData* data = FindAnimation(name);
+		CAnimationSequence2DData* data = findAnimation(name);
 
 		if (!data)
 		{
@@ -46,7 +61,7 @@ public:
 	template <typename T>
 	void AddNotify(const std::string& name, const int frame, T* obj, void(T::* func)())
 	{
-		CAnimationSequence2DData* data = FindAnimation(name);
+		CAnimationSequence2DData* data = findAnimation(name);
 
 		if (!data)
 		{
@@ -56,13 +71,14 @@ public:
 		data->AddNotify<T>(name, frame, obj, func);
 	}
 
-private:
-	CAnimationSequence2DData* FindAnimation(const std::string& name);
+protected:
+	CAnimationSequence2DData* findAnimation(const std::string& name);
 
-private:
+protected:
 	class CSpriteComponent* mOwner;													// 주인 컴포넌트
 	class CScene* mScene;															// 소속 씬
+	CAnimationSequence2DData* mCurrentAnimation;									// 현재 애니메이션
 	std::unordered_map<std::string, CAnimationSequence2DData*> mMapAnimation;		// 애니메이션 데이터 목록
-
+	class CAnimation2DConstantBuffer* mCBuffer;
 };
 

@@ -33,6 +33,12 @@ bool CShaderManager::Init()
 
 	CreateConstantBuffer("MaterialCbuffer", sizeof(MaterialCBuffer), 1,
 		(int)eConstantBufferShaderTypeFlags::Graphic);
+
+	CreateConstantBuffer("Standard2DCBuffer", sizeof(Standard2DCBuffer), 2,
+		(int)eConstantBufferShaderTypeFlags::Graphic);
+
+	CreateConstantBuffer("Animation2DCBuffer", sizeof(Animation2DCBuffer), 10,
+		(int)eConstantBufferShaderTypeFlags::Graphic);
 	
 	return true;
 }

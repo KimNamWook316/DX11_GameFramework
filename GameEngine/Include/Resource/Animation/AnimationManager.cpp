@@ -1,16 +1,21 @@
 #include "AnimationManager.h"
+#include "../Shader/Animation2DConstantBuffer.h"
 
-CAnimationManager::CAnimationManager()
+CAnimationManager::CAnimationManager()	:
+	mAnimation2DCBuffer(nullptr)
 {
 }
 
 CAnimationManager::~CAnimationManager()
 {
-
+	SAFE_DELETE(mAnimation2DCBuffer);
 }
 
 bool CAnimationManager::Init()
 {
+	mAnimation2DCBuffer = new CAnimation2DConstantBuffer;
+	mAnimation2DCBuffer->Init();
+
 	return true;
 }
 

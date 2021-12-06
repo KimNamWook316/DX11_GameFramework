@@ -1,6 +1,7 @@
 #include "SceneComponent.h"
 #include "../Render/RenderManager.h"
 #include "../GameObject/GameObject.h"
+#include "../Resource/Shader/Standard2DConstantBuffer.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -116,6 +117,10 @@ void CSceneComponent::PrevRender()
 void CSceneComponent::Render()
 {
 	mTransform->SetTransformBuffer();
+
+	// 씬 컴포넌트의 default 값은 애니메이션 없음
+	CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(false);
+	CRenderManager::GetInst()->GetStandard2DCBuffer()->UpdateCBuffer();
 }
 
 void CSceneComponent::PostRender()

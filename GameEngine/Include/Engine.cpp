@@ -6,18 +6,19 @@
 #include "PathManager.h"
 #include "Input.h"
 #include "Timer.h"
+#include "IMGUIManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
 bool CEngine::mLoop = true;
 
 CEngine::CEngine() 
-	: mClearColor{0.5f, 0.5f, 0.5f, 1.f}
+	: mClearColor{0.5f, 0.5f, 0.5f, 0.5f}
 	, mTimer(nullptr)
 	, mbIsStart(false)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(356);
+	//_CrtSetBreakAlloc(413);
 }
 
 CEngine::~CEngine() 
@@ -27,6 +28,7 @@ CEngine::~CEngine()
 	CRenderManager::DestroyInst();
 	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
+	CIMGUIManager::DestroyInst();
 	CDevice::DestroyInst();
 	SAFE_DELETE(mTimer);
 }
@@ -84,6 +86,12 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	}
 
 	if (!CInput::GetInst()->Init(mhInst, mhWnd))
+	{
+		assert(false);
+		return false;
+	}
+
+	if (!CIMGUIManager::GetInst()->Init(mhWnd))
 	{
 		assert(false);
 		return false;
@@ -148,6 +156,8 @@ void CEngine::Logic()
 
 	CInput::GetInst()->Update(deltaTime);
 
+	CIMGUIManager::GetInst()->Update(deltaTime);
+	
 	if (!update(deltaTime))
 	{
 		return;
@@ -184,6 +194,8 @@ bool CEngine::render(float deltaTime)
 	CDevice::GetInst()->ClearDepthStencil(1.f, 0);
 
 	CRenderManager::GetInst()->Render();
+	
+	CIMGUIManager::GetInst()->Render();
 
 	CDevice::GetInst()->Flip();
 
@@ -259,8 +271,15 @@ BOOL CEngine::Create(const TCHAR* name)
 	return TRUE;
 }
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+	{
+		return 1;
+	}
+
 	switch (message)
 	{
 	case WM_PAINT:

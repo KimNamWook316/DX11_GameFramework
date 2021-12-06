@@ -25,6 +25,9 @@
 #include "Vector4.h"
 #include "Matrix.h"
 #include "SharedPtr.h"
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
 
 #define ROOT_PATH		"Root"
 #define SHADER_PATH		"Shader"
@@ -177,4 +180,18 @@ struct AnimationFrameData
 {
 	Vector2 Start;
 	Vector2 Size;
+};
+
+struct Animation2DCBuffer
+{
+	Vector2 Animation2DStartUV;
+	Vector2 Animation2DEndUV;
+	int Animation2DType;
+	Vector3 Dummy;
+};
+
+struct Standard2DCBuffer
+{
+	int AnimationEnable;
+	Vector3 Dummy;
 };

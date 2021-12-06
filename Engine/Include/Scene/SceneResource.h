@@ -73,7 +73,8 @@ public:
 	void AddAnimationSequece2DFrame(const std::string& name, const Vector2& start, const Vector2& size);
 	void AddAnimationSequece2DFrame(const std::string& name, const float startX, const float startY,
 		const float width, const float height);
-	CAnimationSequence2D* FindAnimationSequece2D(const std::string& name);
+	CAnimationSequence2D* FindAnimationSequence2D(const std::string& name);
+	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer() const;
 
 private:
 	class CScene* mScene;

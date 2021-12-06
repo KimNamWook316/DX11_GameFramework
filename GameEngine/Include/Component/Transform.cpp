@@ -86,21 +86,6 @@ void CTransform::PostUpdate(const float deltaTime)
 	{
 		mMatWorld = mMatScale * mMatRot * mMatPos;
 	}
-
-	if (mbUpdateScale)
-	{
-		mbUpdateScale = false;
-	}
-
-	if (mbUpdateRot)
-	{
-		mbUpdateRot = false;
-	}
-
-	if (mbUpdatePos)
-	{
-		mbUpdatePos = false;
-	}
 }
 
 // 상수 버퍼 갱신
