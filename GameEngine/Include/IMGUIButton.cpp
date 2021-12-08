@@ -11,6 +11,7 @@ CIMGUIButton::~CIMGUIButton()
 
 bool CIMGUIButton::Init()
 {
+	SetSize(100.f, 50.f);
 	return true;
 }
 

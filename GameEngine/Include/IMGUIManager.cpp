@@ -2,11 +2,13 @@
 #include "IMGUIWindow.h"
 #include "IMGUITestWindow.h"
 #include "Device.h"
+#include "PathManager.h"
 
 DEFINITION_SINGLE(CIMGUIManager)
 
 CIMGUIManager::CIMGUIManager()	:
-	mContext(nullptr)
+	mContext(nullptr),
+	mCurrentFont(nullptr)
 {
 }
 
@@ -18,14 +20,6 @@ CIMGUIManager::~CIMGUIManager()
 	for (; iter != iterEnd; ++iter)
 	{
 		SAFE_DELETE(iter->second);
-	}
-
-	auto iterFont = mMapFont.begin();
-	auto iterEndFont = mMapFont.end();
-
-	for (; iterFont != iterEndFont; ++iter)
-	{
-		SAFE_DELETE(iterFont->second);
 	}
 
 	ImGui_ImplDX11_Shutdown();
@@ -42,6 +36,7 @@ bool CIMGUIManager::Init(HWND hWnd)
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+	// Multi-Vieports
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 	ImGui::StyleColorsDark();
@@ -50,8 +45,15 @@ bool CIMGUIManager::Init(HWND hWnd)
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(CDevice::GetInst()->GetDevice(), CDevice::GetInst()->GetContext());
 	
+	// Sample Window
 	CIMGUITestWindow* window = AddWindow<CIMGUITestWindow>("TestWindow");
 
+	// Font
+	AddFont("Default", "NotoSansKR-Regular.otf", 15.f, true);
+	AddFont("DefaultBlack", "NotoSansKR-Black.otf", 15.f, true);
+	AddFont("DefaultBold", "NotoSansKR-Bold.otf", 15.f, true);
+	
+	mCurrentFont = FindFont("Default");
 	return true;
 }
 
@@ -59,21 +61,13 @@ void CIMGUIManager::Update(float deltaTime)
 {
 	static bool bOpen = false;
 
-//	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
-//	{
-//		bOpen = false;
-//		CIMGUIWindow* window = FindIMGUIWindow("TestWindow");
-//
-//		if (window)
-//		{
-//			window->Open();
-//		}
-//	}
-//
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 
 	ImGui::NewFrame();
+
+	// Font Push
+	ImGui::PushFont(mCurrentFont);
 
 	auto iter = mMapWindow.begin();
 	auto iterEnd = mMapWindow.end();
@@ -82,6 +76,9 @@ void CIMGUIManager::Update(float deltaTime)
 	{
 		iter->second->Update(deltaTime);
 	}
+	
+	// Font Pop
+	ImGui::PopFont();
 
 	// Window에서 그려낸 위젯들은 실제 화면에 그려지는 것이 아니라
 	// IMGUI내부의 버퍼에 그려지게 된다.
@@ -91,6 +88,7 @@ void CIMGUIManager::Update(float deltaTime)
 
 void CIMGUIManager::Render()
 {
+	// IMGUI 백버퍼 내에 그려져 있는 데이터들을 다시 그린다
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	ImGuiIO& io = ImGui::GetIO();
@@ -110,5 +108,85 @@ CIMGUIWindow* CIMGUIManager::FindIMGUIWindow(const std::string& name)
 	{
 		return nullptr;
 	}
+	return iter->second;
+}
+
+bool CIMGUIManager::AddFont(const std::string& fontName, const char* fileName, const float size, const bool bKorean, const int overH, const int overV, const float spacing, const std::string& pathName)
+{
+	ImFont* font = FindFont(fontName);
+
+	if (font)
+	{
+		return false;
+	}
+
+	char fullPath[MAX_PATH];
+
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+
+	strcat_s(fullPath, fileName);
+
+	return AddFontFullPath(fontName, fullPath, size, bKorean, overH, overV, spacing);
+}
+
+bool CIMGUIManager::AddFontFullPath(const std::string& fontName, const char* fullPath, const float size, const bool bKorean, const int overH, const int overV, const float spacing)
+{
+	ImFont* font = FindFont(fontName);
+
+	if (font)
+	{
+		return false;
+	}
+
+	ImGuiIO& io = ImGui::GetIO();
+
+	ImFontConfig config;
+
+	// texture smpling 하듯 sampling quality 결정 -> H = 2, V = 1 최적화
+	config.OversampleH = overH;
+	config.OversampleV = overV;
+	config.GlyphExtraSpacing.x = spacing;
+	config.PixelSnapH = 1;
+
+	if (!bKorean)
+	{
+		font = io.Fonts->AddFontFromFileTTF(fullPath, size, &config, io.Fonts->GetGlyphRangesDefault());
+	}
+	else
+	{
+		font = io.Fonts->AddFontFromFileTTF(fullPath, size, &config, io.Fonts->GetGlyphRangesKorean());
+	}
+
+	mMapFont.insert(std::make_pair(fontName, font));
+	return true;
+}
+
+void CIMGUIManager::SetCurrentFont(const std::string& fontName)
+{
+	ImFont* font = FindFont(fontName);
+
+	if (!font)
+	{
+		assert(false);
+		return;
+	}
+
+	mCurrentFont = font;
+}
+
+ImFont* CIMGUIManager::FindFont(const std::string& fontName)
+{
+	auto iter = mMapFont.find(fontName);
+
+	if (iter == mMapFont.end())
+	{
+		return nullptr;
+	}
+
 	return iter->second;
 }

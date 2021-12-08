@@ -42,14 +42,6 @@ public:
 		mSize.y = y;
 	}
 
-	void SetColor(const float r, const float g, const float b, const float a = 1.f)
-	{
-		mColor.Value.x = r;
-		mColor.Value.y = g;
-		mColor.Value.z = b;
-		mColor.Value.w = a;
-	}
-
 	void SetColor(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a = 255)
 	{
 		mColor.Value.x = r / 255.f;

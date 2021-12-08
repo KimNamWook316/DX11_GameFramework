@@ -34,16 +34,19 @@ bool CIMGUIWindow::Init()
 
 void CIMGUIWindow::Update(float deltaTime)
 {
+    // 윈도우가 열린 상태가 아니라면 렌더하지 않음
     if (!mbOpen)
     {
         return;
     }
-
+    
+    // 새로운 IMGUI 윈도우 시작, 닫힌 상태라면 윈도우 open -> false;
     if (!ImGui::Begin(mName.c_str(), &mbOpen, mWindowFlag))
     {
         mbOpen = false;
     }
 
+    // Widget들 모두 Render
     size_t size = mVecWidget.size();
 
     for (size_t i = 0; i < size; ++i)
@@ -51,6 +54,7 @@ void CIMGUIWindow::Update(float deltaTime)
         mVecWidget[i]->Render();
     }
 
+    // Begin을 하면 End를 해 주어야 한다.
     ImGui::End();
 }
 

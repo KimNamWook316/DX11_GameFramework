@@ -323,6 +323,18 @@
     <ClInclude Include="IMGUITestWindow.h">
       <Filter>01. Engine\08. IMGUI\01. Window</Filter>
     </ClInclude>
+    <ClInclude Include="IMGUIText.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUISameLine.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUILabel.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUITextInput.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -504,6 +516,18 @@
     </ClCompile>
     <ClCompile Include="IMGUITestWindow.cpp">
       <Filter>01. Engine\08. IMGUI\01. Window</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIText.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUISameLine.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUILabel.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUITextInput.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
