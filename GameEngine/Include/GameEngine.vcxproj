@@ -39,8 +39,14 @@
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="IMGUIButton.h" />
+    <ClInclude Include="IMGUICheckBox.h" />
+    <ClInclude Include="IMGUIComboBox.h" />
+    <ClInclude Include="IMGUIImage.h" />
+    <ClInclude Include="IMGUIInfo.h" />
     <ClInclude Include="IMGUILabel.h" />
+    <ClInclude Include="IMGUIListBox.h" />
     <ClInclude Include="IMGUIManager.h" />
+    <ClInclude Include="IMGUIRadioButton.h" />
     <ClInclude Include="IMGUISameLine.h" />
     <ClInclude Include="IMGUITestWindow.h" />
     <ClInclude Include="IMGUITextInput.h" />
@@ -99,7 +105,12 @@
     <ClCompile Include="Animation\AnimationSequence2DData.cpp" />
     <ClCompile Include="Animation\AnimationSequence2DInstance.cpp" />
     <ClCompile Include="IMGUIButton.cpp" />
+    <ClCompile Include="IMGUICheckBox.cpp" />
+    <ClCompile Include="IMGUIComboBox.cpp" />
+    <ClCompile Include="IMGUIImage.cpp" />
     <ClCompile Include="IMGUILabel.cpp" />
+    <ClCompile Include="IMGUIListBox.cpp" />
+    <ClCompile Include="IMGUIRadioButton.cpp" />
     <ClCompile Include="IMGUISameLine.cpp" />
     <ClCompile Include="IMGUITestWindow.cpp" />
     <ClCompile Include="IMGUITextInput.cpp" />

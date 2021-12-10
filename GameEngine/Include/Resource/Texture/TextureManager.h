@@ -14,6 +14,7 @@ public:
 	bool Init();
 	bool LoadTexture(const std::string& name, const TCHAR* fileName, 
 		const std::string& path = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& name, const TCHAR* fullPath);
 	class CTexture* FindTexture(const std::string& name);
 	void ReleaseTexture(const std::string& name);
 

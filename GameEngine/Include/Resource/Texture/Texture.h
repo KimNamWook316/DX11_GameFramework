@@ -63,6 +63,7 @@ protected:
 
 public:
 	bool LoadTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& name, const TCHAR* fullPath);
 
 public:
 	void SetShader(const int reg, const int eShaderType, const int index);
@@ -87,6 +88,11 @@ public:
 	size_t GetImageCount() const
 	{
 		return mVecTextureInfo.size();
+	}
+
+	ID3D11ShaderResourceView* GetResourceView(const int idx = 0)
+	{
+		return mVecTextureInfo[idx]->ShaderResourceView;
 	}
 
 private:

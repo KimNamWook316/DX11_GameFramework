@@ -25,6 +25,14 @@ public:
 		mName = name;
 	}
 	
+	void SetHideName(const bool bHide)
+	{
+		if (bHide)
+		{
+			mName = "##" + mName;
+		}
+	}
+
 	void SetSize(const ImVec2& size)
 	{
 		mSize = size;

@@ -115,6 +115,11 @@ bool CResourceManager::LoadTexture(const std::string& name, const TCHAR* fileNam
 	return mTextureManager->LoadTexture(name, fileName, filePath);
 }
 
+bool CResourceManager::LoadTextureFullPath(const std::string& name, const TCHAR* fullPath)
+{
+	return mTextureManager->LoadTextureFullPath(name, fullPath);
+}
+
 bool CResourceManager::CreateAnimationSequence2D(const std::string& name, const std::string& textureName, const TCHAR* fileName, const std::string& pathName)
 {
 	return mAnimationManager->CreateAnimationSequence(name, textureName, fileName, pathName);

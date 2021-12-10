@@ -335,6 +335,24 @@
     <ClInclude Include="IMGUITextInput.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="IMGUIComboBox.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIImage.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIListBox.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUICheckBox.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIRadioButton.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIInfo.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -527,6 +545,21 @@
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
     <ClCompile Include="IMGUITextInput.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIComboBox.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIImage.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIListBox.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUICheckBox.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIRadioButton.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>

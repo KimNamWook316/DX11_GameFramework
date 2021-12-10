@@ -17,6 +17,9 @@ public:
 		const int overH = 2, const int overV = 1, const float spacing = 1.f);
 	void SetCurrentFont(const std::string& fontName);
 	ImFont* FindFont(const std::string& fontName);
+
+	void PushCurrentFont();
+	void PopCurrentFont();
 		
 public:
 	template <typename T>

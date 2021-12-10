@@ -190,3 +190,13 @@ ImFont* CIMGUIManager::FindFont(const std::string& fontName)
 
 	return iter->second;
 }
+
+void CIMGUIManager::PushCurrentFont()
+{
+	ImGui::PushFont(mCurrentFont);
+}
+
+void CIMGUIManager::PopCurrentFont()
+{
+	ImGui::PopFont();
+}

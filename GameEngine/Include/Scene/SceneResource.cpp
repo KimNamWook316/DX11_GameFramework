@@ -149,6 +149,22 @@ bool CSceneResource::LoadTexture(const std::string& name, const TCHAR* fileName,
 	return true;
 }
 
+bool CSceneResource::LoadTextureFullPath(const std::string& name, const TCHAR* fullPath)
+{
+	if (FindTexture(name))
+	{
+		return true;
+	}
+
+	if (!CResourceManager::GetInst()->LoadTextureFullPath(name, fullPath))
+	{
+		return false;
+	}
+
+	mMapTexture.insert(std::make_pair(name, CResourceManager::GetInst()->FindTexture(name)));
+	return true;
+}
+
 CTexture* CSceneResource::FindTexture(const std::string& name)
 {
 	auto iter = mMapTexture.find(name);

@@ -1,5 +1,6 @@
 #include "IMGUIWindow.h"
 #include "IMGUIWidget.h"
+#include "IMGUIManager.h"
 
 CIMGUIWindow::CIMGUIWindow() :
     mbOpen(true),
@@ -39,13 +40,18 @@ void CIMGUIWindow::Update(float deltaTime)
     {
         return;
     }
-    
+
     // 새로운 IMGUI 윈도우 시작, 닫힌 상태라면 윈도우 open -> false;
     if (!ImGui::Begin(mName.c_str(), &mbOpen, mWindowFlag))
     {
-        mbOpen = false;
+        // 필요한가?
+        // mbOpen = false;
+        ImGui::End();
+        return;
     }
 
+    CIMGUIManager::GetInst()->PushCurrentFont();
+    
     // Widget들 모두 Render
     size_t size = mVecWidget.size();
 
@@ -53,6 +59,8 @@ void CIMGUIWindow::Update(float deltaTime)
     {
         mVecWidget[i]->Render();
     }
+    
+    CIMGUIManager::GetInst()->PopCurrentFont();
 
     // Begin을 하면 End를 해 주어야 한다.
     ImGui::End();
