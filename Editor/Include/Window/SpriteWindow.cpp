@@ -47,7 +47,7 @@ bool CSpriteWindow::Init()
 	label->SetAlign(0.5f, 0);
 
 	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("Line");
-	line->SetOffsetX(300.f);
+	line->SetOffsetX(330.f);
 
 	label = AddWidget<CIMGUILabel>("Animation Frame Name", 200.f, 30.f);
 	label->SetColor(0, 0, 255);
@@ -58,7 +58,11 @@ bool CSpriteWindow::Init()
 	mAnimationList->SetPageItemCount(6);
 	
 	line = AddWidget<CIMGUISameLine>("Line");
-	line->SetOffsetX(300.f);
+
+	button = AddWidget<CIMGUIButton>("Add Animation List", 80.f, 30.f);
+	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimation);
+
+	line = AddWidget<CIMGUISameLine>("Line");
 
 	mAnimationFrameList = AddWidget<CIMGUIListBox>("AnimationFrameList", 200.f, 300.f);
 	mAnimationFrameList->SetHideName(true);
