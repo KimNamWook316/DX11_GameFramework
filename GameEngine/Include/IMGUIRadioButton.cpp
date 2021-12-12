@@ -4,7 +4,7 @@ CIMGUIRadioButton::CIMGUIRadioButton()    :
     mbMultiColumn(false),
     mbMultiCheck(false),
     mSpacingX(10.f),
-    mCheckItemIdx(-1)
+    mCheckItemIdx(0)
 {
 }
 
@@ -43,10 +43,7 @@ void CIMGUIRadioButton::Render()
             {
                 if (!mbMultiCheck)
                 {
-					if (mCheckItemIdx != -1)
-					{
-						mVecCheckInfo[mCheckItemIdx]->bCheck = false;
-					}
+					mVecCheckInfo[mCheckItemIdx]->bCheck = false;
 					mCheckItemIdx = (int)i;
                 }
                 mVecCheckInfo[i]->bCheck = true;

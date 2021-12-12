@@ -4,7 +4,7 @@
 
 CIMGUIWindow::CIMGUIWindow() :
     mbOpen(true),
-    mWindowFlag(0),
+    mWindowFlag(ImGuiWindowFlags_NoCollapse),
     mbModalPopUp(false)
 {
 }

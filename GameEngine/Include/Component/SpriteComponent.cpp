@@ -5,7 +5,8 @@
 #include "../Render/RenderManager.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
 
-CSpriteComponent::CSpriteComponent()
+CSpriteComponent::CSpriteComponent()	:
+	mAnimation(nullptr)
 {
 	SetTypeID<CSpriteComponent>();
 	mbIsRender = true;
@@ -83,7 +84,7 @@ void CSpriteComponent::Render()
 	// 애니메이션이 있으면
 	if (mAnimation)
 	{
-		CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(true);
+		CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(mAnimation->GetAnimationCount() > 0);
 		CRenderManager::GetInst()->GetStandard2DCBuffer()->UpdateCBuffer();
 
 		mAnimation->SetShader();

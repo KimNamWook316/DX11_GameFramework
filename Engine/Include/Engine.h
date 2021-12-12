@@ -16,6 +16,17 @@ public:
 	int Run();
 	void Logic();
 
+public:
+	HWND GetWindowHandle() const
+	{
+		return mhWnd;
+	}
+
+	HINSTANCE GetWindowInstance() const
+	{
+		return mhInst;
+	}
+
 private:
 	bool update(float deltaTime);
 	bool postUpdate(float deltaTime);

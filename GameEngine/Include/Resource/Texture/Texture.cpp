@@ -158,7 +158,7 @@ bool CTexture::LoadTextureFullPath(const std::string& name, const TCHAR* fullPat
 		}
 	}
 
-	else if (strcmp(ext, ".TGA"))
+	else if (strcmp(ext, ".TGA") == 0)
 	{
 		if (FAILED(LoadFromTGAFile(fullPath, nullptr, *image)))
 		{
@@ -181,7 +181,7 @@ bool CTexture::LoadTextureFullPath(const std::string& name, const TCHAR* fullPat
 	info->Image = image;
 	mVecTextureInfo.push_back(info);
 
-	return true;
+	return createResource(0);
 }
 
 bool CTexture::createResource(const int index)

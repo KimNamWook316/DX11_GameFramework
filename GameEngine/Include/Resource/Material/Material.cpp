@@ -241,6 +241,15 @@ void CMaterial::SetTexture(const int index, const int reg, const int shaderType,
 
 void CMaterial::SetTextureFullPath(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
 {
+	if (!CResourceManager::GetInst()->LoadTextureFullPath(name, fullPath))
+	{
+		return;
+	}
+
+	mVecTextureInfo[index].Register = reg;
+	mVecTextureInfo[index].Name = name;
+	mVecTextureInfo[index].Texture = CResourceManager::GetInst()->FindTexture(name);
+	mVecTextureInfo[index].ShaderType = shaderType;
 }
 
 void CMaterial::SetTexture(const int index, const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)

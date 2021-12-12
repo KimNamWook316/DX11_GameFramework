@@ -16,6 +16,10 @@ CIMGUIImage::~CIMGUIImage()
 
 bool CIMGUIImage::Init()
 {
+    SetTexture("UIDefault", TEXT("DefaultUI.png"));
+
+    SetImageStart(0.f, 0.f);
+
     return true;
 }
 
@@ -37,20 +41,25 @@ void CIMGUIImage::SetTexture(const std::string& name, const TCHAR* fileName, con
 {
     CResourceManager::GetInst()->LoadTexture(name, fileName, pathName);
     mTexture = CResourceManager::GetInst()->FindTexture(name);
+
+    SetImageEnd((float)mTexture->GetWidth(), (float)mTexture->GetHeight());
 }
 
 void CIMGUIImage::SetTexture(const std::string& name)
 {
     mTexture = CResourceManager::GetInst()->FindTexture(name);
+    SetImageEnd((float)mTexture->GetWidth(), (float)mTexture->GetHeight());
 }
 
 void CIMGUIImage::SetTextureFullPath(const std::string& name, const TCHAR* fullPath)
 {
     CResourceManager::GetInst()->LoadTextureFullPath(name, fullPath);
     mTexture = CResourceManager::GetInst()->FindTexture(name);
+    SetImageEnd((float)mTexture->GetWidth(), (float)mTexture->GetHeight());
 }
 
 void CIMGUIImage::SetTexture(CTexture* texture)
 {
     mTexture = texture;
+    SetImageEnd((float)mTexture->GetWidth(), (float)mTexture->GetHeight());
 }

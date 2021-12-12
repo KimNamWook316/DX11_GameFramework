@@ -46,7 +46,7 @@ bool CIMGUIManager::Init(HWND hWnd)
 	ImGui_ImplDX11_Init(CDevice::GetInst()->GetDevice(), CDevice::GetInst()->GetContext());
 	
 	// Sample Window
-	CIMGUITestWindow* window = AddWindow<CIMGUITestWindow>("TestWindow");
+	// CIMGUITestWindow* window = AddWindow<CIMGUITestWindow>("TestWindow");
 
 	// Font
 	AddFont("Default", "NotoSansKR-Regular.otf", 15.f, true);
@@ -59,6 +59,12 @@ bool CIMGUIManager::Init(HWND hWnd)
 
 void CIMGUIManager::Update(float deltaTime)
 {
+	// 윈도우 없으면 실행 안함
+	if (mMapWindow.empty())
+	{
+		return;
+	}
+
 	static bool bOpen = false;
 
 	ImGui_ImplDX11_NewFrame();
@@ -88,6 +94,11 @@ void CIMGUIManager::Update(float deltaTime)
 
 void CIMGUIManager::Render()
 {
+	if (mMapWindow.empty())
+	{
+		return;
+	}
+
 	// IMGUI 백버퍼 내에 그려져 있는 데이터들을 다시 그린다
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 

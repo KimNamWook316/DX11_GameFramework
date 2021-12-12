@@ -21,6 +21,12 @@ public:
 	virtual CAnimationSequence2DInstance* Clone();
 
 public:
+	int GetAnimationCount() const
+	{
+		return (int)mMapAnimation.size();
+	}
+
+public:
 	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop = true,
 		const float playTime = 1.f, const float playScale = 1.f, bool bIsReverse = false);
 	void ChangeAnimation(const std::string& name);

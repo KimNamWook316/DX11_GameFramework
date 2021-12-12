@@ -8,7 +8,9 @@
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 	mScene(nullptr),
-	mOwner(nullptr)
+	mOwner(nullptr),
+	mCBuffer(nullptr),
+	mCurrentAnimation(nullptr)
 {
 }
 
@@ -50,7 +52,7 @@ CAnimationSequence2DInstance::~CAnimationSequence2DInstance()
 
 void CAnimationSequence2DInstance::Start()
 {
-	if (mOwner)
+	if (mOwner && mCurrentAnimation)
 	{
 		mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
 			mCurrentAnimation->mSequence->GetTexture()->GetName(), mCurrentAnimation->mSequence->GetTexture());
@@ -66,6 +68,11 @@ bool CAnimationSequence2DInstance::Init()
 
 void CAnimationSequence2DInstance::Update(float deltaTime)
 {
+	if (!mCurrentAnimation)
+	{
+		return;
+	}
+
 	// 델타타임 더하기
 	mCurrentAnimation->mTime += deltaTime * mCurrentAnimation->mPlayScale;
 
@@ -162,6 +169,11 @@ void CAnimationSequence2DInstance::Update(float deltaTime)
 
 void CAnimationSequence2DInstance::SetShader()
 {
+	if (!mCurrentAnimation)
+	{
+		return;
+	}
+
 	Vector2 startUV, endUV;
 
 	Vector2 start = mCurrentAnimation->mSequence->GetFrameData(mCurrentAnimation->mFrame).Start;
