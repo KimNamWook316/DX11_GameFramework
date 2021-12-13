@@ -7,6 +7,7 @@ class CIMGUICheckBox :
     public CIMGUIWidget
 {
     friend class CIMGUIWindow;
+    friend class CIMGUITree;
 
 protected:
     CIMGUICheckBox();

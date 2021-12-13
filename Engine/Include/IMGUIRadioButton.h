@@ -7,6 +7,7 @@ class CIMGUIRadioButton :
     public CIMGUIWidget
 {
     friend class CIMGUIWindow;
+    friend class CIMGUITree;
 
 protected:
     CIMGUIRadioButton();

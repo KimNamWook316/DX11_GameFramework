@@ -21,6 +21,7 @@ public:
 
 private:
     class CIMGUIImage* mImage;
+    class CIMGUIImage* mCropImage;
     class CIMGUIListBox* mAnimationList;
     class CIMGUIListBox* mAnimationFrameList;
     CSharedPtr<class CSpriteEditObject> mSpriteEditObject;

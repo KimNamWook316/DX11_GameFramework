@@ -9,6 +9,7 @@
 #include "IMGUIImage.h"
 #include "IMGUICheckBox.h"
 #include "IMGUIRadioButton.h"
+#include "IMGUITree.h"
 #include "Engine.h"
 #include "Scene/SceneManager.h"
 #include "../EditorManager.h"
@@ -16,9 +17,11 @@
 #include "Scene/Scene.h"
 #include "Component/SpriteComponent.h"
 #include "PathManager.h"
+#include "Input.h"
 
 CSpriteWindow::CSpriteWindow()	:
 	mImage(nullptr),
+	mCropImage(nullptr),
 	mAnimationFrameList(nullptr),
 	mAnimationList(nullptr)
 {
@@ -42,11 +45,15 @@ bool CSpriteWindow::Init()
 
 	mImage = AddWidget<CIMGUIImage>("SpriteOrigin", 200.f, 200.f);
 	
+	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("Line");
+
+	mCropImage = AddWidget<CIMGUIImage>("SpriteCrop", 200.f, 200.f);
+
 	CIMGUILabel* label = AddWidget<CIMGUILabel>("Animation List Name", 200.f, 30.f);
 	label->SetColor(0, 0, 255);
 	label->SetAlign(0.5f, 0);
 
-	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("Line");
+	line = AddWidget<CIMGUISameLine>("Line");
 	line->SetOffsetX(330.f);
 
 	label = AddWidget<CIMGUILabel>("Animation Frame Name", 200.f, 30.f);
@@ -59,7 +66,7 @@ bool CSpriteWindow::Init()
 	
 	line = AddWidget<CIMGUISameLine>("Line");
 
-	button = AddWidget<CIMGUIButton>("Add Animation List", 80.f, 30.f);
+	button = AddWidget<CIMGUIButton>("Add List", 80.f, 30.f);
 	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimation);
 
 	line = AddWidget<CIMGUISameLine>("Line");
@@ -70,8 +77,37 @@ bool CSpriteWindow::Init()
 
 	line = AddWidget<CIMGUISameLine>("Line");
 
-	button = AddWidget<CIMGUIButton>("Add Animation Frame", 80.f, 30.f);
+	button = AddWidget<CIMGUIButton>("Add Frame", 80.f, 30.f);
 	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimationFrame);
+
+	// Tree 과제
+	CIMGUITree* tree = AddWidget<CIMGUITree>("Tree");
+	tree->AddChild("child1");
+	tree->AddChild("child2");
+	tree->AddChild("child3");
+	
+	CIMGUITree* child1 = tree->GetNode(0);
+	CIMGUIText* child1Text = child1->AddWidget<CIMGUIText>("child1Text");
+	child1Text->SetText("child1Text");
+	CIMGUITextInput* child1TextInput = child1->AddWidget<CIMGUITextInput>("child1TextInput");
+	child1TextInput->SetHintText("child1TextInput");
+
+	CIMGUITree* child2 = tree->GetNode("child2");
+	button = child2->AddWidget<CIMGUIButton>("child2Button");
+
+	child2->AddChild("child2's child");
+	CIMGUITree* child2Child = child2->GetNode("child2's child");
+	label = child2Child->AddWidget<CIMGUILabel>("child2childLabel", 200.f, 30.f);
+	label->SetColor(128, 128, 0);
+	label->SetAlign(0.5f, 0);
+	
+	child2Child->AddChild("child2child2child");
+
+	CIMGUITree* child3 = tree->GetNode("child3");
+	CIMGUIRadioButton* radioButton = child3->AddWidget<CIMGUIRadioButton>("child3RadioButton");
+	radioButton->AddCheckInfo("child3_1");
+	radioButton->AddCheckInfo("child3_2");
+	radioButton->AddCheckInfo("child3_3");
 
 	return true;
 }
@@ -82,7 +118,7 @@ void CSpriteWindow::Update(float deltaTime)
 }
 
 void CSpriteWindow::OnClickLoadTexture()
-{
+	{
 	if (CEditorManager::GetInst()->GetEditMode() != eEditMode::Sprite)
 	{
 		return;
@@ -116,6 +152,11 @@ void CSpriteWindow::OnClickLoadTexture()
 		// 씬 스프라이트 오브젝트에 등록
 		mSpriteEditObject->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
 			convertFileName, filePath);
+
+		// Texture 크기 실제 비율에 맞게 수정
+		CTexture* texture = CResourceManager::GetInst()->FindTexture(convertFileName);
+		mSpriteEditObject->GetSpriteComponent()->SetRelativeScale(texture->GetWidth(),
+			texture->GetHeight(), 1.f);
 	}
 }
 

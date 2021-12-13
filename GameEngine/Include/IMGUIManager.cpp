@@ -90,10 +90,26 @@ void CIMGUIManager::Update(float deltaTime)
 	// IMGUI내부의 버퍼에 그려지게 된다.
 	// 이 버퍼를 최종적으로 한 번 그려내는 방식으로 처리가 된다.
 	ImGui::Render();
-}
+ }
 
 void CIMGUIManager::Render()
 {
+	// DEMO
+ //	static bool bOpen = true;
+ //	ImGui_ImplDX11_NewFrame();
+ //	ImGui_ImplWin32_NewFrame();
+ //	ImGui::NewFrame();
+ //	ImGui::ShowDemoWindow(&bOpen);
+ //	ImGui::Render();
+ //	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+ //
+ //	ImGuiIO& io = ImGui::GetIO();
+ //	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+ //	{
+ //		ImGui::UpdatePlatformWindows();
+ //		ImGui::RenderPlatformWindowsDefault();
+ //	}
+
 	if (mMapWindow.empty())
 	{
 		return;

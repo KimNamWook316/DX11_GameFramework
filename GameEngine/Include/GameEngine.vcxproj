@@ -50,6 +50,7 @@
     <ClInclude Include="IMGUISameLine.h" />
     <ClInclude Include="IMGUITestWindow.h" />
     <ClInclude Include="IMGUITextInput.h" />
+    <ClInclude Include="IMGUITree.h" />
     <ClInclude Include="IMGUIWidget.h" />
     <ClInclude Include="IMGUIWindow.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="IMGUISameLine.cpp" />
     <ClCompile Include="IMGUITestWindow.cpp" />
     <ClCompile Include="IMGUITextInput.cpp" />
+    <ClCompile Include="IMGUITree.cpp" />
     <ClCompile Include="IMGUIWidget.cpp" />
     <ClCompile Include="IMGUIManager.cpp" />
     <ClCompile Include="IMGUIWindow.cpp" />

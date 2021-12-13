@@ -13,6 +13,7 @@ class CIMGUITextInput :
     public CIMGUIWidget
 {
     friend class CIMGUIWindow;
+    friend class CIMGUITree;
 
 protected:
     CIMGUITextInput();

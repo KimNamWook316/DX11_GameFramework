@@ -114,7 +114,6 @@ public:
 		}
 	}
 
-
 protected:
 	CSharedPtr<CSpriteMesh> mMesh;
 	CSharedPtr<CMaterial> mMaterial;

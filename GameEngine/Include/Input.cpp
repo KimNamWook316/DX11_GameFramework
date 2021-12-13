@@ -259,15 +259,6 @@ void CInput::readDirectInputMouse()
 			mMouse->Acquire();
 		}
 	}
-
-	if (mMouseState.rgbButtons[0] != '\0')
-	{
-		int a = 1;
-	}
-	if (mMouseState.rgbButtons[1] != '\0')
-	{
-		int a = 1;
-	}
 }
 
 // Mouse Position, Mouse Move Amount 업데이트

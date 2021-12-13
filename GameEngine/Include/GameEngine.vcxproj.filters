@@ -353,6 +353,9 @@
     <ClInclude Include="IMGUIInfo.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="IMGUITree.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -560,6 +563,9 @@
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
     <ClCompile Include="IMGUIRadioButton.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUITree.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>
