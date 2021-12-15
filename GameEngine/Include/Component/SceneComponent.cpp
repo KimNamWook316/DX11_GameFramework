@@ -19,6 +19,9 @@ CSceneComponent::CSceneComponent()
 	// 다른 SceneComponent의 자식으로 들어갈 경우, AddChild를 통해 부모를 설정한다.
 	// 이 생성자로 생성될 경우, 최상위 SceneComponent일 수 있다.
 	mParent = nullptr;
+
+	// 기본 레이어 설정
+	mLayerName = "Default";
 }
 
 CSceneComponent::CSceneComponent(const CSceneComponent& com)	:

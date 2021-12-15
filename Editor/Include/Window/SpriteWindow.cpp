@@ -4,8 +4,8 @@
 #include "IMGUILabel.h"
 #include "IMGUIText.h"
 #include "IMGUITextInput.h"
-#include "IMGUIComboBox.h";
-#include "IMGUIListBox.h";
+#include "IMGUIComboBox.h"
+#include "IMGUIListBox.h"
 #include "IMGUIImage.h"
 #include "IMGUICheckBox.h"
 #include "IMGUIRadioButton.h"
@@ -18,12 +18,16 @@
 #include "Component/SpriteComponent.h"
 #include "PathManager.h"
 #include "Input.h"
+#include "Device.h"
 
 CSpriteWindow::CSpriteWindow()	:
 	mImage(nullptr),
 	mCropImage(nullptr),
 	mAnimationFrameList(nullptr),
-	mAnimationList(nullptr)
+	mAnimationList(nullptr),
+	mAnimationNameInput(nullptr),
+	mCropImageTextWidth(nullptr),
+	mCropImageTextHeight(nullptr)
 {
 }
 
@@ -42,17 +46,56 @@ bool CSpriteWindow::Init()
 
 	button = AddWidget<CIMGUIButton>("Edit Sprite");
 	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickSpriteEdit);
-
-	mImage = AddWidget<CIMGUIImage>("SpriteOrigin", 200.f, 200.f);
 	
-	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("Line");
+	CIMGUIText* text = AddWidget<CIMGUIText>("Text");
+	text->SetText("Original Image");
+	
+	mImage = AddWidget<CIMGUIImage>("SpriteOrigin", 200.f, 200.f);
 
+	text = AddWidget<CIMGUIText>("Text");
+	text->SetText("Crop Image");
 	mCropImage = AddWidget<CIMGUIImage>("SpriteCrop", 200.f, 200.f);
+
+	text = AddWidget<CIMGUIText>("CropXText");
+	text->SetText("Width : ");
+
+	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("Line");
+	mCropImageTextWidth = AddWidget<CIMGUIText>("CropX");
+	mCropImageTextWidth->SetText("0.f");
+
+	line = AddWidget<CIMGUISameLine>("Line");
+	text = AddWidget<CIMGUIText>("CropYText");
+	text->SetText("Height : ");
+
+	line = AddWidget<CIMGUISameLine>("Line");
+	mCropImageTextHeight = AddWidget<CIMGUIText>("CropY");
+	mCropImageTextHeight->SetText("0.f");
+
+	text = AddWidget<CIMGUIText>("Start");
+	text->SetText("Start : ");
+
+	AddWidget<CIMGUISameLine>("Line");
+	mCropImageTextStart = AddWidget<CIMGUIText>("Start");
+	mCropImageTextStart->SetText("0.f");
+
+	AddWidget<CIMGUISameLine>("Line");
+	text = AddWidget<CIMGUIText>("End");
+	text->SetText("End : ");
+
+	AddWidget<CIMGUISameLine>("Line");
+	mCropImageTextEnd = AddWidget<CIMGUIText>("End");
+	mCropImageTextEnd->SetText("0.f");
 
 	CIMGUILabel* label = AddWidget<CIMGUILabel>("Animation List Name", 200.f, 30.f);
 	label->SetColor(0, 0, 255);
 	label->SetAlign(0.5f, 0);
 
+	line = AddWidget<CIMGUISameLine>("Line");
+	mAnimationNameInput = AddWidget<CIMGUITextInput>("Animation Name Input", 80.f, 30.f);
+	mAnimationNameInput->SetHideName(true);
+	mAnimationNameInput->SetHintText("ex)Anim1");
+
+	line = AddWidget<CIMGUISameLine>("Line");
 	line = AddWidget<CIMGUISameLine>("Line");
 	line->SetOffsetX(330.f);
 
@@ -63,10 +106,11 @@ bool CSpriteWindow::Init()
 	mAnimationList = AddWidget<CIMGUIListBox>("AnimationList", 200.f, 300.f);
 	mAnimationList->SetHideName(true);
 	mAnimationList->SetPageItemCount(6);
+	mAnimationList->SetSelectCallBack<CSpriteWindow>(this, &CSpriteWindow::OnSelectAnimationList);
 	
 	line = AddWidget<CIMGUISameLine>("Line");
 
-	button = AddWidget<CIMGUIButton>("Add List", 80.f, 30.f);
+	button = AddWidget<CIMGUIButton>("Add Anim", 80.f, 30.f);
 	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimation);
 
 	line = AddWidget<CIMGUISameLine>("Line");
@@ -74,41 +118,13 @@ bool CSpriteWindow::Init()
 	mAnimationFrameList = AddWidget<CIMGUIListBox>("AnimationFrameList", 200.f, 300.f);
 	mAnimationFrameList->SetHideName(true);
 	mAnimationFrameList->SetPageItemCount(6);
+	mAnimationFrameList->SetSelectCallBack<CSpriteWindow>(this, &CSpriteWindow::OnSelectAnimationFrame);
 
 	line = AddWidget<CIMGUISameLine>("Line");
 
 	button = AddWidget<CIMGUIButton>("Add Frame", 80.f, 30.f);
 	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimationFrame);
-
-	// Tree 과제
-	CIMGUITree* tree = AddWidget<CIMGUITree>("Tree");
-	tree->AddChild("child1");
-	tree->AddChild("child2");
-	tree->AddChild("child3");
 	
-	CIMGUITree* child1 = tree->GetNode(0);
-	CIMGUIText* child1Text = child1->AddWidget<CIMGUIText>("child1Text");
-	child1Text->SetText("child1Text");
-	CIMGUITextInput* child1TextInput = child1->AddWidget<CIMGUITextInput>("child1TextInput");
-	child1TextInput->SetHintText("child1TextInput");
-
-	CIMGUITree* child2 = tree->GetNode("child2");
-	button = child2->AddWidget<CIMGUIButton>("child2Button");
-
-	child2->AddChild("child2's child");
-	CIMGUITree* child2Child = child2->GetNode("child2's child");
-	label = child2Child->AddWidget<CIMGUILabel>("child2childLabel", 200.f, 30.f);
-	label->SetColor(128, 128, 0);
-	label->SetAlign(0.5f, 0);
-	
-	child2Child->AddChild("child2child2child");
-
-	CIMGUITree* child3 = tree->GetNode("child3");
-	CIMGUIRadioButton* radioButton = child3->AddWidget<CIMGUIRadioButton>("child3RadioButton");
-	radioButton->AddCheckInfo("child3_1");
-	radioButton->AddCheckInfo("child3_2");
-	radioButton->AddCheckInfo("child3_3");
-
 	return true;
 }
 
@@ -148,15 +164,14 @@ void CSpriteWindow::OnClickLoadTexture()
 
 		// Image Widget에 스프라이트 등록
 		mImage->SetTextureFullPath(convertFileName, filePath);
+		mCropImage->SetTextureFullPath(convertFileName, filePath);
 		
 		// 씬 스프라이트 오브젝트에 등록
 		mSpriteEditObject->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
 			convertFileName, filePath);
-
 		// Texture 크기 실제 비율에 맞게 수정
-		CTexture* texture = CResourceManager::GetInst()->FindTexture(convertFileName);
-		mSpriteEditObject->GetSpriteComponent()->SetRelativeScale(texture->GetWidth(),
-			texture->GetHeight(), 1.f);
+		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(),
+			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
 	}
 }
 
@@ -172,8 +187,213 @@ void CSpriteWindow::OnClickSpriteEdit()
 
 void CSpriteWindow::OnClickAddAnimation()
 {
+	// 예외처리
+	if (mAnimationNameInput->IsEmpty() || mSpriteEditObject == nullptr)
+	{
+		return;
+	}
+
+	const char* text = mAnimationNameInput->GetTextMultiByte();
+
+	if (mAnimationList->IsItemExist(text))
+	{
+		// TODO : popup
+		return;
+	}
+	
+	// 현재 씬 리소스 가져와 애니메이션 추가
+	CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
+
+	if (!resource->CreateAnimationSequence2D(text, mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture()))
+	{
+		return;
+	}
+
+	mAnimationList->AddItem(text);
 }
 
 void CSpriteWindow::OnClickAddAnimationFrame()
 {
+	if (!mSpriteEditObject)
+	{
+		return;
+	}
+
+	int selectAnimIdx = mAnimationList->GetSelectIndex();
+
+	// 어떤 애니메이션도 선택되지 않았을 때
+	if (selectAnimIdx == -1)
+	{
+		return;
+	}
+
+	// 씬 리소스에서 애니메이션 시퀀스 얻어옴
+	CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
+	CAnimationSequence2D* anim = resource->FindAnimationSequence2D(mAnimationList->GetItem(selectAnimIdx));
+
+	// 사이즈 설정 : mCropImage가 좌표순 정렬된 좌표를 가지고 있기 때문에 가져옴
+	Vector2 frameImageSize = mCropImage->GetImageEnd() - mCropImage->GetImageStart();
+	frameImageSize.x = abs(frameImageSize.x);
+	frameImageSize.y = abs(frameImageSize.y);
+
+	// 프레임 추가
+	anim->AddFrame(mCropImage->GetImageStart(), frameImageSize);
+	
+	// UI에 추가
+	int frameCount = anim->GetFrameCount();
+	
+	char frameName[32] = {};
+	sprintf_s(frameName, "%d", frameCount);
+
+	mAnimationFrameList->AddItem(frameName);
+}
+
+void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
+{
+	// 이전 프레임 리스트 초기화
+	mAnimationFrameList->Clear();
+
+	CAnimationSequence2D* anim = CSceneManager::GetInst()->GetScene()->GetResource()->FindAnimationSequence2D(item);
+	
+	// 현재 선택된 애니메이션의 프레임리스트 출력
+	int size = (int)anim->GetFrameCount();
+	for (int i = 0; i < size; ++i)
+	{
+		mAnimationFrameList->AddItem(std::to_string(i));
+	}
+
+	// 현재 선택된 애니메이션의 텍스쳐와 이전 애니메이션의 텍스쳐가 다르면 교체
+	CTexture* selectAnimTexture = anim->GetTexture();
+
+	if (selectAnimTexture != mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture())
+	{
+		mSpriteEditObject->GetSpriteComponent()->SetTexture(0, 0, 
+			(int)eConstantBufferShaderTypeFlags::Pixel, selectAnimTexture->GetName(), selectAnimTexture);
+
+		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(),
+			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
+	}
+	
+	if (selectAnimTexture != mImage->GetTexture())
+	{
+		mImage->SetTexture(anim->GetTexture());
+	}
+
+	if (selectAnimTexture != mCropImage->GetTexture())
+	{
+		mCropImage->SetTexture(anim->GetTexture());
+	}
+}
+
+void CSpriteWindow::OnSelectAnimationFrame(int idx, const char* item)
+{
+	// 예외처리
+	if (mAnimationList->GetSelectIndex() == -1)
+	{
+		return;
+	}
+
+	CAnimationSequence2D* anim = CSceneManager::GetInst()->GetScene()->GetResource()->FindAnimationSequence2D(mAnimationList->GetSelectItem());
+	
+	AnimationFrameData data = anim->GetFrameData(idx);
+
+	// 애니메이션 위치정보 DirectX좌표계로 변환 후 Crop Image창 업데이트
+	mCropStartPos = data.Start;
+	mCropStartPos.y = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - mCropStartPos.y;
+	mCropEndPos.x = mCropStartPos.x + data.Size.x;
+	mCropEndPos.y = mCropStartPos.y - data.Size.y;
+
+	UpdateCropImage();
+}
+
+void CSpriteWindow::MoveCropPos(const float x, const float y)
+{
+	Vector2 val(x, y);
+	mCropStartPos += val;
+	mCropEndPos += val;
+
+	UpdateCropImage();
+}
+
+void CSpriteWindow::UpdateCropImage()
+{
+	Vector2 topLeft;
+	Vector2 botRight;
+
+	// 마우스 눌렸던 위치와 비교해 좌상, 우하 좌표 설정
+	if (mCropStartPos.x < mCropEndPos.x)
+	{
+		topLeft.x = mCropStartPos.x;
+		botRight.x = mCropEndPos.x;
+	}
+	else
+	{
+		topLeft.x = mCropEndPos.x;
+		botRight.x = mCropStartPos.x;
+	}
+
+	if (mCropStartPos.y > mCropEndPos.y)
+	{
+		topLeft.y = mCropStartPos.y;
+		botRight.y = mCropEndPos.y;
+	}
+	else
+	{
+		topLeft.y = mCropEndPos.y;
+		botRight.y = mCropStartPos.y;
+	}
+	
+	// 실제 렌더링 되어 있는 오브젝트의 좌상, 우하 좌표 받아오기
+	Vector3 objectPos = mSpriteEditObject->GetRelativePos();
+	Vector3 objectScale = mSpriteEditObject->GetWorldScale();
+	Vector3 objectPivot = mSpriteEditObject->GetPivot();
+
+	Vector2 objTopLeft = Vector2(objectPos.x - (objectPivot.x * objectScale.x),
+		(objectPos.y + objectScale.y) + (objectPivot.y * objectScale.y));
+
+	Vector2 objBotRight = Vector2((objectPos.x + objectScale.x) + (objectPivot.x * objectScale.x),
+		objectPos.y - (objectPivot.y * objectScale.y));
+
+	// 텍스쳐 범위에 마우스가 없을 경우
+	if ((botRight.x < objTopLeft.x) ||
+		(topLeft.x > objBotRight.x) ||
+		(botRight.y > objTopLeft.y) ||
+		(topLeft.y < objBotRight.y))
+	{
+		return;
+	}
+	else
+	{
+		// 마우스 드래그 범위 중 텍스쳐와 겹치는 범위만 추출
+		if (topLeft.x < objTopLeft.x)
+		{
+			topLeft.x = objTopLeft.x;
+		}
+		if (botRight.x > objBotRight.x)
+		{
+			botRight.x = objBotRight.x;
+		}
+		if (topLeft.y > objTopLeft.y)
+		{
+			topLeft.y = objTopLeft.y;
+		}
+		if (botRight.y < objBotRight.y)
+		{
+			botRight.y = objBotRight.y;
+		}
+		
+		// UV좌표 설정
+		mCropImage->SetImageStart(topLeft.x, objectScale.y - topLeft.y);
+		mCropImage->SetImageEnd(botRight.x, objectScale.y - botRight.y);
+
+		// 너비, 높이 텍스트 갱신
+		char buf[64] = {};
+		float width = botRight.x - topLeft.x;
+		float height = topLeft.y - botRight.y;
+
+		sprintf_s(buf, "%.1f", width);
+		mCropImageTextWidth->SetText(buf);
+		sprintf_s(buf, "%.1f", height);
+		mCropImageTextHeight->SetText(buf);
+	}
 }

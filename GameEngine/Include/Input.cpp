@@ -42,7 +42,7 @@ bool CInput::Init(HINSTANCE hInst, HWND hWnd)
 	}
 
 	mhInst = hInst;
-	mhWnd = mhWnd;
+	mhWnd = hWnd;
 	meInputType = eInputType::Direct;
 
 	HRESULT result = DirectInput8Create(mhInst, DIRECTINPUT_VERSION, IID_IDirectInput8,
@@ -273,6 +273,9 @@ void CInput::updateMouse(float deltaTime)
 
 	// 비율에 의한 위치 보정
 	Vector2 mousePos = Vector2(mouseWindowPos.x * ratio.x, mouseWindowPos.y * ratio.y);
+	
+	// 윈도우 좌표계 -> directX 좌표계로 변환
+	mousePos.y = CDevice::GetInst()->GetResolution().Height - mousePos.y;
 
 	mMouseMoveAmount = mMousePos - mousePos;
 
@@ -453,9 +456,20 @@ void CInput::updateKeyInfo(float deltaTime)
 			iter->second->bIsAlt == mbIsAltPressed &&
 			iter->second->bIsShift == mbIsShiftPressed)
 		{
+			// IMGUI 윈도우에 올라와 있는 상태에서 마우스 클릭 이벤트가 발생하면 콜백 호출 안 함
 			if (iter->second->CallBack[KeyState_Down])
 			{
-				iter->second->CallBack[KeyState_Down](deltaTime);
+				if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
+				{
+					if (!ImGui::GetIO().WantCaptureMouse)
+					{
+						iter->second->CallBack[KeyState_Down](deltaTime);
+					}
+				}
+				else
+				{
+					iter->second->CallBack[KeyState_Down](deltaTime);
+				}
 			}
 		}
 
@@ -466,7 +480,17 @@ void CInput::updateKeyInfo(float deltaTime)
 		{
 			if (iter->second->CallBack[KeyState_Push])
 			{
-				iter->second->CallBack[KeyState_Push](deltaTime);
+				if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
+				{
+					if (!ImGui::GetIO().WantCaptureMouse)
+					{
+						iter->second->CallBack[KeyState_Push](deltaTime);
+					}
+				}
+				else
+				{
+					iter->second->CallBack[KeyState_Push](deltaTime);
+				}
 			}
 		}
 
@@ -477,7 +501,17 @@ void CInput::updateKeyInfo(float deltaTime)
 		{
 			if (iter->second->CallBack[KeyState_Up])
 			{
-				iter->second->CallBack[KeyState_Up](deltaTime);
+				if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
+				{
+					if (!ImGui::GetIO().WantCaptureMouse)
+					{
+						iter->second->CallBack[KeyState_Up](deltaTime);
+					}
+				}
+				else
+				{
+					iter->second->CallBack[KeyState_Up](deltaTime);
+				}
 			}
 		}
 	}

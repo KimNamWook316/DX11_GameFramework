@@ -35,7 +35,6 @@ void CMaterial::SetShader(const std::string& shaderName)
 
 void CMaterial::Reset()
 {
-	mBaseColor = Vector4::White;
 	size_t size = mVecTextureInfo.size();
 	
 	for (size_t i = 0; i < size; ++i)

@@ -122,7 +122,12 @@ bool CResourceManager::LoadTextureFullPath(const std::string& name, const TCHAR*
 
 bool CResourceManager::CreateAnimationSequence2D(const std::string& name, const std::string& textureName, const TCHAR* fileName, const std::string& pathName)
 {
-	return mAnimationManager->CreateAnimationSequence(name, textureName, fileName, pathName);
+	return mAnimationManager->CreateAnimationSequence2D(name, textureName, fileName, pathName);
+}
+
+bool CResourceManager::CreateAnimationSequence2D(const std::string& name, CTexture* texture)
+{
+	return mAnimationManager->CreateAnimationSequence2D(name, texture);
 }
 
 void CResourceManager::AddAnimationSequece2DFrame(const std::string& name, const Vector2& start, const Vector2& size)

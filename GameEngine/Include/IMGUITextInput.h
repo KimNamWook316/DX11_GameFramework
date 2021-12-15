@@ -135,6 +135,11 @@ public:
         meTextInputType = eType;
     }
     
+    bool IsEmpty() const
+    {
+        return strlen(mText) == 0;
+    }
+
 public:
     template <typename T>
     void SetInputCallBack(T* obj, void(T::* func)())

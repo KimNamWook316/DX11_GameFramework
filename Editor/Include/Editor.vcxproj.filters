@@ -45,6 +45,9 @@
     <ClInclude Include="Object\SpriteEditObject.h">
       <Filter>03. Object</Filter>
     </ClInclude>
+    <ClInclude Include="Object\DragObject.h">
+      <Filter>03. Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -60,6 +63,9 @@
       <Filter>02. Editor</Filter>
     </ClCompile>
     <ClCompile Include="Object\SpriteEditObject.cpp">
+      <Filter>03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\DragObject.cpp">
       <Filter>03. Object</Filter>
     </ClCompile>
   </ItemGroup>

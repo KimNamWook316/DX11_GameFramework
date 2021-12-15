@@ -59,6 +59,7 @@ public: // ===================== Texture =====================
 public: // ===================== Sequence2D =====================
 	bool CreateAnimationSequence2D(const std::string& name, const std::string& textureName,
 		const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& name, class CTexture* texture);
 	void AddAnimationSequece2DFrame(const std::string& name, const Vector2& start, const Vector2& size);
 	void AddAnimationSequece2DFrame(const std::string& name, const float startX, const float startY,
 		const float width, const float height);

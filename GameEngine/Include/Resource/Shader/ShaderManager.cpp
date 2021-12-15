@@ -1,6 +1,7 @@
 #include "ShaderManager.h"
 #include "ColorMeshShader.h"
 #include "Mesh2DShader.h"
+#include "PosMeshShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -20,6 +21,12 @@ bool CShaderManager::Init()
 		return false;
 	}
 
+	if (!CreateShader<CPosMeshShader>("PosMeshShader"))
+	{
+		assert(false);
+		return false;
+	}
+	
 	// 텍스쳐용 쉐이더 생성
 	if (!CreateShader<CMesh2DShader>("Mesh2DShader"))
 	{

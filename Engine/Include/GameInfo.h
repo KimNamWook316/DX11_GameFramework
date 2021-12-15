@@ -3,6 +3,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 
 #include <Windows.h>
+#include <stdio.h>
 #include <list>
 #include <vector>
 #include <unordered_map>

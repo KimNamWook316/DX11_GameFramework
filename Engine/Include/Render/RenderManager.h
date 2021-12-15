@@ -2,6 +2,21 @@
 
 #include "../GameInfo.h"
 
+struct RenderLayer
+{
+	std::string Name;
+	int LayerPriority;								// TODO : 클수록 위에 렌더되는중
+	std::vector<class CSceneComponent*> RenderList; // 이 레이어에서 렌더되는 오브젝트들 
+	int RenderCount;								
+
+	RenderLayer()
+	{
+		LayerPriority = 0;
+		RenderCount = 0;
+		RenderList.resize(500);
+	}
+};
+
 // 렌더를 수행하는 매니저
 class CRenderManager
 {
@@ -11,6 +26,8 @@ public:
 		mpObjList = pList;
 	}
 	void AddRenderList(class CSceneComponent* pComponent);
+	void CreateLayer(const std::string& name, const int priority);
+	void SetLayerPriority(const std::string& name, const int priority);
 
 public:
 	bool Init();
@@ -41,11 +58,17 @@ public:
 	}
 
 private:
+	static bool sortLayer(RenderLayer* src, RenderLayer* dest);
+
+private:
 	class CRenderStateManager* mRenderStateManager;
 
 	int mRenderCount;
-	std::vector<class CSceneComponent*> mVecRender;
+	std::vector<RenderLayer*> mRenderLayerList;
 	const std::list<CSharedPtr<class CGameObject>>* mpObjList;
 	class CStandard2DConstantBuffer* mStandard2DBuffer;
+	
+	// 2D용 Depth 사용 하지 않는 렌더링 스테이트
+	class CRenderState* mDepthDisableState;
 };
 

@@ -21,6 +21,11 @@ CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)
 	{
 		mAnimation = com.mAnimation->Clone();
 	}
+
+	if (com.mMaterial)
+	{
+		mMaterial = com.mMaterial->Clone();
+	}
 }
 
 CSpriteComponent::~CSpriteComponent()
@@ -43,6 +48,7 @@ bool CSpriteComponent::Init()
 	SetMaterial(mScene->GetResource()->FindMaterial("BaseTexture"));
 
 	SetMeshSize(1.f, 1.f, 0.f);
+	SetWorldScale((float)mMaterial->GetTextureWidth(), (float)mMaterial->GetTextureHeight(), 1.f);
 	return true;
 }
 

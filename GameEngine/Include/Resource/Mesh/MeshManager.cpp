@@ -1,5 +1,6 @@
 #include "MeshManager.h"
 #include "SpriteMesh.h"
+#include "StaticMesh.h"
 
 CMeshManager::CMeshManager()
 {
@@ -22,6 +23,20 @@ bool CMeshManager::Init()
 
 	// insert되면서, CSharePtr의 복사 생성자가 호출되기 때문에, 레퍼런스 카운트가 증가한다.
 	mMapMesh.insert(std::make_pair("SpriteMesh", spriteMesh));
+
+	CMesh* frameRectMesh = new CStaticMesh;
+
+	Vector3 frameRectPos[5] =
+	{
+		Vector3(0.f, 1.f, 0.f),
+		Vector3(1.f, 1.f, 0.f),
+		Vector3(1.f, 0.f, 0.f),
+		Vector3(0.f, 0.f, 0.f),
+		Vector3(0.f, 1.f, 0.f)
+	};
+
+	frameRectMesh->CreateMesh(frameRectPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	mMapMesh.insert(std::make_pair("FrameRectMesh", frameRectMesh));
 
 	return true;
 }

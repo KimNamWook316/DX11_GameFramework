@@ -5,7 +5,8 @@
 CIMGUIWindow::CIMGUIWindow() :
     mbOpen(true),
     mWindowFlag(ImGuiWindowFlags_NoCollapse),
-    mbModalPopUp(false)
+    mbModalPopUp(false),
+    mbIsFocused(false)
 {
 }
 
@@ -48,6 +49,15 @@ void CIMGUIWindow::Update(float deltaTime)
         // mbOpen = false;
         ImGui::End();
         return;
+    }
+
+    if (ImGui::IsWindowFocused())
+    {
+        mbIsFocused = true;
+    }
+    else
+    {
+        mbIsFocused = false;
     }
 
     CIMGUIManager::GetInst()->PushCurrentFont();
@@ -102,4 +112,9 @@ CIMGUIWidget* CIMGUIWindow::FindWidget(const std::string& name)
         }
     }
     return nullptr;
+}
+
+bool CIMGUIWindow::IsWindowFocused(ImGuiFocusedFlags_ eFlag) const
+{
+    return mbIsFocused;
 }

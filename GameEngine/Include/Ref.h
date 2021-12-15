@@ -16,7 +16,7 @@ public:
 
 	void Destroy()
 	{
-		mEnable = false;
+		mActive = false;
 	}
 
 	bool IsActive() const

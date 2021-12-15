@@ -356,6 +356,18 @@
     <ClInclude Include="IMGUITree.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\PosMeshShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMeshShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\StaticMesh.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\StaticMeshComponent.h">
+      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\DepthStencilState.h">
+      <Filter>06. Render\01. RenderState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -567,6 +579,18 @@
     </ClCompile>
     <ClCompile Include="IMGUITree.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\PosMeshShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMeshShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh\StaticMesh.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\StaticMeshComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\DepthStencilState.cpp">
+      <Filter>06. Render\01. RenderState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

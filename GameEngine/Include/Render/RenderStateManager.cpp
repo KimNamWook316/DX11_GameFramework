@@ -1,5 +1,6 @@
 #include "RenderStateManager.h"
 #include "BlendState.h"
+#include "DepthStencilState.h"
 
 CRenderStateManager::CRenderStateManager()
 {
@@ -15,6 +16,9 @@ bool CRenderStateManager::Init()
 	AddBlendInfo("AlphaBlend");
 	// Multi-Sampling 사용하므로 두 번째 인자 true
 	CreateBlendState("AlphaBlend", true, false);
+
+	// 2D용 : depth 사용 안하는 상태
+	CreateDepthStencilState("DepthDisable", false, D3D11_DEPTH_WRITE_MASK_ZERO);
 	return false;
 }
 
@@ -73,5 +77,31 @@ bool CRenderStateManager::CreateBlendState(const std::string& name, bool bIsAlph
 		return false;
 	}
 
+	return true;
+}
+
+bool CRenderStateManager::CreateDepthStencilState(const std::string& name, bool bDepthEnable, D3D11_DEPTH_WRITE_MASK depthWriteMask, D3D11_COMPARISON_FUNC depthFunc, bool bStencilEnable, UINT8 stencilReadMask, UINT8 stencilWriteMask, D3D11_DEPTH_STENCILOP_DESC frontFace, D3D11_DEPTH_STENCILOP_DESC backFace)
+{
+	CDepthStencilState* state = (CDepthStencilState*)FindRenderState(name);
+
+	if (state)
+	{
+		return true;
+	}
+
+	state = new CDepthStencilState;
+
+	if (!state->CreateState(bDepthEnable, depthWriteMask,
+		depthFunc, bStencilEnable, stencilReadMask, stencilWriteMask, frontFace, backFace))
+	{
+		SAFE_RELEASE(state);
+		assert(false);
+		return false;
+	}
+
+	state->SetName(name);
+
+	mMapRenderState.insert(std::make_pair(name, state));
+	
 	return true;
 }

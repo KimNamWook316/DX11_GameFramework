@@ -19,6 +19,9 @@ public:
 	class CIMGUIWidget* FindWidget(const std::string& name);
 
 public:
+	bool IsWindowFocused(ImGuiFocusedFlags_ eFlag = ImGuiFocusedFlags_None) const;
+
+public:
 	template <typename T>
 	T* AddWidget(const std::string& name, const float width = 100.f, const float height = 100.f)
 	{
@@ -88,5 +91,8 @@ protected:
 	std::string mPopUpTitle;
 	bool mbModalPopUp;
 	std::vector<class CIMGUIWidget*> mVecPopUpWidget;
+
+protected:
+	bool mbIsFocused;
 };
 

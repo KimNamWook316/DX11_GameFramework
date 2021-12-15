@@ -19,7 +19,7 @@ bool CAnimationManager::Init()
 	return true;
 }
 
-bool CAnimationManager::CreateAnimationSequence(const std::string& name, const std::string& textureName, const TCHAR* fileName, const std::string& pathName)
+bool CAnimationManager::CreateAnimationSequence2D(const std::string& name, const std::string& textureName, const TCHAR* fileName, const std::string& pathName)
 {
 	CAnimationSequence2D* sequence = FindSequence(name);
 
@@ -39,6 +39,30 @@ bool CAnimationManager::CreateAnimationSequence(const std::string& name, const s
 
 	mMapSequence2D.insert(std::make_pair(name, sequence));
 
+	return true;
+}
+
+bool CAnimationManager::CreateAnimationSequence2D(const std::string& name, CTexture* texture)
+{
+	CAnimationSequence2D* sequence = FindSequence(name);
+
+	if (sequence)
+	{
+		return true;
+	}
+
+	sequence = new CAnimationSequence2D;
+
+	sequence->SetName(name);
+
+	if (!sequence->Init(texture))
+	{
+		assert(false);
+		SAFE_DELETE(sequence);
+		return false;
+	}
+	
+	mMapSequence2D.insert(std::make_pair(name, sequence));
 	return true;
 }
 

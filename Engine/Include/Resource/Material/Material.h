@@ -73,6 +73,22 @@ public:
 	void SetTexture(const int index, const int reg, const int shaderType,
 		const std::string& name, const std::vector<TCHAR*>& vecFileName, 
 		const std::string& pathName = TEXTURE_PATH);
+	
+public:
+	CTexture* GetTexture(const int textureIdx = 0) const
+	{
+		return mVecTextureInfo[textureIdx].Texture;
+	}
+
+	unsigned int GetTextureWidth(const int textureIdx = 0) const
+	{
+		return mVecTextureInfo[textureIdx].Texture->GetWidth();
+	}
+
+	unsigned int GetTextureHeight(const int textureIdx = 0) const
+	{
+		return mVecTextureInfo[textureIdx].Texture->GetHeight();
+	}
 
 private:
 	void SetConstantBuffer(class CMaterialConstantBuffer* buffer)

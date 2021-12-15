@@ -253,6 +253,11 @@ public:
 		return mTransform->GetWorldAxis(Axis);
 	}
 
+	std::string GetLayerName() const
+	{
+		return mLayerName;
+	}
+
 public:
 	void SetPivot(const Vector3& Pivot)
 	{
@@ -272,6 +277,11 @@ public:
 	void SetMeshSize(float x, float y, float z)
 	{
 		mTransform->SetMeshSize(x, y, z);
+	}
+
+	void SetLayerName(const std::string& name)
+	{
+		mLayerName = name;
 	}
 
 public:
@@ -370,5 +380,6 @@ protected:
 	CTransform* mTransform;	// 씬에 보여지는 컴포넌트이므로 위치 정보는 무조건 있어야 한다.
 	CSceneComponent* mParent; // 상위 컴포넌트
 	std::vector<CSharedPtr<CSceneComponent>> mVecChild; // 자식 컴포넌트
+	std::string mLayerName;
 };
 

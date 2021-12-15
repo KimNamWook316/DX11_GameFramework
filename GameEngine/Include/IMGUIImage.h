@@ -43,6 +43,22 @@ public:
     void SetTextureFullPath(const std::string& name, const TCHAR* fullPath);
     void SetTexture(class CTexture* texture);
 
+public:
+    Vector2 GetImageStart()
+    {
+        return Vector2(mImageStart.x, mImageStart.y);
+    }
+
+    Vector2 GetImageEnd()
+    {
+        return Vector2(mImageEnd.x, mImageEnd.y);
+    }
+
+    CTexture* GetTexture()
+    {
+        return mTexture;
+    }
+
 protected:
     CSharedPtr<class CTexture> mTexture;
     ImVec2 mImageStart;

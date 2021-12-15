@@ -4,8 +4,8 @@
 #include "IMGUILabel.h"
 #include "IMGUIText.h"
 #include "IMGUITextInput.h"
-#include "IMGUIComboBox.h";
-#include "IMGUIListBox.h";
+#include "IMGUIComboBox.h"
+#include "IMGUIListBox.h"
 #include "IMGUIImage.h"
 #include "IMGUICheckBox.h"
 #include "IMGUIRadioButton.h"

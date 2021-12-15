@@ -12,8 +12,9 @@ private:
 
 public:
 	bool Init();
-	bool CreateAnimationSequence(const std::string& name, const std::string& textureName,
+	bool CreateAnimationSequence2D(const std::string& name, const std::string& textureName,
 		const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& name, class CTexture* texture);
 	void AddFrame(const std::string& name, const Vector2& start, const Vector2& size);
 	void AddFrame(const std::string& name, const float startX, const float startY,
 		const float width, const float height);

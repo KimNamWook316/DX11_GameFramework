@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="EditorManager.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Object\DragObject.h" />
     <ClInclude Include="Object\SpriteEditObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\DragObject.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
     <ClCompile Include="Window\SpriteWindow.cpp" />

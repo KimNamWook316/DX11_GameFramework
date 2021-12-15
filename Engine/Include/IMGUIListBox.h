@@ -37,6 +37,20 @@ public:
         return (int)mVecItem.size();
     }
 
+    bool IsItemExist(const char* item)
+    {
+        size_t size = mVecItem.size();
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            if (mVecItem[i] == item)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 public:
     void AddItem(const std::string& item)
     {

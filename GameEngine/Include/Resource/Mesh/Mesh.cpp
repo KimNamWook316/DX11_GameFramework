@@ -159,3 +159,38 @@ void CMesh::Render()
 		}
 	}
 }
+
+bool CMesh::CreateMesh(void* vertexData, const int size, const int count, D3D11_USAGE usage, D3D11_PRIMITIVE_TOPOLOGY primitive, void* indexData, const int indexSize, const int indexCount, D3D11_USAGE idxUsage, DXGI_FORMAT fmt)
+{
+	MeshContainer* container = new MeshContainer;
+
+	container->VB.Size = size;
+	container->VB.Count = count;
+	container->Primitive = primitive;
+
+	if (!CreateBuffer(eBufferType::VERTEX, vertexData, size, count, usage,
+		&container->VB.Buffer))
+	{
+		assert(false);
+		return false;
+	}
+
+	if (indexData)
+	{
+		container->vecIB.resize(1);
+
+		container->vecIB[0].Size = indexSize;
+		container->vecIB[0].Count = indexCount;
+		container->vecIB[0].Fmt = fmt;
+
+		if (!CreateBuffer(eBufferType::INDEX, indexData, indexSize,
+			indexCount, idxUsage, &container->vecIB[0].Buffer))
+		{
+			assert(false);
+			return false;
+		}
+	}
+
+	mVecContainer.push_back(container);
+	return true;
+}
