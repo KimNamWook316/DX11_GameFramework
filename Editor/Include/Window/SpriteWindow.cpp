@@ -10,6 +10,11 @@
 #include "IMGUICheckBox.h"
 #include "IMGUIRadioButton.h"
 #include "IMGUITree.h"
+#include "IMGUIChild.h"
+#include "IMGUIDummy.h"
+#include "IMGUISeperator.h"
+#include "IMGUIInputInt.h"
+#include "IMGUIInputFloat.h"
 #include "Engine.h"
 #include "Scene/SceneManager.h"
 #include "../EditorManager.h"
@@ -26,8 +31,14 @@ CSpriteWindow::CSpriteWindow()	:
 	mAnimationFrameList(nullptr),
 	mAnimationList(nullptr),
 	mAnimationNameInput(nullptr),
-	mCropImageTextWidth(nullptr),
-	mCropImageTextHeight(nullptr)
+	mWidthInput(nullptr),
+	mHeightInput(nullptr),
+	mStartXInput(nullptr),
+	mStartYInput(nullptr),
+	mAnimLoopCheckBox(nullptr),
+	mAnimReverseCheckBox(nullptr),
+	mPlayTimeInput(nullptr),
+	mPlayScaleInput(nullptr)
 {
 }
 
@@ -37,94 +48,119 @@ CSpriteWindow::~CSpriteWindow()
 
 bool CSpriteWindow::Init()
 {
+	// Adjust Window Size;
+	ImGui::SetNextWindowSize(ImVec2(400.f, 500.f));
+
 	CIMGUIWindow::Init();
 
-	CIMGUIButton* button = AddWidget<CIMGUIButton>("Load Texture");
-	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickLoadTexture);
+	CIMGUIText* text = AddWidget<CIMGUIText>("animation");
+	text->SetText("Animation");
+	AddWidget<CIMGUISeperator>("sperator");
 
+	// Col1. Animation List Column
+	CIMGUIChild* animCol = AddWidget<CIMGUIChild>("animCol", 150.f, 550.f);
+	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("line");
+
+	text = animCol->AddWidget<CIMGUIText>("animList");
+	text->SetText("Animation List");
+	animCol->AddWidget<CIMGUISeperator>("sperator");
+
+	// Col1. Animation ListBox
+	mAnimationList = animCol->AddWidget<CIMGUIListBox>("AnimationList", 200.f, 300.f);
+	mAnimationList->SetHideName(true);
+	mAnimationList->SetPageItemCount(22);
+	mAnimationList->SetSelectCallBack<CSpriteWindow>(this, &CSpriteWindow::OnSelectAnimationList);
+
+	// Col1. Animation Name Input
+	mAnimationNameInput = animCol->AddWidget<CIMGUITextInput>("Anim Name", 150.f, 100.f);
+	mAnimationNameInput->SetHintText("Input Animation Name");
+
+	// Col1. Animation Add, Delete Button 
+	CIMGUIButton* button = animCol->AddWidget<CIMGUIButton>("Add", 0.f, 0.f);
+	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimation);
+	animCol->AddWidget<CIMGUISameLine>("line");
+	button = animCol->AddWidget<CIMGUIButton>("Del", 0.f, 0.f);
+	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickDeleteAnimation);
+
+	// Col2. Frame List Column
+	CIMGUIChild* frameCol = AddWidget<CIMGUIChild>("frameCol", 150.f, 550.f);
 	AddWidget<CIMGUISameLine>("line");
 
-	button = AddWidget<CIMGUIButton>("Edit Sprite");
-	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickSpriteEdit);
-	
-	CIMGUIText* text = AddWidget<CIMGUIText>("Text");
-	text->SetText("Original Image");
-	
-	mImage = AddWidget<CIMGUIImage>("SpriteOrigin", 200.f, 200.f);
+	text = frameCol->AddWidget<CIMGUIText>("frameList");
+	text->SetText("Frame List");
+	frameCol->AddWidget<CIMGUISeperator>("sperator");
 
-	text = AddWidget<CIMGUIText>("Text");
-	text->SetText("Crop Image");
-	mCropImage = AddWidget<CIMGUIImage>("SpriteCrop", 200.f, 200.f);
-
-	text = AddWidget<CIMGUIText>("CropXText");
-	text->SetText("Width : ");
-
-	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("Line");
-	mCropImageTextWidth = AddWidget<CIMGUIText>("CropX");
-	mCropImageTextWidth->SetText("0.f");
-
-	line = AddWidget<CIMGUISameLine>("Line");
-	text = AddWidget<CIMGUIText>("CropYText");
-	text->SetText("Height : ");
-
-	line = AddWidget<CIMGUISameLine>("Line");
-	mCropImageTextHeight = AddWidget<CIMGUIText>("CropY");
-	mCropImageTextHeight->SetText("0.f");
-
-	text = AddWidget<CIMGUIText>("Start");
-	text->SetText("Start : ");
-
-	AddWidget<CIMGUISameLine>("Line");
-	mCropImageTextStart = AddWidget<CIMGUIText>("Start");
-	mCropImageTextStart->SetText("0.f");
-
-	AddWidget<CIMGUISameLine>("Line");
-	text = AddWidget<CIMGUIText>("End");
-	text->SetText("End : ");
-
-	AddWidget<CIMGUISameLine>("Line");
-	mCropImageTextEnd = AddWidget<CIMGUIText>("End");
-	mCropImageTextEnd->SetText("0.f");
-
-	CIMGUILabel* label = AddWidget<CIMGUILabel>("Animation List Name", 200.f, 30.f);
-	label->SetColor(0, 0, 255);
-	label->SetAlign(0.5f, 0);
-
-	line = AddWidget<CIMGUISameLine>("Line");
-	mAnimationNameInput = AddWidget<CIMGUITextInput>("Animation Name Input", 80.f, 30.f);
-	mAnimationNameInput->SetHideName(true);
-	mAnimationNameInput->SetHintText("ex)Anim1");
-
-	line = AddWidget<CIMGUISameLine>("Line");
-	line = AddWidget<CIMGUISameLine>("Line");
-	line->SetOffsetX(330.f);
-
-	label = AddWidget<CIMGUILabel>("Animation Frame Name", 200.f, 30.f);
-	label->SetColor(0, 0, 255);
-	label->SetAlign(0.5f, 0);
-
-	mAnimationList = AddWidget<CIMGUIListBox>("AnimationList", 200.f, 300.f);
-	mAnimationList->SetHideName(true);
-	mAnimationList->SetPageItemCount(6);
-	mAnimationList->SetSelectCallBack<CSpriteWindow>(this, &CSpriteWindow::OnSelectAnimationList);
-	
-	line = AddWidget<CIMGUISameLine>("Line");
-
-	button = AddWidget<CIMGUIButton>("Add Anim", 80.f, 30.f);
-	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimation);
-
-	line = AddWidget<CIMGUISameLine>("Line");
-
-	mAnimationFrameList = AddWidget<CIMGUIListBox>("AnimationFrameList", 200.f, 300.f);
+	// Col2. Frame ListBox
+	mAnimationFrameList = frameCol->AddWidget<CIMGUIListBox>("AnimationFrameList", 200.f, 300.f);
 	mAnimationFrameList->SetHideName(true);
-	mAnimationFrameList->SetPageItemCount(6);
+	mAnimationFrameList->SetPageItemCount(22);
 	mAnimationFrameList->SetSelectCallBack<CSpriteWindow>(this, &CSpriteWindow::OnSelectAnimationFrame);
 
-	line = AddWidget<CIMGUISameLine>("Line");
-
-	button = AddWidget<CIMGUIButton>("Add Frame", 80.f, 30.f);
+	// Col2. Frame Add/Del Button
+	button = frameCol->AddWidget<CIMGUIButton>("Add", 0.f, 0.f);
 	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickAddAnimationFrame);
+	frameCol->AddWidget<CIMGUISameLine>("line");
+	button = frameCol->AddWidget<CIMGUIButton>("Del", 0.f, 0.f);
+	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickDeleteAnimationFrame);
+
+	// Col3. Info & Edit Animation Coloumn
+	CIMGUIChild* infoCol = AddWidget<CIMGUIChild>("infoCol", 400.f, 550.f);
+
+	text = infoCol->AddWidget<CIMGUIText>("frameList");
+	text->SetText("Edit");
+	infoCol->AddWidget<CIMGUISameLine>("line");
+
+	// Col3. Load Texture & Edit Sprite Button
+	button = infoCol->AddWidget<CIMGUIButton>("Load");
+	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickLoadTexture);
+	button->SetSize(0.f, 0.f);
+	infoCol->AddWidget<CIMGUISameLine>("line");
+	button = infoCol->AddWidget<CIMGUIButton>("EditMode");
+	button->SetClickCallBack<CSpriteWindow>(this, &CSpriteWindow::OnClickSpriteEdit);
+	button->SetSize(0.f, 0.f);
+	infoCol->AddWidget<CIMGUISeperator>("sperator");
 	
+	// Col3. CropImage
+	text = infoCol->AddWidget<CIMGUIText>("Text");
+	text->SetText("Crop Image");
+	mCropImage = infoCol->AddWidget<CIMGUIImage>("SpriteCrop", 200.f, 200.f);
+	infoCol->AddWidget<CIMGUISeperator>("sperator");
+
+	// Col3. Image Poistion Edit Input
+	text = infoCol->AddWidget<CIMGUIText>("text");
+	text->SetText("Position");
+	mWidthInput = infoCol->AddWidget<CIMGUIInputInt>("Width", 30.f, 0.f);
+	mWidthInput->SetSize(200.f, 0.f);
+	mHeightInput = infoCol->AddWidget<CIMGUIInputInt>("Height", 30.f, 0.f);
+	mHeightInput->SetSize(200.f, 0.f);
+	mStartXInput = infoCol->AddWidget<CIMGUIInputInt>("StartX", 30.f, 0.f);
+	mStartXInput->SetSize(200.f, 0.f);
+	mStartYInput = infoCol->AddWidget<CIMGUIInputInt>("StartY", 30.f, 0.f);
+	mStartYInput->SetSize(200.f, 0.f);
+	infoCol->AddWidget<CIMGUISeperator>("sperator");
+	
+	// Col3. Animation Setting, Play & Stop Button
+	text = infoCol->AddWidget<CIMGUIText>("text");
+	text->SetText("Animation Value");
+	mAnimLoopCheckBox = infoCol->AddWidget<CIMGUICheckBox>("Loop", 30.f, 0.f);
+	mAnimLoopCheckBox->AddCheckInfo("Loop");
+	infoCol->AddWidget<CIMGUISameLine>("line");
+	mAnimReverseCheckBox = infoCol->AddWidget<CIMGUICheckBox>("Reverse", 30.f, 0.f);
+	mAnimReverseCheckBox->AddCheckInfo("Reverse");
+	mPlayTimeInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Time", 200.f, 0.f);
+	mPlayScaleInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Scale", 200.f, 0.f);
+	button = infoCol->AddWidget<CIMGUIButton>("Play", 0.f, 0.f);
+	infoCol->AddWidget<CIMGUISameLine>("line");
+	button = infoCol->AddWidget<CIMGUIButton>("Stop", 0.f, 0.f);
+	infoCol->AddWidget<CIMGUISeperator>("sperator");
+
+	// Col3. Save & Load
+	text = infoCol->AddWidget<CIMGUIText>("text");
+	text->SetText("Save & Load");
+	button = infoCol->AddWidget<CIMGUIButton>("Save", 0.f, 0.f);
+	infoCol->AddWidget<CIMGUISameLine>("line");
+	button = infoCol->AddWidget<CIMGUIButton>("Load", 0.f, 0.f);
+
 	return true;
 }
 
@@ -163,7 +199,6 @@ void CSpriteWindow::OnClickLoadTexture()
 		WideCharToMultiByte(CP_ACP, 0, fileName, -1, convertFileName, length, 0, 0);
 
 		// Image Widget에 스프라이트 등록
-		mImage->SetTextureFullPath(convertFileName, filePath);
 		mCropImage->SetTextureFullPath(convertFileName, filePath);
 		
 		// 씬 스프라이트 오브젝트에 등록
@@ -248,6 +283,14 @@ void CSpriteWindow::OnClickAddAnimationFrame()
 	mAnimationFrameList->AddItem(frameName);
 }
 
+void CSpriteWindow::OnClickDeleteAnimation()
+{
+}
+
+void CSpriteWindow::OnClickDeleteAnimationFrame()
+{
+}
+
 void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
 {
 	// 이전 프레임 리스트 초기화
@@ -274,11 +317,6 @@ void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
 			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
 	}
 	
-	if (selectAnimTexture != mImage->GetTexture())
-	{
-		mImage->SetTexture(anim->GetTexture());
-	}
-
 	if (selectAnimTexture != mCropImage->GetTexture())
 	{
 		mCropImage->SetTexture(anim->GetTexture());
@@ -302,6 +340,8 @@ void CSpriteWindow::OnSelectAnimationFrame(int idx, const char* item)
 	mCropStartPos.y = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - mCropStartPos.y;
 	mCropEndPos.x = mCropStartPos.x + data.Size.x;
 	mCropEndPos.y = mCropStartPos.y - data.Size.y;
+	
+	// Drag Object 해당 위치로
 
 	UpdateCropImage();
 }
@@ -386,14 +426,14 @@ void CSpriteWindow::UpdateCropImage()
 		mCropImage->SetImageStart(topLeft.x, objectScale.y - topLeft.y);
 		mCropImage->SetImageEnd(botRight.x, objectScale.y - botRight.y);
 
-		// 너비, 높이 텍스트 갱신
-		char buf[64] = {};
-		float width = botRight.x - topLeft.x;
-		float height = topLeft.y - botRight.y;
-
-		sprintf_s(buf, "%.1f", width);
-		mCropImageTextWidth->SetText(buf);
-		sprintf_s(buf, "%.1f", height);
-		mCropImageTextHeight->SetText(buf);
+ //		// 너비, 높이 텍스트 갱신
+ //		char buf[64] = {};
+ //		float width = botRight.x - topLeft.x;
+ //		float height = topLeft.y - botRight.y;
+ //
+ //		sprintf_s(buf, "%.1f", width);
+ //		mCropImageTextWidth->SetText(buf);
+ //		sprintf_s(buf, "%.1f", height);
+ //		mCropImageTextHeight->SetText(buf);
 	}
 }

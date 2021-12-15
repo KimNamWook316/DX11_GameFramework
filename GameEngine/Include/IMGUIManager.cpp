@@ -39,6 +39,9 @@ bool CIMGUIManager::Init(HWND hWnd)
 	// Multi-Vieports
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+	// TODO : 임시 기본 폰트로
+	io.Fonts->AddFontDefault();
+
 	ImGui::StyleColorsDark();
 
 	// BackEnd SetUp
@@ -72,8 +75,9 @@ void CIMGUIManager::Update(float deltaTime)
 
 	ImGui::NewFrame();
 
+	// TODO : 폰트 기본 임시 설정
 	// Font Push
-	ImGui::PushFont(mCurrentFont);
+	//ImGui::PushFont(mCurrentFont);
 
 	auto iter = mMapWindow.begin();
 	auto iterEnd = mMapWindow.end();
@@ -83,8 +87,9 @@ void CIMGUIManager::Update(float deltaTime)
 		iter->second->Update(deltaTime);
 	}
 	
+	// TODO : 폰트 기본 임시 설정
 	// Font Pop
-	ImGui::PopFont();
+	//ImGui::PopFont();
 
 	// Window에서 그려낸 위젯들은 실제 화면에 그려지는 것이 아니라
 	// IMGUI내부의 버퍼에 그려지게 된다.

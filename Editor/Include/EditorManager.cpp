@@ -34,7 +34,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	}
 
 	// GUI
-	mIMGUISpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("SpriteWindow");
+	mIMGUISpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("Editor");
 
 	// Layer
 	CRenderManager::GetInst()->CreateLayer("DragLayer", INT_MAX);

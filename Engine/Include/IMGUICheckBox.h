@@ -8,6 +8,7 @@ class CIMGUICheckBox :
 {
     friend class CIMGUIWindow;
     friend class CIMGUITree;
+    friend class CIMGUIChild;
 
 protected:
     CIMGUICheckBox();

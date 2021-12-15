@@ -60,7 +60,8 @@ void CIMGUIWindow::Update(float deltaTime)
         mbIsFocused = false;
     }
 
-    CIMGUIManager::GetInst()->PushCurrentFont();
+    // TODO : 폰트 기본으로 설정해놓음
+    //CIMGUIManager::GetInst()->PushCurrentFont();
     
     // Widget들 모두 Render
     size_t size = mVecWidget.size();
@@ -70,7 +71,7 @@ void CIMGUIWindow::Update(float deltaTime)
         mVecWidget[i]->Render();
     }
     
-    CIMGUIManager::GetInst()->PopCurrentFont();
+    //CIMGUIManager::GetInst()->PopCurrentFont();
 
     // Begin을 하면 End를 해 주어야 한다.
     ImGui::End();

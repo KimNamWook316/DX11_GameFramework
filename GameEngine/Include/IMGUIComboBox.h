@@ -7,6 +7,7 @@ class CIMGUIComboBox :
 {
     friend class CIMGUIWindow;
     friend class CIMGUITree;
+    friend class CIMGUIChild;
 
 protected:
     CIMGUIComboBox();

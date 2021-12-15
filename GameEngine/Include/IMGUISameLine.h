@@ -7,6 +7,7 @@ class CIMGUISameLine :
 {
     friend class CIMGUIWindow;
     friend class CIMGUITree;
+    friend class CIMGUIChild;
 
 protected:
     CIMGUISameLine();

@@ -368,6 +368,21 @@
     <ClInclude Include="Render\DepthStencilState.h">
       <Filter>06. Render\01. RenderState</Filter>
     </ClInclude>
+    <ClInclude Include="IMGUIChild.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIDummy.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUISeperator.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIInputInt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIInputFloat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -591,6 +606,21 @@
     </ClCompile>
     <ClCompile Include="Render\DepthStencilState.cpp">
       <Filter>06. Render\01. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIChild.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIDummy.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUISeperator.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIInputInt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIInputFloat.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

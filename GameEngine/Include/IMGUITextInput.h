@@ -14,6 +14,7 @@ class CIMGUITextInput :
 {
     friend class CIMGUIWindow;
     friend class CIMGUITree;
+    friend class CIMGUIChild;
 
 protected:
     CIMGUITextInput();

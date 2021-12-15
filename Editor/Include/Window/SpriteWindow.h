@@ -13,16 +13,21 @@ public:
     virtual bool Init();
     virtual void Update(float deltaTime);
 
+public:
     void UpdateCropImage();
     
+// CallBacks
 public:
     void OnClickLoadTexture();
     void OnClickSpriteEdit();
     void OnClickAddAnimation();
     void OnClickAddAnimationFrame();
+    void OnClickDeleteAnimation();
+    void OnClickDeleteAnimationFrame();
     void OnSelectAnimationList(int idx, const char* item);
     void OnSelectAnimationFrame(int idx, const char* item);
 
+// Setter
 public:
     void SetCropStartPos(const Vector2& pos)
     {
@@ -36,6 +41,7 @@ public:
 
     void MoveCropPos(const float x, const float y);
 
+// Members
 private:
     class CIMGUIImage* mImage;
     class CIMGUIImage* mCropImage;
@@ -44,11 +50,18 @@ private:
     class CIMGUIListBox* mAnimationFrameList;
     CSharedPtr<class CSpriteEditObject> mSpriteEditObject;
 
-private:
-    class CIMGUIText* mCropImageTextWidth;
-    class CIMGUIText* mCropImageTextHeight;
-    class CIMGUIText* mCropImageTextStart;
-    class CIMGUIText* mCropImageTextEnd;
+    // Image Input
+    class CIMGUIInputInt* mWidthInput;
+    class CIMGUIInputInt* mHeightInput;
+    class CIMGUIInputInt* mStartXInput;
+    class CIMGUIInputInt* mStartYInput;
+
+    // Anim Input
+    class CIMGUICheckBox* mAnimLoopCheckBox;
+    class CIMGUICheckBox* mAnimReverseCheckBox;
+    class CIMGUIInputFloat* mPlayTimeInput;
+    class CIMGUIInputFloat* mPlayScaleInput;
+
     Vector2 mCropStartPos;
     Vector2 mCropEndPos;
 };
