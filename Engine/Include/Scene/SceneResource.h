@@ -76,6 +76,7 @@ public:
 		const float width, const float height);
 	CAnimationSequence2D* FindAnimationSequence2D(const std::string& name);
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer() const;
+	void ReleaseAnimationSequence2D(const std::string& name);
 
 private:
 	class CScene* mScene;

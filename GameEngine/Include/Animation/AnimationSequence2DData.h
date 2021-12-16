@@ -26,6 +26,25 @@ private:
 	~CAnimationSequence2DData();
 
 public:
+	void Replay();
+
+public:
+	int GetCurrentFrame() const
+	{
+		return mFrame;
+	}
+
+	float GetAnimationTime() const
+	{
+		return mTime;
+	}
+
+	class CAnimationSequence2D* GetAnimationSequence() const
+	{
+		return mSequence;
+	}
+
+public:
 	template <typename T>
 	void SetEndCallBack(T* obj, void(T::* func)())
 	{

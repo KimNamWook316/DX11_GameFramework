@@ -1,3 +1,4 @@
+#include "Animation/AnimationSequence2DInstance.h"
 #include "SpriteWindow.h"
 #include "IMGUIButton.h"
 #include "IMGUISameLine.h"
@@ -24,9 +25,9 @@
 #include "PathManager.h"
 #include "Input.h"
 #include "Device.h"
+#include "../Object/DragObject.h"
 
 CSpriteWindow::CSpriteWindow()	:
-	mImage(nullptr),
 	mCropImage(nullptr),
 	mAnimationFrameList(nullptr),
 	mAnimationList(nullptr),
@@ -38,12 +39,14 @@ CSpriteWindow::CSpriteWindow()	:
 	mAnimLoopCheckBox(nullptr),
 	mAnimReverseCheckBox(nullptr),
 	mPlayTimeInput(nullptr),
-	mPlayScaleInput(nullptr)
+	mPlayScaleInput(nullptr),
+	mAnimationInstance(nullptr)
 {
 }
 
 CSpriteWindow::~CSpriteWindow()
 {
+	SAFE_DELETE(mAnimationInstance);
 }
 
 bool CSpriteWindow::Init()
@@ -72,8 +75,10 @@ bool CSpriteWindow::Init()
 	mAnimationList->SetSelectCallBack<CSpriteWindow>(this, &CSpriteWindow::OnSelectAnimationList);
 
 	// Col1. Animation Name Input
-	mAnimationNameInput = animCol->AddWidget<CIMGUITextInput>("Anim Name", 150.f, 100.f);
-	mAnimationNameInput->SetHintText("Input Animation Name");
+	mAnimationNameInput = animCol->AddWidget<CIMGUITextInput>("Anim Name", 70.f, 100.f);
+	mAnimationNameInput->SetHideName(true);
+	mAnimationNameInput->SetHintText("Animation Name");
+	animCol->AddWidget<CIMGUISameLine>("line");
 
 	// Col1. Animation Add, Delete Button 
 	CIMGUIButton* button = animCol->AddWidget<CIMGUIButton>("Add", 0.f, 0.f);
@@ -131,12 +136,16 @@ bool CSpriteWindow::Init()
 	text->SetText("Position");
 	mWidthInput = infoCol->AddWidget<CIMGUIInputInt>("Width", 30.f, 0.f);
 	mWidthInput->SetSize(200.f, 0.f);
+	mWidthInput->SetCallBack(this, &CSpriteWindow::OnWidthInputChanged);
 	mHeightInput = infoCol->AddWidget<CIMGUIInputInt>("Height", 30.f, 0.f);
 	mHeightInput->SetSize(200.f, 0.f);
+	mHeightInput->SetCallBack(this, &CSpriteWindow::OnHeightInputChanged);
 	mStartXInput = infoCol->AddWidget<CIMGUIInputInt>("StartX", 30.f, 0.f);
 	mStartXInput->SetSize(200.f, 0.f);
+	mStartXInput->SetCallBack(this, &CSpriteWindow::OnStartXInputChanged);
 	mStartYInput = infoCol->AddWidget<CIMGUIInputInt>("StartY", 30.f, 0.f);
 	mStartYInput->SetSize(200.f, 0.f);
+	mStartYInput->SetCallBack(this, &CSpriteWindow::OnStartYInputChanged);
 	infoCol->AddWidget<CIMGUISeperator>("sperator");
 	
 	// Col3. Animation Setting, Play & Stop Button
@@ -150,8 +159,10 @@ bool CSpriteWindow::Init()
 	mPlayTimeInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Time", 200.f, 0.f);
 	mPlayScaleInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Scale", 200.f, 0.f);
 	button = infoCol->AddWidget<CIMGUIButton>("Play", 0.f, 0.f);
+	button->SetClickCallBack(this, &CSpriteWindow::OnClickPlayAnimation);
 	infoCol->AddWidget<CIMGUISameLine>("line");
 	button = infoCol->AddWidget<CIMGUIButton>("Stop", 0.f, 0.f);
+	button->SetClickCallBack(this, &CSpriteWindow::OnClickStopAnimation);
 	infoCol->AddWidget<CIMGUISeperator>("sperator");
 
 	// Col3. Save & Load
@@ -161,12 +172,40 @@ bool CSpriteWindow::Init()
 	infoCol->AddWidget<CIMGUISameLine>("line");
 	button = infoCol->AddWidget<CIMGUIButton>("Load", 0.f, 0.f);
 
+	// Animation Instance
+	mAnimationInstance = new CAnimationSequence2DInstance;
+	mAnimationInstance->Init();
+	mAnimationInstance->Start();
+	mAnimationInstance->Stop();
+
 	return true;
 }
 
 void CSpriteWindow::Update(float deltaTime)
 {
 	CIMGUIWindow::Update(deltaTime);
+
+	mAnimationInstance->Update(deltaTime);
+
+	if (mAnimationInstance->IsPlay())
+	{
+		CAnimationSequence2DData* animData = mAnimationInstance->GetCurrentAnimation();
+
+		if (animData)
+		{
+			int frame = animData->GetCurrentFrame();
+
+			AnimationFrameData frameData = animData->GetAnimationSequence()->GetFrameData(frame);
+
+			// UI 업데이트
+			mCropImage->SetImageStart(frameData.Start.x, frameData.Start.y);
+			mCropImage->SetImageEnd(frameData.Start.x + frameData.Size.x, frameData.Start.y + frameData.Size.y);
+
+			// Drag Object 현재 프레임으로 이동
+			CEditorManager::GetInst()->GetDragObject()->SetWorldPos(frameData.Start.x, 
+				mSpriteEditObject->GetWorldScale().y - frameData.Start.y, 0.f);
+		}
+	}
 }
 
 void CSpriteWindow::OnClickLoadTexture()
@@ -232,7 +271,6 @@ void CSpriteWindow::OnClickAddAnimation()
 
 	if (mAnimationList->IsItemExist(text))
 	{
-		// TODO : popup
 		return;
 	}
 	
@@ -244,7 +282,13 @@ void CSpriteWindow::OnClickAddAnimation()
 		return;
 	}
 
+	// UI update
 	mAnimationList->AddItem(text);
+
+	// Animation Instance에 저장
+	mAnimationInstance->AddAnimation(text, text, mAnimLoopCheckBox->GetCheck(0),
+		mPlayTimeInput->GetVal(), mPlayScaleInput->GetVal(), 
+		mAnimReverseCheckBox->GetCheck(0));
 }
 
 void CSpriteWindow::OnClickAddAnimationFrame()
@@ -281,32 +325,81 @@ void CSpriteWindow::OnClickAddAnimationFrame()
 	sprintf_s(frameName, "%d", frameCount);
 
 	mAnimationFrameList->AddItem(frameName);
+
+	// UI 업데이트
+	updateFrameUI();
 }
 
 void CSpriteWindow::OnClickDeleteAnimation()
 {
+	int selectIdx = mAnimationList->GetSelectIndex();
+
+	if (-1 == selectIdx)
+	{
+		return;
+	}
+
+	mAnimationInstance->DeleteAnimation(mAnimationList->GetSelectItem());
+
+	CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
+	resource->ReleaseAnimationSequence2D(mAnimationList->GetSelectItem());
+
+	mAnimationList->DeleteItem(selectIdx);
+	mAnimationFrameList->Clear();
 }
 
 void CSpriteWindow::OnClickDeleteAnimationFrame()
 {
+	int selectAnimIdx = mAnimationList->GetSelectIndex();
+	int selectIdx = mAnimationFrameList->GetSelectIndex();
+
+	if (-1 == selectIdx || -1 == selectAnimIdx)
+	{
+		return;
+	}
+	
+	CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
+	CAnimationSequence2D* anim = resource->FindAnimationSequence2D(mAnimationList->GetItem(selectAnimIdx));
+
+	anim->DeleteFrame(selectIdx);
+
+	mAnimationFrameList->Clear();
+
+	char frameName[32] = {};
+
+	for (int i = 0; i < anim->GetFrameCount(); ++i)
+	{
+		sprintf_s(frameName, "%d", i + 1);
+		mAnimationFrameList->AddItem(frameName);
+	}
+
+	// 재생중인 애니메이션 프레임 정보 업데이트
+	if (mAnimationInstance->IsPlay())
+	{
+		mAnimationInstance->ReplayCurrentAnimation();
+	}
+
+	// UI clear
+	clearFrameUI();
 }
 
 void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
 {
+	// 현재 애니메이션 변경
+	mAnimationInstance->SetCurrentAnimation(item);
+	int frameCount = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount();
+
 	// 이전 프레임 리스트 초기화
 	mAnimationFrameList->Clear();
-
-	CAnimationSequence2D* anim = CSceneManager::GetInst()->GetScene()->GetResource()->FindAnimationSequence2D(item);
 	
 	// 현재 선택된 애니메이션의 프레임리스트 출력
-	int size = (int)anim->GetFrameCount();
-	for (int i = 0; i < size; ++i)
+	for (int i = 0; i < frameCount; ++i)
 	{
 		mAnimationFrameList->AddItem(std::to_string(i));
 	}
 
 	// 현재 선택된 애니메이션의 텍스쳐와 이전 애니메이션의 텍스쳐가 다르면 교체
-	CTexture* selectAnimTexture = anim->GetTexture();
+	CTexture* selectAnimTexture = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetTexture();
 
 	if (selectAnimTexture != mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture())
 	{
@@ -319,7 +412,18 @@ void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
 	
 	if (selectAnimTexture != mCropImage->GetTexture())
 	{
-		mCropImage->SetTexture(anim->GetTexture());
+		mCropImage->SetTexture(selectAnimTexture);
+	}
+
+	// 현재 Animation의 0번 프레임 UI에 출력
+	if (mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() != 0)
+	{
+		AnimationFrameData data = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0);
+		mCropImage->SetImageStart(data.Start.x, data.Start.y);
+		mCropImage->SetImageEnd(data.Start.x + data.Size.x, data.Start.y + data.Size.y);
+
+		// DragObject 0번 프레임 위치로
+		CEditorManager::GetInst()->GetDragObject()->SetWorldPos(data.Start.x, data.Start.y, 0.f);
 	}
 }
 
@@ -342,8 +446,114 @@ void CSpriteWindow::OnSelectAnimationFrame(int idx, const char* item)
 	mCropEndPos.y = mCropStartPos.y - data.Size.y;
 	
 	// Drag Object 해당 위치로
+	CEditorManager::GetInst()->GetDragObject()->SetWorldPos(mCropStartPos.x, mCropStartPos.y , 0.f);
 
+	// Image UI 업데이트
 	UpdateCropImage();
+
+	// Poisiton UI 업데이트
+	updateFrameUI();
+}
+
+void CSpriteWindow::OnClickPlayAnimation()
+{
+	if (mAnimationInstance->GetCurrentAnimation() != nullptr)
+	{
+		mAnimationInstance->ReplayCurrentAnimation();
+		mAnimationInstance->Play();
+	}
+}
+
+void CSpriteWindow::OnClickStopAnimation()
+{
+	if (mAnimationInstance->GetCurrentAnimation() != nullptr)
+	{
+		mAnimationInstance->Stop();
+	}
+}
+
+void CSpriteWindow::OnWidthInputChanged(int val)
+{
+	mCropImage->SetImageEnd(mCropImage->GetImageStart().x + val, mCropImage->GetImageEnd().y);
+	
+	CDragObject* dragObj = CEditorManager::GetInst()->GetDragObject();
+	Vector3 scale = dragObj->GetRelativeScale();
+	Vector3 pos = dragObj->GetWorldPos();
+	if (scale.x < 0)
+	{
+		dragObj->SetWorldScale(-scale.x, scale.y, scale.z);
+		pos.x += scale.x;
+ 		dragObj->SetWorldPos(pos);
+	}		
+	dragObj->SetWorldScale(val, scale.y, scale.z);
+}
+
+void CSpriteWindow::OnHeightInputChanged(int val)
+{
+	mCropImage->SetImageEnd(mCropImage->GetImageEnd().x, mCropImage->GetImageStart().y + val);
+
+	CDragObject* dragObj = CEditorManager::GetInst()->GetDragObject();
+	Vector3 scale = dragObj->GetRelativeScale();
+	Vector3 pos = dragObj->GetWorldPos();
+	if (scale.y > 0)
+	{
+		scale.y *= -1;
+		dragObj->SetWorldScale(scale.x, scale.y, scale.z);
+		pos.y -= scale.y;
+		dragObj->SetWorldPos(pos);
+	}
+	dragObj->SetWorldScale(scale.x, -val, scale.z);
+}
+
+void CSpriteWindow::OnStartXInputChanged(int val)
+{
+	int width = mCropImage->GetImageEnd().x - mCropImage->GetImageStart().x;
+	mCropImage->SetImageStart(val, mCropImage->GetImageStart().y);
+	mCropImage->SetImageEnd(val + width, mCropImage->GetImageEnd().y);
+
+	CDragObject* dragObj = CEditorManager::GetInst()->GetDragObject();
+	Vector3 scale = dragObj->GetRelativeScale();
+	Vector3 pos = dragObj->GetWorldPos();
+	if (scale.x < 0)
+	{
+		dragObj->SetWorldScale(-scale.x, scale.y, scale.z);
+		pos.x += scale.x;
+ 		dragObj->SetWorldPos(pos);
+	}
+	pos.x = val;
+	dragObj->SetWorldPos(pos);
+}
+
+void CSpriteWindow::OnStartYInputChanged(int val)
+{
+	int height = mCropImage->GetImageEnd().y - mCropImage->GetImageStart().y;
+	mCropImage->SetImageStart(mCropImage->GetImageStart().x, val);
+	mCropImage->SetImageEnd(mCropImage->GetImageEnd().x, height + val);
+
+	CDragObject* dragObj = CEditorManager::GetInst()->GetDragObject();
+	Vector3 scale = dragObj->GetRelativeScale();
+	Vector3 pos = dragObj->GetWorldPos();
+	if (scale.y > 0)
+	{
+		scale.y *= -1;
+		dragObj->SetWorldScale(scale.x, scale.y, scale.z);
+		pos.y -= scale.y;
+		dragObj->SetWorldPos(pos);
+	}
+	pos.y = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - val;
+	dragObj->SetWorldPos(pos);
+}
+
+void CSpriteWindow::OnClickLoopCheckBox(bool bLoop)
+{
+}
+
+void CSpriteWindow::OnClickReverseCheckBox(bool bLoop)
+{
+}
+
+void CSpriteWindow::OnClickSave()
+{
 }
 
 void CSpriteWindow::MoveCropPos(const float x, const float y)
@@ -353,6 +563,34 @@ void CSpriteWindow::MoveCropPos(const float x, const float y)
 	mCropEndPos += val;
 
 	UpdateCropImage();
+}
+
+void CSpriteWindow::updateFrameUI()
+{
+	Vector2 imageStart = mCropImage->GetImageStart();
+	Vector2 imageEnd = mCropImage->GetImageEnd();
+	
+	mStartXInput->SetVal(imageStart.x);
+	mStartYInput->SetVal(imageStart.y);
+
+	mWidthInput->SetVal(imageEnd.x - imageStart.x);
+	mHeightInput->SetVal(imageEnd.y - imageStart.y);
+}
+
+void CSpriteWindow::updateAnimationUI()
+{
+}
+
+void CSpriteWindow::clearFrameUI()
+{
+	mStartXInput->SetVal(0);
+	mStartYInput->SetVal(0);
+	mWidthInput->SetVal(0);
+	mHeightInput->SetVal(0);
+}
+
+void CSpriteWindow::clearAnimationUI()
+{
 }
 
 void CSpriteWindow::UpdateCropImage()
@@ -425,15 +663,7 @@ void CSpriteWindow::UpdateCropImage()
 		// UV좌표 설정
 		mCropImage->SetImageStart(topLeft.x, objectScale.y - topLeft.y);
 		mCropImage->SetImageEnd(botRight.x, objectScale.y - botRight.y);
-
- //		// 너비, 높이 텍스트 갱신
- //		char buf[64] = {};
- //		float width = botRight.x - topLeft.x;
- //		float height = topLeft.y - botRight.y;
- //
- //		sprintf_s(buf, "%.1f", width);
- //		mCropImageTextWidth->SetText(buf);
- //		sprintf_s(buf, "%.1f", height);
- //		mCropImageTextHeight->SetText(buf);
 	}
+
+	updateFrameUI();
 }

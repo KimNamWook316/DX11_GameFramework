@@ -22,3 +22,9 @@ CAnimationSequence2DData::~CAnimationSequence2DData()
 		SAFE_DELETE(*iter);
 	}
 }
+
+void CAnimationSequence2DData::Replay()
+{
+	mFrame = 0;
+	mTime = 0;
+}

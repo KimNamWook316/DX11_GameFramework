@@ -26,6 +26,15 @@ public:
     void OnClickDeleteAnimationFrame();
     void OnSelectAnimationList(int idx, const char* item);
     void OnSelectAnimationFrame(int idx, const char* item);
+    void OnClickPlayAnimation();
+    void OnClickStopAnimation();
+    void OnWidthInputChanged(int val);
+    void OnHeightInputChanged(int val);
+    void OnStartXInputChanged(int val);
+    void OnStartYInputChanged(int val);
+    void OnClickLoopCheckBox(bool bLoop);
+    void OnClickReverseCheckBox(bool bLoop);
+    void OnClickSave();
 
 // Setter
 public:
@@ -41,14 +50,23 @@ public:
 
     void MoveCropPos(const float x, const float y);
 
+private:
+    void updateFrameUI();
+    void updateAnimationUI();
+
+    void clearFrameUI();
+    void clearAnimationUI();
+
 // Members
 private:
-    class CIMGUIImage* mImage;
+    // Sprite Object
+    CSharedPtr<class CSpriteEditObject> mSpriteEditObject;
+
+    // Image
     class CIMGUIImage* mCropImage;
     class CIMGUIListBox* mAnimationList;
     class CIMGUITextInput* mAnimationNameInput;
     class CIMGUIListBox* mAnimationFrameList;
-    CSharedPtr<class CSpriteEditObject> mSpriteEditObject;
 
     // Image Input
     class CIMGUIInputInt* mWidthInput;
@@ -61,6 +79,9 @@ private:
     class CIMGUICheckBox* mAnimReverseCheckBox;
     class CIMGUIInputFloat* mPlayTimeInput;
     class CIMGUIInputFloat* mPlayScaleInput;
+    
+    // Anim Instance
+    class CAnimationSequence2DInstance* mAnimationInstance;
 
     Vector2 mCropStartPos;
     Vector2 mCropEndPos;

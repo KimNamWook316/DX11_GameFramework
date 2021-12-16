@@ -72,9 +72,6 @@
     <Filter Include="02. Resource\03. Material">
       <UniqueIdentifier>{f0e2ee75-be6c-4970-b39d-57e3910b6d04}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. Scene\01. SceneMode\02. SceneResource">
-      <UniqueIdentifier>{e0f07e6f-69c6-4d7f-a017-64c2121b4fd3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. Resource\02. Shader\03. ConstantBuffer">
       <UniqueIdentifier>{a59c04db-a649-41e8-98ba-04d972716413}</UniqueIdentifier>
     </Filter>
@@ -122,6 +119,9 @@
     </Filter>
     <Filter Include="01. Engine\08. IMGUI\02. Widget">
       <UniqueIdentifier>{caf075b2-558c-4c2e-8b82-7caa9babe763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\02. SceneResource">
+      <UniqueIdentifier>{e0f07e6f-69c6-4d7f-a017-64c2121b4fd3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -222,7 +222,7 @@
       <Filter>02. Resource\03. Material</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneResource.h">
-      <Filter>03. Scene\01. SceneMode\02. SceneResource</Filter>
+      <Filter>03. Scene\02. SceneResource</Filter>
     </ClInclude>
     <ClInclude Include="Component\Transform.h">
       <Filter>05. Component\01. SceneComponent</Filter>
@@ -377,11 +377,11 @@
     <ClInclude Include="IMGUISeperator.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
-    <ClInclude Include="IMGUIInputInt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IMGUIInputFloat.h">
-      <Filter>Header Files</Filter>
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIInputInt.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -470,7 +470,7 @@
       <Filter>02. Resource\03. Material</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneResource.cpp">
-      <Filter>03. Scene\01. SceneMode\02. SceneResource</Filter>
+      <Filter>03. Scene\02. SceneResource</Filter>
     </ClCompile>
     <ClCompile Include="Component\Transform.cpp">
       <Filter>05. Component\01. SceneComponent</Filter>
@@ -616,11 +616,11 @@
     <ClCompile Include="IMGUISeperator.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
-    <ClCompile Include="IMGUIInputInt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IMGUIInputFloat.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIInputInt.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

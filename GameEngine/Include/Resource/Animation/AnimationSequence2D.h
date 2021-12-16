@@ -18,6 +18,8 @@ public:
 		const std::string& pathName = TEXTURE_PATH);
 	void AddFrame(const Vector2& startPos, const Vector2& size);
 	void AddFrame(const float startX, const float startY, const float width, const float height);
+	void DeleteFrame(const int idx);
+	void ClearFrame();
 
 public:
 	void SetScene(class CScene* scene);

@@ -18,6 +18,9 @@ bool CIMGUIInputInt::Init()
 void CIMGUIInputInt::Render()
 {
     ImGui::PushItemWidth(mSize.x);
-    ImGui::InputInt(mName.c_str(), &mVal, mStep);
+    if (ImGui::InputInt(mName.c_str(), &mVal, mStep))
+    {
+        mCallBack(mVal);
+    }
     ImGui::PopItemWidth();
 }

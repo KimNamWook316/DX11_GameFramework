@@ -5,9 +5,7 @@
 // 스프라이트 컴포넌트가 들고 있는 실제 애니메이션 객체
 class CAnimationSequence2DInstance
 {
-	friend class CSpriteComponent;
-
-protected:
+public:
 	CAnimationSequence2DInstance();
 	CAnimationSequence2DInstance(const CAnimationSequence2DInstance& anim);
 	virtual ~CAnimationSequence2DInstance();
@@ -21,6 +19,27 @@ public:
 	virtual CAnimationSequence2DInstance* Clone();
 
 public:
+	void Play()
+	{
+		mbPlay = true;
+	}
+
+	void Stop()
+	{
+		mbPlay = false;
+	}
+
+	bool IsPlay() const
+	{
+		return mbPlay;
+	}
+
+	CAnimationSequence2DData* GetCurrentAnimation() const
+	{
+		return mCurrentAnimation;
+	}
+
+public:
 	int GetAnimationCount() const
 	{
 		return (int)mMapAnimation.size();
@@ -29,8 +48,12 @@ public:
 public:
 	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop = true,
 		const float playTime = 1.f, const float playScale = 1.f, bool bIsReverse = false);
+	void DeleteAnimation(const std::string& name);
 	void ChangeAnimation(const std::string& name);
 	bool CheckCurrentAnimation(const std::string& name);
+
+public:
+	void ReplayCurrentAnimation();
 
 public:
 	void SetPlayTime(const std::string& name, const float playTime);
@@ -81,6 +104,7 @@ protected:
 	CAnimationSequence2DData* findAnimation(const std::string& name);
 
 protected:
+	bool mbPlay;
 	class CSpriteComponent* mOwner;													// 주인 컴포넌트
 	class CScene* mScene;															// 소속 씬
 	CAnimationSequence2DData* mCurrentAnimation;									// 현재 애니메이션

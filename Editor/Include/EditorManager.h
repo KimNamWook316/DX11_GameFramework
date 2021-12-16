@@ -30,6 +30,11 @@ public:
 		return meEditMode;
 	}
 
+	class CDragObject* GetDragObject()
+	{
+		return mDragObj;
+	}
+
 	void SetEditMode(eEditMode mode);
 
 	DECLARE_SINGLE(CEditorManager)

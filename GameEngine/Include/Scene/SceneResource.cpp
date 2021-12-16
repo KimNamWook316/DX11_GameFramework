@@ -269,3 +269,17 @@ CAnimation2DConstantBuffer* CSceneResource::GetAnimation2DCBuffer() const
 {
 	return CResourceManager::GetInst()->GetAnimation2DCBuffer();
 }
+
+void CSceneResource::ReleaseAnimationSequence2D(const std::string& name)
+{
+	auto iter = mMapSequence2D.find(name);
+
+	if (iter != mMapSequence2D.end())
+	{
+		if (iter->second->GetRefCount() == 2)
+		{
+			mMapSequence2D.erase(name);
+			CResourceManager::GetInst()->ReleaseAnimationSequece2D(name);
+		}
+	}
+}

@@ -66,6 +66,17 @@ void CAnimationSequence2D::AddFrame(const float startX, const float startY, cons
 	mVecFrameData.push_back(data);
 }
 
+void CAnimationSequence2D::DeleteFrame(const int idx)
+{
+	auto iter = mVecFrameData.begin() + idx;
+	mVecFrameData.erase(iter);
+}
+
+void CAnimationSequence2D::ClearFrame()
+{
+	mVecFrameData.clear();
+}
+
 void CAnimationSequence2D::SetScene(CScene* scene)
 {
 	mScene = scene;

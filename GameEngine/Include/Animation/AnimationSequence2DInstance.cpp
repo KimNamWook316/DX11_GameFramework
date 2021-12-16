@@ -7,6 +7,7 @@
 #include "../Resource/Texture/Texture.h"
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
+	mbPlay(true),
 	mScene(nullptr),
 	mOwner(nullptr),
 	mCBuffer(nullptr),
@@ -16,6 +17,8 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSequence2DInstance& anim)
 {
+	mbPlay = anim.mbPlay;
+
 	auto iter = anim.mMapAnimation.begin();
 	auto iterEnd = anim.mMapAnimation.end();
 
@@ -61,17 +64,23 @@ void CAnimationSequence2DInstance::Start()
 
 bool CAnimationSequence2DInstance::Init()
 {
-	mCBuffer = mScene->GetResource()->GetAnimation2DCBuffer();
+	if (mScene)
+	{
+		mCBuffer = mScene->GetResource()->GetAnimation2DCBuffer();
+	}
 
 	return true;
 }
 
 void CAnimationSequence2DInstance::Update(float deltaTime)
 {
-	if (!mCurrentAnimation)
+	if (!mCurrentAnimation || !mbPlay || mCurrentAnimation->mSequence->GetFrameCount() == 0)
 	{
 		return;
 	}
+
+	// 한 프레임당 시간 실시간 계산 ( 프레임이 추가되면 Sequnce에 추가되기 때문에 갱신의 용이성때문에 이렇게 사용)
+	mCurrentAnimation->mFrameTime = mCurrentAnimation->mPlayTime / mCurrentAnimation->mSequence->GetFrameCount();
 
 	// 델타타임 더하기
 	mCurrentAnimation->mTime += deltaTime * mCurrentAnimation->mPlayScale;
@@ -128,7 +137,7 @@ void CAnimationSequence2DInstance::Update(float deltaTime)
 			// 역재생일 경우 맨 뒤 프레임으로
 			if (mCurrentAnimation->mbIsReverse)
 			{
-				mCurrentAnimation->mFrame = mCurrentAnimation->mSequence->GetFrameCount();
+				mCurrentAnimation->mFrame = mCurrentAnimation->mSequence->GetFrameCount() - 1;
 			}
 			else
 			{
@@ -144,7 +153,7 @@ void CAnimationSequence2DInstance::Update(float deltaTime)
 			}
 			else
 			{
-				mCurrentAnimation->mFrame = mCurrentAnimation->mSequence->GetFrameCount();
+				mCurrentAnimation->mFrame = mCurrentAnimation->mSequence->GetFrameCount() - 1;
 			}
 		}
 
@@ -256,6 +265,19 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName,
 	mMapAnimation.insert(std::make_pair(name, anim));
 }
 
+void CAnimationSequence2DInstance::DeleteAnimation(const std::string& name)
+{
+	auto iter = findAnimation(name);
+	
+	if (iter == nullptr)
+	{
+		return;
+	}
+	
+	SAFE_DELETE(iter);
+	mMapAnimation.erase(name);
+}
+
 void CAnimationSequence2DInstance::ChangeAnimation(const std::string& name)
 {
 	if (mCurrentAnimation->mName == name)
@@ -294,6 +316,11 @@ void CAnimationSequence2DInstance::ChangeAnimation(const std::string& name)
 bool CAnimationSequence2DInstance::CheckCurrentAnimation(const std::string& name)
 {
 	return mCurrentAnimation->mName == name;
+}
+
+void CAnimationSequence2DInstance::ReplayCurrentAnimation()
+{
+	mCurrentAnimation->Replay();
 }
 
 void CAnimationSequence2DInstance::SetPlayTime(const std::string& name, const float playTime)
