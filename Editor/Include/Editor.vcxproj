@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EditorInfo.h" />
     <ClInclude Include="EditorManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Object\DragObject.h" />
@@ -155,6 +156,9 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Window\DetailWindow.h" />
+    <ClInclude Include="Window\EditorMenuWindow.h" />
+    <ClInclude Include="Window\ObjectHierachyWindow.h" />
     <ClInclude Include="Window\SpriteWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +167,9 @@
     <ClCompile Include="Object\DragObject.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
+    <ClCompile Include="Window\DetailWindow.cpp" />
+    <ClCompile Include="Window\EditorMenuWindow.cpp" />
+    <ClCompile Include="Window\ObjectHierachyWindow.cpp" />
     <ClCompile Include="Window\SpriteWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -48,6 +48,18 @@
     <ClInclude Include="Object\DragObject.h">
       <Filter>03. Object</Filter>
     </ClInclude>
+    <ClInclude Include="Window\ObjectHierachyWindow.h">
+      <Filter>02. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\EditorMenuWindow.h">
+      <Filter>02. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\DetailWindow.h">
+      <Filter>02. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -67,6 +79,15 @@
     </ClCompile>
     <ClCompile Include="Object\DragObject.cpp">
       <Filter>03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\ObjectHierachyWindow.cpp">
+      <Filter>02. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\EditorMenuWindow.cpp">
+      <Filter>02. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\DetailWindow.cpp">
+      <Filter>02. Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

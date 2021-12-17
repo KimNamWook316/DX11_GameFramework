@@ -18,6 +18,22 @@ public:
 	void PostUpdate(float deltaTime);
 
 public:
+	CGameObject* FindObject(const std::string& name)
+	{
+		auto iter = mObjList.begin();
+		auto iterEnd = mObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->GetName() == name)
+			{
+				return (*iter);
+			}
+		}
+		return nullptr;
+	}
+
+public:
 	CSceneResource* GetResource() const
 	{
 		return mResource;

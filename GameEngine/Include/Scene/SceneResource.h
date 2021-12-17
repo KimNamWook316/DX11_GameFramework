@@ -78,6 +78,11 @@ public:
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer() const;
 	void ReleaseAnimationSequence2D(const std::string& name);
 
+public:
+	bool SaveSequence2D(const std::string& name, const char* fullPath);
+	bool LoadSequence2D(const char* fullPath);
+	bool LoadSequence2D(std::string& outName, const char* fullPath);
+
 private:
 	class CScene* mScene;
 	std::unordered_map <std::string, CSharedPtr<CMesh>> mMapMesh;

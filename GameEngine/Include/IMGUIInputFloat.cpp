@@ -18,6 +18,9 @@ bool CIMGUIInputFloat::Init()
 void CIMGUIInputFloat::Render()
 {
     ImGui::PushItemWidth(mSize.x);
-    ImGui::InputFloat(mName.c_str(), &mVal, mStep);
+    if (ImGui::InputFloat(mName.c_str(), &mVal, mStep))
+    {
+        mCallBack(mVal);
+    }
     ImGui::PopItemWidth();
 }

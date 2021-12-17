@@ -41,32 +41,32 @@ public:
 public:
 	void operator = (T* ptr)
 	{
+		if (ptr)
+		{
+			ptr->AddRef();
+		}
+
 		if (mPtr)
 		{
 			mPtr->Release();
 		}
 
 		mPtr = ptr;
-
-		if (mPtr)
-		{
-			mPtr->AddRef();
-		}
 	}
 
 	void operator = (const CSharedPtr<T>& ptr)
 	{
+		if (ptr.mPtr)
+		{
+			ptr.mPtr->AddRef();
+		}
+		
 		if (mPtr)
 		{
 			mPtr->Release();
 		}
 
 		mPtr = ptr.mPtr;
-
-		if (mPtr)
-		{
-			mPtr->AddRef();
-		}
 	}
 
 	bool operator == (T* ptr) const

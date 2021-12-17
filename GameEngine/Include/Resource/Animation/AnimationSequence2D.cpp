@@ -77,6 +77,152 @@ void CAnimationSequence2D::ClearFrame()
 	mVecFrameData.clear();
 }
 
+bool CAnimationSequence2D::Save(const char* fullPath)
+{
+	FILE* pFile = nullptr;
+
+	fopen_s(&pFile, fullPath, "wt");
+
+	if (!pFile)
+	{
+		return false;
+	}
+
+	int length = (int)mName.length();
+	fwrite(&length, sizeof(int), 1, pFile);
+	fwrite(mName.c_str(), sizeof(char), length, pFile);
+
+	bool bTextEnable = false;
+
+	if (mTexture)
+	{
+		bTextEnable = true;
+	}
+	
+	fwrite(&bTextEnable, sizeof(bool), 1, pFile);
+
+	if (mTexture)
+	{
+		mTexture->Save(pFile);
+	}
+
+	int frameCount = (int)mVecFrameData.size();
+
+	fwrite(&frameCount, sizeof(int), 1, pFile);
+
+	fwrite(&mVecFrameData[0], sizeof(AnimationFrameData), frameCount, pFile);
+
+	fclose(pFile);
+
+	return true;
+}
+
+bool CAnimationSequence2D::Load(const char* fullPath)
+{
+	FILE* pFile = nullptr;
+	fopen_s(&pFile, fullPath, "rt");
+
+	if (!pFile)
+	{
+		return false;
+	}
+
+	int length = 0;
+	fread(&length, sizeof(int), 1, pFile);
+
+	char name[256] = {};
+	fread(name, sizeof(char), length, pFile);
+	mName = name;
+
+	bool bTexEnable = false;
+	fread(&bTexEnable, sizeof(bool), 1, pFile);
+
+	if (bTexEnable)
+	{
+		int texNameLength = 0;
+		fread(&texNameLength, sizeof(int), 1, pFile);
+		char texName[256] = {};
+		fread(texName, sizeof(char), texNameLength, pFile);
+
+		eImageType eType;
+		fread(&eType, sizeof(eImageType), 1, pFile);
+		
+		int infoCount = 0;
+		fread(&infoCount, sizeof(int), 1, pFile);
+
+		std::vector<std::wstring> vecFullPath;
+		std::vector<std::wstring> vecFileName;
+		std::string pathName;
+
+		for (int i = 0; i < infoCount; ++i)
+		{
+			int pathSize = 0;
+			fread(&pathSize, sizeof(int), 1, pFile);
+
+			TCHAR fullPath[MAX_PATH] = {};
+			fread(fullPath, sizeof(TCHAR), pathSize, pFile);
+			vecFullPath.push_back(fullPath);
+
+			fread(&pathSize, sizeof(int), 1, pFile);
+
+			TCHAR texFileName[MAX_PATH] = {};
+			fread(texFileName, sizeof(TCHAR), pathSize, pFile);
+			vecFileName.push_back(texFileName);
+			
+			fread(&pathSize, sizeof(int), 1, pFile);
+
+			char texPathName[MAX_PATH] = {};
+			fread(texPathName, sizeof(char), pathSize, pFile);
+
+			pathName = texPathName;
+		}
+
+		switch (eType)
+		{
+		case eImageType::Atlas:
+			if (vecFileName.size() == 1)
+			{
+				if (mScene)
+				{
+					mScene->GetResource()->LoadTexture(texName, vecFileName[0].c_str(), pathName);
+				}
+				else
+				{
+					CResourceManager::GetInst()->LoadTexture(texName, vecFileName[0].c_str(), pathName);
+				}
+			}
+			else
+			{
+
+			}
+			break;
+		default:
+			assert(false);
+			break;
+		}
+
+		if (mScene)
+		{
+			mTexture = mScene->GetResource()->FindTexture(texName);
+		}
+		else
+		{
+			mTexture = CResourceManager::GetInst()->FindTexture(texName);
+		}
+	}
+
+	int frameCount = 0;
+	fread(&frameCount, sizeof(int), 1, pFile);
+	
+	mVecFrameData.resize((const size_t)frameCount);
+
+	fread(&mVecFrameData[0], sizeof(AnimationFrameData), frameCount, pFile);
+
+	fclose(pFile);
+
+	return true;
+}
+
 void CAnimationSequence2D::SetScene(CScene* scene)
 {
 	mScene = scene;

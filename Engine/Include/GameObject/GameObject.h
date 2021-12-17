@@ -23,13 +23,13 @@ public:
 		return mRootSceneComponent;
 	}
 
-	// TODO : Root에 Child로 배치해야 하지 않나?
 	void AddSceneComponent(CSceneComponent* component)
 	{
 		mSceneComponentList.push_back(component);
 	}
 
 	class CComponent* FindComponent(const std::string& name);
+	void GetAllSceneComponentsName(std::vector<FindComponentName>& outNames);
 
 public:
 	void SetScene(class CScene* scene);
@@ -75,6 +75,11 @@ public:
 		else
 		{
 			mSceneComponentList.push_back((class CSceneComponent*)comp);
+
+			if (!mRootSceneComponent)
+			{
+				mRootSceneComponent = comp;
+			}
 		}
 		
 		// 씬컴포넌트는 계층 구조이므로 따로 저장

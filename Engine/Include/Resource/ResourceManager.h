@@ -66,6 +66,9 @@ public: // ===================== Sequence2D =====================
 	CAnimationSequence2D* FindAnimationSequece2D(const std::string& name);
 	void ReleaseAnimationSequece2D(const std::string& name);
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer() const;
+	bool SaveSequence2D(const std::string& name, const char* fullPath);
+	bool LoadSequence2D(std::string& outName, const char* fullPath, class CScene* scene = nullptr);
+	bool LoadSequence2D(const char* fullPath, class CScene* scene = nullptr);
 
 	DECLARE_SINGLE(CResourceManager)
 private:

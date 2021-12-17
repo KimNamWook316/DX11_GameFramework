@@ -283,3 +283,36 @@ void CSceneResource::ReleaseAnimationSequence2D(const std::string& name)
 		}
 	}
 }
+
+bool CSceneResource::SaveSequence2D(const std::string& name, const char* fullPath)
+{
+	return CResourceManager::GetInst()->SaveSequence2D(name, fullPath);
+}
+
+bool CSceneResource::LoadSequence2D(const char* fullPath)
+{
+	std::string sequenceName;
+
+	if (!CResourceManager::GetInst()->LoadSequence2D(sequenceName, fullPath, mScene))
+	{
+		return false;
+	}
+
+	CAnimationSequence2D* sequence = CResourceManager::GetInst()->FindAnimationSequece2D(sequenceName);
+
+	mMapSequence2D.insert(std::make_pair(sequenceName, sequence));
+	return true;
+}
+
+bool CSceneResource::LoadSequence2D(std::string& outName, const char* fullPath)
+{
+	if (!CResourceManager::GetInst()->LoadSequence2D(outName, fullPath, mScene))
+	{
+		return false;
+	}
+
+	CAnimationSequence2D* sequence = CResourceManager::GetInst()->FindAnimationSequece2D(outName);
+	
+	mMapSequence2D.insert(std::make_pair(outName, sequence));
+	return true;
+}

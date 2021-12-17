@@ -136,6 +136,27 @@ CSceneComponent* CSceneComponent::Clone()
 	return new CSceneComponent(*this);
 }
 
+void CSceneComponent::GetAllSceneComponentsName(std::vector<FindComponentName>& outNames)
+{
+	FindComponentName name;
+
+	name.Name = mName;
+
+	if (mParent)
+	{
+		name.ParentName = mParent->GetName();
+	}
+
+	outNames.push_back(name);
+
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->GetAllSceneComponentsName(outNames);
+	}
+}
+
 // GameObject의 씬 컴포넌트 리스트에 이 객체를 등록한다.
 void CSceneComponent::SetThisToGameObject(CGameObject* obj)
 {

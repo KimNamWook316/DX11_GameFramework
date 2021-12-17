@@ -24,6 +24,9 @@ public:
 	virtual CSceneComponent* Clone();
 
 public:
+	void GetAllSceneComponentsName(std::vector<FindComponentName>& outNames);
+
+public:
 	bool GetIsRender()	const
 	{
 		return mbIsRender;

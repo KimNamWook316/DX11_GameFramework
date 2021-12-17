@@ -70,6 +70,9 @@ public:
 	void ResetShader(const int reg, const int eShaderType, const int index);
 
 public:
+	void Save(FILE* pFile);
+
+public:
 	eImageType GetImageType() const
 	{
 		return meImageType;

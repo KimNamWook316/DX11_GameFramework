@@ -8,6 +8,9 @@
 #include "IMGUIManager.h"
 #include "Object/SpriteEditObject.h"
 #include "Window/SpriteWindow.h"
+#include "Window/ObjectHierachyWindow.h"
+#include "Window/DetailWindow.h"
+#include "Window/EditorMenuWindow.h"
 #include "Object/DragObject.h"
 
 DEFINITION_SINGLE(CEditorManager)
@@ -15,7 +18,7 @@ DEFINITION_SINGLE(CEditorManager)
 CEditorManager::CEditorManager()	:
 	meEditMode(eEditMode::Scene),
 	mDragObj(nullptr),
-	mIMGUISpriteWindow(nullptr)
+	mSpriteWindow(nullptr)
 {
 }
 
@@ -34,7 +37,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	}
 
 	// GUI
-	mIMGUISpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("Editor");
+	mSpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("Editor");
+	mObjectHierachyWindow = CIMGUIManager::GetInst()->AddWindow<CObjectHierachyWindow>("Object Hierachy");
+	mDetailWindow = CIMGUIManager::GetInst()->AddWindow<CDetailWindow>("Details");
+	mEditorMenuWindow = CIMGUIManager::GetInst()->AddWindow<CEditorMenuWindow>("Editor Menu");
 
 	// Layer
 	CRenderManager::GetInst()->CreateLayer("DragLayer", INT_MAX);
@@ -74,7 +80,7 @@ void CEditorManager::OnMouseLButtonDown(float deltaTime)
 		Vector2 mousePos = CInput::GetInst()->GetMousePos();
 		mDragObj->SetStartPos(mousePos);
 
-		mIMGUISpriteWindow->SetCropStartPos(mousePos);
+		mSpriteWindow->SetCropStartPos(mousePos);
 	}
 }
 
@@ -90,8 +96,8 @@ void CEditorManager::OnMouseLButtonUp(float deltaTime)
 {
 	if (mDragObj)
 	{
-		mIMGUISpriteWindow->SetCropEndPos(CInput::GetInst()->GetMousePos());
-		mIMGUISpriteWindow->UpdateCropImage();
+		mSpriteWindow->SetCropEndPos(CInput::GetInst()->GetMousePos());
+		mSpriteWindow->UpdateCropImage();
 	}
 }
 
@@ -100,7 +106,7 @@ void CEditorManager::OnDownArrowKeyDown(float deltaTime)
 	if (mDragObj)
 	{
 		mDragObj->AddWorldPos(0.f,-1.f, 0.f);
-		mIMGUISpriteWindow->MoveCropPos(0.f, -1.f);
+		mSpriteWindow->MoveCropPos(0.f, -1.f);
 	}
 }
 
@@ -109,7 +115,7 @@ void CEditorManager::OnUpArrowKeyDown(float deltaTime)
 	if (mDragObj)
 	{
 		mDragObj->AddWorldPos(0.f, 1.f, 0.f);
-		mIMGUISpriteWindow->MoveCropPos(0.f, 1.f);
+		mSpriteWindow->MoveCropPos(0.f, 1.f);
 	}
 }
 
@@ -118,7 +124,7 @@ void CEditorManager::OnLeftArrowKeyDown(float deltaTime)
 	if (mDragObj)
 	{
 		mDragObj->AddWorldPos(-1.f, 0.f, 0.f);
-		mIMGUISpriteWindow->MoveCropPos(-1.f, 0.f);
+		mSpriteWindow->MoveCropPos(-1.f, 0.f);
 	}
 }
 
@@ -127,7 +133,7 @@ void CEditorManager::OnRightArrowKeyDown(float deltaTime)
 	if (mDragObj)
 	{
 		mDragObj->AddWorldPos(1.f, 0.f, 0.f);
-		mIMGUISpriteWindow->MoveCropPos(1.f, 0.f);
+		mSpriteWindow->MoveCropPos(1.f, 0.f);
 	}
 }
 

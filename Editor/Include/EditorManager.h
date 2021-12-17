@@ -41,7 +41,12 @@ public:
 
 private:
 	eEditMode meEditMode;
-	class CSpriteWindow* mIMGUISpriteWindow;
+
+	class CSpriteWindow* mSpriteWindow;
+	class CObjectHierachyWindow* mObjectHierachyWindow;
+	class CDetailWindow* mDetailWindow;
+	class CEditorMenuWindow* mEditorMenuWindow;
+
 	class CDragObject* mDragObj;
 };
 

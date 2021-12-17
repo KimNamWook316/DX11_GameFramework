@@ -20,6 +20,8 @@ public:
 	void AddFrame(const float startX, const float startY, const float width, const float height);
 	void DeleteFrame(const int idx);
 	void ClearFrame();
+	bool Save(const char* fullPath);
+	bool Load(const char* fullPath);
 
 public:
 	void SetScene(class CScene* scene);

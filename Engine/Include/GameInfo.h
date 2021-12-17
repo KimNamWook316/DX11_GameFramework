@@ -34,6 +34,7 @@
 #define SHADER_PATH		"Shader"
 #define TEXTURE_PATH	"Texture"
 #define FONT_PATH		"Font" 
+#define ANIMATION_PATH	"Animation"
 
 #define SAFE_DELETE(p)  if(p) { delete p; p = nullptr; }
 #define SAFE_DELETE_ARRAY(p) if(p) { delete[] p; p = nullptr; }
@@ -196,4 +197,10 @@ struct Standard2DCBuffer
 {
 	int AnimationEnable;
 	Vector3 Dummy;
+};
+
+struct FindComponentName
+{
+	std::string Name;
+	std::string ParentName;
 };

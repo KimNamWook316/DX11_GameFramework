@@ -114,3 +114,33 @@ void CAnimationManager::ReleaseSequence(const std::string& name)
 		}
 	}
 }
+
+bool CAnimationManager::SaveSequence(const std::string& name, const char* fullPath)
+{
+	CAnimationSequence2D* sequence = FindSequence(name);
+
+	if (!sequence)
+	{
+		return false;
+	}
+
+	sequence->Save(fullPath);
+	return true;
+}
+
+bool CAnimationManager::LoadSequence(std::string& outName, const char* fullPath, CScene* scene)
+{
+	CAnimationSequence2D* sequence = new CAnimationSequence2D;
+	
+	sequence->SetScene(scene);
+
+	if (!sequence->Load(fullPath))
+	{
+		SAFE_DELETE(sequence);
+		return false;
+	}
+
+	mMapSequence2D.insert(std::make_pair(sequence->GetName(), sequence));
+	outName = sequence->GetName();
+	return true;
+}

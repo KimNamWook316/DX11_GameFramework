@@ -38,8 +38,16 @@ public:
         return mStep;
     }
 
+public:
+    template <typename T>
+    void SetCallBack(T* obj, void(T::* func)(float))
+    {
+        mCallBack = std::bind(func, obj, std::placeholders::_1);
+    }
+
 protected:
     float mVal;
     float mStep;
+    std::function<void(float)> mCallBack;
 };
 

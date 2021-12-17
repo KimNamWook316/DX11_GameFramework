@@ -76,3 +76,10 @@ enum class eRenderStateType
 	DepthStencil,
 	MAX,
 };
+
+enum class eSceneComponentType
+{
+	Sprite,
+	StaticMesh,
+	Max
+};

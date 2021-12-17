@@ -126,14 +126,32 @@ bool CTexture::LoadTextureFullPath(const std::string& name, const TCHAR* fullPat
 	info->FileName = new TCHAR[MAX_PATH];
 	memset(info->FileName, 0, sizeof(TCHAR) * MAX_PATH);
 
+	int pathLength = lstrlen(info->FullPath);
+
+	// D:\Lecture\37th\API\GameFramework\GameFramework\Bin\Texture\Test.png
+	// 위와 같은 경로가 있을 때, Texture\Text.png를 파일명으로 취급
+	for (int i = pathLength - 1; i > 0; --i)
+	{
+		if (info->FullPath[i] == '\\' && i >= 4)
+		{
+			if ((info->FullPath[i - 1] == 'n' || info->FullPath[i - 1] == 'N') &&
+				(info->FullPath[i - 2] == 'i' || info->FullPath[i - 2] == 'I') &&
+				(info->FullPath[i - 3] == 'b' || info->FullPath[i - 3] == 'B') &&
+				(info->FullPath[i - 4] == '\\'))
+			{
+				lstrcpy(info->FileName, &info->FullPath[i + 1]);
+			}
+		}
+	}
+
 	TCHAR _fileExt[_MAX_EXT] = {};
 
-	_wsplitpath_s(fullPath, nullptr, 0, nullptr, 0, info->FileName, MAX_PATH, _fileExt, _MAX_EXT);
-
-	lstrcat(info->FileName, _fileExt);
+	_wsplitpath_s(fullPath, nullptr, 0, nullptr, 0, nullptr, 0, _fileExt, _MAX_EXT);
 
 	info->PathName = new char[MAX_PATH];
 	memset(info->PathName, 0, sizeof(char) * MAX_PATH);
+
+	strcpy_s(info->PathName, strlen(ROOT_PATH) + 1, ROOT_PATH);
 
 	char ext[_MAX_EXT];
 
@@ -264,5 +282,35 @@ void CTexture::ResetShader(const int reg, const int eShaderType, const int index
 	else
 	{
 
+	}
+}
+
+void CTexture::Save(FILE* pFile)
+{
+	int length = (int)mName.length();
+	fwrite(&length, sizeof(int),1,  pFile);
+	fwrite(mName.c_str(), sizeof(char), length, pFile);
+
+	fwrite(&meImageType, sizeof(eImageType), 1, pFile);
+
+	int infoCount = (int)mVecTextureInfo.size();
+	fwrite(&infoCount, sizeof(int), 1, pFile);
+
+	for (int i = 0; i < infoCount; ++i)
+	{
+		int pathSize = (int)lstrlen(mVecTextureInfo[i]->FullPath);
+
+		fwrite(&pathSize, sizeof(int), 1, pFile);
+		fwrite(mVecTextureInfo[i]->FullPath, sizeof(TCHAR), pathSize, pFile);
+
+		pathSize = (int)lstrlen(mVecTextureInfo[i]->FileName);
+
+		fwrite(&pathSize, sizeof(int), 1, pFile);
+		fwrite(mVecTextureInfo[i]->FileName, sizeof(TCHAR), pathSize, pFile);
+
+		pathSize = (int)strlen(mVecTextureInfo[i]->PathName);
+		
+		fwrite(&pathSize, sizeof(int), 1, pFile);
+		fwrite(mVecTextureInfo[i]->PathName, sizeof(char), pathSize, pFile);
 	}
 }

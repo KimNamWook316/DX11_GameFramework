@@ -17,6 +17,12 @@ public:
     virtual void Render() override;
 
 public:
+    void EnableBorder(bool bEnable)
+    {
+        mbBorder = bEnable;
+    }
+
+public:
     template <typename T>
     T* AddWidget(const std::string& name, const float width = 100.f, const float height = 100.f)
     {
@@ -38,5 +44,6 @@ public:
 
 protected:
     std::vector<class CIMGUIWidget*> mVecChild;
+    bool mbBorder;
 };
 

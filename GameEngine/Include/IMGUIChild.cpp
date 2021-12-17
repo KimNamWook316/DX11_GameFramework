@@ -1,6 +1,7 @@
 #include "IMGUIChild.h"
 
-CIMGUIChild::CIMGUIChild()
+CIMGUIChild::CIMGUIChild() :
+	mbBorder(false)
 {
 }
 
@@ -21,7 +22,7 @@ bool CIMGUIChild::Init()
 
 void CIMGUIChild::Render()
 {
-	ImGui::BeginChild(mName.c_str(), mSize, false);
+	ImGui::BeginChild(mName.c_str(), mSize, mbBorder);
 
 	size_t size = mVecChild.size();
 	for (size_t i = 0; i < size; ++i)

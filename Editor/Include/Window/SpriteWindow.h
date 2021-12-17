@@ -34,7 +34,10 @@ public:
     void OnStartYInputChanged(int val);
     void OnClickLoopCheckBox(bool bLoop);
     void OnClickReverseCheckBox(bool bLoop);
-    void OnClickSave();
+    void OnClickSaveSequence();
+    void OnClickLoadSequence();
+    void OnClickSaveAnimation();
+    void OnClickLoadAnimation();
 
 // Setter
 public:
@@ -51,6 +54,9 @@ public:
     void MoveCropPos(const float x, const float y);
 
 private:
+    void updateAnimList();
+    void updateFrameList();
+
     void updateFrameUI();
     void updateAnimationUI();
 

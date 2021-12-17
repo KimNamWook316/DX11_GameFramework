@@ -52,6 +52,16 @@ CComponent* CGameObject::FindComponent(const std::string& name)
 	return nullptr;
 }
 
+void CGameObject::GetAllSceneComponentsName(std::vector<FindComponentName>& outNames)
+{
+	if (!mRootSceneComponent)
+	{
+		return;
+	}
+
+	mRootSceneComponent->GetAllSceneComponentsName(outNames);
+}
+
 void CGameObject::SetScene(CScene* scene)
 {
 	mScene = scene;
