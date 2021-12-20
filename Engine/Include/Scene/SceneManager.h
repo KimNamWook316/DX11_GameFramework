@@ -30,10 +30,24 @@ public:
 		}
 	}
 
+	template<typename T>
+	void SetCreateSceneModeCallBack(T* obj, void(T::* func)(CScene*, size_t))
+	{
+		mCreateSceneModeCallBack = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+	}
+
+	template<typename T>
+	void SetCreateObjectCallBack(T* obj, void(T::* func)(CScene*, size_t))
+	{
+		mCreateObjectCallBack = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+	}
+
 	DECLARE_SINGLE(CSceneManager)
 
 private:
 	CScene* mScene;
 	CScene* mNextScene;
+	std::function<void(CScene*, size_t)> mCreateSceneModeCallBack;
+	std::function<void(CScene*, size_t)> mCreateObjectCallBack;
 };
 

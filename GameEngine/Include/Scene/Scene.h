@@ -18,6 +18,12 @@ public:
 	void PostUpdate(float deltaTime);
 
 public:
+	void Save(const char* fileName, const std::string& pathName = SCENE_PATH);
+	bool SaveFullPath(const char* fullPath);
+	void Load(const char* fileName, const std::string& pathName = SCENE_PATH);
+	bool LoadFullPath(const char* fullPath);
+
+public:
 	CGameObject* FindObject(const std::string& name)
 	{
 		auto iter = mObjList.begin();

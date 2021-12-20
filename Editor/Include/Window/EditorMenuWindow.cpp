@@ -11,6 +11,9 @@
 #include "IMGUIManager.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"
+#include "Engine.h"
+#include "PathManager.h"
+#include "Scene/SceneManager.h"
 
 CEditorMenuWindow::CEditorMenuWindow()  :
     mCreateObjectButton(nullptr),
@@ -55,6 +58,12 @@ bool CEditorMenuWindow::Init()
     
     mCreateComponentButton = AddWidget<CIMGUIButton>("Create Component", 0.f, 0.f);
     mCreateComponentButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickCreateComponent);
+    
+    CIMGUIButton* button = AddWidget<CIMGUIButton>("Save Scene", 0.f, 0.f);
+    button->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveScene);
+
+    button = AddWidget<CIMGUIButton>("Load Scene", 0.f, 0.f);
+    button->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadScene);
     return true;
 }
 
@@ -140,4 +149,32 @@ void CEditorMenuWindow::OnClickCreateComponent()
 
         componentList->AddItem(mComponentNameInput->GetTextMultiByte());
     }
+}
+
+void CEditorMenuWindow::OnClickSaveScene()
+{
+    TCHAR filePath[MAX_PATH] = {};
+
+    OPENFILENAME openFile = {};
+
+    openFile.lStructSize = sizeof(OPENFILENAME);
+    openFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+    openFile.lpstrFilter = TEXT("모든 파일\0*.*\0Scene File\0*.scn");
+    openFile.lpstrFile = filePath;
+    openFile.nMaxFile = MAX_PATH;
+    openFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(SCENE_PATH)->Path;
+
+    if (GetSaveFileName(&openFile) != 0)
+    {
+        char convertFullPath[MAX_PATH] = {};
+
+        int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
+        WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
+
+        CSceneManager::GetInst()->GetScene()->SaveFullPath(convertFullPath);
+    }
+}
+
+void CEditorMenuWindow::OnClickLoadScene()
+{
 }

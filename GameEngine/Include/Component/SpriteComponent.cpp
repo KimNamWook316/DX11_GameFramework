@@ -116,6 +116,38 @@ CSpriteComponent* CSpriteComponent::Clone()
 	return new CSpriteComponent(*this);
 }
 
+void CSpriteComponent::Save(FILE* fp)
+{
+	std::string meshName = mMesh->GetName();
+	
+	int length = (int)meshName.size();
+
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(meshName.c_str(), sizeof(char), length, fp);
+
+	mMaterial->Save(fp);
+
+	bool bAnimEnable = false;
+	if (mAnimation)
+	{
+		bAnimEnable = true;
+	}
+
+	fwrite(&bAnimEnable, sizeof(bool), 1, fp);
+
+	if (mAnimation)
+	{
+		mAnimation->Save(fp);
+	}
+
+	CSceneComponent::Save(fp);
+}
+
+void CSpriteComponent::Load(FILE* fp)
+{
+	CSceneComponent::Load(fp);
+}
+
 void CSpriteComponent::SetBaseColor(const Vector4& color)
 {
 	mMaterial->SetBaseColor(color);

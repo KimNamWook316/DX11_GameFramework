@@ -3,6 +3,7 @@
 
 CBullet::CBullet()
 {
+	SetTypeID<CBullet>();
 }
 
 CBullet::CBullet(const CBullet& bullet)	:

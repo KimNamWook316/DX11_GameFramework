@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "../PathManager.h"
 
 CScene::CScene()
 {
@@ -83,4 +84,81 @@ void CScene::PostUpdate(float deltaTime)
 		(*iter)->PostUpdate(deltaTime);
 		++iter;
 	}
+}
+
+void CScene::Save(const char* fileName, const std::string& pathName)
+{
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	char fullPath[MAX_PATH] = {};
+
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+
+	strcat_s(fullPath, fileName);
+
+	SaveFullPath(fullPath);
+}
+
+bool CScene::SaveFullPath(const char* fullPath)
+{
+	FILE* fp = nullptr;
+	
+	fopen_s(&fp, fullPath, "wb");
+
+	if (!fp)
+	{
+		assert(false);
+		return false;
+	}
+
+	size_t sceneModeType = mMode->GetTypeID();
+	fwrite(&sceneModeType, sizeof(size_t), 1, fp);
+
+	size_t objCount = mObjList.size();
+	fwrite(&objCount, sizeof(size_t), 1, fp);
+
+	auto iter = mObjList.begin();
+	auto iterEnd = mObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->Save(fp);
+	}
+
+	fclose(fp);
+	return true;
+}
+
+void CScene::Load(const char* fileName, const std::string& pathName)
+{
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	char fullPath[MAX_PATH] = {};
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+
+	strcat_s(fullPath, fileName);
+
+	LoadFullPath(fullPath);
+}
+
+bool CScene::LoadFullPath(const char* fullPath)
+{
+	FILE* fp = nullptr;
+	
+	fopen_s(&fp, fullPath, "rb");
+
+	if (!fp)
+	{
+		assert(false);
+		return false;
+	}
+
+	fclose(fp);
+	return true;
 }

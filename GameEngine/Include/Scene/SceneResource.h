@@ -82,6 +82,7 @@ public:
 	bool SaveSequence2D(const std::string& name, const char* fullPath);
 	bool LoadSequence2D(const char* fullPath);
 	bool LoadSequence2D(std::string& outName, const char* fullPath);
+	bool LoadSequence2D(std::string& outName, FILE* fp);
 
 private:
 	class CScene* mScene;

@@ -24,6 +24,9 @@ bool CClientManager::Init(HINSTANCE hInst)
 		return false;
 	}
 
+	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CClientManager>(this, &CClientManager::CreateSceneMode);
+	CSceneManager::GetInst()->SetCreateObjectCallBack<CClientManager>(this, &CClientManager::CreateObject);
+
 	CInput::GetInst()->CreateKey("MoveUp", 'W');
 	CInput::GetInst()->CreateKey("MoveDown", 'S');
 	CInput::GetInst()->CreateKey("RotationZInv", 'A');
@@ -42,4 +45,12 @@ void CClientManager::CreateDefaultSceneMode()
 int CClientManager::Run()
 {
 	return CEngine::GetInst()->Run();
+}
+
+void CClientManager::CreateSceneMode(CScene* scene, size_t type)
+{
+}
+
+void CClientManager::CreateObject(CScene* scene, size_t type)
+{
 }

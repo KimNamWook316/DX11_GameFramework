@@ -134,13 +134,23 @@ bool CAnimationManager::LoadSequence(std::string& outName, const char* fullPath,
 	
 	sequence->SetScene(scene);
 
-	if (!sequence->Load(fullPath))
-	{
-		SAFE_DELETE(sequence);
-		return false;
-	}
+	sequence->Load(fullPath);
 
 	mMapSequence2D.insert(std::make_pair(sequence->GetName(), sequence));
 	outName = sequence->GetName();
+	return true;
+}
+
+bool CAnimationManager::LoadSequence(std::string& outName, FILE* fp, CScene* scene)
+{
+	CAnimationSequence2D* sequence = new CAnimationSequence2D;
+	
+	sequence->SetScene(scene);
+
+	sequence->Load(fp);
+	
+	outName = sequence->GetName();
+	mMapSequence2D.insert(std::make_pair(sequence->GetName(), sequence));
+
 	return true;
 }

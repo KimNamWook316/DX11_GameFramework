@@ -42,6 +42,10 @@ public:
 	virtual void PostRender() = 0;
 	virtual CComponent* Clone() = 0;
 
+public:
+	virtual void Save(FILE* fp);
+	virtual void Load(FILE* fp);
+
 protected:
 	// 어떤 컴포넌트 타입인지
 	eComponentType meComponentType;

@@ -23,6 +23,7 @@ public:
 	void ReleaseSequence(const std::string& name);
 	bool SaveSequence(const std::string& name, const char* fullPath);
 	bool LoadSequence(std::string& outName, const char* fullPath, class CScene* scene = nullptr);
+	bool LoadSequence(std::string& outName, FILE* fp, class CScene* scene = nullptr);
 
 public:
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer() const

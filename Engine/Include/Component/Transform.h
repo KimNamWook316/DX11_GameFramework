@@ -20,6 +20,10 @@ public:
 	void ComputeWolrdMatrix();
 	CTransform* Clone();
 
+public:
+	void Save(FILE* fp);
+	void Load(FILE* fp);
+
 public: // setter
 	void SetBoolInheritScale(bool bInherit)
 	{

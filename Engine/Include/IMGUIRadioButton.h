@@ -23,9 +23,9 @@ public:
     {
         CheckInfo* info = new CheckInfo;
         
-        memset(info->Label, 0, sizeof(char) * 1024);
-        memset(info->wLabel, 0, sizeof(wchar_t) * 1024);
-        memset(info->LabelUTF8, 0, sizeof(char) * 1024);
+        memset(info->Label, 0, sizeof(char) * 128);
+        memset(info->wLabel, 0, sizeof(wchar_t) * 128);
+        memset(info->LabelUTF8, 0, sizeof(char) * 128);
 
         strcpy_s(info->Label, label);
         
@@ -61,11 +61,19 @@ public:
         return mVecCheckInfo[idx]->bCheck;
     }
 
+public:
+    template <typename T>
+    void SetCallBack(T* obj, void(T::* func)(const char*, bool))
+    {
+        mCallBack = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+    }
+
 protected:
     std::vector<CheckInfo*> mVecCheckInfo; 
     bool mbMultiColumn;
     int mColNum;
     float mSpacingX;
+    std::function<void(const char*, bool)> mCallBack;
     
     bool mbMultiCheck;
     int mCheckItemIdx;

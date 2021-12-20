@@ -36,3 +36,14 @@ bool CComponent::Init()
 void CComponent::Start()
 {
 }
+
+void CComponent::Save(FILE* fp)
+{
+	CRef::Save(fp);
+	fwrite(&meComponentType, sizeof(eComponentType), 1, fp);
+}
+
+void CComponent::Load(FILE* fp)
+{
+	CRef::Load(fp);
+}

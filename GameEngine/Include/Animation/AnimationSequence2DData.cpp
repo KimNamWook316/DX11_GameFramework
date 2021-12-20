@@ -1,5 +1,6 @@
 #include "AnimationSequence2DData.h"
 #include "../Resource/Animation/AnimationSequence2D.h"
+#include "../Scene/SceneManager.h"
 
 CAnimationSequence2DData::CAnimationSequence2DData()	:
 	mFrame(0),
@@ -27,4 +28,45 @@ void CAnimationSequence2DData::Replay()
 {
 	mFrame = 0;
 	mTime = 0;
+}
+
+bool CAnimationSequence2DData::Save(FILE* fp)
+{
+	mSequence->Save(fp);
+
+	int length = (size_t)mName.length();
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(mName.c_str(), sizeof(char), length, fp);
+	fwrite(&mPlayTime, sizeof(float), 1, fp);
+	fwrite(&mPlayScale, sizeof(float), 1, fp);
+	fwrite(&mbIsLoop, sizeof(bool), 1, fp);
+	fwrite(&mbIsReverse, sizeof(bool), 1, fp);
+
+	return true;
+}
+
+bool CAnimationSequence2DData::Load(FILE* fp)
+{
+	CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
+	
+	std::string outName;
+	if (!resource->LoadSequence2D(outName, fp))
+	{
+		assert(false);
+		return false;
+	}
+	
+	mSequence = resource->FindAnimationSequence2D(outName);
+
+	int length = 0;
+	char name[256] = {};
+	fread(&length, sizeof(int), 1, fp);
+	fread(name, sizeof(char), length, fp);
+	mName = name;
+	fread(&mPlayTime, sizeof(float), 1, fp);
+	fread(&mPlayScale, sizeof(float), 1, fp);
+	fread(&mbIsLoop, sizeof(bool), 1, fp);
+	fread(&mbIsReverse, sizeof(bool), 1, fp);
+	mFrameTime = mPlayTime / mSequence->GetFrameCount();
+	return true;
 }

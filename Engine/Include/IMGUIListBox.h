@@ -18,6 +18,11 @@ public:
     virtual void Render() override;
 
 public:
+    bool IsEmpty()
+    {
+        return mVecItem.empty();
+    }
+
     const std::string& GetItem(const int idx)
     {
         return mVecItem[idx];
@@ -88,7 +93,7 @@ public:
         mVecItem.erase(iter);
 
         auto iterUTF = mVecItemUTF8.begin() + idx;
-        mVecItemUTF8.erase(iterUTF);
+        mVecItemUTF8.erase(iter);
     }
 
     void Clear()

@@ -29,6 +29,10 @@ public:
 	void Replay();
 
 public:
+	bool Save(FILE* fp);
+	bool Load(FILE* fp);
+
+public:
 	int GetCurrentFrame() const
 	{
 		return mFrame;
@@ -42,6 +46,27 @@ public:
 	class CAnimationSequence2D* GetAnimationSequence() const
 	{
 		return mSequence;
+	}
+
+public:
+	void SetPlayTime(const float time)
+	{
+		mPlayTime = time;
+	}
+
+	void SetPlayScale(const float scale)
+	{
+		mPlayScale = scale;
+	}
+
+	void EnableLoop(bool bLoop)
+	{
+		mbIsLoop = bLoop;
+	}
+
+	void EnableReverse(bool bRev)
+	{
+		mbIsReverse = bRev;
 	}
 
 public:

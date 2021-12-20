@@ -34,6 +34,10 @@ public:
 	virtual CSpriteComponent* Clone();
 
 public:
+	virtual void Save(FILE* fp);
+	virtual void Load(FILE* fp);
+
+public:
 	void SetBaseColor(const Vector4& color);
 	void SetBaseColor(const float r, const float g, const float b, const float a);
 	void SetRenderState(class CRenderState* state);

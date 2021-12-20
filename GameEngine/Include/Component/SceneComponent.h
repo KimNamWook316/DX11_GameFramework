@@ -24,6 +24,10 @@ public:
 	virtual CSceneComponent* Clone();
 
 public:
+	virtual void Save(FILE* fp);
+	virtual void Load(FILE* fp);
+
+public:
 	void GetAllSceneComponentsName(std::vector<FindComponentName>& outNames);
 
 public:

@@ -38,6 +38,7 @@ public:
 		{
 			return false;
 		}
+		shader->SetName(name);
 
 		mMapShader.insert(std::make_pair(name, shader));
 		return true;

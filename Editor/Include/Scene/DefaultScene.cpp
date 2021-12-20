@@ -2,6 +2,7 @@
 
 CDefaultScene::CDefaultScene()
 {
+    SetTypeID<CDefaultScene>();
 }
 
 CDefaultScene::~CDefaultScene()

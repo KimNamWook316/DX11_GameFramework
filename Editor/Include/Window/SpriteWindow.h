@@ -32,8 +32,10 @@ public:
     void OnHeightInputChanged(int val);
     void OnStartXInputChanged(int val);
     void OnStartYInputChanged(int val);
-    void OnClickLoopCheckBox(bool bLoop);
-    void OnClickReverseCheckBox(bool bLoop);
+    void OnClickLoopCheckBox(const char* name, bool bLoop);
+    void OnClickReverseCheckBox(const char* name, bool bLoop);
+    void OnPlayTimeInputChanged(float val);
+    void OnPlayScaleInputChanged(float val);
     void OnClickSaveSequence();
     void OnClickLoadSequence();
     void OnClickSaveAnimation();

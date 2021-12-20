@@ -5,6 +5,7 @@
 
 CMainScene::CMainScene()
 {
+	SetTypeID<CMainScene>();
 }
 
 CMainScene::~CMainScene()

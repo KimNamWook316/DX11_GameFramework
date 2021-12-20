@@ -8,6 +8,7 @@ CPlayer2D::CPlayer2D()	:
 	mOpacity(1.f),
 	mbIsMoving(false)
 {
+	SetTypeID<CPlayer2D>();
 }
 
 CPlayer2D::CPlayer2D(const CPlayer2D& obj)	:

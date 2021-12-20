@@ -2,8 +2,8 @@
 
 struct CheckInfo
 {
-    char Label[1024];
-    wchar_t wLabel[1024];
-    char LabelUTF8[1024];
+    char Label[128];
+    wchar_t wLabel[128];
+    char LabelUTF8[128];
     bool bCheck;
 };

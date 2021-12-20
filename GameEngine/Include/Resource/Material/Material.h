@@ -38,6 +38,10 @@ public:
 	CMaterial* Clone();
 
 public:
+	void Save(FILE* fp);
+	void Load(FILE* fp);
+
+public:
 	void SetScene(class CScene* scene)
 	{
 		mScene = scene;

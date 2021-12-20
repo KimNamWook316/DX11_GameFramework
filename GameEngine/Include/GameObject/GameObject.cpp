@@ -182,3 +182,33 @@ CGameObject* CGameObject::Clone()
 {
 	return new CGameObject(*this);
 }
+
+void CGameObject::Save(FILE* fp)
+{
+	CRef::Save(fp);
+
+	if (mRootSceneComponent)
+	{
+		bool bRootExist = true;
+		fwrite(&bRootExist, sizeof(bool), 1, fp);
+		mRootSceneComponent->Save(fp);
+	}
+	else
+	{
+		bool bRootExist = false;
+		fwrite(&bRootExist, sizeof(bool), 1, fp);
+	}
+
+	int objComponentCount = (int)mVecObjectComponent.size();
+	fwrite(&objComponentCount, sizeof(int), 1, fp);
+	
+	for (int i = 0; i < objComponentCount; ++i)
+	{
+		mVecObjectComponent[i]->Save(fp);
+	}
+}
+
+void CGameObject::Load(FILE* fp)
+{
+	CRef::Load(fp);
+}

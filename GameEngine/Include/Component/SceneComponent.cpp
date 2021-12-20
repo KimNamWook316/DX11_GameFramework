@@ -136,6 +136,31 @@ CSceneComponent* CSceneComponent::Clone()
 	return new CSceneComponent(*this);
 }
 
+void CSceneComponent::Save(FILE* fp)
+{
+	CComponent::Save(fp);
+
+	fwrite(&mbIsRender, sizeof(bool), 1, fp);
+
+	int length = (int)mLayerName.length();
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(mLayerName.c_str(), sizeof(char), length, fp);
+
+	mTransform->Save(fp);
+
+	int childCount = (int)mVecChild.size();
+
+	for (int i = 0; i < childCount; ++i)
+	{
+		mVecChild[i]->Save(fp);
+	}
+}
+
+void CSceneComponent::Load(FILE* fp)
+{
+	CComponent::Load(fp);
+}
+
 void CSceneComponent::GetAllSceneComponentsName(std::vector<FindComponentName>& outNames)
 {
 	FindComponentName name;

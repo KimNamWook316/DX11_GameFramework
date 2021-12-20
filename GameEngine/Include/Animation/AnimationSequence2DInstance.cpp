@@ -210,6 +210,131 @@ CAnimationSequence2DInstance* CAnimationSequence2DInstance::Clone()
 	return new CAnimationSequence2DInstance(*this);
 }
 
+bool CAnimationSequence2DInstance::Save(const char* fullPath)
+{
+	FILE* fp = nullptr;
+
+	fopen_s(&fp, fullPath, "wb");
+
+	if (!fp)
+	{
+		assert(false);
+		return false;
+	}
+
+	int mapSize = (int)mMapAnimation.size();
+	fwrite(&mapSize, sizeof(int), 1, fp);
+
+	auto iter = mMapAnimation.begin();
+	auto iterEnd = mMapAnimation.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		int length = (int)iter->first.length();
+		fwrite(&length, sizeof(int), 1, fp);
+		fwrite(iter->first.c_str(), sizeof(char), length, fp);
+		if (!iter->second->Save(fp))
+		{
+			assert(false);
+			return false;
+		}
+	}
+	
+	int length = (int)mCurrentAnimation->mName.size();
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(mCurrentAnimation->mName.c_str(), sizeof(char), length, fp);
+
+	fwrite(&mbPlay, sizeof(bool), 1, fp);
+
+	fclose(fp);
+		
+	return true;
+}
+
+void CAnimationSequence2DInstance::Save(FILE* fp)
+{
+	int mapSize = (int)mMapAnimation.size();
+	fwrite(&mapSize, sizeof(int), 1, fp);
+
+	auto iter = mMapAnimation.begin();
+	auto iterEnd = mMapAnimation.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		int length = (int)iter->first.length();
+		fwrite(&length, sizeof(int), 1, fp);
+		fwrite(iter->first.c_str(), sizeof(char), length, fp);
+		if (!iter->second->Save(fp))
+		{
+			assert(false);
+			return;
+		}
+	}
+	
+	int length = (int)mCurrentAnimation->mName.size();
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(mCurrentAnimation->mName.c_str(), sizeof(char), length, fp);
+
+	fwrite(&mbPlay, sizeof(bool), 1, fp);
+}
+
+bool CAnimationSequence2DInstance::Load(const char* fullPath)
+{
+	FILE* fp = nullptr;
+
+	fopen_s(&fp, fullPath, "rb");
+
+	if (!fp)
+	{
+		assert(false);
+		return false;
+	}
+
+	int mapSize = 0;
+	fread(&mapSize, sizeof(int), 1, fp);
+
+	for (int i = 0; i < mapSize; ++i)
+	{
+		CAnimationSequence2DData* data = new CAnimationSequence2DData;
+
+		int length = 0;
+		fread(&length, sizeof(int), 1, fp);
+		char name[256] = {};
+		fread(name, sizeof(char), size_t(length), fp);
+		
+		if (!data->Load(fp))
+		{
+			auto iter = mMapAnimation.begin();
+			auto iterEnd = mMapAnimation.end();
+			for (; iter != iterEnd; ++iter)
+			{
+				SAFE_DELETE(iter->second);
+			}
+			SAFE_DELETE(data);
+			assert(false);
+			return false;
+		}
+
+		mMapAnimation.insert(std::make_pair(name, data));
+	}
+
+	int length = 0;
+	fread(&length, sizeof(int), 1, fp);
+	char name[256] = {};
+	fread(name, sizeof(char), size_t(length), fp);
+	
+	mCurrentAnimation = mMapAnimation.find(name)->second;
+
+	fread(&mbPlay, sizeof(bool), 1, fp);
+
+	fclose(fp);
+	return true;
+}
+
+void CAnimationSequence2DInstance::Load(FILE* fp)
+{
+}
+
 void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
 {
 	// 이미 해당 애니메이션이 존재하는지 체크
@@ -242,6 +367,7 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName,
 	anim = new CAnimationSequence2DData;
 
 	anim->mSequence = sequence;
+	anim->mName = name;
 	anim->mbIsLoop = bIsLoop;
 	anim->mPlayTime = playTime;
 	anim->mPlayScale = playScale;

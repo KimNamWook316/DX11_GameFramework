@@ -18,6 +18,11 @@ public:
     virtual void Render() override;
 
 public:
+    bool IsEmpty()
+    {
+        return mVecItem.empty();
+    }
+
     const std::string& GetItem(const int idx)
     {
         return mVecItem[idx];

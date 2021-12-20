@@ -87,6 +87,61 @@ CMaterial* CMaterial::Clone()
 	return new CMaterial(*this);
 }
 
+void CMaterial::Save(FILE* fp)
+{
+	std::string shaderName = mShader->GetName();
+	int length = (size_t)shaderName.length();
+	
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(shaderName.c_str(), sizeof(char), length, fp);
+
+	fwrite(&mBaseColor, sizeof(Vector4), 1, fp);
+	fwrite(&mOpacity, sizeof(float), 1, fp);
+
+	for (int i = 0; i < (int)eRenderStateType::MAX; ++i)
+	{
+		bool bStateEnable = false;
+
+		if (mRenderStateArray[i])
+		{
+			bStateEnable = true;
+		}
+
+		fwrite(&bStateEnable, sizeof(bool), 1, fp);
+
+		if (bStateEnable)
+		{
+			std::string stateName = mShader->GetName();
+			int length = (size_t)stateName.length();
+			
+			fwrite(&length, sizeof(int), 1, fp);
+			fwrite(stateName.c_str(), sizeof(char), length, fp);
+		}
+	}
+
+	int textureCount = (int)mVecTextureInfo.size();
+
+	fwrite(&textureCount, sizeof(int), 1, fp);
+
+	for (int i = 0; i < textureCount; ++i)
+	{
+		int length = (size_t)mVecTextureInfo[i].Name.length();
+		
+		fwrite(&length, sizeof(int), 1, fp);
+		fwrite(mVecTextureInfo[i].Name.c_str(), sizeof(char), length, fp);
+		
+		fwrite(&mVecTextureInfo[i].SamplerType, sizeof(eSamplerType), 1, fp);
+		fwrite(&mVecTextureInfo[i].Register, sizeof(int), 1, fp);
+		fwrite(&mVecTextureInfo[i].ShaderType, sizeof(eShaderType), 1, fp);
+
+		mVecTextureInfo[i].Texture->Save(fp);
+	}
+}
+
+void CMaterial::Load(FILE* fp)
+{
+}
+
 void CMaterial::SetRenderState(CRenderState* state)
 {
 	mRenderStateArray[(int)eRenderStateType::Blend] = state;

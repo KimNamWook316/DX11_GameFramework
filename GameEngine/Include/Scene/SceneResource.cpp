@@ -316,3 +316,17 @@ bool CSceneResource::LoadSequence2D(std::string& outName, const char* fullPath)
 	mMapSequence2D.insert(std::make_pair(outName, sequence));
 	return true;
 }
+
+bool CSceneResource::LoadSequence2D(std::string& outName, FILE* fp)
+{
+	if (!CResourceManager::GetInst()->LoadSequence2D(outName, fp, mScene))
+	{
+		assert(false);
+		return false;
+	}
+
+	CAnimationSequence2D* sequence = CResourceManager::GetInst()->FindAnimationSequece2D(outName);
+	
+	mMapSequence2D.insert(std::make_pair(outName, sequence));
+	return true;
+}

@@ -16,6 +16,10 @@ public:
 	int Run();
 
 public:
+	void CreateSceneMode(class CScene* scene, size_t type);
+	void CreateObject(class CScene* scene, size_t type);
+
+public:
 	void OnMouseLButtonDown(float deltaTime);
 	void OnMouseLButtonPush(float deltaTime);
 	void OnMouseLButtonUp(float deltaTime);

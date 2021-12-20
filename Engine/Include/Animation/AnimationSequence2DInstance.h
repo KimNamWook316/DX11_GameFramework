@@ -19,6 +19,12 @@ public:
 	virtual CAnimationSequence2DInstance* Clone();
 
 public:
+	virtual bool Save(const char* fullPath);
+	virtual void Save(FILE* fp);
+	virtual bool Load(const char* fullPath);
+	virtual void Load(FILE* fp);
+
+public:
 	void Play()
 	{
 		mbPlay = true;
@@ -34,16 +40,6 @@ public:
 		return mbPlay;
 	}
 
-	CAnimationSequence2DData* GetCurrentAnimation() const
-	{
-		return mCurrentAnimation;
-	}
-
-public:
-	int GetAnimationCount() const
-	{
-		return (int)mMapAnimation.size();
-	}
 
 public:
 	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop = true,
@@ -54,6 +50,28 @@ public:
 
 public:
 	void ReplayCurrentAnimation();
+
+public:
+	CAnimationSequence2DData* GetCurrentAnimation() const
+	{
+		return mCurrentAnimation;
+	}
+
+	int GetAnimationCount() const
+	{
+		return (int)mMapAnimation.size();
+	}
+
+	void GetAnimationNames(std::vector<std::string>& outNames)
+	{
+		auto iter = mMapAnimation.begin();
+		auto iterEnd = mMapAnimation.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			outNames.push_back(iter->first);
+		}
+	}
 
 public:
 	void SetPlayTime(const std::string& name, const float playTime);

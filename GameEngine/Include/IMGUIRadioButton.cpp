@@ -46,6 +46,7 @@ void CIMGUIRadioButton::Render()
 					mVecCheckInfo[mCheckItemIdx]->bCheck = false;
 					mCheckItemIdx = (int)i;
                 }
+                mCallBack(mVecCheckInfo[i]->LabelUTF8, mVecCheckInfo[i]->bCheck);
                 mVecCheckInfo[i]->bCheck = true;
             }
         }

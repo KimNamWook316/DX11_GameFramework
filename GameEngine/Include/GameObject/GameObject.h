@@ -53,6 +53,10 @@ public:
 	virtual CGameObject* Clone();
 
 public:
+	virtual void Save(FILE* fp);
+	virtual void Load(FILE* fp);
+
+public:
 	template <typename T>
 	T* CreateComponent(const std::string& name)
 	{

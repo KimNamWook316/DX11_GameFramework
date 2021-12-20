@@ -2,7 +2,8 @@
 
 CIMGUICheckBox::CIMGUICheckBox()    :
     mbMultiColumn(false),
-    mSpacingX(10.f)
+    mSpacingX(10.f),
+    mColNum(0)
 {
 }
 
@@ -31,7 +32,10 @@ void CIMGUICheckBox::Render()
 
     for (size_t i = 0; i < size; ++i)
     {
-        ImGui::Checkbox(mVecCheckInfo[i]->LabelUTF8, &mVecCheckInfo[i]->bCheck);
+        if (ImGui::Checkbox(mVecCheckInfo[i]->LabelUTF8, &mVecCheckInfo[i]->bCheck))
+        {
+            mCallBack(mVecCheckInfo[i]->LabelUTF8, mVecCheckInfo[i]->bCheck);
+        }
 
         if (mbMultiColumn)
         {

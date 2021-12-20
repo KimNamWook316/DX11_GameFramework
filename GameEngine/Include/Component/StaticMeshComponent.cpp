@@ -103,6 +103,23 @@ CStaticMeshComponent* CStaticMeshComponent::Clone()
 	return new CStaticMeshComponent(*this);
 }
 
+void CStaticMeshComponent::Save(FILE* fp)
+{
+	std::string meshName = mMesh->GetName();
+	int length = (size_t)meshName.length();
+
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(meshName.c_str(), sizeof(char), length, fp);
+
+	mMaterial->Save(fp);
+	CSceneComponent::Save(fp);
+}
+
+void CStaticMeshComponent::Load(FILE* fp)
+{
+	CSceneComponent::Load(fp);
+}
+
 void CStaticMeshComponent::SetBaseColor(const Vector4& color)
 {
 	mMaterial->SetBaseColor(color);

@@ -61,6 +61,54 @@ CTransform* CTransform::Clone()
 	return new CTransform(*this);
 }
 
+void CTransform::Save(FILE* fp)
+{
+	fwrite(&mbInheritScale, sizeof(bool), 1, fp);
+	fwrite(&mbInheritRotX, sizeof(bool), 1, fp);
+	fwrite(&mbInheritRotY, sizeof(bool), 1, fp);
+	fwrite(&mbInheritRotZ, sizeof(bool), 1, fp);
+	fwrite(&mbInheritPosX, sizeof(bool), 1, fp);
+	fwrite(&mbInheritPosY, sizeof(bool), 1, fp);
+	fwrite(&mbInheritPosZ, sizeof(bool), 1, fp);
+
+	fwrite(&mRelativeScale, sizeof(Vector3), 1, fp);
+	fwrite(&mRelativeScale, sizeof(Vector3), 1, fp);
+	fwrite(&mRelativeRot, sizeof(Vector3), 1, fp);
+	fwrite(&mRelativeAxis, sizeof(Vector3), AXIS_MAX, fp);
+
+	fwrite(&mWorldScale, sizeof(Vector3), 1, fp);
+	fwrite(&mWorldScale, sizeof(Vector3), 1, fp);
+	fwrite(&mWorldRot, sizeof(Vector3), 1, fp);
+	fwrite(&mWorldAxis, sizeof(Vector3), AXIS_MAX, fp);
+	
+	fwrite(&mPivot, sizeof(Vector3), 1, fp);
+	fwrite(&mMeshSize, sizeof(Vector3), 1, fp);
+}
+
+void CTransform::Load(FILE* fp)
+{
+	fread(&mbInheritScale, sizeof(bool), 1, fp);
+	fread(&mbInheritRotX, sizeof(bool), 1, fp);
+	fread(&mbInheritRotY, sizeof(bool), 1, fp);
+	fread(&mbInheritRotZ, sizeof(bool), 1, fp);
+	fread(&mbInheritPosX, sizeof(bool), 1, fp);
+	fread(&mbInheritPosY, sizeof(bool), 1, fp);
+	fread(&mbInheritPosZ, sizeof(bool), 1, fp);
+
+	fread(&mRelativeScale, sizeof(Vector3), 1, fp);
+	fread(&mRelativeScale, sizeof(Vector3), 1, fp);
+	fread(&mRelativeRot, sizeof(Vector3), 1, fp);
+	fread(&mRelativeAxis, sizeof(Vector3), AXIS_MAX, fp);
+
+	fread(&mWorldScale, sizeof(Vector3), 1, fp);
+	fread(&mWorldScale, sizeof(Vector3), 1, fp);
+	fread(&mWorldRot, sizeof(Vector3), 1, fp);
+	fread(&mWorldAxis, sizeof(Vector3), AXIS_MAX, fp);
+	
+	fread(&mPivot, sizeof(Vector3), 1, fp);
+	fread(&mMeshSize, sizeof(Vector3), 1, fp);
+}
+
 void CTransform::Update(const float deltaTime)
 {
 }

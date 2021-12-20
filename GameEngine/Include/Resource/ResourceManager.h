@@ -69,6 +69,7 @@ public: // ===================== Sequence2D =====================
 	bool SaveSequence2D(const std::string& name, const char* fullPath);
 	bool LoadSequence2D(std::string& outName, const char* fullPath, class CScene* scene = nullptr);
 	bool LoadSequence2D(const char* fullPath, class CScene* scene = nullptr);
+	bool LoadSequence2D(std::string& outName, FILE* fp, class CScene* scene = nullptr);
 
 	DECLARE_SINGLE(CResourceManager)
 private:

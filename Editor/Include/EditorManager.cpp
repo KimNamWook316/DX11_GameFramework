@@ -35,6 +35,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 		CEngine::DestroyInst();
 		return false;
 	}
+	
+	// SceneManager CallBack
+	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CEditorManager>(this, &CEditorManager::CreateSceneMode);
+	CSceneManager::GetInst()->SetCreateObjectCallBack<CEditorManager>(this, &CEditorManager::CreateObject);
 
 	// GUI
 	mSpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("Editor");
@@ -71,6 +75,14 @@ void CEditorManager::CreateDefaultSceneMode()
 int CEditorManager::Run()
 {
 	return CEngine::GetInst()->Run();
+}
+
+void CEditorManager::CreateSceneMode(CScene*, size_t type)
+{
+}
+
+void CEditorManager::CreateObject(CScene*, size_t type)
+{
 }
 
 void CEditorManager::OnMouseLButtonDown(float deltaTime)

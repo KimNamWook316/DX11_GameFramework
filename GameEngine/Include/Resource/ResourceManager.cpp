@@ -171,4 +171,9 @@ bool CResourceManager::LoadSequence2D(const char* fullPath, CScene* scene)
 	return mAnimationManager->LoadSequence(name, fullPath, scene);
 }
 
+bool CResourceManager::LoadSequence2D(std::string& outName, FILE* fp, CScene* scene)
+{
+	return mAnimationManager->LoadSequence(outName, fp, scene);
+}
+
 

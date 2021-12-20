@@ -62,6 +62,11 @@ public:
 		return mName;
 	}
 
+	size_t GetTypeID() const
+	{
+		return mTypeID;
+	}
+
 	template <typename T>
 	void SetTypeID()
 	{
@@ -73,6 +78,10 @@ public:
 	{
 		return mTypeID == typeid(T).hash_code();
 	}
+
+public:
+	virtual void Save(FILE* fp);
+	virtual void Load(FILE* fp);
 
 protected:
 	std::string mName;
