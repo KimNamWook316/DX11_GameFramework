@@ -13,6 +13,7 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 	mCBuffer(nullptr),
 	mCurrentAnimation(nullptr)
 {
+	SetTypeID<CAnimationSequence2DInstance>();
 }
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSequence2DInstance& anim)

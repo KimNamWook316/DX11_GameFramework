@@ -72,12 +72,12 @@ void CTransform::Save(FILE* fp)
 	fwrite(&mbInheritPosZ, sizeof(bool), 1, fp);
 
 	fwrite(&mRelativeScale, sizeof(Vector3), 1, fp);
-	fwrite(&mRelativeScale, sizeof(Vector3), 1, fp);
+	fwrite(&mRelativePos, sizeof(Vector3), 1, fp);
 	fwrite(&mRelativeRot, sizeof(Vector3), 1, fp);
 	fwrite(&mRelativeAxis, sizeof(Vector3), AXIS_MAX, fp);
 
 	fwrite(&mWorldScale, sizeof(Vector3), 1, fp);
-	fwrite(&mWorldScale, sizeof(Vector3), 1, fp);
+	fwrite(&mWorldPos, sizeof(Vector3), 1, fp);
 	fwrite(&mWorldRot, sizeof(Vector3), 1, fp);
 	fwrite(&mWorldAxis, sizeof(Vector3), AXIS_MAX, fp);
 	
@@ -96,12 +96,12 @@ void CTransform::Load(FILE* fp)
 	fread(&mbInheritPosZ, sizeof(bool), 1, fp);
 
 	fread(&mRelativeScale, sizeof(Vector3), 1, fp);
-	fread(&mRelativeScale, sizeof(Vector3), 1, fp);
+	fread(&mRelativePos, sizeof(Vector3), 1, fp);
 	fread(&mRelativeRot, sizeof(Vector3), 1, fp);
 	fread(&mRelativeAxis, sizeof(Vector3), AXIS_MAX, fp);
 
 	fread(&mWorldScale, sizeof(Vector3), 1, fp);
-	fread(&mWorldScale, sizeof(Vector3), 1, fp);
+	fread(&mWorldPos, sizeof(Vector3), 1, fp);
 	fread(&mWorldRot, sizeof(Vector3), 1, fp);
 	fread(&mWorldAxis, sizeof(Vector3), AXIS_MAX, fp);
 	

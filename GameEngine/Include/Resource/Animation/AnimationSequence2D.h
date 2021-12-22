@@ -31,6 +31,78 @@ public:
 	void SetScene(class CScene* scene);
 
 public:
+	void SetStartPos(const int idx, const Vector2& startPos)
+	{
+		if (!isValidIdx(idx))
+		{
+			return;
+		}
+
+		mVecFrameData[idx].Start = startPos;
+	}
+
+	void SetStartX(const int idx, const float x)
+	{
+		if (!isValidIdx(idx))
+		{
+			return;
+		}
+
+		mVecFrameData[idx].Start.x = x;
+	}
+
+	void SetStartY(const int idx, const float y)
+	{
+		if (!isValidIdx(idx))
+		{
+			return;
+		}
+
+		mVecFrameData[idx].Start.y = y;
+	}
+
+	void SetSize(const int idx, const Vector2& size)
+	{
+		if (!isValidIdx(idx))
+		{
+			return;
+		}
+
+		mVecFrameData[idx].Size = size;
+	}
+
+	void SetWidth(const int idx, const float width)
+	{
+		if (!isValidIdx(idx))
+		{
+			return;
+		}
+
+		mVecFrameData[idx].Size.x = width;
+	}
+
+	void SetHeight(const int idx, const float height)
+	{
+		if (!isValidIdx(idx))
+		{
+			return;
+		}
+
+		mVecFrameData[idx].Size.y = height;
+	}
+
+private:
+	bool isValidIdx(const int idx)
+	{
+		if (idx < 0 || idx > (int)mVecFrameData.size() - 1)
+		{
+			assert(false);
+			return false;
+		}
+		return true;
+	}
+
+public:
 	class CTexture* GetTexture() const
 	{
 		return mTexture;

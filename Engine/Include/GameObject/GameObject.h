@@ -90,6 +90,30 @@ public:
 		return comp;
 	}
 
+	template <typename T>
+	T* LoadComponent()
+	{
+		T* component = new T;
+
+		component->SetScene(mScene);
+		component->SetGameObject(this);
+
+		if (component->GetComponentType() == eComponentType::OBJ_COMP)
+		{
+			mVecObjectComponent.push_back((class CObjectComponent*)component);
+		}
+		else
+		{
+			mSceneComponentList.push_back((class CSceneComponent*)component);
+			if (!mRootSceneComponent)
+			{
+				mRootSceneComponent = component;
+			}
+		}
+
+		return component;
+	}
+
 public:
 	void SetBoolInheritScale(bool Inherit)
 	{

@@ -46,4 +46,5 @@ void CComponent::Save(FILE* fp)
 void CComponent::Load(FILE* fp)
 {
 	CRef::Load(fp);
+	fread(&meComponentType, sizeof(eComponentType), 1, fp);
 }

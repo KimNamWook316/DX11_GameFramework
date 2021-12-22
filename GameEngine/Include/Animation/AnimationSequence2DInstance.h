@@ -73,6 +73,11 @@ public:
 		}
 	}
 
+	size_t GetTypeID() const
+	{
+		return mTypeID;
+	}
+
 public:
 	void SetPlayTime(const std::string& name, const float playTime);
 	void SetPlayScale(const std::string& name, const float playScale);
@@ -118,10 +123,17 @@ public:
 		data->AddNotify<T>(name, frame, obj, func);
 	}
 
+	template <typename T>
+	void SetTypeID()
+	{
+		mTypeID = typeid(T).hash_code();
+	}
+
 protected:
 	CAnimationSequence2DData* findAnimation(const std::string& name);
 
 protected:
+	size_t mTypeID;
 	bool mbPlay;
 	class CSpriteComponent* mOwner;													// 주인 컴포넌트
 	class CScene* mScene;															// 소속 씬

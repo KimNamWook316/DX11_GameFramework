@@ -48,6 +48,12 @@ public: // ===================== Material =====================
 		return mMaterialManager->CreateMaterial<T>(name);
 	}
 
+	template <typename T>
+	T* CreateMaterialEmpty()
+	{
+		return mMaterialManager->CreateMaterialEmpty<T>();
+	}
+
 public: // ===================== Texture =====================
 	class CTexture* FindTexture(const std::string& name);
 	void ReleaseTexture(const std::string& name);

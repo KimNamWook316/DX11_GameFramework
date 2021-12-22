@@ -66,6 +66,15 @@ public:
 		return true;
 	}
 
+	// 파일로부터 로드할 때 -> Init하지 않고, 파일로부터 오브젝트들을 생성한다.
+	template <typename T>
+	bool LoadSceneMode()
+	{
+		mMode = new T;
+		mMode->mScene = this;
+		return true;
+	}
+
 	template <typename T>
 	T* CreateGameObject(const std::string& name)
 	{
@@ -88,6 +97,20 @@ public:
 			obj->Start();
 		}
 
+		return obj;
+	}
+
+	template <typename T>
+	CGameObject* LoadGameObject()
+	{
+		T* obj = new T;
+		obj->SetScene(this);
+		mObjList.push_back(obj);
+		
+		if (mbIsStart)
+		{
+			obj->Start();
+		}
 		return obj;
 	}
 

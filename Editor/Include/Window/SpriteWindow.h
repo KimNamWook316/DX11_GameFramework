@@ -76,6 +76,10 @@ private:
     class CIMGUITextInput* mAnimationNameInput;
     class CIMGUIListBox* mAnimationFrameList;
 
+    // Text
+    class CIMGUIText* mSpriteWidthText;
+    class CIMGUIText* mSpriteHeightText;
+
     // Image Input
     class CIMGUIInputInt* mWidthInput;
     class CIMGUIInputInt* mHeightInput;

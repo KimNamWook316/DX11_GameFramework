@@ -5,6 +5,7 @@
 #include "IMGUIText.h"
 #include "IMGUISeperator.h"
 #include "IMGUIListBox.h"
+#include "IMGUISameLine.h"
 #include "../EditorInfo.h"
 #include "Scene/SceneManager.h"
 #include "ObjectHierachyWindow.h"
@@ -59,8 +60,15 @@ bool CEditorMenuWindow::Init()
     mCreateComponentButton = AddWidget<CIMGUIButton>("Create Component", 0.f, 0.f);
     mCreateComponentButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickCreateComponent);
     
+    AddWidget<CIMGUISeperator>("seperator");
+
+    text = AddWidget<CIMGUIText>("text");
+    text->SetText("Scene Save/Load");
+
     CIMGUIButton* button = AddWidget<CIMGUIButton>("Save Scene", 0.f, 0.f);
     button->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveScene);
+
+    AddWidget<CIMGUISameLine>("Line");
 
     button = AddWidget<CIMGUIButton>("Load Scene", 0.f, 0.f);
     button->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadScene);
@@ -177,4 +185,24 @@ void CEditorMenuWindow::OnClickSaveScene()
 
 void CEditorMenuWindow::OnClickLoadScene()
 {
+    TCHAR filePath[MAX_PATH] = {};
+
+    OPENFILENAME openFile = {};
+
+    openFile.lStructSize = sizeof(OPENFILENAME);
+    openFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+    openFile.lpstrFilter = TEXT("모든 파일\0*.*\0Scene File\0*.scn");
+    openFile.lpstrFile = filePath;
+    openFile.nMaxFile = MAX_PATH;
+    openFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(SCENE_PATH)->Path;
+
+    if (GetOpenFileName(&openFile) != 0)
+    {
+        char convertFullPath[MAX_PATH] = {};
+
+        int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
+        WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
+
+        CSceneManager::GetInst()->GetScene()->LoadFullPath(convertFullPath);
+    }
 }

@@ -40,7 +40,9 @@ CSpriteWindow::CSpriteWindow()	:
 	mAnimReverseCheckBox(nullptr),
 	mPlayTimeInput(nullptr),
 	mPlayScaleInput(nullptr),
-	mAnimationInstance(nullptr)
+	mAnimationInstance(nullptr),
+	mSpriteWidthText(nullptr),
+	mSpriteHeightText(nullptr)
 {
 }
 
@@ -125,6 +127,22 @@ bool CSpriteWindow::Init()
 	button->SetSize(0.f, 0.f);
 	infoCol->AddWidget<CIMGUISeperator>("sperator");
 	
+	// Sprite Info
+	text = infoCol->AddWidget<CIMGUIText>("Text");
+	text->SetText("Sprite Info");
+	text = infoCol->AddWidget<CIMGUIText>("Text");
+	text->SetText("Width : ");
+	infoCol->AddWidget<CIMGUISameLine>("line");
+	mSpriteWidthText = infoCol->AddWidget<CIMGUIText>("widthText");
+	mSpriteWidthText->SetText("0");
+	infoCol->AddWidget<CIMGUISameLine>("line");
+	text = infoCol->AddWidget<CIMGUIText>("Text");
+	text->SetText("Height : ");
+	infoCol->AddWidget<CIMGUISameLine>("line");
+	mSpriteHeightText = infoCol->AddWidget<CIMGUIText>("heightText");
+	mSpriteHeightText->SetText("0");
+	infoCol->AddWidget<CIMGUISeperator>("sperator");
+
 	// Col3. CropImage
 	text = infoCol->AddWidget<CIMGUIText>("Text");
 	text->SetText("Crop Image");
@@ -250,13 +268,22 @@ void CSpriteWindow::OnClickLoadTexture()
 
 		// Image Widget에 스프라이트 등록
 		mCropImage->SetTextureFullPath(convertFileName, filePath);
-		
+
 		// 씬 스프라이트 오브젝트에 등록
 		mSpriteEditObject->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
 			convertFileName, filePath);
+
 		// Texture 크기 실제 비율에 맞게 수정
-		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(),
-			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
+		CTexture* texture = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture();
+		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)texture->GetWidth(),
+			(float)texture->GetHeight(), 1.f);
+
+		// Sprite Info 갱신
+		char buf[32] = {};
+		sprintf_s(buf, "%d", texture->GetWidth());
+		mSpriteWidthText->SetText(buf);
+		sprintf_s(buf, "%d", texture->GetHeight());
+		mSpriteHeightText->SetText(buf);
 	}
 }
 
@@ -494,8 +521,10 @@ void CSpriteWindow::OnClickStopAnimation()
 
 void CSpriteWindow::OnWidthInputChanged(int val)
 {
+	// Crop UI Update
 	mCropImage->SetImageEnd(mCropImage->GetImageStart().x + val, mCropImage->GetImageEnd().y);
 	
+	// Drag Objct
 	CDragObject* dragObj = CEditorManager::GetInst()->GetDragObject();
 	Vector3 scale = dragObj->GetRelativeScale();
 	Vector3 pos = dragObj->GetWorldPos();
@@ -506,6 +535,14 @@ void CSpriteWindow::OnWidthInputChanged(int val)
  		dragObj->SetWorldPos(pos);
 	}		
 	dragObj->SetWorldScale((float)val, scale.y, scale.z);
+	
+	// Animation Sequence FrameData
+	int curFrame = mAnimationFrameList->GetSelectIndex();
+	if (curFrame == -1)
+	{
+		return;
+	}
+	mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->SetWidth(curFrame, (float)val);
 }
 
 void CSpriteWindow::OnHeightInputChanged(int val)
@@ -523,6 +560,14 @@ void CSpriteWindow::OnHeightInputChanged(int val)
 		dragObj->SetWorldPos(pos);
 	}
 	dragObj->SetWorldScale(scale.x, -(float)val, scale.z);
+
+	// Animation Sequence FrameData
+	int curFrame = mAnimationFrameList->GetSelectIndex();
+	if (curFrame == -1)
+	{
+		return;
+	}
+	mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->SetHeight(curFrame, (float)val);
 }
 
 void CSpriteWindow::OnStartXInputChanged(int val)
@@ -542,6 +587,14 @@ void CSpriteWindow::OnStartXInputChanged(int val)
 	}
 	pos.x = (float)val;
 	dragObj->SetWorldPos(pos);
+
+	// Animation Sequence FrameData
+	int curFrame = mAnimationFrameList->GetSelectIndex();
+	if (curFrame == -1)
+	{
+		return;
+	}
+	mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->SetStartX(curFrame, (float)val);
 }
 
 void CSpriteWindow::OnStartYInputChanged(int val)
@@ -562,6 +615,14 @@ void CSpriteWindow::OnStartYInputChanged(int val)
 	}
 	pos.y = (float)(mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - val);
 	dragObj->SetWorldPos(pos);
+
+	// Animation Sequence FrameData
+	int curFrame = mAnimationFrameList->GetSelectIndex();
+	if (curFrame == -1)
+	{
+		return;
+	}
+	mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->SetStartY(curFrame, (float)val);
 }
 
 void CSpriteWindow::OnClickLoopCheckBox(const char* name, bool bLoop)
@@ -655,20 +716,6 @@ void CSpriteWindow::OnClickLoadSequence()
 		{
 			mAnimationFrameList->AddItem(std::to_string(i));
 		}
-
-		CTexture* selectAnimTexture = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetTexture();
-
-		if (!mSpriteEditObject)
-		{
-			mSpriteEditObject = CSceneManager::GetInst()->GetScene()->CreateGameObject<CSpriteEditObject>("SpriteEditObject");
-			mSpriteEditObject->Init();
-		}
-
-		mSpriteEditObject->GetSpriteComponent()->SetTexture(0, 0, 
-			(int)eConstantBufferShaderTypeFlags::Pixel, selectAnimTexture->GetName(), selectAnimTexture);
-
-		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(),
-			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
 	}
 }
 
@@ -741,15 +788,7 @@ void CSpriteWindow::OnClickLoadAnimation()
 		{
 			mAnimationFrameList->Clear();
 		}
-		
-		int frameCount = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount();
-		for (int i = 0; i < frameCount; ++i)
-		{
-			mAnimationFrameList->AddItem(std::to_string(i));
-		}
-
-		updateFrameUI();
-
+	
 		CTexture* selectAnimTexture = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetTexture();
 
 		if (!mSpriteEditObject)
@@ -761,8 +800,17 @@ void CSpriteWindow::OnClickLoadAnimation()
 		mSpriteEditObject->GetSpriteComponent()->SetTexture(0, 0, 
 			(int)eConstantBufferShaderTypeFlags::Pixel, selectAnimTexture->GetName(), selectAnimTexture);
 
-		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(),
-			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
+		// Texture 크기 실제 비율에 맞게 수정
+		CTexture* texture = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture();
+		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)texture->GetWidth(),
+			(float)texture->GetHeight(), 1.f);
+
+		// Sprite Info 갱신
+		char buf[32] = {};
+		sprintf_s(buf, "%d", texture->GetWidth());
+		mSpriteWidthText->SetText(buf);
+		sprintf_s(buf, "%d", texture->GetHeight());
+		mSpriteHeightText->SetText(buf);
 
 		// 현재 Animation의 0번 프레임 UI에 출력
 		if (mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() != 0)

@@ -60,6 +60,12 @@ public:
 
 		return true;
 	}
+
+	template <typename T>
+	T* CreateMaterialEmpty()
+	{
+		return CResourceManager::GetInst()->CreateMaterialEmpty<T>();
+	}
 	
 public:
 	bool LoadTexture(const std::string& name, const TCHAR* fileName,

@@ -34,6 +34,14 @@ public:
 		return true;
 	}
 
+	template <typename T>
+	T* CreateMaterialEmpty()
+	{
+		T* material = new T;
+		material->SetConstantBuffer(mCBuffer);
+		return material;
+	}
+
 private:
 	std::unordered_map<std::string, CSharedPtr<CMaterial>> mMapMaterial;
 	class CMaterialConstantBuffer* mCBuffer;

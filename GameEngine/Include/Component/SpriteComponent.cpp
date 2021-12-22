@@ -4,6 +4,7 @@
 #include "../Animation/AnimationSequence2DInstance.h"
 #include "../Render/RenderManager.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
+#include "../Scene/SceneManager.h"
 
 CSpriteComponent::CSpriteComponent()	:
 	mAnimation(nullptr)
@@ -137,6 +138,8 @@ void CSpriteComponent::Save(FILE* fp)
 
 	if (mAnimation)
 	{
+		size_t typeID = mAnimation->GetTypeID();
+		fwrite(&typeID, sizeof(size_t), 1, fp);
 		mAnimation->Save(fp);
 	}
 
@@ -145,6 +148,30 @@ void CSpriteComponent::Save(FILE* fp)
 
 void CSpriteComponent::Load(FILE* fp)
 {
+	char meshName[256] = {};
+
+	int length = 0;
+	fread(&length, sizeof(int), 1, fp);
+	fread(meshName, sizeof(char), length, fp);
+
+	mMesh = (CSpriteMesh*)mScene->GetResource()->FindMesh(meshName);
+
+	// TODO : here
+	mMaterial = mScene->GetResource()->CreateMaterialEmpty<CMaterial>();
+	mMaterial->Load(fp);
+
+	bool bAnimEnable = false;
+	fread(&bAnimEnable, sizeof(bool), 1, fp);
+
+	if (bAnimEnable)
+	{
+		size_t typeID = mAnimation->GetTypeID();
+		fread(&typeID, sizeof(size_t), 1, fp);
+
+		CSceneManager::GetInst()->CallCreateAnimInstanceFunction(this, typeID);
+		mAnimation->Load(fp);
+	}
+
 	CSceneComponent::Load(fp);
 }
 

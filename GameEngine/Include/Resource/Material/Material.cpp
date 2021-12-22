@@ -140,6 +140,119 @@ void CMaterial::Save(FILE* fp)
 
 void CMaterial::Load(FILE* fp)
 {
+	char shaderName[256] = {};
+	int length = 0;
+
+	fread(&length, sizeof(int), 1, fp);
+	fread(shaderName, sizeof(char), length, fp);
+
+	mShader = (CGraphicShader*)CResourceManager::GetInst()->FindShader(shaderName);
+
+	fread(&mBaseColor, sizeof(Vector4), 1, fp);
+	fread(&mOpacity, sizeof(float), 1, fp);
+
+	for (int i = 0; i < (int)eRenderStateType::MAX; ++i)
+	{
+		bool bStateEnable = false;
+		fread(&bStateEnable, sizeof(bool), 1, fp);
+
+		if (bStateEnable)
+		{
+			char stateName[256] = {};
+			int length = 0;
+
+			fread(&length, sizeof(int), 1, fp);
+			fread(stateName, sizeof(char), length, fp);
+
+			mRenderStateArray[i] = CRenderManager::GetInst()->FindRenderState(stateName);
+		}
+	}
+
+	int textureCount = 0;
+	fread(&textureCount, sizeof(int), 1, fp);
+
+	for (int i = 0; i < textureCount; ++i)
+	{
+		mVecTextureInfo.push_back(MaterialTextureInfo());
+
+		char textureName[256] = {};
+		int length = 0;
+		fread(&length, sizeof(int), 1, fp);
+		fread(textureName, sizeof(char), length, fp);
+		mVecTextureInfo[i].Name = textureName;
+		
+		fread(&mVecTextureInfo[i].SamplerType, sizeof(eSamplerType), 1, fp);
+		fread(&mVecTextureInfo[i].Register, sizeof(int), 1, fp);
+		fread(&mVecTextureInfo[i].ShaderType, sizeof(int), 1, fp);
+
+		int texNameLength = 0;
+		char texName[256] = {};
+		fread(&texNameLength, sizeof(int), 1, fp);
+		fread(texName, sizeof(char), texNameLength, fp);
+
+		eImageType eType;
+		fread(&eType, sizeof(eImageType), 1, fp);
+
+		int infoCount = 0;
+		fread(&infoCount, sizeof(int), 1, fp);
+
+		std::vector<std::wstring> vecFullPath;
+		std::vector<std::wstring> vecFileName;
+		std::string	texPathName;
+
+		for (int i = 0; i < infoCount; ++i)
+		{
+			int pathSize = 0;
+			TCHAR fullPath[MAX_PATH] = {};
+
+			fread(&pathSize, sizeof(int), 1, fp);
+			fread(fullPath, sizeof(TCHAR), pathSize, fp);
+			vecFullPath.push_back(fullPath);
+			
+			TCHAR fileName[MAX_PATH] = {};
+			fread(&pathSize, sizeof(int), 1, fp);
+			fread(&fileName, sizeof(TCHAR), pathSize, fp);
+			vecFileName.push_back(fileName);
+
+			char pathName[MAX_PATH] = {};
+			fread(&pathSize, sizeof(int), 1, fp);
+			fread(&pathName, sizeof(char), pathSize, fp);
+			texPathName = pathName;
+		}
+
+		switch (eType)
+		{
+		case eImageType::Atlas:
+			if (vecFileName.size() == 0)
+			{
+				if (mScene)
+				{
+					mScene->GetResource()->LoadTexture(textureName, vecFileName[0].c_str(), texPathName);
+				}
+				else
+				{
+					CResourceManager::GetInst()->LoadTexture(textureName, vecFileName[0].c_str(), texPathName);
+				}
+			}
+			break;
+		case eImageType::Frame:
+			break;
+		case eImageType::Array:
+			break;
+		default:
+			assert(false);
+			break;
+		}
+
+		if (mScene)
+		{
+			mVecTextureInfo[i].Texture = mScene->GetResource()->FindTexture(texName);
+		}
+		else
+		{
+			mVecTextureInfo[i].Texture = CResourceManager::GetInst()->FindTexture(texName);
+		}
+	}
 }
 
 void CMaterial::SetRenderState(CRenderState* state)

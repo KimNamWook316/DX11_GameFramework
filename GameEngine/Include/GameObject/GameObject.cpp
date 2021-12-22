@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "../Scene/SceneManager.h"
 
 CGameObject::CGameObject()	:
 	mScene(nullptr),
@@ -191,6 +192,10 @@ void CGameObject::Save(FILE* fp)
 	{
 		bool bRootExist = true;
 		fwrite(&bRootExist, sizeof(bool), 1, fp);
+
+		size_t typeID = mRootSceneComponent->GetTypeID();
+		fwrite(&typeID, sizeof(size_t), 1, fp);
+
 		mRootSceneComponent->Save(fp);
 	}
 	else
@@ -204,6 +209,9 @@ void CGameObject::Save(FILE* fp)
 	
 	for (int i = 0; i < objComponentCount; ++i)
 	{
+		size_t typeID = mVecObjectComponent[i]->GetTypeID();
+		fwrite(&typeID, sizeof(size_t), 1, fp);
+
 		mVecObjectComponent[i]->Save(fp);
 	}
 }
@@ -211,4 +219,30 @@ void CGameObject::Save(FILE* fp)
 void CGameObject::Load(FILE* fp)
 {
 	CRef::Load(fp);
-}
+
+	bool bRootExist = false;
+	fread(&bRootExist, sizeof(bool), 1, fp);
+
+	if (bRootExist)
+	{
+		size_t typeID = 0;
+		fread(&typeID, sizeof(size_t), 1, fp);
+		
+		// CGameObject의 LoadComponent()를 통해 루트로 들어감
+		CSceneManager::GetInst()->CallCreateComponentFunction(this, typeID);
+		mRootSceneComponent->Load(fp);
+	}
+
+	int objComponentCount = 0;
+	fread(&objComponentCount, sizeof(int), 1, fp);
+
+	for (int i = 0; i < objComponentCount; ++i)
+	{
+		size_t typeID = 0;
+		fread(&typeID, sizeof(size_t), 1, fp);
+
+		// CGameObject의 LoadComponent()를 통해 벡터에 추가 
+		CComponent* component = CSceneManager::GetInst()->CallCreateComponentFunction(this, typeID);
+		component->Load(fp);
+	}
+ } 

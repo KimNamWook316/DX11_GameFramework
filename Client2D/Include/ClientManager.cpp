@@ -24,8 +24,8 @@ bool CClientManager::Init(HINSTANCE hInst)
 		return false;
 	}
 
-	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CClientManager>(this, &CClientManager::CreateSceneMode);
-	CSceneManager::GetInst()->SetCreateObjectCallBack<CClientManager>(this, &CClientManager::CreateObject);
+ //	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CClientManager>(this, &CClientManager::CreateSceneMode);
+ //	CSceneManager::GetInst()->SetCreateObjectCallBack<CClientManager>(this, &CClientManager::CreateObject);
 
 	CInput::GetInst()->CreateKey("MoveUp", 'W');
 	CInput::GetInst()->CreateKey("MoveDown", 'S');

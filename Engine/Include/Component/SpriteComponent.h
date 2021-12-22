@@ -79,6 +79,7 @@ public:
 	void SetReverse(const std::string& name, bool bReverse);
 	void SetCurrentAnimation(const std::string& name);
 
+public:
 	template <typename T>
 	void CreateAnimationInstance()
 	{
@@ -97,6 +98,16 @@ public:
 		// 원래 애니메이션이 있으면 삭제
 		SAFE_DELETE(mAnimation);
 
+		mAnimation = anim;
+	}
+
+	template <typename T>
+	void LoadAnimationInstance()
+	{
+		T* anim = new T;
+		anim->SetScene(mScene);
+		anim->SetOwner(this);
+		SAFE_DELETE(mAnimation);
 		mAnimation = anim;
 	}
 

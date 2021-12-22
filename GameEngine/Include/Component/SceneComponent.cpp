@@ -2,6 +2,7 @@
 #include "../Render/RenderManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
+#include "../Scene/SceneManager.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -152,6 +153,9 @@ void CSceneComponent::Save(FILE* fp)
 
 	for (int i = 0; i < childCount; ++i)
 	{
+		size_t typeID = mVecChild[i]->GetTypeID();
+		fwrite(&typeID, sizeof(size_t), 1, fp);
+
 		mVecChild[i]->Save(fp);
 	}
 }
@@ -159,6 +163,29 @@ void CSceneComponent::Save(FILE* fp)
 void CSceneComponent::Load(FILE* fp)
 {
 	CComponent::Load(fp);
+
+	fread(&mbIsRender, sizeof(bool), 1, fp);
+	
+	char layerName[256] = {};
+	int length = 0;
+	fread(&length, sizeof(int), 1, fp);
+	fread(layerName, sizeof(char), length, fp);
+	mLayerName = layerName;
+
+	mTransform->Load(fp);
+	
+	int childCount = 0;
+	fread(&childCount, sizeof(int), 1, fp);
+
+	for (int i = 0; i < childCount; ++i)
+	{
+		size_t typeID = 0;
+		fread(&typeID, sizeof(size_t), 1, fp);
+		
+		CComponent* component = CSceneManager::GetInst()->CallCreateComponentFunction(mObject, typeID);
+		component->Load(fp);
+		mVecChild.push_back((CSceneComponent*)component);
+	}
 }
 
 void CSceneComponent::GetAllSceneComponentsName(std::vector<FindComponentName>& outNames)
