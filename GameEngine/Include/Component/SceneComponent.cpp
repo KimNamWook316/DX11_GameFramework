@@ -150,6 +150,7 @@ void CSceneComponent::Save(FILE* fp)
 	mTransform->Save(fp);
 
 	int childCount = (int)mVecChild.size();
+	fwrite(&childCount, sizeof(int), 1, fp);
 
 	for (int i = 0; i < childCount; ++i)
 	{

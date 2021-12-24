@@ -22,10 +22,12 @@ public:
 	void ClearFrame();
 
 public:
-	void Save(const char* fullPath);
-	void Save(FILE* fp);
-	void Load(const char* fullPath);
-	void Load(FILE* fp);
+	bool SaveFullPath(const char* fullPath);
+	bool Save(const char* fileName, const std::string& pathName);
+	bool SaveFile(FILE* fp);
+	bool LoadFullPath(const char* fullPath);
+	bool Load(const char* fileName, const std::string& pathName);
+	bool LoadFile(FILE* fp);
 
 public:
 	void SetScene(class CScene* scene);

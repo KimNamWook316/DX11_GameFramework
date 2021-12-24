@@ -115,7 +115,7 @@ void CAnimationManager::ReleaseSequence(const std::string& name)
 	}
 }
 
-bool CAnimationManager::SaveSequence(const std::string& name, const char* fullPath)
+bool CAnimationManager::SaveSequenceFullPath(const std::string& name, const char* fullPath)
 {
 	CAnimationSequence2D* sequence = FindSequence(name);
 
@@ -124,33 +124,65 @@ bool CAnimationManager::SaveSequence(const std::string& name, const char* fullPa
 		return false;
 	}
 
-	sequence->Save(fullPath);
+	sequence->SaveFullPath(fullPath);
 	return true;
 }
 
-bool CAnimationManager::LoadSequence(std::string& outName, const char* fullPath, CScene* scene)
+bool CAnimationManager::LoadSequenceFullPath(std::string& outName, const char* fullPath, CScene* scene)
 {
 	CAnimationSequence2D* sequence = new CAnimationSequence2D;
 	
 	sequence->SetScene(scene);
 
-	sequence->Load(fullPath);
+	if(!sequence->LoadFullPath(fullPath))
+	{
+		SAFE_DELETE(sequence);
+		return false;
+	}
 
-	mMapSequence2D.insert(std::make_pair(sequence->GetName(), sequence));
 	outName = sequence->GetName();
+
+	if (FindSequence(outName))
+	{
+		SAFE_RELEASE(sequence);
+		return true;
+	}
+	mMapSequence2D.insert(std::make_pair(sequence->GetName(), sequence));
 	return true;
 }
 
-bool CAnimationManager::LoadSequence(std::string& outName, FILE* fp, CScene* scene)
+bool CAnimationManager::SaveSequence(const std::string& name, const char* fileName, const std::string& pathName)
+{
+	CAnimationSequence2D* sequence = FindSequence(name);
+
+	if (!sequence)
+	{
+		return false;
+	}
+
+	sequence->Save(fileName, pathName);
+	return true;
+}
+
+bool CAnimationManager::LoadSequece(std::string& outName, const char* fileName, const std::string& pathName, CScene* scene)
 {
 	CAnimationSequence2D* sequence = new CAnimationSequence2D;
-	
 	sequence->SetScene(scene);
 
-	sequence->Load(fp);
-	
-	outName = sequence->GetName();
-	mMapSequence2D.insert(std::make_pair(sequence->GetName(), sequence));
+	if (!sequence->Load(fileName, pathName))
+	{
+		SAFE_DELETE(sequence);
+		return false;
+	}
 
+	outName = sequence->GetName();
+
+	if (FindSequence(outName))
+	{
+		SAFE_RELEASE(sequence);
+		return true;
+	}
+
+	mMapSequence2D.insert(std::make_pair(outName, sequence));
 	return true;
 }

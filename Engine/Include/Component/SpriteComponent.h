@@ -14,14 +14,6 @@ protected:
 	CSpriteComponent(const CSpriteComponent& com);
 	virtual ~CSpriteComponent();
 
-public:
-	void SetMaterial(CMaterial* material);
-
-public:
-	CMaterial* GetMaterial()
-	{
-		return mMaterial;
-	}
 
 public:
 	virtual bool Init();
@@ -45,6 +37,19 @@ public:
 	void SetTransparency(bool bEnable);
 	void SetOpacity(const float val);
 	void AddOpacity(const float val);
+public:
+	void SetMaterial(CMaterial* material);
+
+public:
+	CMaterial* GetMaterial()
+	{
+		return mMaterial;
+	}
+
+	CAnimationSequence2DInstance* GetAnimationInstance() const
+	{
+		return mAnimation;
+	}
 
 public:
 	void AddTexture(const int reg, const int shaderType, const std::string& name,

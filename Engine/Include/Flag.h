@@ -1,5 +1,11 @@
 #pragma once
 
+enum class eEngineSpace
+{
+	Space2D,	
+	Space3D,
+};
+
 enum eAXIS
 {
 	AXIS_X,
@@ -82,4 +88,35 @@ enum class eSceneComponentType
 	Sprite,
 	StaticMesh,
 	Max
+};
+
+enum class eCollisionChannel
+{
+	Object,
+	Player,
+	Monster,
+	PlayerAttack,
+	MonsterAttack,
+	Cutom1,
+	Cutom2,
+	Cutom3,
+	Cutom4,
+	Cutom5,
+	Cutom6,
+	Cutom7,
+	Cutom8,
+	Cutom9,
+	Cutom10,
+	Max
+};
+
+enum class eCollisionState
+{
+	Ignore,
+	Collision,
+};
+
+enum class eColliderType
+{
+	Box2D,
 };

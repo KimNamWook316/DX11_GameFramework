@@ -2,6 +2,7 @@
 
 #include "SceneMode.h"
 #include "SceneResource.h"
+#include "SceneCollision.h"
 #include "../GameObject/GameObject.h"
 
 class CScene
@@ -48,6 +49,17 @@ public:
 	CGameObject* GetPlayerObj() const
 	{
 		return mMode->GetPlayerObj();
+	}
+
+	void GetObjNames(std::vector<std::string>& outNames)
+	{
+		auto iter = mObjList.begin();
+		auto iterEnd = mObjList.end();
+
+		for (;iter != iterEnd; ++iter)
+		{
+			outNames.push_back((*iter)->GetName());
+		}
 	}
 
 public:
@@ -117,6 +129,7 @@ public:
 private:
 	CSharedPtr<CSceneMode> mMode;
 	CSceneResource* mResource;
+	CSceneCollision* mCollision;
 
 	std::list<CSharedPtr<CGameObject>> mObjList;
 	bool mbIsStart;

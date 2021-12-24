@@ -29,10 +29,30 @@ public:
 	void Replay();
 
 public:
-	bool Save(FILE* fp);
-	bool Load(FILE* fp);
+	void Save(FILE* fp);
+	void Load(FILE* fp);
 
 public:
+	bool IsLoop() const
+	{
+		return mbIsLoop;
+	}
+
+	bool IsReverse() const
+	{
+		return mbIsReverse;
+	}
+
+	float GetPlayTime() const
+	{
+		return mFrameTime;
+	}
+
+	float GetPlayScale() const
+	{
+		return mPlayScale;
+	}
+
 	int GetCurrentFrame() const
 	{
 		return mFrame;
@@ -90,6 +110,7 @@ public:
 
 private:
 	std::string mName;										// 이 애니메이션의 이름
+	std::string mSequenceName;
 	CSharedPtr<class CAnimationSequence2D> mSequence;		// 애니메이션 정보
 	int mFrame;												// 몇 프레임 짜리인지	
 	float mTime;											// 실행시간

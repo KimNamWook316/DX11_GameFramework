@@ -2,6 +2,7 @@
 #include "../../Scene/Scene.h"
 #include "../../Scene/SceneResource.h"
 #include "../ResourceManager.h"
+#include "../../PathManager.h"
 
 CAnimationSequence2D::CAnimationSequence2D()	:
 	mScene(nullptr)
@@ -77,24 +78,40 @@ void CAnimationSequence2D::ClearFrame()
 	mVecFrameData.clear();
 }
 
-void CAnimationSequence2D::Save(const char* fullPath)
+bool CAnimationSequence2D::SaveFullPath(const char* fullPath)
 {
 	FILE* pFile = nullptr;
 
-	fopen_s(&pFile, fullPath, "wt");
+	fopen_s(&pFile, fullPath, "wb");
 
 	if (!pFile)
 	{
 		assert(false);
-		return;
+		return false;
 	}
 
-	Save(pFile);
+	SaveFile(pFile);
 
 	fclose(pFile);
+	return true;
 }
 
-void CAnimationSequence2D::Save(FILE* fp)
+bool CAnimationSequence2D::Save(const char* fileName, const std::string& pathName)
+{
+	const PathInfo* path = CPathManager::GetInst()->FindPath(pathName);
+
+	char fullPath[MAX_PATH] = {};
+
+	if (path)
+	{
+		strcpy_s(fullPath, path->PathMultibyte);
+	}
+	strcat_s(fullPath, fileName);
+
+	return SaveFullPath(fullPath);
+}
+
+bool CAnimationSequence2D::SaveFile(FILE* fp)
 {
 	int length = (int)mName.length();
 	fwrite(&length, sizeof(int), 1, fp);
@@ -119,25 +136,42 @@ void CAnimationSequence2D::Save(FILE* fp)
 	fwrite(&frameCount, sizeof(int), 1, fp);
 
 	fwrite(&mVecFrameData[0], sizeof(AnimationFrameData), frameCount, fp);
+	return true;
 }
 
-void CAnimationSequence2D::Load(const char* fullPath)
+bool CAnimationSequence2D::LoadFullPath(const char* fullPath)
 {
 	FILE* pFile = nullptr;
-	fopen_s(&pFile, fullPath, "rt");
+	fopen_s(&pFile, fullPath, "rb");
 
 	if (!pFile)
 	{
 		assert(false);
-		return;
+		return false;
 	}
 
-	Load(pFile);
+	LoadFile(pFile);
 
 	fclose(pFile);
+	return true;
 }
 
-void CAnimationSequence2D::Load(FILE* fp)
+bool CAnimationSequence2D::Load(const char* fileName, const std::string& pathName)
+{
+	const PathInfo* path = CPathManager::GetInst()->FindPath(pathName);
+
+	char fullPath[MAX_PATH] = {};
+
+	if (path)
+	{
+		strcpy_s(fullPath, path->PathMultibyte);
+	}
+	strcat_s(fullPath, fileName);
+
+	return LoadFullPath(fullPath);
+}
+
+bool CAnimationSequence2D::LoadFile(FILE* fp)
 {
 	int length = 0;
 	fread(&length, sizeof(int), 1, fp);
@@ -229,6 +263,7 @@ void CAnimationSequence2D::Load(FILE* fp)
 	mVecFrameData.resize((const size_t)frameCount);
 
 	fread(&mVecFrameData[0], sizeof(AnimationFrameData), frameCount, fp);
+	return true;
 }
 
 void CAnimationSequence2D::SetScene(CScene* scene)

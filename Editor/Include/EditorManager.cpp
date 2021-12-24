@@ -16,6 +16,7 @@
 #include "Window/ObjectHierachyWindow.h"
 #include "Window/DetailWindow.h"
 #include "Window/EditorMenuWindow.h"
+#include "Object/Player2D.h"
 
 DEFINITION_SINGLE(CEditorManager)
 
@@ -39,6 +40,8 @@ bool CEditorManager::Init(HINSTANCE hInst)
 		CEngine::DestroyInst();
 		return false;
 	}
+
+	CEngine::GetInst()->SetPlay(false);
 	
 	// SceneManager CallBack
 	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CEditorManager>(this, &CEditorManager::CreateSceneMode);
@@ -119,6 +122,11 @@ class CGameObject* CEditorManager::CreateObject(CScene* scene, size_t type)
 	else if (type == typeid(CSpriteEditObject).hash_code())
 	{
 		CSpriteEditObject* obj = scene->LoadGameObject<CSpriteEditObject>();
+		return obj;
+	}
+	else if (type == typeid(CPlayer2D).hash_code())
+	{
+		CPlayer2D* obj = scene->LoadGameObject<CPlayer2D>();
 		return obj;
 	}
 	else

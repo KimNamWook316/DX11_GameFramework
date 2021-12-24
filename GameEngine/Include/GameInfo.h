@@ -205,3 +205,12 @@ struct FindComponentName
 	std::string Name;
 	std::string ParentName;
 };
+
+struct CollisionProfile
+{
+	std::string Name;
+	eCollisionChannel Channel; // 이 채널이 어떤 채널에 속해있는지
+	bool bCollisionEnable;
+
+	std::vector<eCollisionState> vecState; // 각 채널에 대해 충돌하는지 아닌지 ( 총 채널수만큼 사이즈)
+};

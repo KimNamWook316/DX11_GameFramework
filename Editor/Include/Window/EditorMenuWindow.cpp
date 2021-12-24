@@ -9,6 +9,8 @@
 #include "../EditorInfo.h"
 #include "Scene/SceneManager.h"
 #include "ObjectHierachyWindow.h"
+#include "SpriteWindow.h"
+#include "../Object/Player2D.h"
 #include "IMGUIManager.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"
@@ -35,6 +37,14 @@ bool CEditorMenuWindow::Init()
     CIMGUIWindow::Init();
 
     CIMGUIText* text = AddWidget<CIMGUIText>("text");
+    text->SetText("Play/Stop");
+
+    CIMGUIButton* button = AddWidget<CIMGUIButton>("Play", 0.f, 0.f);
+    button->SetClickCallBack(this, &CEditorMenuWindow::OnClickPlay);
+
+    AddWidget<CIMGUISeperator>("seperator");
+
+    text = AddWidget<CIMGUIText>("text");
     text->SetText("Create Object");
 
     mCreatableObjectsComboBox = AddWidget<CIMGUIComboBox>("Object List", 150.f, 0.f);
@@ -65,7 +75,7 @@ bool CEditorMenuWindow::Init()
     text = AddWidget<CIMGUIText>("text");
     text->SetText("Scene Save/Load");
 
-    CIMGUIButton* button = AddWidget<CIMGUIButton>("Save Scene", 0.f, 0.f);
+    button = AddWidget<CIMGUIButton>("Save Scene", 0.f, 0.f);
     button->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveScene);
 
     AddWidget<CIMGUISameLine>("Line");
@@ -94,6 +104,7 @@ void CEditorMenuWindow::OnClickCreateObject()
         CSceneManager::GetInst()->GetScene()->CreateGameObject<CGameObject>(mObjectNameInput->GetTextMultiByte());
         break;
     case eCreateObjectType::Player:
+        CSceneManager::GetInst()->GetScene()->CreateGameObject<CPlayer2D>(mObjectNameInput->GetTextMultiByte());
         break;
     default:
         assert(false);
@@ -203,6 +214,34 @@ void CEditorMenuWindow::OnClickLoadScene()
         int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
         WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
 
-        CSceneManager::GetInst()->GetScene()->LoadFullPath(convertFullPath);
+        if (!CSceneManager::GetInst()->GetScene()->LoadFullPath(convertFullPath))
+        {
+            MessageBox(nullptr, TEXT("Failed To Load Scene"), TEXT("Failed"), MB_OK);
+        }
+        else
+        {
+            std::vector<std::string> objNames;
+            CSceneManager::GetInst()->GetScene()->GetObjNames(objNames);
+
+            CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Object Hierachy");
+            
+            size_t size = objNames.size();
+            for (size_t i = 0; i < size; ++i)
+            {
+                hierachyWindow->AddObjectList(objNames[i].c_str());
+            }
+        }
+    }
+}
+
+void CEditorMenuWindow::OnClickPlay()
+{
+    if (!CEngine::GetInst()->IsPlay())
+    {
+        CEngine::GetInst()->SetPlay(true);
+    }
+    else
+    {
+        CEngine::GetInst()->SetPlay(false);
     }
 }

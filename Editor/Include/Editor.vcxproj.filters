@@ -60,6 +60,9 @@
     <ClInclude Include="EditorInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Object\Player2D.h">
+      <Filter>03. Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -88,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="Window\DetailWindow.cpp">
       <Filter>02. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player2D.cpp">
+      <Filter>03. Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

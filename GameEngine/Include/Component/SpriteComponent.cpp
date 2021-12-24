@@ -121,7 +121,7 @@ void CSpriteComponent::Save(FILE* fp)
 {
 	std::string meshName = mMesh->GetName();
 	
-	int length = (int)meshName.size();
+	int length = (int)meshName.length();
 
 	fwrite(&length, sizeof(int), 1, fp);
 	fwrite(meshName.c_str(), sizeof(char), length, fp);
@@ -156,7 +156,6 @@ void CSpriteComponent::Load(FILE* fp)
 
 	mMesh = (CSpriteMesh*)mScene->GetResource()->FindMesh(meshName);
 
-	// TODO : here
 	mMaterial = mScene->GetResource()->CreateMaterialEmpty<CMaterial>();
 	mMaterial->Load(fp);
 
@@ -165,7 +164,7 @@ void CSpriteComponent::Load(FILE* fp)
 
 	if (bAnimEnable)
 	{
-		size_t typeID = mAnimation->GetTypeID();
+		size_t typeID = 0;
 		fread(&typeID, sizeof(size_t), 1, fp);
 
 		CSceneManager::GetInst()->CallCreateAnimInstanceFunction(this, typeID);

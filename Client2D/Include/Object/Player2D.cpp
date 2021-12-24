@@ -94,7 +94,6 @@ CGameObject* CPlayer2D::Clone()
 {
 	return new CPlayer2D(*this);
 }
-
 void CPlayer2D::move(float deltaTime)
 {
 	mMovePosition = Vector3(CInput::GetInst()->GetMousePos().x, 720.f - CInput::GetInst()->GetMousePos().y, 0.f);

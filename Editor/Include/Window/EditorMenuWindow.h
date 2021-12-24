@@ -18,6 +18,7 @@ public:
     void OnClickCreateComponent();
     void OnClickSaveScene();
     void OnClickLoadScene();
+    void OnClickPlay();
 
 private:
     class CIMGUIButton* mCreateObjectButton;

@@ -27,6 +27,27 @@ public:
 		return mhInst;
 	}
 
+	eEngineSpace GetEngineSpace() const
+	{
+		return meSpace;
+	}
+
+public:
+	bool IsPlay() const
+	{
+		return mbPlay;
+	}
+
+	void SetPlay(bool bPlay)
+	{
+		mbPlay = bPlay;
+	}
+
+	void SetEngineSpace(eEngineSpace space)
+	{
+		meSpace = space;
+	}
+
 private:
 	bool update(float deltaTime);
 	bool postUpdate(float deltaTime);
@@ -48,5 +69,7 @@ private:
 	float		mClearColor[4]; // 화면 초기화 색상 변수
 	class CTimer* mTimer;
 	bool		mbIsStart;
+	bool		mbPlay;
+	eEngineSpace meSpace;
 };
 

@@ -19,9 +19,9 @@ public:
 	virtual CAnimationSequence2DInstance* Clone();
 
 public:
-	virtual bool Save(const char* fullPath);
+	virtual void Save(const char* fullPath);
 	virtual void Save(FILE* fp);
-	virtual bool Load(const char* fullPath);
+	virtual void Load(const char* fullPath);
 	virtual void Load(FILE* fp);
 
 public:
@@ -44,6 +44,8 @@ public:
 public:
 	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop = true,
 		const float playTime = 1.f, const float playScale = 1.f, bool bIsReverse = false);
+	void AddAnimation(const TCHAR* fileName, const std::string& pathName, const std::string& name,
+		bool bIsLoop = true, const float playTime = 1.f, const float playScale = 1.f, bool bIsReverse = false);
 	void DeleteAnimation(const std::string& name);
 	void ChangeAnimation(const std::string& name);
 	bool CheckCurrentAnimation(const std::string& name);

@@ -85,10 +85,12 @@ public:
 	void ReleaseAnimationSequence2D(const std::string& name);
 
 public:
-	bool SaveSequence2D(const std::string& name, const char* fullPath);
-	bool LoadSequence2D(const char* fullPath);
-	bool LoadSequence2D(std::string& outName, const char* fullPath);
-	bool LoadSequence2D(std::string& outName, FILE* fp);
+	bool SaveSequence2DFullPath(const std::string& name, const char* fullPath);
+	bool LoadSequence2DFullPath(const char* fullPath);
+	bool LoadSequence2DFullPath(std::string& outName, const char* fullPath);
+	bool SaveSequence2D(const std::string& name, const char* fileName, const std::string& pathName = ANIMATION_PATH);
+	bool LoadSequence2D(const char* fileName, const std::string& pathName = ANIMATION_PATH);
+	bool LoadSequence2D(std::string& outName, const char* fileName, const std::string& pathName = ANIMATION_PATH);
 
 private:
 	class CScene* mScene;

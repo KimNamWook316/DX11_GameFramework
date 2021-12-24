@@ -673,7 +673,7 @@ void CSpriteWindow::OnClickSaveSequence()
 		int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, filePath, -1, fullPath, length, 0, 0);
 		
-		mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->Save(fullPath);
+		mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->SaveFullPath(fullPath);
 	}
 }
 
@@ -702,13 +702,13 @@ void CSpriteWindow::OnClickLoadSequence()
 		CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
 
 		std::string sequenceName;
-		resource->LoadSequence2D(sequenceName, fullPath);
+		resource->LoadSequence2DFullPath(sequenceName, fullPath);
 		
 		mAnimationInstance->AddAnimation(sequenceName, sequenceName);
 
 		mAnimationFrameList->Clear();
 
-		mAnimationList->AddItem(mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetName());
+		mAnimationList->AddItem(resource->FindAnimationSequence2D(sequenceName)->GetName());
 		
 		int frameCount = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount();
 

@@ -3,6 +3,7 @@
 #include "Resource/ResourceManager.h"
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
+#include "Collision/CollisionManager.h"
 #include "PathManager.h"
 #include "Input.h"
 #include "Timer.h"
@@ -16,6 +17,7 @@ CEngine::CEngine()
 	: mClearColor{0.5f, 0.5f, 0.5f, 0.5f}
 	, mTimer(nullptr)
 	, mbIsStart(false)
+	, meSpace(eEngineSpace::Space2D)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(413);
@@ -27,6 +29,7 @@ CEngine::~CEngine()
 	CInput::DestroyInst();
 	CRenderManager::DestroyInst();
 	CPathManager::DestroyInst();
+	CCollisionManager::DestroyInst();
 	CResourceManager::DestroyInst();
 	CIMGUIManager::DestroyInst();
 	CDevice::DestroyInst();
@@ -73,6 +76,13 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	// 리소스 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
+	{
+		assert(false);
+		return false;
+	}
+
+	// 충돌 매니저 초기화
+	if (!CCollisionManager::GetInst()->Init())
 	{
 		assert(false);
 		return false;
@@ -153,6 +163,12 @@ void CEngine::Logic()
 	mTimer->Update();
 
 	float deltaTime = mTimer->GetDeltaTIme();
+
+	// !play -> deltaTime == 0
+	if (!mbPlay)
+	{
+		deltaTime = 0.f;
+	}
 
 	CInput::GetInst()->Update(deltaTime);
 

@@ -123,6 +123,15 @@
     <Filter Include="03. Scene\02. SceneResource">
       <UniqueIdentifier>{e0f07e6f-69c6-4d7f-a017-64c2121b4fd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08. Collision">
+      <UniqueIdentifier>{719b27e7-6e13-40ea-ade1-870619a2f739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\03. Collision">
+      <UniqueIdentifier>{015f77a7-1943-4cd8-a99e-411cb3639e7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. SceneComponent\02. ColliderComponent">
+      <UniqueIdentifier>{1f2cc7df-01fc-4b34-bf37-6e43558bb8ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -148,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>01. Engine\02. Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Flag.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ref.h">
       <Filter>01. Engine\03. Ref</Filter>
@@ -382,6 +388,24 @@
     </ClInclude>
     <ClInclude Include="IMGUIInputInt.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Flag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\CollisionManager.h">
+      <Filter>08. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneCollision.h">
+      <Filter>03. Scene\03. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CollisionSection.h">
+      <Filter>03. Scene\03. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderComponent.h">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderBox2D.h">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -621,6 +645,21 @@
     </ClCompile>
     <ClCompile Include="IMGUIInputInt.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\CollisionManager.cpp">
+      <Filter>08. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneCollision.cpp">
+      <Filter>03. Scene\03. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CollisionSection.cpp">
+      <Filter>03. Scene\03. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderBox2D.cpp">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

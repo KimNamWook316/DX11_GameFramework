@@ -211,7 +211,7 @@ CAnimationSequence2DInstance* CAnimationSequence2DInstance::Clone()
 	return new CAnimationSequence2DInstance(*this);
 }
 
-bool CAnimationSequence2DInstance::Save(const char* fullPath)
+void CAnimationSequence2DInstance::Save(const char* fullPath)
 {
 	FILE* fp = nullptr;
 
@@ -220,36 +220,12 @@ bool CAnimationSequence2DInstance::Save(const char* fullPath)
 	if (!fp)
 	{
 		assert(false);
-		return false;
-	}
-
-	int mapSize = (int)mMapAnimation.size();
-	fwrite(&mapSize, sizeof(int), 1, fp);
-
-	auto iter = mMapAnimation.begin();
-	auto iterEnd = mMapAnimation.end();
-
-	for (; iter != iterEnd; ++iter)
-	{
-		int length = (int)iter->first.length();
-		fwrite(&length, sizeof(int), 1, fp);
-		fwrite(iter->first.c_str(), sizeof(char), length, fp);
-		if (!iter->second->Save(fp))
-		{
-			assert(false);
-			return false;
-		}
+		return;
 	}
 	
-	int length = (int)mCurrentAnimation->mName.size();
-	fwrite(&length, sizeof(int), 1, fp);
-	fwrite(mCurrentAnimation->mName.c_str(), sizeof(char), length, fp);
-
-	fwrite(&mbPlay, sizeof(bool), 1, fp);
+	Save(fp);
 
 	fclose(fp);
-		
-	return true;
 }
 
 void CAnimationSequence2DInstance::Save(FILE* fp)
@@ -265,11 +241,7 @@ void CAnimationSequence2DInstance::Save(FILE* fp)
 		int length = (int)iter->first.length();
 		fwrite(&length, sizeof(int), 1, fp);
 		fwrite(iter->first.c_str(), sizeof(char), length, fp);
-		if (!iter->second->Save(fp))
-		{
-			assert(false);
-			return;
-		}
+		iter->second->Save(fp);
 	}
 	
 	int length = (int)mCurrentAnimation->mName.size();
@@ -279,7 +251,7 @@ void CAnimationSequence2DInstance::Save(FILE* fp)
 	fwrite(&mbPlay, sizeof(bool), 1, fp);
 }
 
-bool CAnimationSequence2DInstance::Load(const char* fullPath)
+void CAnimationSequence2DInstance::Load(const char* fullPath)
 {
 	FILE* fp = nullptr;
 
@@ -288,9 +260,16 @@ bool CAnimationSequence2DInstance::Load(const char* fullPath)
 	if (!fp)
 	{
 		assert(false);
-		return false;
+		return;
 	}
+	
+	Load(fp);
 
+	fclose(fp);
+}
+
+void CAnimationSequence2DInstance::Load(FILE* fp)
+{
 	int mapSize = 0;
 	fread(&mapSize, sizeof(int), 1, fp);
 
@@ -303,17 +282,15 @@ bool CAnimationSequence2DInstance::Load(const char* fullPath)
 		char name[256] = {};
 		fread(name, sizeof(char), size_t(length), fp);
 		
-		if (!data->Load(fp))
+		data->Load(fp);
+		
+		if (mScene)
 		{
-			auto iter = mMapAnimation.begin();
-			auto iterEnd = mMapAnimation.end();
-			for (; iter != iterEnd; ++iter)
-			{
-				SAFE_DELETE(iter->second);
-			}
-			SAFE_DELETE(data);
-			assert(false);
-			return false;
+			data->mSequence = mScene->GetResource()->FindAnimationSequence2D(data->mSequenceName);
+		}
+		else
+		{
+			data->mSequence = CResourceManager::GetInst()->FindAnimationSequece2D(data->mSequenceName);
 		}
 
 		mMapAnimation.insert(std::make_pair(name, data));
@@ -328,12 +305,10 @@ bool CAnimationSequence2DInstance::Load(const char* fullPath)
 
 	fread(&mbPlay, sizeof(bool), 1, fp);
 
-	fclose(fp);
-	return true;
-}
-
-void CAnimationSequence2DInstance::Load(FILE* fp)
-{
+	if (mScene)
+	{
+		mCBuffer = mScene->GetResource()->GetAnimation2DCBuffer();
+	}
 }
 
 void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
@@ -367,6 +342,7 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName,
 	// 애니메이션 데이터 생성
 	anim = new CAnimationSequence2DData;
 
+	anim->mSequenceName = sequence->GetName();
 	anim->mSequence = sequence;
 	anim->mName = name;
 	anim->mbIsLoop = bIsLoop;
@@ -386,6 +362,66 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName,
 			// SpriteComponent의 Material에 이 애니메이션의 텍스쳐를 등록한다.
 			mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
 				anim->mSequence->GetTexture()->GetName(), anim->mSequence->GetTexture());
+		}
+	}
+
+	mMapAnimation.insert(std::make_pair(name, anim));
+}
+
+void CAnimationSequence2DInstance::AddAnimation(const TCHAR* fileName, const std::string& pathName, 
+	const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
+{
+	CAnimationSequence2DData* anim = findAnimation(name);
+
+	if (anim)
+	{
+		return;
+	}
+
+	char fileNameMultiByte[256] = {};
+	int length = WideCharToMultiByte(CP_ACP, 0, fileName, -1, 0, 0, 0, 0);
+	WideCharToMultiByte(CP_ACP, 0, fileName, -1, fileNameMultiByte,length, 0, 0);
+
+	CAnimationSequence2D* sequence = nullptr;
+
+	if (mScene)
+	{
+		std::string sequenceName;
+		mScene->GetResource()->LoadSequence2D(sequenceName, fileNameMultiByte);
+		sequence = mScene->GetResource()->FindAnimationSequence2D(sequenceName);
+	}
+	else
+	{
+		std::string sequenceName;
+
+		CResourceManager::GetInst()->LoadSequence2D(sequenceName, fileNameMultiByte);
+		sequence = CResourceManager::GetInst()->FindAnimationSequece2D(sequenceName);
+	}
+
+	if (!sequence)
+	{
+		assert(false);
+		return;
+	}
+
+	anim = new CAnimationSequence2DData;
+
+	anim->mSequence = sequence;
+	anim->mSequenceName = sequence->GetName();
+	anim->mName = name;
+	anim->mbIsLoop = bIsLoop;
+	anim->mbIsReverse = bIsReverse;
+	anim->mPlayTime = playTime;
+	anim->mPlayScale = playScale;
+	anim->mFrameTime = playTime / sequence->GetFrameCount();
+
+	if (mMapAnimation.empty())
+	{
+		mCurrentAnimation = anim;
+		if (mOwner)
+		{
+			mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel, anim->mSequence->GetTexture()->GetName(),
+				anim->mSequence->GetTexture());
 		}
 	}
 

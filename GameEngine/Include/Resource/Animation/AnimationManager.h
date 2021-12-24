@@ -21,9 +21,10 @@ public:
 
 	CAnimationSequence2D* FindSequence(const std::string& name);
 	void ReleaseSequence(const std::string& name);
-	bool SaveSequence(const std::string& name, const char* fullPath);
-	bool LoadSequence(std::string& outName, const char* fullPath, class CScene* scene = nullptr);
-	bool LoadSequence(std::string& outName, FILE* fp, class CScene* scene = nullptr);
+	bool SaveSequenceFullPath(const std::string& name, const char* fullPath);
+	bool LoadSequenceFullPath(std::string& outName, const char* fullPath, class CScene* scene = nullptr);
+	bool SaveSequence(const std::string& name, const char* fileName, const std::string& pathName);
+	bool LoadSequece(std::string& outName, const char* fileName, const std::string& pathName, class CScene* scene = nullptr);
 
 public:
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer() const

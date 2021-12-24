@@ -223,7 +223,7 @@ void CMaterial::Load(FILE* fp)
 		switch (eType)
 		{
 		case eImageType::Atlas:
-			if (vecFileName.size() == 0)
+			if (vecFileName.size() == 1)
 			{
 				if (mScene)
 				{
