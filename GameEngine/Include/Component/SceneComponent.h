@@ -18,6 +18,7 @@ public:
 	virtual void Start();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
+	virtual void CheckCollision();
 	virtual void PrevRender();
 	virtual void Render();
 	virtual void PostRender();

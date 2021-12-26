@@ -48,6 +48,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void PostUpdate(float deltaTime);
 	virtual void PrevRender();
+	void AddCollision();
 	virtual void Render();
 	virtual void PostRender();
 	virtual CGameObject* Clone();

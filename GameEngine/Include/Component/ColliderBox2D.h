@@ -23,5 +23,22 @@ public:
     virtual CColliderBox2D* Clone();
     virtual void Save(FILE* fp) override;
     virtual void Load(FILE* fp) override;
+
+public:
+    Box2DInfo GetInfo() const
+    {
+        return mInfo;
+    }
+
+public:
+    void SetExtent(float width, float height)
+    {
+        mInfo.Length.x = width;
+        mInfo.Length.y = height;
+        SetWorldScale(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
+    }
+
+private:
+    Box2DInfo mInfo;
 };
 

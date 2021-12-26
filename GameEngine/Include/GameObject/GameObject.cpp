@@ -149,6 +149,14 @@ void CGameObject::PrevRender()
 	}
 }
 
+void CGameObject::AddCollision()
+{
+	if (mRootSceneComponent)
+	{
+		mRootSceneComponent->CheckCollision();
+	}
+}
+
 void CGameObject::Render()
 {
 	size_t size = mVecObjectComponent.size();

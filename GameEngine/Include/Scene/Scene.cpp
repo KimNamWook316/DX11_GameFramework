@@ -91,6 +91,19 @@ void CScene::PostUpdate(float deltaTime)
 		(*iter)->PostUpdate(deltaTime);
 		++iter;
 	}
+
+	// 모든 PostUpdate 처리가 끝나고, World Position이 결정된 후에 충돌을 수행한다.
+	// 충돌체를 충돌 영역에 포함시킨다.
+	iter = mObjList.begin();
+	iterEnd = mObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->AddCollision();
+	}
+
+	// 포함된 충돌체들을 이용해 충돌처리 수행
+	mCollision->DoCollide(deltaTime);
 }
 
 void CScene::Save(const char* fileName, const std::string& pathName)

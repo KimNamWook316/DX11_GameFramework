@@ -102,6 +102,17 @@ void CSceneComponent::PostUpdate(float deltaTime)
 	}
 }
 
+// 충돌 컴포넌트에서 재정의
+void CSceneComponent::CheckCollision()
+{
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->CheckCollision();
+	}
+}
+
 void CSceneComponent::PrevRender()
 {
 	if (mbIsRender)

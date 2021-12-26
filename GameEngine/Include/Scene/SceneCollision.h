@@ -17,7 +17,11 @@ struct CollisionSectionInfo
 	CollisionSectionInfo():
 		CountX(1),
 		CountY(1),
-		CountZ(1)
+		CountZ(1),
+		SectionSize(1000.f, 1000.f, 1.f),
+		SectionTotalSize(1000.f, 1000.f, 1.f),
+		Min(-500.f, -500.f, -0.5f),
+		Max(500.f, 500.f, 0.5f)
 	{
 	}
 };
@@ -33,9 +37,28 @@ private:
 public:
 	bool Init();
 	void Start();
+	void DoCollide(float deltaTime);
+
+public:
+	void SetSectionSize(const Vector3& size);
+	void SetSectionSize(const float x, const float y, const float z);
+	void SetSectionCenter(const Vector3& center);
+	void SetSectionCenter(const float x, const float y, const float z);
+	void SetSectionMin(const Vector3& min);
+	void SetSectionMin(const float x, const float y, const float z);
+	void SetSectionMax(const Vector3& max);
+	void SetSectionMax(const float x, const float y, const float z);
+	void SetSectionCount(const int countX, const int countY, const int countZ = 1);
+	void CreateSection();
+	void Clear();
+	void AddCollider(class CColliderComponent* collider);
+
+private:
+	void classifyColliderBySection();
 
 private:
 	class CScene* mScene;
 	CollisionSectionInfo* mSectionInfo;
+	std::vector<class CColliderComponent*> mVecCollider;
 };
 

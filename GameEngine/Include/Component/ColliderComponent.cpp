@@ -1,4 +1,6 @@
 #include "ColliderComponent.h"
+#include "../Scene/Scene.h"
+#include "../Scene/SceneCollision.h"
 
 CColliderComponent::CColliderComponent()
 {
@@ -41,6 +43,14 @@ void CColliderComponent::PostUpdate(float deltaTime)
 	CSceneComponent::PostUpdate(deltaTime);
 }
 
+void CColliderComponent::CheckCollision()
+{
+	// 자신을 씬 충돌 매니저에 등록
+	mScene->GetCollision()->AddCollider(this);
+	
+	CSceneComponent::CheckCollision();
+}
+
 void CColliderComponent::PrevRender()
 {
 	CSceneComponent::PrevRender();
@@ -64,9 +74,17 @@ CColliderComponent* CColliderComponent::Clone()
 void CColliderComponent::Save(FILE* fp)
 {
 	CSceneComponent::Save(fp);
+	fwrite(&meColliderType, sizeof(eColliderType), 1, fp);
+	fwrite(&mOffset, sizeof(Vector3), 1, fp);
+	fwrite(&mMinPos, sizeof(Vector3), 1, fp);
+	fwrite(&mMaxPos, sizeof(Vector3), 1, fp);
 }
 
 void CColliderComponent::Load(FILE* fp)
 {
 	CSceneComponent::Load(fp);
+	fread(&meColliderType, sizeof(eColliderType), 1, fp);
+	fread(&mOffset, sizeof(Vector3), 1, fp);
+	fread(&mMinPos, sizeof(Vector3), 1, fp);
+	fread(&mMaxPos, sizeof(Vector3), 1, fp);
 }

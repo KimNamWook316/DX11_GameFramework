@@ -51,6 +51,11 @@ public:
 		return mMode->GetPlayerObj();
 	}
 
+	CSceneCollision* GetCollision() const
+	{
+		return mCollision;
+	}
+
 	void GetObjNames(std::vector<std::string>& outNames)
 	{
 		auto iter = mObjList.begin();

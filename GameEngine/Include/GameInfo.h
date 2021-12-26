@@ -214,3 +214,13 @@ struct CollisionProfile
 
 	std::vector<eCollisionState> vecState; // 각 채널에 대해 충돌하는지 아닌지 ( 총 채널수만큼 사이즈)
 };
+
+// for collider
+struct Box2DInfo
+{
+	Vector2 Center;
+	Vector2 Axis[2];
+	Vector2 Length; // Collider Box의 너비, 높이의 절반
+	Vector2 Min;	// 가장 낮은 좌표값
+	Vector3 Max;	// 가장 높은 좌표값
+};

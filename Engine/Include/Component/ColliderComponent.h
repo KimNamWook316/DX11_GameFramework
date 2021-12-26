@@ -17,6 +17,7 @@ public:
     virtual void Start() override;
     virtual void Update(float deltaTime) override;
     virtual void PostUpdate(float deltaTime) override;
+    virtual void CheckCollision() override;
     virtual void PrevRender() override;
     virtual void Render() override;
     virtual void PostRender() override;
@@ -30,13 +31,36 @@ public:
         return meColliderType;
     }
 
+    Vector3 GetMinPos() const
+    {
+        return mMinPos;
+    }
+
+    Vector3 GetMaxPos() const
+    {
+        return mMaxPos;
+    }
+
 public:
     void SetColiderType(eColliderType type)
     {
         meColliderType = type;
     }
 
+    void SetOffset(const Vector3& offset)
+    {
+        mOffset = offset;
+    }
+
+    void SetOffset(const float x, const float y, const float z)
+    {
+        mOffset = Vector3(x, y, z);
+    }
+
 protected:
     eColliderType meColliderType;
+    Vector3 mOffset;
+    Vector3 mMinPos;
+    Vector3 mMaxPos;
 };
 
