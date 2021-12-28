@@ -7,9 +7,9 @@ class CCollisionManager
 public:
 	bool Init();
 	bool CreateProfile(const std::string& name, eCollisionChannel eChannel,
-		bool bEnable, eCollisionState eState = eCollisionState::Collision);
+		bool bEnable, eCollisionInteraction eState = eCollisionInteraction::Collision);
 	bool SetCollisionState(const std::string& name, eCollisionChannel eChannel,
-		eCollisionState state);
+		eCollisionInteraction state);
 	CollisionProfile* FindProfile(const std::string& name);
 
 	DECLARE_SINGLE(CCollisionManager)

@@ -137,3 +137,13 @@ void CColliderBox2D::Load(FILE* fp)
 	CColliderComponent::Load(fp);
 	fread(&mInfo, sizeof(Box2DInfo), 1, fp);
 }
+
+bool CColliderBox2D::DoCollide(CColliderComponent* Dest)
+{
+	return false;
+}
+
+bool CColliderBox2D::DoCollideMouse(const Vector2& mousePos)
+{
+	return false;
+}

@@ -24,6 +24,9 @@ public:
     virtual void Save(FILE* fp) override;
     virtual void Load(FILE* fp) override;
 
+    virtual bool DoCollide(CColliderComponent* Dest);
+    virtual bool DoCollideMouse(const Vector2& mousePos);
+
 public:
     Box2DInfo GetInfo() const
     {

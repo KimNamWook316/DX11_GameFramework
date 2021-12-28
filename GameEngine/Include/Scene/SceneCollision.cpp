@@ -2,12 +2,12 @@
 #include "../Engine.h"
 #include "CollisionSection.h"
 #include "../Component/ColliderComponent.h"
+#include "../Input.h"
 
 CSceneCollision::CSceneCollision():
 	mSectionInfo(nullptr),
 	mScene(nullptr)
 {
-	mVecCollider.reserve(10000);
 }
 
 CSceneCollision::~CSceneCollision()
@@ -39,13 +39,133 @@ void CSceneCollision::Start()
 
 void CSceneCollision::DoCollide(float deltaTime)
 {
+	// 마우스와 충돌한 오브젝트가 사라지면 마우스와 충돌한 충돌체 정보를 nullptr로
+	// 오브젝트가 Die했을 때 처리
+	auto iter = mColliderList.begin();
+	auto iterEnd = mColliderList.end();
+
+	for (; iter != iterEnd;)
+	{
+		if (!(*iter)->IsActive())
+		{
+			if (*iter == mMouseCollision)
+			{
+				mMouseCollision = nullptr;
+			}
+			iter = mColliderList.erase(iter);
+			iterEnd = mColliderList.end();
+			continue;
+		}
+		++iter;
+	}
+
 	// 충돌체를 분류해 각자의 영역으로 보낸다.
 	classifyColliderBySection();
 
+	// 현재 충돌 영역이 겹치는지 확인
+	iter = mColliderList.begin();
+	iter = mColliderList.end();
 
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->GetCheckCurrentSection())
+		{
+			continue;
+		}
+		(*iter)->CheckCurrentSection();
 
-	// 초기화
-	mVecCollider.clear();
+		// 이전 프레임에 충돌했다면, 충돌체들이 아직 같은 영역에 있는지 확인한다.
+		(*iter)->CheckPrevCollisionSection();
+	}
+
+	// 마우스와 충돌처리
+	DoCollideMouse(deltaTime);
+
+	// 전체 Section 순회하며, 충돌처리
+	size_t size = mSectionInfo->vecSection.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		mSectionInfo->vecSection[i]->DoCollide(deltaTime);
+		mSectionInfo->vecSection[i]->Clear();
+	}
+
+	iter = mColliderList.begin();
+	iterEnd = mColliderList.end();
+	
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->ClearFrame();
+	}
+}
+
+void CSceneCollision::DoCollideMouse(float deltaTime)
+{
+	bool bCollideMouse = false;
+
+	// UI와 마우스간 충돌처리
+
+	// UI와 마우스가 충돌하지 않은 경우, 물체와의 충돌
+	if (!bCollideMouse)
+	{
+		// 마우스의 현재 충돌 영역 판별
+		// 2D와 3D의 처리 다름, 3D의 경우 Picking기법 활용
+		if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)
+		{
+			Vector2 mousePos = CInput::GetInst()->GetMouseWorldPos();
+
+			mousePos.x -= mSectionInfo->Min.x;
+			mousePos.y -= mSectionInfo->Min.y;
+			
+			int idxX = 0;
+			int idxY = 0;
+
+			idxX = (int)(mousePos.x / mSectionInfo->SectionSize.x);
+			idxY = (int)(mousePos.y / mSectionInfo->SectionSize.y);
+
+			idxX = idxX < 0 ? -1 : idxX;
+			idxY = idxY < 0 ? -1 : idxY;
+
+			idxX = idxX > mSectionInfo->CountX ? -1 : idxX;
+			idxY = idxY > mSectionInfo->CountY ? -1 : idxY;
+
+			if (idxX != -1 && idxY != -1)
+			{
+				CColliderComponent* colliderMouse = mSectionInfo->vecSection[idxY * mSectionInfo->CountX + idxX]->DoCollideMouse(true, deltaTime);
+
+				if (colliderMouse)
+				{
+					bCollideMouse = true;
+
+					if (colliderMouse != mMouseCollision)
+					{
+						colliderMouse->CallCollisionMouseCallBack(eCollisionState::Enter);
+					}
+
+					// 이전에 충돌한 물체와 다른 경우
+					if (mMouseCollision && (colliderMouse != mMouseCollision))
+					{
+						mMouseCollision->CallCollisionMouseCallBack(eCollisionState::Exit);
+					}
+
+					mMouseCollision = colliderMouse;
+				}
+			}
+		}
+		else
+		{
+
+		}
+	}
+
+	if (!bCollideMouse)
+	{
+		// 마우스와 충돌하지 않았고, 이전 프레임에 충돌된 물체가 있었을 경우
+		if (mMouseCollision)
+		{
+			mMouseCollision->CallCollisionMouseCallBack(eCollisionState::Exit);
+			mMouseCollision = nullptr;
+		}
+	}
 }
 
 void CSceneCollision::SetSectionSize(const Vector3& size)
@@ -200,16 +320,21 @@ void CSceneCollision::Clear()
 
 void CSceneCollision::AddCollider(CColliderComponent* collider)
 {
-	mVecCollider.push_back(collider);
+	mColliderList.push_back(collider);
+}
+
+void CSceneCollision::collideMouse(float deltaTime)
+{
 }
 
 void CSceneCollision::classifyColliderBySection()
 {
-	size_t size = mVecCollider.size();
+	auto iter = mColliderList.begin();
+	auto iterEnd = mColliderList.end();
 
-	for (size_t i = 0; i < size; ++i)
+	for (; iter != iterEnd; ++iter)
 	{
-		CColliderComponent* collider = mVecCollider[i];
+		CColliderComponent* collider = *iter;
 
 		Vector3 min = collider->GetMinPos();
 		Vector3 max = collider->GetMaxPos();

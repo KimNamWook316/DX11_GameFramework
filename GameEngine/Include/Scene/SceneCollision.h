@@ -38,6 +38,7 @@ public:
 	bool Init();
 	void Start();
 	void DoCollide(float deltaTime);
+	void DoCollideMouse(float deltaTime);
 
 public:
 	void SetSectionSize(const Vector3& size);
@@ -53,12 +54,16 @@ public:
 	void Clear();
 	void AddCollider(class CColliderComponent* collider);
 
+protected:
+	void collideMouse(float deltaTime);
+
 private:
 	void classifyColliderBySection();
 
 private:
 	class CScene* mScene;
 	CollisionSectionInfo* mSectionInfo;
-	std::vector<class CColliderComponent*> mVecCollider;
+	std::list<CSharedPtr<class CColliderComponent>> mColliderList;
+	class CColliderComponent* mMouseCollision;
 };
 
