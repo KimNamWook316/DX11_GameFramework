@@ -48,9 +48,9 @@ public:
     }
 
     template <typename T>
-    void AddCollisionCallBack(eCollisionState state, T* obj, void(T::* func)(const CollisionResult&))
+    void AddCollisionMouseCallBack(eCollisionState state, T* obj, void(T::* func)(const CollisionResult&))
     {
-        mCollistionMouseCallBack[state] = std::bind(obj, std::placeholders::_1);
+        mCollisionMouseCallBack[state] = std::bind(obj, std::placeholders::_1);
     }
 
 public:
@@ -74,7 +74,7 @@ public:
         return mResult;
     }
 
-    CollisionResult GetCollisionResult() const
+    CollisionResult GetCollisionMouseResult() const
     {
         return mMouseResult;
     }

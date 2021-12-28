@@ -110,10 +110,17 @@ enum class eCollisionChannel
 	Max
 };
 
-enum class eCollisionState
+enum class eCollisionInteraction
 {
 	Ignore,
 	Collision,
+};
+
+enum class eCollisionState
+{
+	Enter,
+	Exit,
+	Max
 };
 
 enum class eColliderType

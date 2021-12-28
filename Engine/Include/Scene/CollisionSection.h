@@ -18,6 +18,10 @@ public:
 	void Clear();
 	void AddCollider(class CColliderComponent* collider);
 	void DoCollide(float deltaTime);
+	CColliderComponent* DoCollideMouse(bool bIs2D, float deltaTime);
+
+private:
+	static int SortY(const void* src, const void* dest);
 
 private:
 	std::vector<class CColliderComponent*> mVecCollider;

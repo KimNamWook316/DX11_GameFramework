@@ -48,6 +48,7 @@ void CSceneCollision::DoCollide(float deltaTime)
 	{
 		if (!(*iter)->IsActive())
 		{
+			// 마우스와 충돌한 오브젝트일경우 nullptr로 비어있게
 			if (*iter == mMouseCollision)
 			{
 				mMouseCollision = nullptr;
@@ -102,7 +103,7 @@ void CSceneCollision::DoCollideMouse(float deltaTime)
 {
 	bool bCollideMouse = false;
 
-	// UI와 마우스간 충돌처리
+	// TODO : UI와 마우스간 충돌처리
 
 	// UI와 마우스가 충돌하지 않은 경우, 물체와의 충돌
 	if (!bCollideMouse)
@@ -208,7 +209,7 @@ void CSceneCollision::SetSectionCenter(const float x, const float y, const float
 {
 	if (!mSectionInfo)
 	{
-		return;
+		mSectionInfo = new CollisionSectionInfo;
 	}
 
 	mSectionInfo->Center = Vector3(x,y,z);
@@ -220,7 +221,7 @@ void CSceneCollision::SetSectionMin(const Vector3& min)
 {
 	if (!mSectionInfo)
 	{
-		return;
+		mSectionInfo = new CollisionSectionInfo;
 	}
 
 	mSectionInfo->Min = min;
@@ -234,7 +235,7 @@ void CSceneCollision::SetSectionMin(const float x, const float y, const float z)
 {
 	if (!mSectionInfo)
 	{
-		return;
+		mSectionInfo = new CollisionSectionInfo;
 	}
 
 	mSectionInfo->Min = Vector3(x,y,z);
@@ -248,7 +249,7 @@ void CSceneCollision::SetSectionMax(const Vector3& max)
 {
 	if (!mSectionInfo)
 	{
-		return;
+		mSectionInfo = new CollisionSectionInfo;
 	}
 
 	mSectionInfo->Max = max;
@@ -262,7 +263,7 @@ void CSceneCollision::SetSectionMax(const float x, const float y, const float z)
 {
 	if (!mSectionInfo)
 	{
-		return;
+		mSectionInfo = new CollisionSectionInfo;
 	}
 
 	mSectionInfo->Max = Vector3(x,y,z);

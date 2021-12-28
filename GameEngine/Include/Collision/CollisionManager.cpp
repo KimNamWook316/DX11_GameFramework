@@ -90,7 +90,6 @@ CollisionProfile* CCollisionManager::FindProfile(const std::string& name)
 
 	if (iter == mMapProfile.end())
 	{
-		assert(false);
 		return nullptr;
 	}
 

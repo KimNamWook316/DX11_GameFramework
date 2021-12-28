@@ -52,8 +52,12 @@ public:
 	void ClearCallBack();
 
 public:
-	// DirectX 좌표계 기준 좌표로 반환함
 	Vector2 GetMousePos() const
+	{
+		return mMousePos;
+	}
+	
+	Vector2 GetMouseWorldPos() const
 	{
 		return mMousePos;
 	}
@@ -74,7 +78,6 @@ public:
 
 		if (!info)
 		{
-			assert(false);
 			return;
 		}
 

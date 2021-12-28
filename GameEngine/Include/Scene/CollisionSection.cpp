@@ -41,7 +41,7 @@ void CCollisionSection::AddCollider(CColliderComponent* collider)
 
 void CCollisionSection::DoCollide(float deltaTime)
 {
-	// 角力 面倒 贸府
+	// TODO : 面倒贸府
 }
 
 CColliderComponent* CCollisionSection::DoCollideMouse(bool bIs2D, float deltaTime)
