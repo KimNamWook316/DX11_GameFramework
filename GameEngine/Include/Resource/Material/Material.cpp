@@ -90,7 +90,7 @@ CMaterial* CMaterial::Clone()
 void CMaterial::Save(FILE* fp)
 {
 	std::string shaderName = mShader->GetName();
-	int length = (size_t)shaderName.length();
+	int length = (int)shaderName.length();
 	
 	fwrite(&length, sizeof(int), 1, fp);
 	fwrite(shaderName.c_str(), sizeof(char), length, fp);
@@ -112,7 +112,7 @@ void CMaterial::Save(FILE* fp)
 		if (bStateEnable)
 		{
 			std::string stateName = mShader->GetName();
-			int length = (size_t)stateName.length();
+			int length = (int)stateName.length();
 			
 			fwrite(&length, sizeof(int), 1, fp);
 			fwrite(stateName.c_str(), sizeof(char), length, fp);
@@ -125,7 +125,7 @@ void CMaterial::Save(FILE* fp)
 
 	for (int i = 0; i < textureCount; ++i)
 	{
-		int length = (size_t)mVecTextureInfo[i].Name.length();
+		int length = (int)mVecTextureInfo[i].Name.length();
 		
 		fwrite(&length, sizeof(int), 1, fp);
 		fwrite(mVecTextureInfo[i].Name.c_str(), sizeof(char), length, fp);

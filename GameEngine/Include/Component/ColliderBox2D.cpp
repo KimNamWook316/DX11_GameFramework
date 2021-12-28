@@ -1,4 +1,7 @@
 #include "ColliderBox2D.h"
+#include "../Collision/Collision.h"
+#include "../Scene/Scene.h"
+#include "../Scene/SceneResource.h"
 
 CColliderBox2D::CColliderBox2D()
 {
@@ -37,6 +40,9 @@ bool CColliderBox2D::Init()
 
 	// Length는 전체 스케일의 반
 	SetWorldScale(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
+
+	// 출력을 위한 Mesh
+	mMesh = mScene->GetResource()->FindMesh("Box2DMesh");
 
 	return true;
 }
@@ -145,5 +151,7 @@ bool CColliderBox2D::DoCollide(CColliderComponent* Dest)
 
 bool CColliderBox2D::DoCollideMouse(const Vector2& mousePos)
 {
-	return false;
+	CollisionResult result;
+	mbMouseCollision = CCollision::CollisionBox2DToPoint(mMouseResult, result, mInfo, mousePos);
+	return mbMouseCollision;
 }

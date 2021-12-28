@@ -132,5 +132,11 @@ protected:
     std::list<std::function<void(const CollisionResult&)>> mCollisionCallBack[(int)eCollisionState::Max];
     std::list<std::function<void(const CollisionResult&)>> mCollisionMouseCallBack[(int)eCollisionState::Max];
     bool mbMouseCollision;
+
+    // 출력을 위한 Mesh
+    class CMesh* mMesh;
+    // Material을 가지고 있을 필요 없으므로, 상수 버퍼를 직접 가지고 있는다.
+    // Color만 쉐이더에 넘겨주는 상수 버퍼
+    class CColliderConstantBuffer* mCBuffer;
 };
 

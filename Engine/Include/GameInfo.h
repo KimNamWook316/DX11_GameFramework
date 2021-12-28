@@ -237,3 +237,8 @@ struct Box2DInfo
 	Vector2 Min;	// °¡Àå ³·Àº ÁÂÇ¥°ª
 	Vector3 Max;	// °¡Àå ³ôÀº ÁÂÇ¥°ª
 };
+
+struct ColliderCBuffer
+{
+	Vector4 Color;
+};

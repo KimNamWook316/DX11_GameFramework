@@ -37,9 +37,25 @@ bool CMeshManager::Init()
 	};
 
 	frameRectMesh->CreateMesh(frameRectPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	mMapMesh.insert(std::make_pair("FrameRectMesh", frameRectMesh));
 	frameRectMesh->SetName("frameRectMesh");
+	mMapMesh.insert(std::make_pair("FrameRectMesh", frameRectMesh));
 
+	// Collider 출력에 쓰일 메쉬
+	CMesh* box2DMesh = new CStaticMesh;
+	
+	// 가운데 중점
+	Vector3 box2DPos[5] =
+	{
+		Vector3(-0.5f, 0.5f, 0.f),
+		Vector3(0.5f, 0.5f, 0.f),
+		Vector3(0.5f, -0.5f, 0.f),
+		Vector3(-0.5f, -0.5f, 0.f),
+		Vector3(-0.5f, 0.5f, 0.f),
+	};
+
+	box2DMesh->SetName("Box2DMesh");
+	box2DMesh->CreateMesh(box2DPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	mMapMesh.insert(std::make_pair("Box2DMesh", box2DMesh));
 	return true;
 }
 

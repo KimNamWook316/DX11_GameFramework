@@ -106,7 +106,7 @@ CStaticMeshComponent* CStaticMeshComponent::Clone()
 void CStaticMeshComponent::Save(FILE* fp)
 {
 	std::string meshName = mMesh->GetName();
-	int length = (size_t)meshName.length();
+	int length = (int)meshName.length();
 
 	fwrite(&length, sizeof(int), 1, fp);
 	fwrite(meshName.c_str(), sizeof(char), length, fp);

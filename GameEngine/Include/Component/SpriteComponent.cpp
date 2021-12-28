@@ -272,6 +272,7 @@ bool CSpriteComponent::CheckCurrentAnimation(const std::string& name)
 	{
 		return mAnimation->CheckCurrentAnimation(name);
 	}
+	return false;
 }
 
 void CSpriteComponent::SetPlayTime(const std::string& name, const float playTime)

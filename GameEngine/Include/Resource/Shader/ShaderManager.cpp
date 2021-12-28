@@ -2,6 +2,7 @@
 #include "ColorMeshShader.h"
 #include "Mesh2DShader.h"
 #include "PosMeshShader.h"
+#include "ColliderShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -21,6 +22,7 @@ bool CShaderManager::Init()
 		return false;
 	}
 
+	// 에디터용 와이어프레임 사각 메쉬
 	if (!CreateShader<CPosMeshShader>("PosMeshShader"))
 	{
 		assert(false);
@@ -29,6 +31,13 @@ bool CShaderManager::Init()
 	
 	// 텍스쳐용 쉐이더 생성
 	if (!CreateShader<CMesh2DShader>("Mesh2DShader"))
+	{
+		assert(false);
+		return false;
+	}
+
+	// 콜라이더용 와이어프레임 쉐이더
+	if (!CreateShader<CColliderShader>("ColliderShader"))
 	{
 		assert(false);
 		return false;
@@ -45,6 +54,9 @@ bool CShaderManager::Init()
 		(int)eConstantBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("Animation2DCBuffer", sizeof(Animation2DCBuffer), 10,
+		(int)eConstantBufferShaderTypeFlags::Graphic);
+
+	CreateConstantBuffer("ColliderCBuffer", sizeof(ColliderCBuffer), 11,
 		(int)eConstantBufferShaderTypeFlags::Graphic);
 	
 	return true;

@@ -2,6 +2,7 @@
 #include "../Collision/CollisionManager.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneCollision.h"
+#include "../Resource/Shader/ColliderConstantBuffer.h"
 
 CColliderComponent::CColliderComponent()
 {
@@ -12,6 +13,9 @@ CColliderComponent::CColliderComponent()
 	mbCheckCurrentSection = false;
 	mProfile = nullptr;
 	mbMouseCollision = false;
+	
+	mMesh = nullptr;
+	mCBuffer = nullptr;
 }
 
 CColliderComponent::CColliderComponent(const CColliderComponent& com) :
@@ -21,10 +25,14 @@ CColliderComponent::CColliderComponent(const CColliderComponent& com) :
 	mbCheckCurrentSection = false;
 	mbIsRender = com.mbIsRender;
 	mProfile = com.mProfile;
+	
+	mCBuffer = com.mCBuffer->Clone();
 }
 
 CColliderComponent::~CColliderComponent()
 {
+	SAFE_DELETE(mCBuffer);
+
 	auto iter = mPrevCollisionList.begin();
 	auto iterEnd = mPrevCollisionList.end();
 
@@ -45,6 +53,15 @@ bool CColliderComponent::Init()
 		assert(false);
 		return false;
 	}
+
+	// Defualt Profile : Object
+	SetCollisionProfile("Object");
+
+	// 상수 버퍼 생성
+	mCBuffer = new CColliderConstantBuffer;
+	mCBuffer->Init();
+	mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
+
 	return true;
 }
 
