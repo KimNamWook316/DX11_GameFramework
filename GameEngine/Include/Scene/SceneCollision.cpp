@@ -65,7 +65,7 @@ void CSceneCollision::DoCollide(float deltaTime)
 
 	// 현재 충돌 영역이 겹치는지 확인
 	iter = mColliderList.begin();
-	iter = mColliderList.end();
+	iterEnd = mColliderList.end();
 
 	for (; iter != iterEnd; ++iter)
 	{

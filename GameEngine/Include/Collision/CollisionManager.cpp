@@ -58,11 +58,11 @@ bool CCollisionManager::CreateProfile(const std::string& name, eCollisionChannel
 	profile->Name = name;
 	profile->Channel = eChannel;
 	profile->bCollisionEnable = bEnable;
-	profile->vecState.resize((int)eCollisionChannel::Max); // 모든 프로파일에 상태 가지도록 세팅
+	profile->vecInteraction.resize((int)eCollisionChannel::Max); // 모든 프로파일에 상태 가지도록 세팅
 
 	for (int i = 0; i < (int)eCollisionChannel::Max; ++i)
 	{
-		profile->vecState[i] = eState;
+		profile->vecInteraction[i] = eState;
 	}
 
 	mMapProfile.insert(std::make_pair(name, profile));
@@ -79,7 +79,7 @@ bool CCollisionManager::SetCollisionState(const std::string& name, eCollisionCha
 		return false;
 	}
 
-	profile->vecState[(int)eChannel] = state;
+	profile->vecInteraction[(int)eChannel] = state;
 
 	return true;
 }

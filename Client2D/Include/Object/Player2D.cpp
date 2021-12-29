@@ -41,6 +41,9 @@ bool CPlayer2D::Init()
 	mSprite->SetEndCallBack<CPlayer2D>("Attack", this, &CPlayer2D::attack);
 	mSprite->SetPlayTime("Attack", 0.5f);
 
+	mBody = CreateComponent<CColliderBox2D>("Body");
+	mSprite->AddChild(mBody);
+
 	return true;
 }
 
@@ -96,7 +99,7 @@ CGameObject* CPlayer2D::Clone()
 }
 void CPlayer2D::move(float deltaTime)
 {
-	mMovePosition = Vector3(CInput::GetInst()->GetMousePos().x, 720.f - CInput::GetInst()->GetMousePos().y, 0.f);
+	mMovePosition = Vector3(CInput::GetInst()->GetMousePos().x, CInput::GetInst()->GetMousePos().y, 0.f);
 	mDirection = mMovePosition - GetWorldPos();
 	mDirection.Normalize();
 	mSpeed = 300.f;

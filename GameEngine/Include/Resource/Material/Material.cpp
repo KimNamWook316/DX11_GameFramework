@@ -18,9 +18,7 @@ CMaterial::CMaterial()	:
 CMaterial::CMaterial(const CMaterial& mat)
 {
 	*this = mat;
-
 	mScene = nullptr;
-
 	mRefCount = 0;
 }
 

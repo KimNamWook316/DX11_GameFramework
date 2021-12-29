@@ -11,12 +11,12 @@ CColliderShader::~CColliderShader()
 
 bool CColliderShader::Init()
 {
-	if (!LoadVertexShader("ColliderMeshVS", TEXT("ColorMesh.fx"), SHADER_PATH))
+	if (!LoadVertexShader("ColliderMeshVS", TEXT("Collider.fx"), SHADER_PATH))
 	{
 		assert(false);
 		return false;
 	}
-	if (!LoadPixelShader("ColliderMeshPS", TEXT("ColorMesh.fx"), SHADER_PATH))
+	if (!LoadPixelShader("ColliderMeshPS", TEXT("Collider.fx"), SHADER_PATH))
 	{
 		assert(false);
 		return false;

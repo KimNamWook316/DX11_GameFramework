@@ -135,6 +135,9 @@
     <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\05. Collider">
       <UniqueIdentifier>{d3559cfb-6364-40b7-9833-951423453629}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\03. ColliderShader">
+      <UniqueIdentifier>{166918cc-5547-4272-a7be-569aad04fc2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -413,11 +416,11 @@
     <ClInclude Include="Collision\Collision.h">
       <Filter>08. Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Resource\Shader\ColliderShader.h">
-      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMeshShader</Filter>
-    </ClInclude>
     <ClInclude Include="Resource\Shader\ColliderConstantBuffer.h">
       <Filter>02. Resource\02. Shader\03. ConstantBuffer\05. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ColliderShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -676,11 +679,11 @@
     <ClCompile Include="Collision\Collision.cpp">
       <Filter>08. Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Resource\Shader\ColliderShader.cpp">
-      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMeshShader</Filter>
-    </ClCompile>
     <ClCompile Include="Resource\Shader\ColliderConstantBuffer.cpp">
       <Filter>02. Resource\02. Shader\03. ConstantBuffer\05. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ColliderShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -700,6 +703,9 @@
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Mesh2D.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Collider.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

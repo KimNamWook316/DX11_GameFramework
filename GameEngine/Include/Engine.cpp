@@ -18,6 +18,7 @@ CEngine::CEngine()
 	, mTimer(nullptr)
 	, mbIsStart(false)
 	, meSpace(eEngineSpace::Space2D)
+	, mbPlay(true)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(413);
@@ -95,12 +96,14 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 		return false;
 	}
 
+	// 입력 매니저
 	if (!CInput::GetInst()->Init(mhInst, mhWnd))
 	{
 		assert(false);
 		return false;
 	}
 
+	// IMGUI 초기화
 	if (!CIMGUIManager::GetInst()->Init(mhWnd))
 	{
 		assert(false);

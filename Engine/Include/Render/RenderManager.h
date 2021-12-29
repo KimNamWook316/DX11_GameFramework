@@ -5,7 +5,7 @@
 struct RenderLayer
 {
 	std::string Name;
-	int LayerPriority;								// TODO : 클수록 위에 렌더되는중
+	int LayerPriority;
 	std::vector<class CSceneComponent*> RenderList; // 이 레이어에서 렌더되는 오브젝트들 
 	int RenderCount;								
 

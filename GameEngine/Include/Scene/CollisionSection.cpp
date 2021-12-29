@@ -41,7 +41,67 @@ void CCollisionSection::AddCollider(CColliderComponent* collider)
 
 void CCollisionSection::DoCollide(float deltaTime)
 {
-	// TODO : 충돌처리
+	size_t count = mVecCollider.size();
+
+	// 이 섹션에 충돌체가 하나밖에 없다면, 충돌 수행할 필요 없음
+	if (count < 2)
+	{
+		return;
+	}
+
+	// 인덱스 주의
+	for (size_t i = 0; i < count - 1; ++i)
+	{
+		CColliderComponent* src = mVecCollider[i];
+
+		for (size_t j = 1; j < count; ++j)
+		{
+			CColliderComponent* dest = mVecCollider[j];
+
+			// 이미 이전 충돌영역에서 충돌을 수행했다면, 충돌 영역이 걸쳐있는 것이므로 이 섹션에서 수행할 필요 없음
+			if (src->IsExistInCurrentCollision(dest))
+			{
+				continue;
+			}
+
+			CollisionProfile* srcProfile = src->GetCollisionProfile();
+			CollisionProfile* destProfile = dest->GetCollisionProfile();
+
+			// 두 충돌체가 속해있는 채널간의 충돌이 모두 다 무시되는 경우, 충돌 수행 하지 않는다.
+			if (srcProfile->vecInteraction[(int)destProfile->Channel] == eCollisionInteraction::Ignore &&
+				destProfile->vecInteraction[(int)srcProfile->Channel] == eCollisionInteraction::Ignore)
+			{
+				continue;
+			}
+
+			// 충돌 수행한다.
+			if (src->DoCollide(dest))
+			{
+				// 이전 프레임에 충돌된 목록에 없다면, 지금 막 충돌이 시작된 것.
+				if (!src->IsExistInPrevCollision(dest))
+				{
+					src->AddPrevCollision(dest);
+					dest->AddPrevCollision(src);
+
+					src->CallCollisionCallBack(eCollisionState::Enter);
+					dest->CallCollisionCallBack(eCollisionState::Enter);
+				}
+				
+				src->AddCurrentFrameCollision(dest);
+				dest->AddCurrentFrameCollision(src);
+			}
+
+			// 충돌이 되지 않았는데, 이전 프레임에 충돌했다면, 지금 막 충돌상태에서 벗어난 것
+			else if (src->IsExistInPrevCollision(dest))
+			{
+				src->DeletePrevCollision(dest);
+				dest->DeletePrevCollision(src);
+
+				src->CallCollisionCallBack(eCollisionState::Exit);
+				dest->CallCollisionCallBack(eCollisionState::Exit);
+			}
+		}
+	}
 }
 
 CColliderComponent* CCollisionSection::DoCollideMouse(bool bIs2D, float deltaTime)

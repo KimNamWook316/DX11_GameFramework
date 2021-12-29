@@ -4,6 +4,7 @@
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
 #include "RenderStateManager.h"
 #include "RenderState.h"
+#include "../Engine.h"
 
 DEFINITION_SINGLE(CRenderManager)
 
@@ -54,7 +55,8 @@ void CRenderManager::AddRenderList(CSceneComponent* pComponent)
 		return;
 	}
 
-	// 리사이즈
+	// 리사이즈 (최적화) -> 렌더 대상이 런타임에서 추가되는 경우가 게임은 매우 많다.
+	// 따라서 미리 공간을 할당해놓는 것이 속도면에서 유리하지 않을까?
 	if (layer->RenderCount == (int)layer->RenderList.size())
 	{
 		layer->RenderList.resize((size_t)layer->RenderCount * 2);
@@ -107,7 +109,7 @@ bool CRenderManager::Init()
 	layer->LayerPriority = 0;
 	mRenderLayerList.push_back(layer);
 
-	// TODO : Depth Disable 된 상태임
+	// Depth Disable 된 상태
 	mDepthDisableState = mRenderStateManager->FindRenderState("DepthDisable");
 
 	return true;
@@ -115,8 +117,11 @@ bool CRenderManager::Init()
 
 void CRenderManager::Render()
 {
-	// TODO : 3D에서는 적용하지 않아야 함
-	mDepthDisableState->SetState();
+	// 2D에서는 Depth 사용하지 않는 State적용
+	if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)
+	{
+		mDepthDisableState->SetState();
+	}
 
 	{
 		auto iter = mRenderLayerList.begin();
@@ -166,8 +171,10 @@ void CRenderManager::Render()
 		}
 	}
 
-	// TODO : 3D에서는 적용하지 않아야 함
-	mDepthDisableState->ResetState();
+	if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)
+	{
+		mDepthDisableState->ResetState();
+	}
 }
 
 CRenderState* CRenderManager::FindRenderState(const std::string& name)

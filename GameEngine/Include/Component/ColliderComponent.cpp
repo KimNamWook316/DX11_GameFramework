@@ -14,17 +14,21 @@ CColliderComponent::CColliderComponent()
 	mProfile = nullptr;
 	mbMouseCollision = false;
 	
-	mMesh = nullptr;
 	mCBuffer = nullptr;
 }
 
 CColliderComponent::CColliderComponent(const CColliderComponent& com) :
 	CSceneComponent(com)
 {
+	SetTypeID<CColliderComponent>();
+	meComponentType = eComponentType::SCENE_COMP;
+
 	mbMouseCollision = false;
 	mbCheckCurrentSection = false;
 	mbIsRender = com.mbIsRender;
 	mProfile = com.mProfile;
+	mMesh = com.mMesh;
+	mShader = com.mShader;
 	
 	mCBuffer = com.mCBuffer->Clone();
 }
@@ -62,12 +66,17 @@ bool CColliderComponent::Init()
 	mCBuffer->Init();
 	mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
 
+	mShader = CResourceManager::GetInst()->FindShader("ColliderShader");
+
 	return true;
 }
 
 void CColliderComponent::Start()
 {
 	CSceneComponent::Start();
+
+	// 자신을 충돌 매니저에 등록
+	mScene->GetCollision()->AddCollider(this);
 }
 
 void CColliderComponent::Update(float deltaTime)
@@ -80,11 +89,9 @@ void CColliderComponent::PostUpdate(float deltaTime)
 	CSceneComponent::PostUpdate(deltaTime);
 }
 
+// TODO : 이 함수 필요한가?
 void CColliderComponent::CheckCollision()
 {
-	// 자신을 씬 충돌 매니저에 등록
-	mScene->GetCollision()->AddCollider(this);
-	
 	CSceneComponent::CheckCollision();
 }
 

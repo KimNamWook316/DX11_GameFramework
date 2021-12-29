@@ -2,6 +2,7 @@
 
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
+#include "Component/ColliderBox2D.h"
 
 class CPlayer2D : public CGameObject
 {
@@ -28,6 +29,7 @@ private:
 
 private:
 	CSharedPtr<CSpriteComponent> mSprite;
+	CSharedPtr<CColliderBox2D> mBody;
 
 	float mOpacity;
 	float mSpeed;

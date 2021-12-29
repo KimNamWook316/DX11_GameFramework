@@ -21,6 +21,11 @@ public:
         mBufferData.Color = color;
     }
 
+    void SetColliderWVP(const Matrix& matWVP)
+    {
+        mBufferData.MatWVP = matWVP;
+    }
+
 protected:
     ColliderCBuffer mBufferData;
 };

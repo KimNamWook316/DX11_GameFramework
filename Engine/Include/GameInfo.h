@@ -212,7 +212,7 @@ struct CollisionProfile
 	eCollisionChannel Channel; // 이 채널이 어떤 채널에 속해있는지
 	bool bCollisionEnable;
 
-	std::vector<eCollisionInteraction> vecState; // 각 채널에 대해 충돌하는지 아닌지 ( 총 채널수만큼 사이즈)
+	std::vector<eCollisionInteraction> vecInteraction; // 각 채널에 대해 충돌하는지 아닌지 ( 총 채널수만큼 사이즈)
 };
 
 struct CollisionResult
@@ -241,4 +241,5 @@ struct Box2DInfo
 struct ColliderCBuffer
 {
 	Vector4 Color;
+	Matrix MatWVP;
 };

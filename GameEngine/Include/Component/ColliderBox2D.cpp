@@ -2,6 +2,7 @@
 #include "../Collision/Collision.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Resource/Shader/ColliderConstantBuffer.h"
 
 CColliderBox2D::CColliderBox2D()
 {
@@ -120,6 +121,40 @@ void CColliderBox2D::PrevRender()
 void CColliderBox2D::Render()
 {
 	CColliderComponent::Render();
+
+	Matrix matWorld, matProj, matWVP;
+	matProj = XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f, 0.f, 1000.f);
+
+	Matrix matScale, matRot, matTrans;
+	matScale.Scaling(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
+	matRot.Rotation(GetWorldRot());
+	matTrans.Translation(mInfo.Center);
+	
+	matWorld = matScale * matRot * matTrans;
+
+	matWVP = matWorld * matProj;
+
+	matWVP.Transpose();
+
+	mCBuffer->SetColliderWVP(matWVP);
+
+	if (mPrevCollisionList.empty())
+	{
+		mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
+	}
+	else
+	{
+		mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
+	}
+
+	if (mbMouseCollision)
+	{
+		mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
+	}
+
+	mCBuffer->UpdateCBuffer();
+	mShader->SetShader();
+	mMesh->Render();
 }
 
 void CColliderBox2D::PostRender()
@@ -144,9 +179,16 @@ void CColliderBox2D::Load(FILE* fp)
 	fread(&mInfo, sizeof(Box2DInfo), 1, fp);
 }
 
-bool CColliderBox2D::DoCollide(CColliderComponent* Dest)
+bool CColliderBox2D::DoCollide(CColliderComponent* dest)
 {
-	return false;
+	switch (dest->GetColliderType())
+	{
+	case eColliderType::Box2D:
+		return CCollision::CollisionBox2DToBox2D(this, (CColliderBox2D*)dest);
+	default:
+		assert(false);
+		return false;
+	}
 }
 
 bool CColliderBox2D::DoCollideMouse(const Vector2& mousePos)
