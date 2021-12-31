@@ -16,6 +16,11 @@ public:
         mBufferData.MatWorld = mat;
     }
 
+    void SetViewMatrix(const Matrix& mat)
+    {
+        mBufferData.MatView = mat;
+    }
+
     void SetProjMatrix(const Matrix& mat)
     {
         mBufferData.MatProj = mat;

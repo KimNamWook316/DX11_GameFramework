@@ -1,5 +1,8 @@
 #include "Transform.h"
 #include "../Resource/Shader/TransformConstantBuffer.h"
+#include "../Scene/Scene.h"
+#include "../Scene/CameraManager.h"
+#include "CameraComponent.h"
 
 CTransform::CTransform()	:
 	mParentTransform(nullptr),
@@ -141,11 +144,10 @@ void CTransform::SetTransformBuffer()
 {
 	mCBuffer->SetWorldMatrix(mMatWorld);
 	
-	// 직교 투영 행렬을 만든다., y축 아래쪽을 음수로 설정한다.
-	Matrix matProj;
-	matProj = XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f, 0.f, 1000.f);
+	CCameraComponent* cam = mScene->GetCameraManager()->GetCurrentCamera();
 
-	mCBuffer->SetProjMatrix(matProj);
+	mCBuffer->SetViewMatrix(cam->GetViewMatrix());
+	mCBuffer->SetProjMatrix(cam->GetProjMatrix());
 
 	mCBuffer->SetPivot(mPivot);
 	mCBuffer->SetMeshSize(mMeshSize);

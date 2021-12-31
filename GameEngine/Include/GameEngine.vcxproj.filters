@@ -138,6 +138,12 @@
     <Filter Include="02. Resource\02. Shader\02. ShaderClass\03. ColliderShader">
       <UniqueIdentifier>{166918cc-5547-4272-a7be-569aad04fc2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Scene\04. CameraManager">
+      <UniqueIdentifier>{ccc92ef1-c656-4366-b862-49c4ca1938e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\03. CameraComponent">
+      <UniqueIdentifier>{d838aa54-c5e8-4567-87b1-73a9864b3b20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -422,6 +428,12 @@
     <ClInclude Include="Resource\Shader\ColliderShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
     </ClInclude>
+    <ClInclude Include="Component\CameraComponent.h">
+      <Filter>05. Component\03. CameraComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CameraManager.h">
+      <Filter>03. Scene\04. CameraManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -684,6 +696,12 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\ColliderShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\CameraComponent.cpp">
+      <Filter>05. Component\03. CameraComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CameraManager.cpp">
+      <Filter>03. Scene\04. CameraManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

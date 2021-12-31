@@ -32,11 +32,11 @@ public:
 public:
     void CheckPrevCollisionSection();
     void AddPrevCollision(CColliderComponent* collider);
+    void AddCurrentFrameCollision(CColliderComponent* collider);
     void DeletePrevCollision(CColliderComponent* collider);
     bool EmptyPrevCollision();
     bool IsExistInPrevCollision(CColliderComponent* collider);
     bool IsExistInCurrentCollision(CColliderComponent* collider);
-    void AddCurrentFrameCollision(CColliderComponent* collider);
     void CallCollisionCallBack(eCollisionState state);
     void CallCollisionMouseCallBack(eCollisionState state);
     void ClearFrame();
@@ -45,13 +45,13 @@ public:
     template <typename T>
     void AddCollisionCallBack(eCollisionState state, T* obj, void(T::* func)(const CollisionResult&))
     {
-        mCollisionCallBack[state] = std::bind(obj, std::placeholders::_1);
+        mCollisionCallBack[(int)state].push_back(std::bind(func, obj, std::placeholders::_1));
     }
 
     template <typename T>
     void AddCollisionMouseCallBack(eCollisionState state, T* obj, void(T::* func)(const CollisionResult&))
     {
-        mCollisionMouseCallBack[state] = std::bind(obj, std::placeholders::_1);
+        mCollisionMouseCallBack[(int)state].push_back(std::bind(func, obj, std::placeholders::_1));
     }
 
 public:
@@ -139,7 +139,7 @@ protected:
     CSharedPtr<class CShader> mShader;
 
     // Material을 가지고 있을 필요 없으므로, 상수 버퍼를 직접 가지고 있는다.
-    // Color만 쉐이더에 넘겨주는 상수 버퍼
+    // Color와 WVP 쉐이더에 넘겨주는 상수 버퍼
     class CColliderConstantBuffer* mCBuffer;
 };
 

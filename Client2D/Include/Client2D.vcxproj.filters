@@ -60,6 +60,9 @@
     <ClCompile Include="Object\MonsterAnimation.cpp">
       <Filter>02. Object\04. Monster</Filter>
     </ClCompile>
+    <ClCompile Include="Object\BulletCamera.cpp">
+      <Filter>02. Object\02. Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -88,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Object\MonsterAnimation.h">
       <Filter>02. Object\04. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletCamera.h">
+      <Filter>02. Object\02. Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

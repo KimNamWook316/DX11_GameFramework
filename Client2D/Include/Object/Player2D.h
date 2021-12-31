@@ -3,6 +3,7 @@
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderBox2D.h"
+#include "Component/CameraComponent.h"
 
 class CPlayer2D : public CGameObject
 {
@@ -24,10 +25,12 @@ private:
 	void rotationZInv(float deltaTime);
 	void rotationZ(float deltaTime);
 	void attack();
+	void skill1();
 	
 	void playAttackAnim(float deltaTime);
 
 private:
+	CSharedPtr<CCameraComponent> mCamera;
 	CSharedPtr<CSpriteComponent> mSprite;
 	CSharedPtr<CColliderBox2D> mBody;
 

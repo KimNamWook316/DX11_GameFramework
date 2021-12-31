@@ -33,6 +33,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("RotationZ", 'D');
 	CInput::GetInst()->CreateKey("Move", VK_LBUTTON);
 	CInput::GetInst()->CreateKey("Attack", VK_RBUTTON);
+	CInput::GetInst()->CreateKey("Skill1", '1');
 
 	return true;
 }

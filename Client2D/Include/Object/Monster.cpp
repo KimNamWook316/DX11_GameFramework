@@ -26,6 +26,7 @@ bool CMonster::Init()
 {
 	mSprite = CreateComponent<CSpriteComponent>("PlayerSprite");
 	mBody = CreateComponent<CColliderBox2D>("Body");
+	mBody->SetCollisionProfile("Monster");
 
 	SetRootSceneComponent(mSprite);
 	mSprite->AddChild(mBody);

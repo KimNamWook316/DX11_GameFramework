@@ -127,3 +127,10 @@ enum class eColliderType
 {
 	Box2D,
 };
+
+enum class eCameraType
+{
+	Camera2D,
+	Camera3D,
+	UI,
+};

@@ -59,11 +59,6 @@ void CConstantBuffer::UpdateBuffer(void* data)
 		CDevice::GetInst()->GetContext()->VSSetConstantBuffers(mRegister, 1, &mBuffer);
 	}
 
-	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Vertex)
-	{
-		CDevice::GetInst()->GetContext()->VSSetConstantBuffers(mRegister, 1, &mBuffer);
-	}
-
 	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Pixel)
 	{
 		CDevice::GetInst()->GetContext()->PSSetConstantBuffers(mRegister, 1, &mBuffer);

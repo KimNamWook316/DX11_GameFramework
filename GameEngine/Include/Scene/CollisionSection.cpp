@@ -114,7 +114,8 @@ CColliderComponent* CCollisionSection::DoCollideMouse(bool bIs2D, float deltaTim
 	
 		if (size > 1)
 		{
-			// Y축 기준, 아래에 있는 오브젝트부터 충돌 처리 하기 위해 정렬
+			// 2D의 경우 Y-Sorting하므로, Y값이 낮은 물체가 앞에 표시된다.
+			// 따라서 Y값이 가장 낮은 물체가 우선적으로 피킹되어야 하므로, Sort한다.
 			qsort(&mVecCollider[0], size, sizeof(CColliderComponent*), CCollisionSection::SortY);
 		}
 

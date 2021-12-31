@@ -29,6 +29,7 @@
     <ClInclude Include="Animation\AnimationSequence2DInstance.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionManager.h" />
+    <ClInclude Include="Component\CameraComponent.h" />
     <ClInclude Include="Component\ColliderBox2D.h" />
     <ClInclude Include="Component\ColliderComponent.h" />
     <ClInclude Include="Component\Component.h" />
@@ -102,6 +103,7 @@
     <ClInclude Include="Resource\Texture\DirectXTex.h" />
     <ClInclude Include="Resource\Texture\Texture.h" />
     <ClInclude Include="Resource\Texture\TextureManager.h" />
+    <ClInclude Include="Scene\CameraManager.h" />
     <ClInclude Include="Scene\CollisionSection.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneCollision.h" />
@@ -124,6 +126,7 @@
     <ClCompile Include="Animation\AnimationSequence2DInstance.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionManager.cpp" />
+    <ClCompile Include="Component\CameraComponent.cpp" />
     <ClCompile Include="Component\ColliderBox2D.cpp" />
     <ClCompile Include="Component\ColliderComponent.cpp" />
     <ClCompile Include="Component\StaticMeshComponent.cpp" />
@@ -190,6 +193,7 @@
     <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp" />
     <ClCompile Include="Resource\Texture\Texture.cpp" />
     <ClCompile Include="Resource\Texture\TextureManager.cpp" />
+    <ClCompile Include="Scene\CameraManager.cpp" />
     <ClCompile Include="Scene\CollisionSection.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneCollision.cpp" />

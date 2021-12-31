@@ -3,6 +3,9 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "../Resource/Shader/ColliderConstantBuffer.h"
+#include "../Scene/Scene.h"
+#include "../Scene/CameraManager.h"
+#include "CameraComponent.h"
 
 CColliderBox2D::CColliderBox2D()
 {
@@ -111,6 +114,8 @@ void CColliderBox2D::PostUpdate(float deltaTime)
 	// 최종 최소, 최대 좌표 판별
 	mInfo.Min.x = mMinPos.x;
 	mInfo.Min.y = mMinPos.y;
+	mInfo.Max.x = mMaxPos.x;
+	mInfo.Max.y = mMaxPos.y;
 }
 
 void CColliderBox2D::PrevRender()
@@ -122,8 +127,11 @@ void CColliderBox2D::Render()
 {
 	CColliderComponent::Render();
 
-	Matrix matWorld, matProj, matWVP;
-	matProj = XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f, 0.f, 1000.f);
+	CCameraComponent* cam = mScene->GetCameraManager()->GetCurrentCamera();
+
+	Matrix matWorld, matView, matProj, matWVP;
+	matView = cam->GetViewMatrix();
+	matProj = cam->GetProjMatrix();
 
 	Matrix matScale, matRot, matTrans;
 	matScale.Scaling(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
@@ -132,7 +140,7 @@ void CColliderBox2D::Render()
 	
 	matWorld = matScale * matRot * matTrans;
 
-	matWVP = matWorld * matProj;
+	matWVP = matWorld * matView * matProj;
 
 	matWVP.Transpose();
 

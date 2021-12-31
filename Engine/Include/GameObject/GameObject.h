@@ -92,6 +92,23 @@ public:
 	}
 
 	template <typename T>
+	T* FindSceneComponentFromType()
+	{
+		auto iter = mSceneComponentList.begin();
+		auto iterEnd = mSceneComponentList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->CheckType<T>())
+			{
+				return (T*)(*iter);
+			}
+		}
+
+		return nullptr;
+	}
+
+	template <typename T>
 	T* LoadComponent()
 	{
 		T* component = new T;
