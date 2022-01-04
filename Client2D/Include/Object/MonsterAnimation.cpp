@@ -22,10 +22,10 @@ bool CMonsterAnimation::Init()
 	}
 
 	AddAnimation("PlayerIdle_Front", "Idle_Front");
-	AddAnimation("PlayerIdle_Back", "Idle_Back");
-	AddAnimation("PlayerMove_Front", "Move_Front");
-	AddAnimation("PlayerMove_Back", "Move_Back");
-	AddAnimation("PlayerAttack", "Attack");
+ //	AddAnimation("PlayerIdle_Back", "Idle_Back");
+ //	AddAnimation("PlayerMove_Front", "Move_Front");
+ //	AddAnimation("PlayerMove_Back", "Move_Back");
+ //	AddAnimation("PlayerAttack", "Attack");
 	return true;
 }
 

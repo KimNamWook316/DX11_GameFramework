@@ -48,6 +48,14 @@ public:
 		return mMatProj;
 	}
 
+	Vector2 GetLeftBottomPos() const
+	{
+		Vector2 LB;
+		LB.x = GetWorldPos().x;
+		LB.y = GetWorldPos().y;
+		return LB;
+	}
+
 public:
 	void SetCameraType(eCameraType type)
 	{
@@ -78,6 +86,9 @@ public:
 		{
 			float z = GetRelativePos().z;
 			SetRelativePos(mRS.Width / -2.f, mRS.Height / -2.f, z);
+
+			mRatio.x = 0.5f;
+			mRatio.y = 0.5f;
 		}
 	}
 
@@ -88,6 +99,9 @@ public:
 		{
 			float z = GetRelativePos().z;
 			SetRelativePos(mRS.Width / -x, mRS.Height / -y, z);
+
+			mRatio.x = x;
+			mRatio.y = y;
 		}
 	}
 
@@ -101,5 +115,6 @@ protected:
     float mViewAngle;
     float mDistance;
     Resolution mRS;
+	Vector2 mRatio;
 };
 

@@ -4,6 +4,7 @@
 #include "SceneResource.h"
 #include "SceneCollision.h"
 #include "CameraManager.h"
+#include "Viewport.h"
 #include "../GameObject/GameObject.h"
 
 class CScene
@@ -60,6 +61,11 @@ public:
 	CCameraManager* GetCameraManager() const
 	{
 		return mCameraManager;
+	}
+
+	CViewport* GetViewport() const
+	{
+		return mViewport;
 	}
 
 	void GetObjNames(std::vector<std::string>& outNames)
@@ -142,6 +148,7 @@ private:
 	CSceneResource* mResource;
 	CSceneCollision* mCollision;
 	CCameraManager* mCameraManager;
+	CViewport* mViewport;
 
 	std::list<CSharedPtr<CGameObject>> mObjList;
 	bool mbIsStart;

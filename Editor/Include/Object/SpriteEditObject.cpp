@@ -1,6 +1,9 @@
 #include "SpriteEditObject.h"
 #include "Component/SpriteComponent.h"
+#include "Component/CameraComponent.h"
 #include "Animation/AnimationSequence2DInstance.h"
+#include "Scene/Scene.h"
+#include "Scene/CameraManager.h"
 
 CSpriteEditObject::CSpriteEditObject()	:
 	mSprite(nullptr)
@@ -19,13 +22,9 @@ CSpriteEditObject::~CSpriteEditObject()
 bool CSpriteEditObject::Init()
 {
 	mSprite = CreateComponent<CSpriteComponent>("SpriteEdit");
-	
 	SetRootSceneComponent(mSprite);
-
 	mSprite->SetRelativeScale(100.f, 100.f, 1.f);
-
 	mSprite->CreateAnimationInstance<CAnimationSequence2DInstance>();
-
 	return true;
 }
 

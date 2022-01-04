@@ -141,8 +141,14 @@
     <Filter Include="03. Scene\04. CameraManager">
       <UniqueIdentifier>{ccc92ef1-c656-4366-b862-49c4ca1938e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05. Component\03. CameraComponent">
+    <Filter Include="05. Component\01. SceneComponent\03. CameraComponent">
       <UniqueIdentifier>{d838aa54-c5e8-4567-87b1-73a9864b3b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. Widget">
+      <UniqueIdentifier>{7919a390-e30c-447e-a76f-f68dff19e986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\05. Viewport">
+      <UniqueIdentifier>{fcd4d9e3-58e1-4abb-bd07-019a36a8fcb8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -429,10 +435,31 @@
       <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
     </ClInclude>
     <ClInclude Include="Component\CameraComponent.h">
-      <Filter>05. Component\03. CameraComponent</Filter>
+      <Filter>05. Component\01. SceneComponent\03. CameraComponent</Filter>
     </ClInclude>
     <ClInclude Include="Scene\CameraManager.h">
       <Filter>03. Scene\04. CameraManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderCircle.h">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderPixel.h">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ColliderPixelShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Viewport.h">
+      <Filter>03. Scene\05. Viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\WidgetWindow.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Widget.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Button.h">
+      <Filter>09. Widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -698,10 +725,31 @@
       <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
     </ClCompile>
     <ClCompile Include="Component\CameraComponent.cpp">
-      <Filter>05. Component\03. CameraComponent</Filter>
+      <Filter>05. Component\01. SceneComponent\03. CameraComponent</Filter>
     </ClCompile>
     <ClCompile Include="Scene\CameraManager.cpp">
       <Filter>03. Scene\04. CameraManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderCircle.cpp">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderPixel.cpp">
+      <Filter>05. Component\01. SceneComponent\02. ColliderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ColliderPixelShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\03. ColliderShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Viewport.cpp">
+      <Filter>03. Scene\05. Viewport</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\WidgetWindow.cpp">
+      <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Widget.cpp">
+      <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Button.cpp">
+      <Filter>09. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

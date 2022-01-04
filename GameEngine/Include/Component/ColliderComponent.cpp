@@ -169,7 +169,6 @@ void CColliderComponent::CheckPrevCollisionSection()
 			(*iter)->CallCollisionCallBack(eCollisionState::Exit);
 
 			// 충돌목록에서 삭제
-			DeletePrevCollision(*iter);
 			(*iter)->DeletePrevCollision(this);
 
 			iter = mPrevCollisionList.erase(iter);
@@ -256,6 +255,11 @@ void CColliderComponent::CallCollisionCallBack(eCollisionState state)
 
 void CColliderComponent::CallCollisionMouseCallBack(eCollisionState state)
 {
+	if (eCollisionState::Exit == state)
+	{
+		mbMouseCollision = false;
+	}
+
 	auto iter = mCollisionMouseCallBack[(int)state].begin();
 	auto iterEnd = mCollisionMouseCallBack[(int)state].end();
 

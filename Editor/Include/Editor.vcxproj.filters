@@ -63,6 +63,9 @@
     <ClInclude Include="Object\Player2D.h">
       <Filter>03. Object</Filter>
     </ClInclude>
+    <ClInclude Include="Object\CameraObject.h">
+      <Filter>03. Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -93,6 +96,9 @@
       <Filter>02. Editor</Filter>
     </ClCompile>
     <ClCompile Include="Object\Player2D.cpp">
+      <Filter>03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\CameraObject.cpp">
       <Filter>03. Object</Filter>
     </ClCompile>
   </ItemGroup>

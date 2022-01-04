@@ -37,6 +37,19 @@ CGameObject::~CGameObject()
 {
 }
 
+void CGameObject::Destroy()
+{
+	CRef::Destroy();
+	
+	mRootSceneComponent->Destroy();
+
+	size_t size = mVecObjectComponent.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecObjectComponent[i]->Destroy();
+	}
+}
+
 CComponent* CGameObject::FindComponent(const std::string& name)
 {
 	auto iter = mSceneComponentList.begin();

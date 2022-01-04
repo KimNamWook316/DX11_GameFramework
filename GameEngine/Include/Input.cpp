@@ -1,5 +1,10 @@
 #include "Input.h"
 #include "Device.h"
+#include "Scene/SceneManager.h"
+#include "Scene/CameraManager.h"
+#include "Scene/Scene.h"
+#include "Component/CameraComponent.h"
+#include "Engine.h";
 
 DEFINITION_SINGLE(CInput)
 
@@ -280,6 +285,14 @@ void CInput::updateMouse(float deltaTime)
 	mMouseMoveAmount = mMousePos - mousePos;
 
 	mMousePos = mousePos;
+	mMouseWorldPos = mMousePos;
+
+	// 2D일때는 월드공간에서의 마우스 좌표를 구한다.
+	if (eEngineSpace::Space2D == CEngine::GetInst()->GetEngineSpace())
+	{
+		CCameraComponent* cam = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+		mMouseWorldPos += cam->GetLeftBottomPos();
+	}
 }
 
 void CInput::updateKeyState()

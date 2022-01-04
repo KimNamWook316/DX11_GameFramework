@@ -1,9 +1,10 @@
 #include "BulletCamera.h"
 #include "Component/SpriteComponent.h"
-#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
 #include "Component/CameraComponent.h"
 #include "Scene/Scene.h"
 #include "Scene/CameraManager.h"
+#include "Monster.h"
 
 CBulletCamera::CBulletCamera()
 {
@@ -14,7 +15,7 @@ CBulletCamera::CBulletCamera(const CBulletCamera& bullet)	:
 	CGameObject(bullet)
 {
 	mSprite = (CSpriteComponent*)FindComponent("BulletSprite");
-	mBody = (CColliderBox2D*)FindComponent("BulletBody");
+	mBody = (CColliderCircle*)FindComponent("BulletBody");
 	mCamera = (CCameraComponent*)FindComponent("BulletCamera");
 }
 
@@ -27,7 +28,7 @@ bool CBulletCamera::Init()
 	CGameObject::Init();
 
 	mSprite = CreateComponent<CSpriteComponent>("BulletSprite");
-	mBody = CreateComponent<CColliderBox2D>("BulletBody");
+	mBody = CreateComponent<CColliderCircle>("BulletBody");
 	mCamera = CreateComponent<CCameraComponent>("BulletCamera");
 
 	SetRootSceneComponent(mSprite);

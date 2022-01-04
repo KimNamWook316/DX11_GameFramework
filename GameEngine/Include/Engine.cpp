@@ -14,7 +14,7 @@ DEFINITION_SINGLE(CEngine)
 bool CEngine::mLoop = true;
 
 CEngine::CEngine() 
-	: mClearColor{0.5f, 0.5f, 0.5f, 0.5f}
+	: mClearColor{0.0f, 0.5f, 0.0f, 0.5f}
 	, mTimer(nullptr)
 	, mbIsStart(false)
 	, meSpace(eEngineSpace::Space2D)

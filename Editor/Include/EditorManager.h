@@ -33,6 +33,10 @@ public:
 	void OnShiftLeftArrowKeyDown(float deltaTime);
 	void OnShiftDownArrowKeyDown(float deltaTime);
 	void OnShiftUpArrowKeydown(float deltaTime);
+	void OnScrollDown(float deltaTime);
+	void OnScrollUp(float deltaTime);
+	void OnScrollLeft(float deltaTime);
+	void OnScrollRight(float deltaTime);
 
 public:
 	eEditMode GetEditMode()
@@ -58,5 +62,6 @@ private:
 	class CEditorMenuWindow* mEditorMenuWindow;
 
 	class CDragObject* mDragObj;
+	class CCameraObject* mCameraObj;
 };
 

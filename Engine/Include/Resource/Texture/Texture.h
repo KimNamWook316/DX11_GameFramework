@@ -1,17 +1,6 @@
 #pragma once
 
-#include "DirectXTex.h"
 #include "../../Ref.h"
-
-#ifdef _DEBUG
-
-#pragma comment(lib, "DirectXTex_Debug.lib")
-
-#else
-
-#pragma comment(lib, "DirectXTex.lib")
-
-#endif // _DEBUG
 
 struct TextureResourceInfo
 {

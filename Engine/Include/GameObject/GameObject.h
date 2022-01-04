@@ -13,6 +13,9 @@ protected:
 	virtual ~CGameObject();
 
 public:
+	virtual void Destroy();
+
+public:
 	class CScene* GetScene() const
 	{
 		return mScene;

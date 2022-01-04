@@ -46,8 +46,9 @@ bool CPlayer2D::Init()
 
 	mBody->SetCollisionProfile("Player");
 
-	//mCamera->OnViewportCenter();
-	mCamera->SetViewPortByRatio(3.f, 3.f);
+	mCamera->OnViewportCenter();
+	mCamera->SetWorldScale(1.f, 1.f, 1.f);
+	//mCamera->SetViewPortByRatio(3.f, 3.f);
 
 	return true;
 }
@@ -104,7 +105,7 @@ CGameObject* CPlayer2D::Clone()
 }
 void CPlayer2D::move(float deltaTime)
 {
-	mMovePosition = Vector3(CInput::GetInst()->GetMousePos().x, CInput::GetInst()->GetMousePos().y, 0.f);
+	mMovePosition = Vector3(CInput::GetInst()->GetMouseWorld2DPos().x, CInput::GetInst()->GetMouseWorld2DPos().y, 0.f);
 	mDirection = mMovePosition - GetWorldPos();
 	mDirection.Normalize();
 	mSpeed = 300.f;
@@ -178,7 +179,7 @@ void CPlayer2D::playAttackAnim(float deltaTime)
 {
 	mbIsMoving = false;
 	mSpeed = 0.f;
-	Vector3 mousePos = Vector3(CInput::GetInst()->GetMousePos().x, CInput::GetInst()->GetMousePos().y, 0.f);
+	Vector3 mousePos = Vector3(CInput::GetInst()->GetMouseWorld2DPos().x, CInput::GetInst()->GetMouseWorld2DPos().y, 0.f);
 	mDirection = mousePos - GetWorldPos();
 	mDirection.Normalize();
 

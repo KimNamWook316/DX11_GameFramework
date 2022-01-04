@@ -2,6 +2,7 @@
 #include "Scene/Scene.h"
 #include "../Object/Player2D.h"
 #include "../Object/Monster.h"
+#include "../Object/PixelTest.h"
 #include "Scene/SceneResource.h";
 
 CMainScene::CMainScene()
@@ -20,7 +21,9 @@ bool CMainScene::Init()
 
 	CPlayer2D* player = mScene->CreateGameObject<CPlayer2D>("Player");
 
-	CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
+	//CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
+
+	CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
 
 	SetPlayerObj(player);
 
@@ -33,8 +36,9 @@ void CMainScene::createMaterial()
 
 void CMainScene::createAnimationSequence()
 {
-	mScene->GetResource()->CreateAnimationSequence2D("PlayerIdle_Front", 
-		"PlayerIdle", TEXT("Sorceress_Town_Idle.png"));
+ //	mScene->GetResource()->CreateAnimationSequence2D("PlayerIdle_Front", 
+ //		"PlayerIdle", TEXT("Sorceress_Town_Idle.png"));
+ 	mScene->GetResource()->LoadSequence2D("PlayerIdle_Front.sqc");
 	mScene->GetResource()->CreateAnimationSequence2D("PlayerIdle_Back", 
 		"PlayerIdle", TEXT("Sorceress_Town_Idle.png"));
 	mScene->GetResource()->CreateAnimationSequence2D("PlayerMove_Front", 
@@ -48,11 +52,6 @@ void CMainScene::createAnimationSequence()
 	mScene->GetResource()->CreateAnimationSequence2D("PlayerAttack", 
 		"PlayerAttack", TEXT("Sorceress_Special_Attack_1.png"));
 	
-	for (int i = 0; i < 6; ++i)
-	{
-		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerIdle_Front", Vector2(i * 42.f, 0.f), Vector2(42.f, 73.f));
-	}
-
 	for (int i = 0; i < 6; ++i)
 	{
 		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerIdle_Back", Vector2(i * 42.f, 0.f), Vector2(42.f, 73.f));

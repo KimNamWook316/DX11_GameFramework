@@ -36,6 +36,10 @@ bool CMonster::Init()
 	mSprite->SetRelativeScale(100.f, 100.f, 1.f);
 	mSprite->SetRelativePos(500.f, 300.f, 0.f);
 	mSprite->SetPivot(0.5f, 0.5f, 0.f);
+	
+	mBody->AddCollisionCallBack(eCollisionState::Enter, this, &CMonster::OnCollsionCallBack);
+
+	mHP = 3;
 	return true;
 }
 
@@ -52,4 +56,9 @@ void CMonster::PostUpdate(float deltaTime)
 CMonster* CMonster::Clone()
 {
 	return new CMonster(*this);
+}
+
+void CMonster::OnCollsionCallBack(const CollisionResult& result)
+{
+	AddHP(-1);
 }

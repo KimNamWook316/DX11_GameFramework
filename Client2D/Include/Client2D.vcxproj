@@ -163,6 +163,7 @@
     <ClCompile Include="Object\BulletCamera.cpp" />
     <ClCompile Include="Object\Monster.cpp" />
     <ClCompile Include="Object\MonsterAnimation.cpp" />
+    <ClCompile Include="Object\PixelTest.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\PlayerAnimation2D.cpp" />
     <ClCompile Include="Object\PlayerChild.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Object\BulletCamera.h" />
     <ClInclude Include="Object\Monster.h" />
     <ClInclude Include="Object\MonsterAnimation.h" />
+    <ClInclude Include="Object\PixelTest.h" />
     <ClInclude Include="Object\Player2D.h" />
     <ClInclude Include="Object\PlayerAnimation2D.h" />
     <ClInclude Include="Object\PlayerChild.h" />

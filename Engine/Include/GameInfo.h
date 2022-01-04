@@ -29,6 +29,17 @@
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "Resource/Texture/DirectXTex.h"
+
+#ifdef _DEBUG
+
+#pragma comment(lib, "DirectXTex_Debug.lib")
+
+#else
+
+#pragma comment(lib, "DirectXTex.lib")
+
+#endif // _DEBUG
 
 #define ROOT_PATH		"Root"
 #define SHADER_PATH		"Shader"
@@ -236,6 +247,41 @@ struct Box2DInfo
 	Vector2 Length; // Collider Box의 너비, 높이의 절반
 	Vector2 Min;	// 가장 낮은 좌표값
 	Vector3 Max;	// 가장 높은 좌표값
+};
+
+struct CircleInfo
+{
+	Vector2 Center;
+	float Radius;
+	Vector2 Min;
+	Vector2 Max;
+};
+
+struct PixelInfo
+{
+	unsigned char* Pixel; // 이미지 배열형태로 저장
+	unsigned int Width;
+	unsigned int Height;
+	ePixelCollisionType Type;
+	Vector2 Center;
+	Vector2 Min;
+	Vector2 Max;
+	Box2DInfo Box;
+	unsigned char Color[4]; // 4byte r, g, b, a 배열
+	ID3D11ShaderResourceView* SRV;
+	int RefCount; // 동일한 텍스처를 여러 개 생성할 필요가 없기 때문에, Ref Check해서 공유
+
+	PixelInfo()	:
+		RefCount(1),
+		Pixel(nullptr),
+		SRV(nullptr),
+		Width(0),
+		Height(0),
+		Box{},
+		Color{},
+		Type(ePixelCollisionType::ColorConfirm)
+	{
+	}
 };
 
 struct ColliderCBuffer

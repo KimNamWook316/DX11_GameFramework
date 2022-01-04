@@ -126,6 +126,8 @@ enum class eCollisionState
 enum class eColliderType
 {
 	Box2D,
+	Circle2D,
+	Pixel,
 };
 
 enum class eCameraType
@@ -133,4 +135,21 @@ enum class eCameraType
 	Camera2D,
 	Camera3D,
 	UI,
+};
+
+enum class ePixelCollisionType
+{
+	ColorIgnore,
+	ColorConfirm,
+	AlphaIgnore,
+	AlphaConfirm,
+};
+
+enum class eButtonState
+{
+	Normal,
+	Hovered,
+	Clicked,
+	Disabled,
+	Max,
 };

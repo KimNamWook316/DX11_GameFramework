@@ -112,7 +112,7 @@ void CSceneCollision::DoCollideMouse(float deltaTime)
 		// 2D와 3D의 처리 다름, 3D의 경우 Picking기법 활용
 		if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)
 		{
-			Vector2 mousePos = CInput::GetInst()->GetMouseWorldPos();
+			Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
 
 			mousePos.x -= mSectionInfo->Min.x;
 			mousePos.y -= mSectionInfo->Min.y;
@@ -126,12 +126,12 @@ void CSceneCollision::DoCollideMouse(float deltaTime)
 			idxX = idxX < 0 ? -1 : idxX;
 			idxY = idxY < 0 ? -1 : idxY;
 
-			idxX = idxX > mSectionInfo->CountX ? -1 : idxX;
-			idxY = idxY > mSectionInfo->CountY ? -1 : idxY;
+			idxX = idxX > mSectionInfo->CountX -1 ? -1 : idxX;
+			idxY = idxY > mSectionInfo->CountY -1 ? -1 : idxY;
 
 			if (idxX != -1 && idxY != -1)
 			{
-				CColliderComponent* colliderMouse = mSectionInfo->vecSection[idxY * mSectionInfo->CountX + idxX]->DoCollideMouse(true, deltaTime);
+				CColliderComponent* colliderMouse = mSectionInfo->vecSection[(size_t)(idxY * mSectionInfo->CountX + idxX)]->DoCollideMouse(true, deltaTime);
 
 				if (colliderMouse)
 				{

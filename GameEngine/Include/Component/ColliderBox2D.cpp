@@ -6,6 +6,8 @@
 #include "../Scene/Scene.h"
 #include "../Scene/CameraManager.h"
 #include "CameraComponent.h"
+#include "ColliderCircle.h"
+#include "ColliderPixel.h"
 
 CColliderBox2D::CColliderBox2D()
 {
@@ -193,6 +195,10 @@ bool CColliderBox2D::DoCollide(CColliderComponent* dest)
 	{
 	case eColliderType::Box2D:
 		return CCollision::CollisionBox2DToBox2D(this, (CColliderBox2D*)dest);
+	case eColliderType::Circle2D:
+		return CCollision::CollisionBox2DToCircle(this, (CColliderCircle*)dest);
+	case eColliderType::Pixel:
+		return CCollision::CollisionBox2DToPixel(this, (CColliderPixel*)dest);
 	default:
 		assert(false);
 		return false;

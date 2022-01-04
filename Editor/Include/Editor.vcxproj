@@ -151,6 +151,7 @@
     <ClInclude Include="EditorInfo.h" />
     <ClInclude Include="EditorManager.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\DragObject.h" />
     <ClInclude Include="Object\Player2D.h" />
     <ClInclude Include="Object\SpriteEditObject.h" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\CameraObject.cpp" />
     <ClCompile Include="Object\DragObject.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />

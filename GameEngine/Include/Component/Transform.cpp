@@ -534,6 +534,7 @@ void CTransform::SetInheritPosValue()
 		else
 		{
 			mWorldPos = mRelativePos + mParentTransform->GetWorldPos();
+			//mRelativePos = mWorldPos - mParentTransform->GetWorldPos();
 		}
 	}
 

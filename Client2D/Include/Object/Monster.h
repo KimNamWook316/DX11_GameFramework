@@ -20,8 +20,23 @@ public:
 	virtual void PostUpdate(float deltaTime);
 	virtual CMonster* Clone();
 
+public:
+    void OnCollsionCallBack(const CollisionResult& result);
+
+public:
+    void AddHP(const int hp)
+    {
+        mHP += hp;
+        if (mHP <= 0)
+        {
+            Destroy();
+        }
+    }
+
 private:
     CSharedPtr<CSpriteComponent> mSprite;
     CSharedPtr<CColliderBox2D> mBody;
+
+    int mHP;
 };
 

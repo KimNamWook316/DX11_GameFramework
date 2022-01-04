@@ -23,7 +23,7 @@ private:
 
 private:
 	CSharedPtr<class CSpriteComponent> mSprite;
-	CSharedPtr<class CColliderBox2D> mBody;
+	CSharedPtr<class CColliderCircle> mBody;
 	CSharedPtr<class CCameraComponent> mCamera;
 };
 

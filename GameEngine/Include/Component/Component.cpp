@@ -28,6 +28,11 @@ void CComponent::SetGameObject(CGameObject* object)
 	mObject = object;
 }
 
+void CComponent::Destroy()
+{
+	CRef::Destroy();
+}
+
 bool CComponent::Init()
 {
 	return true;

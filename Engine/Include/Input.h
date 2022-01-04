@@ -57,9 +57,9 @@ public:
 		return mMousePos;
 	}
 	
-	Vector2 GetMouseWorldPos() const
+	Vector2 GetMouseWorld2DPos() const
 	{
-		return mMousePos;
+		return mMouseWorldPos;
 	}
 
 	Vector2 GetMouseMoveAmount() const
@@ -134,6 +134,7 @@ private:
 	std::vector<unsigned char> mVecAddedKey;
 
 	Vector2 mMousePos;
+	Vector2 mMouseWorldPos;
 	Vector2 mMouseMoveAmount;
 
 	bool mbIsCtrlPressed;

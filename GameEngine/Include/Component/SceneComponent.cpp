@@ -61,6 +61,17 @@ CSceneComponent::~CSceneComponent()
 	SAFE_DELETE(mTransform);
 }
 
+void CSceneComponent::Destroy()
+{
+	CComponent::Destroy();
+
+	size_t size = mVecChild.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChild[i]->Destroy();
+	}
+}
+
 bool CSceneComponent::Init()
 {
 	return true;

@@ -31,7 +31,9 @@
     <ClInclude Include="Collision\CollisionManager.h" />
     <ClInclude Include="Component\CameraComponent.h" />
     <ClInclude Include="Component\ColliderBox2D.h" />
+    <ClInclude Include="Component\ColliderCircle.h" />
     <ClInclude Include="Component\ColliderComponent.h" />
+    <ClInclude Include="Component\ColliderPixel.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\ObjectComponent.h" />
     <ClInclude Include="Component\SceneComponent.h" />
@@ -86,6 +88,7 @@
     <ClInclude Include="Resource\Mesh\StaticMesh.h" />
     <ClInclude Include="Resource\Shader\Animation2DConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ColliderConstantBuffer.h" />
+    <ClInclude Include="Resource\Shader\ColliderPixelShader.h" />
     <ClInclude Include="Resource\Shader\ColliderShader.h" />
     <ClInclude Include="Resource\Shader\ColorMeshShader.h" />
     <ClInclude Include="Resource\Shader\ComputeShader.h" />
@@ -110,11 +113,15 @@
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\SceneMode.h" />
     <ClInclude Include="Scene\SceneResource.h" />
+    <ClInclude Include="Scene\Viewport.h" />
     <ClInclude Include="SharedPtr.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Widget\Button.h" />
+    <ClInclude Include="Widget\Widget.h" />
+    <ClInclude Include="Widget\WidgetWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Library\imgui-docking\imgui.cpp" />
@@ -128,7 +135,9 @@
     <ClCompile Include="Collision\CollisionManager.cpp" />
     <ClCompile Include="Component\CameraComponent.cpp" />
     <ClCompile Include="Component\ColliderBox2D.cpp" />
+    <ClCompile Include="Component\ColliderCircle.cpp" />
     <ClCompile Include="Component\ColliderComponent.cpp" />
+    <ClCompile Include="Component\ColliderPixel.cpp" />
     <ClCompile Include="Component\StaticMeshComponent.cpp" />
     <ClCompile Include="IMGUIButton.cpp" />
     <ClCompile Include="IMGUICheckBox.cpp" />
@@ -177,6 +186,7 @@
     <ClCompile Include="Resource\Mesh\StaticMesh.cpp" />
     <ClCompile Include="Resource\Shader\Animation2DConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ColliderConstantBuffer.cpp" />
+    <ClCompile Include="Resource\Shader\ColliderPixelShader.cpp" />
     <ClCompile Include="Resource\Shader\ColliderShader.cpp" />
     <ClCompile Include="Resource\Shader\ColorMeshShader.cpp" />
     <ClCompile Include="Resource\Shader\ComputeShader.cpp" />
@@ -200,12 +210,16 @@
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\SceneMode.cpp" />
     <ClCompile Include="Scene\SceneResource.cpp" />
+    <ClCompile Include="Scene\Viewport.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Widget\Button.cpp" />
+    <ClCompile Include="Widget\Widget.cpp" />
+    <ClCompile Include="Widget\WidgetWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat">

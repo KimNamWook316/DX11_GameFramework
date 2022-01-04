@@ -12,6 +12,9 @@ protected:
 	CSceneComponent();
 	CSceneComponent(const CSceneComponent& com);
 	virtual ~CSceneComponent();
+
+public:
+	virtual void Destroy() override;
 	
 public:
 	virtual bool Init();

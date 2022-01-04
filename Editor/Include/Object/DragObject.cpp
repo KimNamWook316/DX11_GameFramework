@@ -51,11 +51,11 @@ CDragObject* CDragObject::Clone()
 void CDragObject::SetStartPos(const Vector2& pos)
 {
 	mStartPos = pos;
-	mMeshComponent->SetWorldPos(pos.x, pos.y, 0.f);
+	SetWorldPos(pos.x, pos.y, 0.f);
 }
 
 void CDragObject::SetEndPos(const Vector2& pos)
 {
 	mEndPos = pos;
-	mMeshComponent->SetWorldScale(mEndPos.x - mStartPos.x, mEndPos.y - mStartPos.y, 1.f);
+	SetWorldScale(mEndPos.x - mStartPos.x, mEndPos.y - mStartPos.y, 1.f);
 }

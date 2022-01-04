@@ -4,6 +4,7 @@
 #include "PosMeshShader.h"
 #include "ColliderShader.h"
 #include "ConstantBuffer.h"
+#include "ColliderPixelShader.h"
 
 CShaderManager::CShaderManager()
 {
@@ -38,6 +39,13 @@ bool CShaderManager::Init()
 
 	// 콜라이더용 와이어프레임 쉐이더
 	if (!CreateShader<CColliderShader>("ColliderShader"))
+	{
+		assert(false);
+		return false;
+	}
+
+	// 픽셀 충돌체용 쉐이더
+	if (!CreateShader<CColliderPixelShader>("ColliderPixelShader"))
 	{
 		assert(false);
 		return false;

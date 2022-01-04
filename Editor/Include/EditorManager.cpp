@@ -17,6 +17,8 @@
 #include "Window/DetailWindow.h"
 #include "Window/EditorMenuWindow.h"
 #include "Object/Player2D.h"
+#include "Object/CameraObject.h"
+#include "Component/CameraComponent.h"
 
 DEFINITION_SINGLE(CEditorManager)
 
@@ -41,8 +43,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 		return false;
 	}
 
-	CEngine::GetInst()->SetPlay(false);
+	CEngine::GetInst()->SetPlay(true);
 	
+	mCameraObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CCameraObject>("CameraObj");
+
 	// SceneManager CallBack
 	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CEditorManager>(this, &CEditorManager::CreateSceneMode);
 	CSceneManager::GetInst()->SetCreateObjectCallBack<CEditorManager>(this, &CEditorManager::CreateObject);
@@ -85,6 +89,15 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->SetKeyCallBack("JumpToNextFrameReverseDragObj", eKeyState::KeyState_Down, this, &CEditorManager::OnShiftLeftArrowKeyDown);
 	CInput::GetInst()->SetKeyCallBack("JumpToDownFrameDragObj", eKeyState::KeyState_Down, this, &CEditorManager::OnShiftDownArrowKeyDown);
 	CInput::GetInst()->SetKeyCallBack("JumpToUpFrameDragObj", eKeyState::KeyState_Down, this, &CEditorManager::OnShiftUpArrowKeydown);
+
+	CInput::GetInst()->CreateKey("ScrollDown", 'S');
+	CInput::GetInst()->CreateKey("ScrollUp", 'W');
+	CInput::GetInst()->CreateKey("ScrollLeft", 'A');
+	CInput::GetInst()->CreateKey("ScrollRight", 'D');
+	CInput::GetInst()->SetKeyCallBack("ScrollDown", eKeyState::KeyState_Push, this, &CEditorManager::OnScrollDown);
+	CInput::GetInst()->SetKeyCallBack("ScrollUp", eKeyState::KeyState_Push, this, &CEditorManager::OnScrollUp);
+	CInput::GetInst()->SetKeyCallBack("ScrollLeft", eKeyState::KeyState_Push, this, &CEditorManager::OnScrollLeft);
+	CInput::GetInst()->SetKeyCallBack("ScrollRight", eKeyState::KeyState_Push, this, &CEditorManager::OnScrollRight);
 
 	return true;
 }
@@ -172,7 +185,7 @@ void CEditorManager::OnMouseLButtonDown(float deltaTime)
 {
 	if (mDragObj)
 	{
-		Vector2 mousePos = CInput::GetInst()->GetMousePos();
+		Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
 		mDragObj->SetStartPos(mousePos);
 
 		mSpriteWindow->SetCropStartPos(mousePos);
@@ -183,7 +196,7 @@ void CEditorManager::OnMouseLButtonPush(float deltaTime)
 {
 	if (mDragObj)
 	{
-		mDragObj->SetEndPos(CInput::GetInst()->GetMousePos());
+		mDragObj->SetEndPos(CInput::GetInst()->GetMouseWorld2DPos());
 	}
 }
 
@@ -191,7 +204,7 @@ void CEditorManager::OnMouseLButtonUp(float deltaTime)
 {
 	if (mDragObj)
 	{
-		mSpriteWindow->SetCropEndPos(CInput::GetInst()->GetMousePos());
+		mSpriteWindow->SetCropEndPos(CInput::GetInst()->GetMouseWorld2DPos());
 		mSpriteWindow->UpdateCropImage();
 	}
 }
@@ -274,6 +287,26 @@ void CEditorManager::OnShiftUpArrowKeydown(float deltaTime)
 
 		mSpriteWindow->MoveCropPos(0.f, height);
 	}
+}
+
+void CEditorManager::OnScrollDown(float deltaTime)
+{
+	mCameraObj->AddWorldPos(0.f, -deltaTime * 500.f, 0.f);
+}
+
+void CEditorManager::OnScrollUp(float deltaTime)
+{
+	mCameraObj->AddWorldPos(0.f, deltaTime * 500.f, 0.f);
+}
+
+void CEditorManager::OnScrollLeft(float deltaTime)
+{
+	mCameraObj->AddWorldPos(-deltaTime * 500.f, 0.f, 0.f);
+}
+
+void CEditorManager::OnScrollRight(float deltaTime)
+{
+	mCameraObj->AddWorldPos(deltaTime * 500.f, 0.f, 0.f);
 }
 
 void CEditorManager::SetEditMode(eEditMode mode)

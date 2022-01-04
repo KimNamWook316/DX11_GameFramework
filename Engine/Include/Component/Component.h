@@ -33,6 +33,9 @@ public:
 	virtual void SetGameObject(class CGameObject* object);
 
 public:
+	virtual void Destroy() override;
+
+public:
 	virtual bool Init();
 	virtual void Start();
 	virtual void Update(float deltaTime) = 0;

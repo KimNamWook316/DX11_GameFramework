@@ -54,7 +54,7 @@ void CCollisionSection::DoCollide(float deltaTime)
 	{
 		CColliderComponent* src = mVecCollider[i];
 
-		for (size_t j = 1; j < count; ++j)
+		for (size_t j = i + 1; j < count; ++j)
 		{
 			CColliderComponent* dest = mVecCollider[j];
 
@@ -108,7 +108,7 @@ CColliderComponent* CCollisionSection::DoCollideMouse(bool bIs2D, float deltaTim
 {
 	if (bIs2D)
 	{
-		Vector2 mousePos = CInput::GetInst()->GetMouseWorldPos();
+		Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
 
 		size_t size = mVecCollider.size();
 	

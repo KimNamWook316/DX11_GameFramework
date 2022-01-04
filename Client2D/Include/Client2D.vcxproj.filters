@@ -31,6 +31,9 @@
     <Filter Include="02. Object\04. Monster">
       <UniqueIdentifier>{331d94b9-484f-4ab4-959c-9e8394f7ca9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Object\05. Test">
+      <UniqueIdentifier>{a4e4c2d7-958c-4dcb-80f8-aa2a40d53f37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,6 +66,9 @@
     <ClCompile Include="Object\BulletCamera.cpp">
       <Filter>02. Object\02. Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PixelTest.cpp">
+      <Filter>02. Object\05. Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="Object\BulletCamera.h">
       <Filter>02. Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PixelTest.h">
+      <Filter>02. Object\05. Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

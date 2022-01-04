@@ -8,15 +8,18 @@ CScene::CScene()
 	mResource = new CSceneResource;
 	mCollision = new CSceneCollision;
 	mCameraManager = new CCameraManager;
+	mViewport = new CViewport;
 
 	mMode->mScene = this;
 	mResource->mScene = this;
 	mCameraManager->mScene = this;
+	mViewport->mScene = this;
 
 	mbIsStart = false;
 
 	mCollision->Init();
 	mCameraManager->Init();
+	mViewport->Init();
 }
 
 CScene::~CScene()
@@ -24,6 +27,7 @@ CScene::~CScene()
 	SAFE_DELETE(mCameraManager);
 	SAFE_DELETE(mCollision);
 	SAFE_DELETE(mResource);
+	SAFE_DELETE(mViewport);
 }
 
 void CScene::Start()
@@ -42,11 +46,17 @@ void CScene::Start()
 
 	mCollision->Start();
 	mCameraManager->Start();
+	mViewport->Start();
 
-	CCameraComponent* playerCam = mMode->GetPlayerObj()->FindSceneComponentFromType<CCameraComponent>();
-	if (playerCam)
+	// 플레이어가 있고, 플레이어가 카메라를 가지고 있다면 플레이어 카메라를 기본 카메라로 설정
+	CGameObject* playerObj = mMode->GetPlayerObj();
+	if (playerObj)
 	{
-		mCameraManager->SetCurrentCamera(playerCam);
+		CCameraComponent* playerCam = playerObj->FindSceneComponentFromType<CCameraComponent>();
+		if (playerCam)
+		{
+			mCameraManager->SetCurrentCamera(playerCam);
+		}
 	}
 }
 
@@ -77,6 +87,9 @@ void CScene::Update(float deltaTime)
 		(*iter)->Update(deltaTime);
 		++iter;
 	}
+
+	// UI Viewport update
+	mViewport->Update(deltaTime);
 }
 
 void CScene::PostUpdate(float deltaTime)
@@ -104,15 +117,9 @@ void CScene::PostUpdate(float deltaTime)
 		++iter;
 	}
 
-	// 모든 PostUpdate 처리가 끝나고, World Position이 결정된 후에 충돌을 수행한다.
-	// 충돌체를 충돌 영역에 포함시킨다.
- //	iter = mObjList.begin();
- //	iterEnd = mObjList.end();
+	mViewport->PostUpdate(deltaTime);
 
- //	for (; iter != iterEnd; ++iter)
- //	{
- //		(*iter)->AddCollision();
- //	}
+	// 모든 PostUpdate 처리가 끝나고, World Position이 결정된 후에 충돌을 수행한다.
  
 	// 포함된 충돌체들을 이용해 충돌처리 수행
 	mCollision->DoCollide(deltaTime);
