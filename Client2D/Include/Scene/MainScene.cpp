@@ -36,8 +36,6 @@ void CMainScene::createMaterial()
 
 void CMainScene::createAnimationSequence()
 {
- //	mScene->GetResource()->CreateAnimationSequence2D("PlayerIdle_Front", 
- //		"PlayerIdle", TEXT("Sorceress_Town_Idle.png"));
  	mScene->GetResource()->LoadSequence2D("PlayerIdle_Front.sqc");
 	mScene->GetResource()->CreateAnimationSequence2D("PlayerIdle_Back", 
 		"PlayerIdle", TEXT("Sorceress_Town_Idle.png"));

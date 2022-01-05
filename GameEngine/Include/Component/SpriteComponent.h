@@ -85,6 +85,10 @@ public:
 	void SetCurrentAnimation(const std::string& name);
 
 public:
+	bool LoadAnimationInstance(const char* fileName, const std::string& pathName = ANIMATION_PATH);
+	bool LoadAnimationInstanceFullPath(const char* fullPath);
+
+public:
 	template <typename T>
 	void CreateAnimationInstance()
 	{
@@ -107,7 +111,7 @@ public:
 	}
 
 	template <typename T>
-	void LoadAnimationInstance()
+	void SceneLoadAnimationInstance()
 	{
 		T* anim;
 		anim->SetScene(mScene);

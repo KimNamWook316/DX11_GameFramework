@@ -45,7 +45,7 @@ public:
 
 	float GetPlayTime() const
 	{
-		return mFrameTime;
+		return mPlayTime;
 	}
 
 	float GetPlayScale() const

@@ -16,10 +16,10 @@ public:
 	int Run();
 
 public:
-	void CreateSceneMode(class CScene* scene, size_t type);
-	class CGameObject* CreateObject(class CScene* scene, size_t type);
-	class CComponent* CreateComponent(class CGameObject* obj, size_t type);
-	void CreateAnimInstance(class CSpriteComponent* comp, size_t type);
+	void OnCreateSceneMode(class CScene* scene, size_t type);
+	class CGameObject* OnCreateObject(class CScene* scene, size_t type);
+	class CComponent* OnCreateComponent(class CGameObject* obj, size_t type);
+	void OnCreateAnimInstance(class CSpriteComponent* comp, size_t type);
 
 public:
 	void OnMouseLButtonDown(float deltaTime);

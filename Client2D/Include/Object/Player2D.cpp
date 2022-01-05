@@ -3,6 +3,7 @@
 #include "Scene/Scene.h"
 #include "Input.h"
 #include "PlayerAnimation2D.h"
+#include "Animation/AnimationSequence2DInstance.h"
 #include "BulletCamera.h"
 
 CPlayer2D::CPlayer2D()	:
@@ -27,6 +28,7 @@ bool CPlayer2D::Init()
 	mBody = CreateComponent<CColliderBox2D>("Body");
 	mCamera = CreateComponent<CCameraComponent>("Camera");
 	mSprite->CreateAnimationInstance<CPlayerAnimation2D>();
+	mSprite->LoadAnimationInstance("PlayerTownIdle.anim");
 	mSprite->AddChild(mBody);
 	mSprite->AddChild(mCamera);
 
@@ -65,7 +67,6 @@ void CPlayer2D::Update(float deltaTime)
 	{
 		bHide = true;
 	}
-
 
 	if (bHide)
 	{

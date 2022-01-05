@@ -5,6 +5,7 @@
 #include "../Render/RenderManager.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
 #include "../Scene/SceneManager.h"
+#include "../PathManager.h"
 
 CSpriteComponent::CSpriteComponent()	:
 	mAnimation(nullptr)
@@ -313,4 +314,31 @@ void CSpriteComponent::SetCurrentAnimation(const std::string& name)
 	{
 		mAnimation->SetCurrentAnimation(name);
 	}
+}
+
+bool CSpriteComponent::LoadAnimationInstance(const char* fileName, const std::string& pathName)
+{
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+	char fullPath[MAX_PATH] = {};
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+	strcat_s(fullPath, fileName);
+	return LoadAnimationInstanceFullPath(fullPath);
+}
+
+bool CSpriteComponent::LoadAnimationInstanceFullPath(const char* fullPath)
+{
+	if (mAnimation)
+	{
+		SAFE_DELETE(mAnimation);
+	}
+	
+	mAnimation = new CAnimationSequence2DInstance;
+	mAnimation->SetScene(mScene);
+	mAnimation->SetOwner(this);
+	mAnimation->Init();
+	mAnimation->Load(fullPath);
+	return true;
 }

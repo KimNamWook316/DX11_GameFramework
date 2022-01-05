@@ -45,7 +45,7 @@ void CStaticMeshComponent::SetMaterial(CMaterial* material)
 
 bool CStaticMeshComponent::Init()
 {
-	//mMesh = (CStaticMesh*)mScene->GetResource()->FindMesh("FrameRectMesh");
+	mMesh = (CStaticMesh*)mScene->GetResource()->FindMesh("FrameRectMesh");
 	
 	// Material이 같은 텍스쳐를 공유하면 안 되기 때문에 SetMaterial로 복사해준다.
 	SetMaterial(mScene->GetResource()->FindMaterial("Color"));

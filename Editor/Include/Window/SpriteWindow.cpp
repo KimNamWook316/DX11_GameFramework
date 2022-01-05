@@ -180,6 +180,7 @@ bool CSpriteWindow::Init()
 	mPlayTimeInput->SetCallBack(this, &CSpriteWindow::OnPlayTimeInputChanged);
 	mPlayScaleInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Scale", 200.f, 0.f);
 	mPlayScaleInput->SetCallBack(this, &CSpriteWindow::OnPlayScaleInputChanged);
+	button = infoCol->AddWidget<CIMGUIButton>("Apply", 0.f, 0.f);
 	button = infoCol->AddWidget<CIMGUIButton>("Play", 0.f, 0.f);
 	button->SetClickCallBack(this, &CSpriteWindow::OnClickPlayAnimation);
 	infoCol->AddWidget<CIMGUISameLine>("line");
@@ -232,7 +233,7 @@ void CSpriteWindow::Update(float deltaTime)
 
 			// Drag Object 현재 프레임으로 이동
 			CEditorManager::GetInst()->GetDragObject()->SetWorldPos(frameData.Start.x, 
-				mSpriteEditObject->GetWorldScale().y - frameData.Start.y, 0.f);
+				mSpriteEditObject->GetWorldScale().y - frameData.Start.y - frameData.Size.y, 0.f);
 		}
 	}
 }
@@ -465,7 +466,7 @@ void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
 
 		// DragObject 0번 프레임 위치로
 		dragObj->SetWorldScale(data.Size.x, data.Size.y, 1.f);
-		dragObj->SetWorldPos(data.Start.x, height - data.Start.y, 0.f);
+		dragObj->SetWorldPos(data.Start.x, height - data.Start.y - data.Size.y, 0.f);
 	}
 
 	updateFrameUI();
@@ -495,8 +496,8 @@ void CSpriteWindow::OnSelectAnimationFrame(int idx, const char* item)
 	
 	// Drag Object 해당 위치로
 	CDragObject* dragObj = CEditorManager::GetInst()->GetDragObject();
-	dragObj->SetWorldScale(mCropEndPos.x - mCropStartPos.x, mCropEndPos.y - mCropStartPos.y, 1.f);
-	dragObj->SetWorldPos(mCropStartPos.x, mCropStartPos.y , 0.f);
+	dragObj->SetWorldScale(abs(mCropEndPos.x - mCropStartPos.x), abs(mCropEndPos.y - mCropStartPos.y), 1.f);
+	dragObj->SetWorldPos(mCropStartPos.x, mCropStartPos.y - dragObj->GetWorldScale().y, 0.f);
 
 	// Poisiton UI 업데이트
 	updateFrameUI();
@@ -716,6 +717,28 @@ void CSpriteWindow::OnClickLoadSequence()
 		{
 			mAnimationFrameList->AddItem(std::to_string(i));
 		}
+
+		if (!mSpriteEditObject)
+		{
+			mSpriteEditObject = CSceneManager::GetInst()->GetScene()->CreateGameObject<CSpriteEditObject>("SpriteEditObject");
+			mSpriteEditObject->Init();
+		}
+
+		CTexture* curTexture = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetTexture();
+		mSpriteEditObject->GetSpriteComponent()->SetTexture(0, 0, 
+			(int)eConstantBufferShaderTypeFlags::Pixel, curTexture->GetName(), curTexture);
+
+		// Texture 크기 실제 비율에 맞게 수정
+		CTexture* texture = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture();
+		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)texture->GetWidth(),
+			(float)texture->GetHeight(), 1.f);
+
+		// Sprite Info 갱신
+		char buf[32] = {};
+		sprintf_s(buf, "%d", texture->GetWidth());
+		mSpriteWidthText->SetText(buf);
+		sprintf_s(buf, "%d", texture->GetHeight());
+		mSpriteHeightText->SetText(buf);
 	}
 }
 

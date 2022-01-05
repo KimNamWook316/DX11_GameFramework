@@ -37,7 +37,7 @@ bool CMeshManager::Init()
 	};
 
 	frameRectMesh->CreateMesh(frameRectPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	frameRectMesh->SetName("frameRectMesh");
+	frameRectMesh->SetName("FrameRectMesh");
 	mMapMesh.insert(std::make_pair("FrameRectMesh", frameRectMesh));
 
 	// Collider 출력에 쓰일 메쉬

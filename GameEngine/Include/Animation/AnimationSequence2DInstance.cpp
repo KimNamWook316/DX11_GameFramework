@@ -242,6 +242,11 @@ void CAnimationSequence2DInstance::Save(FILE* fp)
 		fwrite(&length, sizeof(int), 1, fp);
 		fwrite(iter->first.c_str(), sizeof(char), length, fp);
 		iter->second->Save(fp);
+
+		char sequenceFilename[MAX_PATH] = {};
+		strcpy_s(sequenceFilename, iter->second->mSequenceName.c_str());
+		strcat_s(sequenceFilename, ".sqc");
+		iter->second->mSequence->Save(sequenceFilename, ANIMATION_PATH);
 	}
 	
 	int length = (int)mCurrentAnimation->mName.size();
@@ -283,15 +288,34 @@ void CAnimationSequence2DInstance::Load(FILE* fp)
 		fread(name, sizeof(char), size_t(length), fp);
 		
 		data->Load(fp);
-		
+
 		if (mScene)
 		{
+			char fileName[MAX_PATH] = {};
+			strcpy_s(fileName, data->mSequenceName.c_str());
+			strcat_s(fileName, ".sqc");
+			
+			mScene->GetResource()->LoadSequence2D(fileName);
 			data->mSequence = mScene->GetResource()->FindAnimationSequence2D(data->mSequenceName);
 		}
 		else
 		{
+			char fileName[MAX_PATH] = {};
+			strcpy_s(fileName, data->mSequenceName.c_str());
+			strcat_s(fileName, ".sqc");
+
+			CResourceManager::GetInst()->LoadSequence2D(fileName);
 			data->mSequence = CResourceManager::GetInst()->FindAnimationSequece2D(data->mSequenceName);
 		}
+		
+ //		if (mScene)
+ //		{
+ //			data->mSequence = mScene->GetResource()->FindAnimationSequence2D(data->mSequenceName);
+ //		}
+ //		else
+ //		{
+ //			data->mSequence = CResourceManager::GetInst()->FindAnimationSequece2D(data->mSequenceName);
+ //		}
 
 		mMapAnimation.insert(std::make_pair(name, data));
 	}

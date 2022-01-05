@@ -48,10 +48,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	mCameraObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CCameraObject>("CameraObj");
 
 	// SceneManager CallBack
-	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CEditorManager>(this, &CEditorManager::CreateSceneMode);
-	CSceneManager::GetInst()->SetCreateObjectCallBack<CEditorManager>(this, &CEditorManager::CreateObject);
-	CSceneManager::GetInst()->SetCreateComponentCallBack<CEditorManager>(this, &CEditorManager::CreateComponent);
-	CSceneManager::GetInst()->SetCreateAnimInstanceCallBack<CEditorManager>(this, &CEditorManager::CreateAnimInstance);
+	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CEditorManager>(this, &CEditorManager::OnCreateSceneMode);
+	CSceneManager::GetInst()->SetCreateObjectCallBack<CEditorManager>(this, &CEditorManager::OnCreateObject);
+	CSceneManager::GetInst()->SetCreateComponentCallBack<CEditorManager>(this, &CEditorManager::OnCreateComponent);
+	CSceneManager::GetInst()->SetCreateAnimInstanceCallBack<CEditorManager>(this, &CEditorManager::OnCreateAnimInstance);
 
 	// GUI
 	mSpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("Editor");
@@ -99,6 +99,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->SetKeyCallBack("ScrollLeft", eKeyState::KeyState_Push, this, &CEditorManager::OnScrollLeft);
 	CInput::GetInst()->SetKeyCallBack("ScrollRight", eKeyState::KeyState_Push, this, &CEditorManager::OnScrollRight);
 
+	// Drag Object »ý¼º
+	mDragObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CDragObject>("DragObject");
+	mDragObj->SetWorldScale(0.f, 0.f, 1.f);
+	mDragObj->Init();
 	return true;
 }
 
@@ -112,7 +116,7 @@ int CEditorManager::Run()
 	return CEngine::GetInst()->Run();
 }
 
-void CEditorManager::CreateSceneMode(CScene* scene, size_t type)
+void CEditorManager::OnCreateSceneMode(CScene* scene, size_t type)
 {
 	if (type == typeid(CDefaultScene).hash_code())
 	{
@@ -120,7 +124,7 @@ void CEditorManager::CreateSceneMode(CScene* scene, size_t type)
 	}
 }
 
-class CGameObject* CEditorManager::CreateObject(CScene* scene, size_t type)
+class CGameObject* CEditorManager::OnCreateObject(CScene* scene, size_t type)
 {
 	if (type == typeid(CGameObject).hash_code())
 	{
@@ -149,7 +153,7 @@ class CGameObject* CEditorManager::CreateObject(CScene* scene, size_t type)
 	}
 }
 
-CComponent* CEditorManager::CreateComponent(CGameObject* obj, size_t type)
+CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 {
 	if(type == typeid(CSceneComponent).hash_code())
 	{
@@ -173,17 +177,17 @@ CComponent* CEditorManager::CreateComponent(CGameObject* obj, size_t type)
 	}
 }
 
-void CEditorManager::CreateAnimInstance(CSpriteComponent* comp, size_t type)
+void CEditorManager::OnCreateAnimInstance(CSpriteComponent* comp, size_t type)
 {
 	if (type == typeid(CAnimationSequence2DInstance).hash_code())
 	{
-		comp->LoadAnimationInstance<CAnimationSequence2DInstance>();
+		comp->SceneLoadAnimationInstance<CAnimationSequence2DInstance>();
 	}
 }
 
 void CEditorManager::OnMouseLButtonDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
 		mDragObj->SetStartPos(mousePos);
@@ -194,7 +198,7 @@ void CEditorManager::OnMouseLButtonDown(float deltaTime)
 
 void CEditorManager::OnMouseLButtonPush(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		mDragObj->SetEndPos(CInput::GetInst()->GetMouseWorld2DPos());
 	}
@@ -202,7 +206,7 @@ void CEditorManager::OnMouseLButtonPush(float deltaTime)
 
 void CEditorManager::OnMouseLButtonUp(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		mSpriteWindow->SetCropEndPos(CInput::GetInst()->GetMouseWorld2DPos());
 		mSpriteWindow->UpdateCropImage();
@@ -211,7 +215,7 @@ void CEditorManager::OnMouseLButtonUp(float deltaTime)
 
 void CEditorManager::OnDownArrowKeyDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		mDragObj->AddWorldPos(0.f,-1.f, 0.f);
 		mSpriteWindow->MoveCropPos(0.f, -1.f);
@@ -220,7 +224,7 @@ void CEditorManager::OnDownArrowKeyDown(float deltaTime)
 
 void CEditorManager::OnUpArrowKeyDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		mDragObj->AddWorldPos(0.f, 1.f, 0.f);
 		mSpriteWindow->MoveCropPos(0.f, 1.f);
@@ -229,7 +233,7 @@ void CEditorManager::OnUpArrowKeyDown(float deltaTime)
 
 void CEditorManager::OnLeftArrowKeyDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		mDragObj->AddWorldPos(-1.f, 0.f, 0.f);
 		mSpriteWindow->MoveCropPos(-1.f, 0.f);
@@ -238,7 +242,7 @@ void CEditorManager::OnLeftArrowKeyDown(float deltaTime)
 
 void CEditorManager::OnRightArrowKeyDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		mDragObj->AddWorldPos(1.f, 0.f, 0.f);
 		mSpriteWindow->MoveCropPos(1.f, 0.f);
@@ -247,7 +251,7 @@ void CEditorManager::OnRightArrowKeyDown(float deltaTime)
 
 void CEditorManager::OnShiftRightArrowKeyDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		float width = abs(mDragObj->GetRelativeScale().x);
 		mDragObj->AddWorldPos(width, 0.f, 0.f);
@@ -258,7 +262,7 @@ void CEditorManager::OnShiftRightArrowKeyDown(float deltaTime)
 
 void CEditorManager::OnShiftLeftArrowKeyDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		float width = abs(mDragObj->GetRelativeScale().x);
 		mDragObj->AddWorldPos(-width, 0.f, 0.f);
@@ -269,7 +273,7 @@ void CEditorManager::OnShiftLeftArrowKeyDown(float deltaTime)
 
 void CEditorManager::OnShiftDownArrowKeyDown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		float height = abs(mDragObj->GetRelativeScale().y);
 		mDragObj->AddWorldPos(0.f, -height, 0.f);
@@ -280,7 +284,7 @@ void CEditorManager::OnShiftDownArrowKeyDown(float deltaTime)
 
 void CEditorManager::OnShiftUpArrowKeydown(float deltaTime)
 {
-	if (mDragObj)
+	if (eEditMode::Sprite == meEditMode)
 	{
 		float height = abs(mDragObj->GetRelativeScale().y);
 		mDragObj->AddWorldPos(0.f, height, 0.f);
@@ -312,15 +316,4 @@ void CEditorManager::OnScrollRight(float deltaTime)
 void CEditorManager::SetEditMode(eEditMode mode)
 {
 	meEditMode = mode;
-
-	if (meEditMode == eEditMode::Sprite)
-	{
-		if (mDragObj)
-		{
-			mDragObj->Destroy();
-		}
-
-		mDragObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CDragObject>("DragObject");
-		mDragObj->SetWorldScale(0.f, 0.f, 1.f);
-	}
 }
