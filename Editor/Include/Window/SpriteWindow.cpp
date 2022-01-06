@@ -180,7 +180,6 @@ bool CSpriteWindow::Init()
 	mPlayTimeInput->SetCallBack(this, &CSpriteWindow::OnPlayTimeInputChanged);
 	mPlayScaleInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Scale", 200.f, 0.f);
 	mPlayScaleInput->SetCallBack(this, &CSpriteWindow::OnPlayScaleInputChanged);
-	button = infoCol->AddWidget<CIMGUIButton>("Apply", 0.f, 0.f);
 	button = infoCol->AddWidget<CIMGUIButton>("Play", 0.f, 0.f);
 	button->SetClickCallBack(this, &CSpriteWindow::OnClickPlayAnimation);
 	infoCol->AddWidget<CIMGUISameLine>("line");
@@ -196,6 +195,8 @@ bool CSpriteWindow::Init()
 	infoCol->AddWidget<CIMGUISameLine>("line");
 	button = infoCol->AddWidget<CIMGUIButton>("Load Sequence", 130.f, 0.f);
 	button->SetClickCallBack(this, &CSpriteWindow::OnClickLoadSequence);
+	button = infoCol->AddWidget<CIMGUIButton>("Save All", 130.f, 0.f);
+	button->SetClickCallBack(this, &CSpriteWindow::OnClickSaveAllSequence);
 	button = infoCol->AddWidget<CIMGUIButton>("Save Animation", 130.f, 0.f);
 	button->SetClickCallBack(this, &CSpriteWindow::OnClickSaveAnimation);
 	infoCol->AddWidget<CIMGUISameLine>("line");
@@ -207,6 +208,10 @@ bool CSpriteWindow::Init()
 	mAnimationInstance->Init();
 	mAnimationInstance->Start();
 	mAnimationInstance->Stop();
+
+	// ShortCut Key
+	CInput::GetInst()->CreateKey("Enter", VK_RETURN);
+	CInput::GetInst()->SetKeyCallBack("Enter", eKeyState::KeyState_Down, this, &CSpriteWindow::OnDownReturnKey);
 
 	return true;
 }
@@ -447,6 +452,13 @@ void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
 
 		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(),
 			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
+
+		// Sprite Info 갱신
+		char buf[32] = {};
+		sprintf_s(buf, "%d", selectAnimTexture->GetWidth());
+		mSpriteWidthText->SetText(buf);
+		sprintf_s(buf, "%d", selectAnimTexture->GetHeight());
+		mSpriteHeightText->SetText(buf);
 	}
 	
 	if (selectAnimTexture != mCropImage->GetTexture())
@@ -668,13 +680,49 @@ void CSpriteWindow::OnClickSaveSequence()
 	if (GetSaveFileName(&openFile) != 0)
 	{
 		FILE* pFile = nullptr;
-
+		
 		char fullPath[MAX_PATH] = {};
 
 		int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, filePath, -1, fullPath, length, 0, 0);
 		
 		mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->SaveFullPath(fullPath);
+	}
+}
+
+// Animation Folder에 자동으로 저장
+void CSpriteWindow::OnClickSaveAllSequence()
+{
+	const PathInfo* info = CPathManager::GetInst()->FindPath(ANIMATION_PATH);
+
+	std::vector<std::string> sequenceNames;
+	mAnimationInstance->GetAnimationNames(sequenceNames);
+
+	bool bSuccess = true;
+	
+	for (size_t i = 0; i < sequenceNames.size(); ++i)
+	{
+		char fullPath[MAX_PATH] = {};
+		CAnimationSequence2D* sequence = CSceneManager::GetInst()->GetScene()->GetResource()->FindAnimationSequence2D(sequenceNames[i]);
+		
+		strcpy_s(fullPath, info->PathMultibyte);
+		strcat_s(fullPath, sequenceNames[i].c_str());
+		strcat_s(fullPath, ".sqc");
+		
+		if (!sequence->SaveFullPath(fullPath))
+		{
+			bSuccess = false;
+			break;
+		}
+	}
+
+	if (bSuccess)
+	{
+		MessageBox(nullptr, TEXT("Saved In Deafult Animation Folder"), TEXT("Saved"), MB_OK);
+	}
+	else
+	{
+		MessageBox(nullptr, TEXT("Failed To Save Sequence"), TEXT("Failed"), MB_OK);
 	}
 }
 
@@ -690,32 +738,56 @@ void CSpriteWindow::OnClickLoadSequence()
 	openFile.lpstrFile = filePath;
 	openFile.nMaxFile = MAX_PATH;
 	openFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(ANIMATION_PATH)->Path;
+	openFile.Flags |= OFN_ALLOWMULTISELECT | OFN_EXPLORER;
 
 	if (GetOpenFileName(&openFile) != 0)
 	{
-		FILE* pFile = nullptr;
-
-		char fullPath[MAX_PATH] = {};
-
-		int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
-		WideCharToMultiByte(CP_ACP, 0, filePath, -1, fullPath, length, 0, 0);
-		
 		CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
-
 		std::string sequenceName;
-		resource->LoadSequence2DFullPath(sequenceName, fullPath);
-		
-		mAnimationInstance->AddAnimation(sequenceName, sequenceName);
 
-		mAnimationFrameList->Clear();
+		FILE* pFile = nullptr;
+		char fullPathMutliByte[MAX_PATH] = {};
 
-		mAnimationList->AddItem(resource->FindAnimationSequence2D(sequenceName)->GetName());
-		
-		int frameCount = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount();
-
-		for (int i = 0; i < frameCount; ++i)
+		// 선택된 파일이 여러개가 아닌 경우
+		if (openFile.nFileExtension != 0)
 		{
-			mAnimationFrameList->AddItem(std::to_string(i));
+			int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
+			WideCharToMultiByte(CP_ACP, 0, filePath, -1, fullPathMutliByte, length, 0, 0);
+
+			resource->LoadSequence2DFullPath(sequenceName, fullPathMutliByte);
+			
+			mAnimationInstance->AddAnimation(sequenceName, sequenceName);
+		}
+		// 여러 개 파일이 선택된 경우
+		else
+		{
+			int fileCount = 0;
+			TCHAR slash[2] = L"\\";
+			TCHAR filePath1[MAX_PATH] = {};
+
+			lstrcpy(filePath1, filePath);
+			lstrcat(filePath1, slash);
+			
+			TCHAR* fileName = openFile.lpstrFile + openFile.nFileOffset;
+			int fileNameLength = lstrlen(fileName);
+
+			// 더 이상 파일 이름 받아올 수 없을 때까지 반복
+			while (*fileName != '\0')
+			{
+				TCHAR fullPath[MAX_PATH] = {};
+				lstrcpy(fullPath, filePath1);
+				lstrcat(fullPath, fileName);
+				fileName += (fileNameLength + 1);
+				fileNameLength = lstrlen(fileName);
+
+				int length = WideCharToMultiByte(CP_ACP, 0, fullPath, -1, 0, 0, 0, 0);
+				WideCharToMultiByte(CP_ACP, 0, fullPath, -1, fullPathMutliByte, length, 0, 0);
+
+				resource->LoadSequence2DFullPath(sequenceName, fullPathMutliByte);
+
+				mAnimationInstance->AddAnimation(sequenceName, sequenceName);
+				mAnimationList->AddItem(resource->FindAnimationSequence2D(sequenceName)->GetName());
+			}
 		}
 
 		if (!mSpriteEditObject)
@@ -723,22 +795,6 @@ void CSpriteWindow::OnClickLoadSequence()
 			mSpriteEditObject = CSceneManager::GetInst()->GetScene()->CreateGameObject<CSpriteEditObject>("SpriteEditObject");
 			mSpriteEditObject->Init();
 		}
-
-		CTexture* curTexture = mAnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetTexture();
-		mSpriteEditObject->GetSpriteComponent()->SetTexture(0, 0, 
-			(int)eConstantBufferShaderTypeFlags::Pixel, curTexture->GetName(), curTexture);
-
-		// Texture 크기 실제 비율에 맞게 수정
-		CTexture* texture = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture();
-		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)texture->GetWidth(),
-			(float)texture->GetHeight(), 1.f);
-
-		// Sprite Info 갱신
-		char buf[32] = {};
-		sprintf_s(buf, "%d", texture->GetWidth());
-		mSpriteWidthText->SetText(buf);
-		sprintf_s(buf, "%d", texture->GetHeight());
-		mSpriteHeightText->SetText(buf);
 	}
 }
 
@@ -849,6 +905,14 @@ void CSpriteWindow::OnClickLoadAnimation()
 			dragObj->SetWorldScale(data.Size.x, data.Size.y, 1.f);
 			dragObj->SetWorldPos(data.Start.x, data.Start.y - data.Size.y, 0.f);
 		}
+	}
+}
+
+void CSpriteWindow::OnDownReturnKey(float dummy)
+{
+	if (eEditMode::Sprite == CEditorManager::GetInst()->GetEditMode())
+	{
+		OnClickAddAnimationFrame();
 	}
 }
 

@@ -37,9 +37,11 @@ public:
     void OnPlayTimeInputChanged(float val);
     void OnPlayScaleInputChanged(float val);
     void OnClickSaveSequence();
+    void OnClickSaveAllSequence();
     void OnClickLoadSequence();
     void OnClickSaveAnimation();
     void OnClickLoadAnimation();
+    void OnDownReturnKey(float dummy);
 
 // Setter
 public:
