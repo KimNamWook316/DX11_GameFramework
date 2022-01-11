@@ -47,6 +47,12 @@
     <ClInclude Include="Object\PlayerObject.h">
       <Filter>02. GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Dia2Info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dia2Flags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Diablo2.rc">

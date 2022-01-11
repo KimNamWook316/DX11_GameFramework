@@ -19,6 +19,8 @@ public:
     virtual void PostUpdate(float deltaTime);
     virtual void Render();
 
+    virtual bool DoCollideMouse(const Vector2& mousePos);
+
 public:
     class CViewport* GetViewport() const
     {
@@ -91,26 +93,23 @@ public:
     template <typename T>
     T* CreateWidget(const std::string& name)
     {
-        auto iter = mWidgetList.begin();
-        auto iterEnd = mWidgetList.end();
+		T* widget = new T;
+		widget->SetName(name);
+		widget->SetOwner(this);
 
-        for (; iter != iterEnd; ++iter)
-        {
-            T* widget = new T;
-            widget->SetName(name);
-            widget->SetOwner(this);
+		if (!widget->Init())
+		{
+			SAFE_RELEASE(widget);
+			assert(false);
+			return nullptr;
+		}
 
-            if (!widget->Init())
-            {
-                SAFE_RELEASE(widget);
-                assert(false);
-                return nullptr;
-            }
-
-            mWidgetList.push_back(widget);
-            return widget;
-        }
+		mWidgetList.push_back(widget);
+		return widget;
     }
+
+private:
+    static bool sortWidget(CSharedPtr<CWidget> src, CSharedPtr<CWidget> dest);
 
 protected:
     class CViewport* mViewport;
@@ -119,5 +118,6 @@ protected:
     Vector2 mPos;
     Vector2 mSize;
     std::list<CSharedPtr<CWidget>> mWidgetList;
+    bool mbStart;
 };
 

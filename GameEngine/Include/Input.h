@@ -67,6 +67,15 @@ public:
 		return mMouseMoveAmount;
 	}
 
+	bool GetMouseLButtonClicked() const
+	{
+		return mbLButtonClicked;
+	}
+
+	bool GetMouseRButtonClicked() const
+	{
+		return mbRButtonClicked;
+	}
 public:
 	// KeyInfo에 CallBack 함수를 등록하는 함수
 	// 멤버 함수를 함수 포인터 형태로 전달
@@ -140,5 +149,12 @@ private:
 	bool mbIsCtrlPressed;
 	bool mbIsAltPressed;
 	bool mbIsShiftPressed;
+
+	// 좌, 우 마우스 버튼 클릭
+	bool mbLButtonClicked;
+	bool mbRButtonClicked;
+
+	// 위젯과 마우스 충돌했는지
+	bool mbWidgetCollide;
 };
 

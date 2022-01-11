@@ -3,6 +3,7 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "../Scene/Viewport.h"
+#include "../Input.h"
 
 CButton::CButton()	:
 	meCurState(eButtonState::Normal)
@@ -37,6 +38,34 @@ void CButton::Start()
 void CButton::Update(float deltaTime)
 {
 	CWidget::Update(deltaTime);
+
+	if (eButtonState::Disabled != meCurState)
+	{
+		if (mbMouseHovered)
+		{
+			if (CInput::GetInst()->GetMouseLButtonClicked())
+			{
+				meCurState = eButtonState::Clicked;
+			}
+			else if (eButtonState::Clicked == meCurState)
+			{
+				if (mClickCallBack)
+				{
+					mClickCallBack();
+				}
+
+				meCurState = eButtonState::Hovered;
+			}
+			else
+			{
+				meCurState = eButtonState::Hovered;
+			}
+		}
+		else
+		{
+			meCurState = eButtonState::Normal;
+		}
+	}
 }
 
 void CButton::PostUpdate(float deltaTime)
@@ -46,6 +75,12 @@ void CButton::PostUpdate(float deltaTime)
 
 void CButton::Render()
 {
+	if (mInfo[(int)meCurState].Texture)
+	{
+		mInfo[(int)meCurState].Texture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, 0);
+	}
+	mTint = mInfo[(int)meCurState].Tint;
+
 	CWidget::Render();
 }
 
@@ -60,6 +95,8 @@ bool CButton::SetTexture(eButtonState state, const std::string& name, const TCHA
 	}
 	
 	mInfo[(int)state].Texture = sceneResource->FindTexture(name);
+
+	SetUseTexture(true);
 	return true;
 }
 
@@ -74,6 +111,8 @@ bool CButton::SetTextureFullPath(eButtonState state, const std::string& name, co
 	}
 	
 	mInfo[(int)state].Texture = sceneResource->FindTexture(name);
+	
+	SetUseTexture(true);
 	return true;
 }
 
@@ -84,7 +123,7 @@ void CButton::SetTextureTint(eButtonState state, const Vector4& tint)
 
 void CButton::SetTextureTint(eButtonState state, const float r, const float g, const float b, const float a)
 {
-	mInfo[(int)state].Tint = Vector4(r, g, b, a);
+	mInfo[(int)state].Tint = Vector4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
 }
 
 void CButton::AddFrameData(eButtonState state, const Vector2& start, const Vector2& size)

@@ -19,6 +19,8 @@ public:
     virtual void PostUpdate(float deltaTime);
     virtual void Render();
 
+    virtual bool DoCollideMouse(const Vector2& mousePos);
+
 public:
     class CWidgetWindow* GetOwner() const
     {
@@ -38,6 +40,11 @@ public:
     int GetZOrder() const
     {
         return mZOrder;
+    }
+
+    float GetAngle() const
+    {
+        return mAngle;
     }
 
 public:
@@ -66,10 +73,31 @@ public:
         mSize = Vector2(x, y);
     }
 
+    void SetOwner(class CWidgetWindow* owner)
+    {
+        mOwner = owner;
+    }
+
+    void SetAngle(const float angle)
+    {
+        mAngle = angle;
+    }
+
+    void SetShader(const std::string& name);
+    void SetUseTexture(bool bUse);
+
 protected:
     class CWidgetWindow* mOwner;
     int mZOrder;
     Vector2 mPos;
     Vector2 mSize;
+    float mAngle;
+    Vector4 mTint;
+    bool mbStart;
+    bool mbMouseHovered;
+
+    class CWidgetConstantBuffer* mCBuffer;
+    CSharedPtr<class CMesh> mMesh;
+    CSharedPtr<class CShader> mShader;
 };
 

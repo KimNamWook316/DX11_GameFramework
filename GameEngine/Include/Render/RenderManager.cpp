@@ -5,13 +5,16 @@
 #include "RenderStateManager.h"
 #include "RenderState.h"
 #include "../Engine.h"
+#include "../Scene/SceneManager.h"
+#include "../Scene/Scene.h"
 
 DEFINITION_SINGLE(CRenderManager)
 
 CRenderManager::CRenderManager()	:
 	mRenderStateManager(nullptr),
 	mStandard2DBuffer(nullptr),
-	mDepthDisableState(nullptr)
+	mDepthDisableState(nullptr),
+	mAlphaBlendState(nullptr)
 {
 }
 
@@ -111,6 +114,7 @@ bool CRenderManager::Init()
 
 	// Depth Disable µÈ »óÅÂ
 	mDepthDisableState = mRenderStateManager->FindRenderState("DepthDisable");
+	mAlphaBlendState = mRenderStateManager->FindRenderState("AlphaBlend");
 
 	return true;
 }
@@ -170,11 +174,19 @@ void CRenderManager::Render()
 			}
 		}
 	}
+	
+	// UI ·»´õ
+	mAlphaBlendState->SetState();
+	
+	CSceneManager::GetInst()->GetScene()->GetViewport()->Render();
+
+	mAlphaBlendState->ResetState();
 
 	if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)
 	{
 		mDepthDisableState->ResetState();
 	}
+
 }
 
 CRenderState* CRenderManager::FindRenderState(const std::string& name)

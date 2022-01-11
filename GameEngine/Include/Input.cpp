@@ -14,6 +14,9 @@ CInput::CInput()	:
 	mInput(nullptr),
 	mKeyBoard(nullptr),
 	mMouse(nullptr),
+	mbLButtonClicked(false),
+	mbRButtonClicked(false),
+	mbWidgetCollide(false),
 	mKeyArray{}
 {
 	mVecKeyState.resize(256);
@@ -89,13 +92,19 @@ void CInput::Update(float deltaTime)
 		readDirectInputMouse();
 	}
 
+	// 마우스 입력처리
+	updateMouse(deltaTime);
+
+	// UI - 마우스 충돌
+	// 여기서 호출하는 이유는, Widget과 마우스가 충돌했는지 먼저 파악해놔야,
+	// UI에서 마우스 조작을 하는데 UI 바깥이 반응하는 것을 막기 위해서이다.
+	mbWidgetCollide = CSceneManager::GetInst()->GetScene()->GetCollision()->DoCollideWidget(deltaTime);
+
 	// 현재 눌린 키 정보를 업데이트
 	updateKeyState();
 
 	// 키에 바인드 되어있는 콜백 함수를 호출
 	updateKeyInfo(deltaTime);
-
-	updateMouse(deltaTime);
 }
 
 bool CInput::CreateKey(const std::string& name, const unsigned char key)
@@ -327,6 +336,24 @@ void CInput::updateKeyState()
 		{
 			mbIsShiftPressed = false;
 		}
+
+		if (mMouseState.rgbButtons[0] & 0x80)
+		{
+			mbLButtonClicked = true;
+		}
+		else
+		{
+			mbLButtonClicked = false;
+		}
+
+		if (mMouseState.rgbButtons[0] & 0x80)
+		{
+			mbRButtonClicked = true;
+		}
+		else
+		{
+			mbRButtonClicked = false;
+		}
 		break;
 
 	case eInputType::Window:
@@ -377,16 +404,18 @@ void CInput::updateKeyState()
 			{
 			case DIK_MOUSELBUTTON:
 				// 왼쪽 클릭
-				if (mMouseState.rgbButtons[0] & 0x80)
+				if (mMouseState.rgbButtons[0] & 0x80 && !mbWidgetCollide)
 				{
+					mbLButtonClicked = true;
 					bIsKeyPushed = true;
 				}
 				break;
 
 			case DIK_MOUSERBUTTON:
 				// 오른쪽 클릭
-				if (mMouseState.rgbButtons[1] & 0x80)
+				if (mMouseState.rgbButtons[1] & 0x80 && !mbWidgetCollide)
 				{
+					mbLButtonClicked = true;
 					bIsKeyPushed = true;
 				}
 				break;

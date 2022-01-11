@@ -1,13 +1,16 @@
 #include "PlayerObject.h"
 #include "Input.h"
 
-CPlayerObject::CPlayerObject()
+CPlayerObject::CPlayerObject()	:
+	mCharInfo{}
 {
 	SetTypeID<CPlayerObject>();
 }
 
-CPlayerObject::CPlayerObject(const CPlayerObject& obj)
+CPlayerObject::CPlayerObject(const CPlayerObject& obj)	:
+	CGameObject(obj)
 {
+	mCharInfo = obj.mCharInfo;
 }
 
 CPlayerObject::~CPlayerObject()
@@ -21,7 +24,7 @@ bool CPlayerObject::Init()
 	// Sprite
 	mSprite = CreateComponent<CSpriteComponent>("Sprite");
 	SetRootSceneComponent(mSprite);
-	mSprite->SetPivot(0.5f, 0.5f, 0.f);
+	mSprite->SetPivot(0.5f, 0.f, 0.f);
 
 	// Animation
 	mSprite->LoadAnimationInstance("Player.anim");
@@ -39,6 +42,13 @@ bool CPlayerObject::Init()
 	mSprite->AddChild(mCamera);
 
 	// Key
+
+	float width = mSprite->GetMaterial()->GetTexture()->GetWidth();
+	float height = mSprite->GetMaterial()->GetTexture()->GetHeight();
+
+	mSprite->SetWorldScale(width / 15.f, height / 15.f, 1.f);
+	mBody->SetOffset(0.f, height / 30.f, 0.f);
+	mBody->SetExtent(width / 30.f, height / 30.f);
 
 	return true;
 }

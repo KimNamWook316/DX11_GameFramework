@@ -17,6 +17,8 @@ public:
 	void Update(float deltaTime);
 	void PostUpdate(float deltaTime);
 	void Render();
+	bool DoCollideMouse();
+	void DoCollide();
 
 public:
 	class CScene* GetScene() const
@@ -58,6 +60,9 @@ public:
 		mWindowList.push_back((CWidgetWindow*)window);
 		return window;
 	}
+
+private:
+	static bool sortWindow(CSharedPtr<CWidgetWindow> src, CSharedPtr<CWidgetWindow> dest);
 	
 private:
 	class CScene* mScene;

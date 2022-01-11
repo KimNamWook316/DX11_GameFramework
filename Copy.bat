@@ -7,3 +7,4 @@ xcopy .\GameEngine\Bin\*.* .\Diablo2\Bin\ /s /d /y /exclude:exclude.txt
 
 xcopy .\GameEngine\Include\*.h .\Engine\Include\ /s /d /y
 xcopy .\GameEngine\Include\*.inl .\Engine\Include\ /s /d /y
+xcopy .\GameEngine\Include\*.hpp .\Engine\Include\ /s /d /y

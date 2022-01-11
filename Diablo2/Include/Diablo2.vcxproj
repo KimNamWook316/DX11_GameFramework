@@ -155,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientManager.h" />
+    <ClInclude Include="Dia2Flags.h" />
+    <ClInclude Include="Dia2Info.h" />
     <ClInclude Include="Object\PlayerObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\TestScene.h" />

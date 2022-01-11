@@ -43,8 +43,8 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::playAttackAnim);
 	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("Move", KeyState_Down, this, &CPlayer2D::move);
 
-	mSprite->SetEndCallBack<CPlayer2D>("Attack", this, &CPlayer2D::skill1);
-	mSprite->SetPlayTime("Attack", 0.5f);
+ //	mSprite->SetEndCallBack<CPlayer2D>("Attack", this, &CPlayer2D::skill1);
+ //	mSprite->SetPlayTime("Attack", 0.5f);
 
 	mBody->SetCollisionProfile("Player");
 
@@ -86,7 +86,7 @@ void CPlayer2D::Update(float deltaTime)
 		{
 			mbIsMoving = false;
 			mSpeed = 0.f;
-			mSprite->ChangeAnimation("Idle_Front");
+			//mSprite->ChangeAnimation("Idle_Front");
 		}
 		else
 		{
@@ -112,14 +112,14 @@ void CPlayer2D::move(float deltaTime)
 	mSpeed = 300.f;
 	mbIsMoving = true;
 
-	if (mDirection.y > 0)
-	{
-		mSprite->ChangeAnimation("Move_Back");
-	}
-	else
-	{
-		mSprite->ChangeAnimation("Move_Front");
-	}
+ //	if (mDirection.y > 0)
+ //	{
+ //		mSprite->ChangeAnimation("Move_Back");
+ //	}
+ //	else
+ //	{
+ //		mSprite->ChangeAnimation("Move_Front");
+ //	}
 }
 
 void CPlayer2D::moveUp(float deltaTime)

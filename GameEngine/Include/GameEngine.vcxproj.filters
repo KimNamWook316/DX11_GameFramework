@@ -150,6 +150,18 @@
     <Filter Include="03. Scene\05. Viewport">
       <UniqueIdentifier>{fcd4d9e3-58e1-4abb-bd07-019a36a8fcb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\04. WidgetShader">
+      <UniqueIdentifier>{61d82b46-cada-4fdb-8742-a43420791e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\06. Widget">
+      <UniqueIdentifier>{8563aefe-e5e0-4668-b185-2d78d192a1ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\06. Sound">
+      <UniqueIdentifier>{f8f4d77a-3372-492b-bbd5-71736c86f1e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\06. Sound\01. FMOD">
+      <UniqueIdentifier>{406d45e9-85a8-40bb-b7d2-1fa97722e4c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -461,6 +473,42 @@
     <ClInclude Include="Widget\Button.h">
       <Filter>09. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\WidgetShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\WidgetConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\06. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.h">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Sound\Sound.h">
+      <Filter>02. Resource\06. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Sound\SoundManager.h">
+      <Filter>02. Resource\06. Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -751,11 +799,32 @@
     <ClCompile Include="Widget\Button.cpp">
       <Filter>09. Widget</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Shader\WidgetShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\WidgetConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\06. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Sound\Sound.cpp">
+      <Filter>02. Resource\06. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Sound\SoundManager.cpp">
+      <Filter>02. Resource\06. Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat" />
     <None Include="Resource\Texture\DirectXTex.inl">
       <Filter>02. Resource\04. Texture</Filter>
+    </None>
+    <None Include="fmod_dsp.cs">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </None>
+    <None Include="fmod_errors.cs">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
+    </None>
+    <None Include="fmod.cs">
+      <Filter>02. Resource\06. Sound\01. FMOD</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -772,6 +841,9 @@
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Collider.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Widget.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

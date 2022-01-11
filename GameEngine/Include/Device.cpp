@@ -26,8 +26,8 @@ CDevice::~CDevice()
 #ifdef _DEBUG
 	mDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&mDebug));
 	//CheckMemoryLeak();
-#endif // _DEBUG
 	SAFE_RELEASE(mDebug);
+#endif // _DEBUG
 	SAFE_RELEASE(mDevice);
 }
 

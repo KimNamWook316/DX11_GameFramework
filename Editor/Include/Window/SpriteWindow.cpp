@@ -759,6 +759,7 @@ void CSpriteWindow::OnClickLoadSequence()
 			mAnimationInstance->AddAnimation(sequenceName, sequenceName);
 		}
 		// 여러 개 파일이 선택된 경우
+		// TODO : 너무 파일 이름이 길어질 경우 로드되지 않음. OpenFile 이슈
 		else
 		{
 			int fileCount = 0;

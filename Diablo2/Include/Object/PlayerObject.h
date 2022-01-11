@@ -4,6 +4,7 @@
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderBox2D.h"
 #include "Component/CameraComponent.h"
+#include "../Dia2Info.h"
 
 class CPlayerObject final :
     public CGameObject
@@ -26,5 +27,7 @@ private:
 	CSharedPtr<CCameraComponent> mCamera;
 	CSharedPtr<CSpriteComponent> mSprite;
 	CSharedPtr<CColliderBox2D> mBody;
+
+	CharacterInfo mCharInfo;
 };
 

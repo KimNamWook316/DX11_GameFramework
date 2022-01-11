@@ -70,5 +70,7 @@ private:
 	
 	// 2D용 Depth 사용 하지 않는 렌더링 스테이트
 	class CRenderState* mDepthDisableState;
+	
+	class CRenderState* mAlphaBlendState;
 };
 

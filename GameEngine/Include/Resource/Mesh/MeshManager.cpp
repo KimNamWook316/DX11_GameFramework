@@ -72,6 +72,25 @@ bool CMeshManager::Init()
 	circleMesh->CreateMesh(circlePos, sizeof(Vector3), 31, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	mMapMesh.insert(std::make_pair("CircleMesh", circleMesh));
 
+	// UI ¸Þ½¬
+	CMesh* widgetMesh = new CStaticMesh;
+
+	VertexUV widgetVtx[4] =
+	{
+		VertexUV(Vector3(0.f, 1.f, 0.f), Vector2(0.f, 0.f)),
+		VertexUV(Vector3(1.f, 1.f, 0.f), Vector2(1.f, 0.f)),
+		VertexUV(Vector3(0.f, 0.f, 0.f), Vector2(0.f, 1.f)),
+		VertexUV(Vector3(1.f, 0.f, 0.f), Vector2(1.f, 1.f)),
+	};
+
+	int widgetIdx[6] = { 0, 1, 3, 0, 3, 2 };
+
+	widgetMesh->SetName("WidgetMesh");
+	widgetMesh->CreateMesh(widgetVtx, sizeof(VertexUV), 4, D3D11_USAGE_IMMUTABLE,
+		D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST, widgetIdx, 4, 6, D3D11_USAGE_IMMUTABLE, DXGI_FORMAT_R32_UINT);
+
+	mMapMesh.insert(std::make_pair("WidgetMesh", widgetMesh));
+
 	return true;
 }
 

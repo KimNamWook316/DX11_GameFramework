@@ -30,6 +30,7 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 #include "Resource/Texture/DirectXTex.h"
+#include "fmod.hpp"
 
 #ifdef _DEBUG
 
@@ -40,6 +41,8 @@
 #pragma comment(lib, "DirectXTex.lib")
 
 #endif // _DEBUG
+
+#pragma comment(lib, "fmod64_vc.lib")
 
 #define ROOT_PATH		"Root"
 #define SHADER_PATH		"Shader"
@@ -288,4 +291,12 @@ struct ColliderCBuffer
 {
 	Vector4 Color;
 	Matrix MatWVP;
+};
+
+struct WidgetCBuffer
+{
+	Vector4 Tint;
+	Matrix MatWP;
+	int UseTexture;
+	Vector3 Dummy;
 };

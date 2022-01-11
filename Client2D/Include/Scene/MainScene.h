@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene/SceneMode.h"
+#include "../Widget/MainWidget.h"
 
 class CMainScene :
     public CSceneMode
@@ -15,5 +16,8 @@ public:
 private:
     void createMaterial();
     void createAnimationSequence();
+
+private:
+    CSharedPtr<CMainWidget> mMainWidget;
 };
 

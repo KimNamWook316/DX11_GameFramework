@@ -3,10 +3,13 @@
 #include "CollisionSection.h"
 #include "../Component/ColliderComponent.h"
 #include "../Input.h"
+#include "Viewport.h"
+#include "Scene.h"
 
 CSceneCollision::CSceneCollision():
 	mSectionInfo(nullptr),
-	mScene(nullptr)
+	mScene(nullptr),
+	mbWidgetClicked(false)
 {
 }
 
@@ -101,9 +104,7 @@ void CSceneCollision::DoCollide(float deltaTime)
 
 void CSceneCollision::DoCollideMouse(float deltaTime)
 {
-	bool bCollideMouse = false;
-
-	// TODO : UI와 마우스간 충돌처리
+	bool bCollideMouse = mbWidgetClicked;
 
 	// UI와 마우스가 충돌하지 않은 경우, 물체와의 충돌
 	if (!bCollideMouse)
@@ -131,7 +132,7 @@ void CSceneCollision::DoCollideMouse(float deltaTime)
 
 			if (idxX != -1 && idxY != -1)
 			{
-				CColliderComponent* colliderMouse = mSectionInfo->vecSection[(size_t)(idxY * mSectionInfo->CountX + idxX)]->DoCollideMouse(true, deltaTime);
+				CColliderComponent* colliderMouse = mSectionInfo->vecSection[(size_t)idxY * (size_t)mSectionInfo->CountX + (size_t)idxX]->DoCollideMouse(true, deltaTime);
 
 				if (colliderMouse)
 				{
@@ -154,7 +155,16 @@ void CSceneCollision::DoCollideMouse(float deltaTime)
 		}
 		else
 		{
-
+		}
+	}
+	// UI와 마우스가 충돌한 경우
+	else
+	{
+		if (mMouseCollision)
+		{
+			// 이전에 마우스와 충돌했던 Collider는 이제 충돌에서 벗어난 상태
+			mMouseCollision->CallCollisionMouseCallBack(eCollisionState::Exit);
+			mMouseCollision = nullptr;
 		}
 	}
 
@@ -167,6 +177,12 @@ void CSceneCollision::DoCollideMouse(float deltaTime)
 			mMouseCollision = nullptr;
 		}
 	}
+}
+
+// CInput의 Update에서 호출
+bool CSceneCollision::DoCollideWidget(float deltaTime)
+{
+	return mbWidgetClicked = mScene->GetViewport()->DoCollideMouse();
 }
 
 void CSceneCollision::SetSectionSize(const Vector3& size)
@@ -322,10 +338,6 @@ void CSceneCollision::Clear()
 void CSceneCollision::AddCollider(CColliderComponent* collider)
 {
 	mColliderList.push_back(collider);
-}
-
-void CSceneCollision::collideMouse(float deltaTime)
-{
 }
 
 void CSceneCollision::classifyColliderBySection()

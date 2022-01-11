@@ -13,6 +13,7 @@ CScene::CScene()
 	mMode->mScene = this;
 	mResource->mScene = this;
 	mCameraManager->mScene = this;
+	mCollision->mScene = this;
 	mViewport->mScene = this;
 
 	mbIsStart = false;

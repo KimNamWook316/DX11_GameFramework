@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "Scene/Scene.h"
+#include "Scene/Viewport.h"
 #include "../Object/Player2D.h"
 #include "../Object/Monster.h"
 #include "../Object/PixelTest.h"
@@ -24,6 +25,8 @@ bool CMainScene::Init()
 	//CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
 
 	CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
+
+	mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	SetPlayerObj(player);
 

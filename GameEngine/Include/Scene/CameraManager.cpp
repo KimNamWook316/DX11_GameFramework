@@ -32,6 +32,8 @@ void CCameraManager::Start()
 	{
 		mCurrentCamera->Start();
 	}
+	
+	mUICamera->Start();
 }
 
 void CCameraManager::Update(float deltaTime)
