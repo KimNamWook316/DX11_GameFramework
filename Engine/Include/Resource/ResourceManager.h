@@ -5,6 +5,7 @@
 #include "Material/MaterialManager.h"
 #include "Texture/TextureManager.h"
 #include "Animation/AnimationManager.h"
+#include "Sound/SoundManager.h"
 
 // 다양한 리소스들을 모두 관리할 매니저 (메쉬, 오디오 등등 모든 리소스는 이 객체에서만 관리한다.)
 // CResource라는 클래스를 만들어, 모든 리소스가 상속받게 하여, 맵 하나로 관리하는 법도 있다.
@@ -80,12 +81,28 @@ public: // ===================== Sequence2D =====================
 	bool LoadSequence2D(const char* fileName, const std::string& pathName = ANIMATION_PATH, class CScene* scene = nullptr);
 	bool LoadSequence2D(std::string& outName, const char* fileName, const std::string& pathName = ANIMATION_PATH, class CScene* scene = nullptr);
 
+public: // ===================== Sound =====================
+	bool LoadSound(const std::string& channelGroupName, bool bLoop, const std::string& soundName,
+		const char* fileName, const std::string& pathName = SOUND_PATH);
+	bool CreateSoundChannelGroup(const std::string& groupName);
+	bool SetVolume(int volume);											// 0 ~ 100
+	bool SetVolume(const std::string& groupName, int volume);
+	bool SoundPlay(const std::string& soundName);
+	bool SoundStop(const std::string& soundName);
+	bool SoundPause(const std::string& soundName);
+	bool SoundResume(const std::string& soundName);
+	CSound* FindSound(const std::string& soundName);
+	FMOD::ChannelGroup* FindChannelGroup(const std::string& groupName);
+	void ReleaseSound(const std::string& soundName);
+
 	DECLARE_SINGLE(CResourceManager)
+
 private:
 	CMeshManager* mMeshManager;
 	CShaderManager* mShaderManager;
 	CMaterialManager* mMaterialManager;
 	CTextureManager* mTextureManager;
 	CAnimationManager* mAnimationManager;
+	CSoundManager* mSoundManager;
 };
 

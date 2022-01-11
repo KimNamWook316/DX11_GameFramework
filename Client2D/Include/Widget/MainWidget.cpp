@@ -30,6 +30,9 @@ bool CMainWidget::Init()
 	mButton->SetTextureTint(eButtonState::Clicked, 128, 128, 128, 128);
 
 	mButton->SetClickCallBack(this, &CMainWidget::onStartButtonClicked);
+	
+	mButton->SetSound(eButtonSoundState::Hovered, "UI", "ButtonMouseOn", "TeemoSmile.mp3");
+	mButton->SetSound(eButtonSoundState::Clicked, "UI", "ButtonClick", "TeemoStartClicck.mp3");
 	return true;
 }
 
@@ -55,5 +58,5 @@ void CMainWidget::Render()
 
 void CMainWidget::onStartButtonClicked()
 {
-	MessageBox(nullptr, TEXT("Click"), TEXT("Click"), MB_OK);
+	//MessageBox(nullptr, TEXT("Click"), TEXT("Click"), MB_OK);
 }

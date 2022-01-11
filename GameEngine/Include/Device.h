@@ -11,6 +11,7 @@ public:
 	void RenderStart();
 	void Flip();
 
+public:
 	ID3D11Device* GetDevice() const
 	{
 		return mDevice;
@@ -31,6 +32,21 @@ public:
 		return mRS;
 	}
 
+	ID2D1RenderTarget* Get2DRenderTarget() const
+	{
+		return m2DTarget;
+	}
+
+	ID2D1RenderTarget* Get2DWorldRenderTarget() const
+	{
+		return m2DTargetWorld;
+	}
+
+	ID2D1Factory* Get2DFactory() const
+	{
+		return m2DFactory;
+	}
+
 	Vector2 GetViewportAspectRatio();
 
 #ifdef _DEBUG
@@ -42,7 +58,6 @@ public:
 		OutputDebugStringW(TEXT("############LEAK INFO END############\n"));
 	}
 #endif // _DEBUG
-
 
 	DECLARE_SINGLE(CDevice)
 
@@ -71,9 +86,13 @@ private:
 	HWND mhWnd;
 	Resolution mRS;
 
+	// Font Ãâ·Â ·»´õ Å¸°Ù ( UI, ¿ùµå )
+	ID2D1RenderTarget* m2DTarget;
+	ID2D1RenderTarget* m2DTargetWorld;
+	ID2D1Factory* m2DFactory;
+
 #ifdef _DEBUG
 	ID3D11Debug* mDebug;
 #endif // _DEBUG
-
 };
 

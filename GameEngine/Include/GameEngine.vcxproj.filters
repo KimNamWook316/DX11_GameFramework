@@ -162,6 +162,9 @@
     <Filter Include="02. Resource\06. Sound\01. FMOD">
       <UniqueIdentifier>{406d45e9-85a8-40bb-b7d2-1fa97722e4c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\07. Font">
+      <UniqueIdentifier>{e928170b-e721-475b-b068-3fb4bad08319}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -509,6 +512,9 @@
     <ClInclude Include="Resource\Sound\SoundManager.h">
       <Filter>02. Resource\06. Sound</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Font\FontManager.h">
+      <Filter>02. Resource\07. Font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -810,6 +816,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Sound\SoundManager.cpp">
       <Filter>02. Resource\06. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Font\FontManager.cpp">
+      <Filter>02. Resource\07. Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

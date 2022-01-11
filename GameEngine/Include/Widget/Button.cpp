@@ -6,7 +6,9 @@
 #include "../Input.h"
 
 CButton::CButton()	:
-	meCurState(eButtonState::Normal)
+	meCurState(eButtonState::Normal),
+	mbHoverSoundPlaying(false),
+	mbClickSoundPlaying(false)
 {
 }
 
@@ -43,9 +45,29 @@ void CButton::Update(float deltaTime)
 	{
 		if (mbMouseHovered)
 		{
+			if (!mbHoverSoundPlaying)
+			{
+				mbHoverSoundPlaying = true;
+
+				if (mSound[(int)eButtonSoundState::Hovered])
+				{
+					mSound[(int)eButtonSoundState::Hovered]->Play();
+				}
+			}
+
 			if (CInput::GetInst()->GetMouseLButtonClicked())
 			{
 				meCurState = eButtonState::Clicked;
+
+				if (!mbClickSoundPlaying)
+				{
+					mbClickSoundPlaying = true;
+
+					if (mSound[(int)eButtonSoundState::Clicked])
+					{
+						mSound[(int)eButtonSoundState::Clicked]->Play();
+					}
+				}
 			}
 			else if (eButtonState::Clicked == meCurState)
 			{
@@ -55,14 +77,18 @@ void CButton::Update(float deltaTime)
 				}
 
 				meCurState = eButtonState::Hovered;
+				mbClickSoundPlaying = false;
 			}
 			else
 			{
 				meCurState = eButtonState::Hovered;
+				mbClickSoundPlaying = false;
 			}
 		}
 		else
 		{
+			mbClickSoundPlaying = false;
+			mbHoverSoundPlaying = false;
 			meCurState = eButtonState::Normal;
 		}
 	}
@@ -133,4 +159,20 @@ void CButton::AddFrameData(eButtonState state, const Vector2& start, const Vecto
 	data.Size = size;
 	
 	mInfo[(int)state].vecFrameData.push_back(data);
+}
+
+void CButton::SetSound(eButtonSoundState state, const std::string& soundName)
+{
+	mSound[(int)state] = mOwner->GetViewport()->GetScene()->GetResource()->FindSound(soundName);
+}
+
+void CButton::SetSound(eButtonSoundState state, CSound* sound)
+{
+	mSound[(int)state] = sound;
+}
+
+void CButton::SetSound(eButtonSoundState state, const std::string& channelGroupName, const std::string& soundName, const char* fileName, const std::string& pathName)
+{
+	mOwner->GetViewport()->GetScene()->GetResource()->LoadSound(channelGroupName, false, soundName, fileName, pathName);
+	mSound[(int)state] = mOwner->GetViewport()->GetScene()->GetResource()->FindSound(soundName);
 }

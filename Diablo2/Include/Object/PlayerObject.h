@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GameObject/GameObject.h"
+#include "D2Object.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderBox2D.h"
 #include "Component/CameraComponent.h"
 #include "../Dia2Info.h"
 
 class CPlayerObject final :
-    public CGameObject
+    public CD2Object 
 {
 	friend class CScene;
 
@@ -27,7 +27,5 @@ private:
 	CSharedPtr<CCameraComponent> mCamera;
 	CSharedPtr<CSpriteComponent> mSprite;
 	CSharedPtr<CColliderBox2D> mBody;
-
-	CharacterInfo mCharInfo;
 };
 

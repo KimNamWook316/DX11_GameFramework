@@ -8,11 +8,18 @@ CDevice::CDevice()
 	, mSwapChain(nullptr)
 	, mTargetView(nullptr)
 	, mDepthView(nullptr) 
+	, m2DTarget(nullptr)
+	, m2DTargetWorld(nullptr)
+	, m2DFactory(nullptr)
 {
 }
 
 CDevice::~CDevice()
 {
+	SAFE_RELEASE(m2DTarget);
+	SAFE_RELEASE(m2DTargetWorld);
+	SAFE_RELEASE(m2DFactory);
+
 	SAFE_RELEASE(mTargetView);
 	SAFE_RELEASE(mDepthView);
 	SAFE_RELEASE(mSwapChain);
@@ -154,6 +161,29 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 	// 렌더타겟의 렌더링 영역 설정, 래스터라이저 스테이지의 설정이므로 RS가 붙음
 	// 뷰포트는 각 렌더타겟별로 설정한다.
 	mContext->RSSetViewports(1, &vp);
+
+	// 2D Factory 생성
+	if (FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, &m2DFactory)))
+	{
+		assert(false);
+		return false;
+	}
+
+	// 3D BackBuffer의 Surface를 얻어온다.
+	IDXGISurface* backSurface = nullptr;
+	mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backSurface));
+
+	// 2D용 렌더타겟을 만들어준다.
+	D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
+		D2D1_RENDER_TARGET_TYPE_HARDWARE,
+		D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED));
+
+	if (FAILED(m2DFactory->CreateDxgiSurfaceRenderTarget(backSurface, props, &m2DTarget)))
+	{
+		assert(false);
+		return false;
+	}
+	SAFE_RELEASE(backSurface);
 
 	return true;
 }

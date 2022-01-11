@@ -4,6 +4,7 @@
 #include "../Resource/Shader/Shader.h"
 #include "../Resource/Material/Material.h"
 #include "../Resource/Texture/Texture.h"
+#include "../Resource/Sound/Sound.h"
 #include "../Resource/Animation/AnimationSequence2D.h"
 #include "../Resource/ResourceManager.h"
 
@@ -92,6 +93,19 @@ public:
 	bool LoadSequence2D(const char* fileName, const std::string& pathName = ANIMATION_PATH);
 	bool LoadSequence2D(std::string& outName, const char* fileName, const std::string& pathName = ANIMATION_PATH);
 
+public: // ===================== Sound =====================
+	bool LoadSound(const std::string& channelGroupName, bool bLoop, const std::string& soundName,
+		const char* fileName, const std::string& pathName = SOUND_PATH);
+	bool CreateSoundChannelGroup(const std::string& groupName);
+	bool SetVolume(int volume);											// 0 ~ 100
+	bool SetVolume(const std::string& groupName, int volume);
+	bool SoundPlay(const std::string& soundName);
+	bool SoundStop(const std::string& soundName);
+	bool SoundPause(const std::string& soundName);
+	bool SoundResume(const std::string& soundName);
+	CSound* FindSound(const std::string& soundName);
+	FMOD::ChannelGroup* FindChannelGroup(const std::string& groupName);
+
 private:
 	class CScene* mScene;
 	std::unordered_map <std::string, CSharedPtr<CMesh>> mMapMesh;
@@ -99,5 +113,6 @@ private:
 	std::unordered_map <std::string, CSharedPtr<CMaterial>> mMapMaterial;
 	std::unordered_map <std::string, CSharedPtr<CTexture>> mMapTexture;
 	std::unordered_map <std::string, CSharedPtr<CAnimationSequence2D>> mMapSequence2D;
+	std::unordered_map <std::string, CSharedPtr<CSound>> mMapSound;
 };
 

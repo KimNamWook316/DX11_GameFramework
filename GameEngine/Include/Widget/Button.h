@@ -48,6 +48,11 @@ public:
     void SetTextureTint(eButtonState state, const Vector4& tint);
     void SetTextureTint(eButtonState state, const float r, const float g, const float b, const float a);
     void AddFrameData(eButtonState state, const Vector2& start, const Vector2& size);
+    void SetSound(eButtonSoundState state, const std::string& soundName);
+    void SetSound(eButtonSoundState state, class CSound* sound);
+    void SetSound(eButtonSoundState state, const std::string& channelGroupName,
+        const std::string& soundName, const char* fileName,
+        const std::string& pathName = SOUND_PATH);
 
 public:
     template <typename T>
@@ -66,5 +71,9 @@ protected:
     eButtonState meCurState;
     ButtonStateInfo mInfo[(int)eButtonState::Max];
     std::function<void()> mClickCallBack;
+
+    CSharedPtr<class CSound> mSound[(int)eButtonSoundState::Max];
+    bool mbHoverSoundPlaying;
+    bool mbClickSoundPlaying;
 };
 

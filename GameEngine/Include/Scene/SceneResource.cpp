@@ -369,3 +369,77 @@ bool CSceneResource::LoadSequence2D(std::string& outName, const char* fileName, 
 	mMapSequence2D.insert(std::make_pair(outName, sequence));
 	return true;
 }
+
+bool CSceneResource::LoadSound(const std::string& channelGroupName, bool bLoop, const std::string& soundName, const char* fileName, const std::string& pathName)
+{
+	if (FindSound(soundName))
+	{
+		return true;
+	}
+
+	if (!CResourceManager::GetInst()->LoadSound(channelGroupName, bLoop, soundName, fileName, pathName))
+	{
+		return false;
+	}
+
+	mMapSound.insert(std::make_pair(soundName, CResourceManager::GetInst()->FindSound(soundName)));
+	return true;
+}
+
+bool CSceneResource::CreateSoundChannelGroup(const std::string& groupName)
+{
+	return CResourceManager::GetInst()->CreateSoundChannelGroup(groupName);
+}
+
+bool CSceneResource::SetVolume(int volume)
+{
+	return CResourceManager::GetInst()->SetVolume(volume);
+}
+
+bool CSceneResource::SetVolume(const std::string& groupName, int volume)
+{
+	return CResourceManager::GetInst()->SetVolume(groupName, volume);
+}
+
+bool CSceneResource::SoundPlay(const std::string& soundName)
+{
+	return CResourceManager::GetInst()->SoundPlay(soundName);
+}
+
+bool CSceneResource::SoundStop(const std::string& soundName)
+{
+	return CResourceManager::GetInst()->SoundStop(soundName);
+}
+
+bool CSceneResource::SoundPause(const std::string& soundName)
+{
+	return CResourceManager::GetInst()->SoundPause(soundName);
+}
+
+bool CSceneResource::SoundResume(const std::string& soundName)
+{
+	return CResourceManager::GetInst()->SoundResume(soundName);
+}
+
+CSound* CSceneResource::FindSound(const std::string& soundName)
+{
+	auto iter = mMapSound.find(soundName);
+
+	if (iter == mMapSound.end())
+	{
+		CSound* findNotInScene = CResourceManager::GetInst()->FindSound(soundName);
+		
+		if (!findNotInScene)
+		{
+			return nullptr;
+		}
+		
+		return findNotInScene;
+	}
+	return iter->second;
+}
+
+FMOD::ChannelGroup* CSceneResource::FindChannelGroup(const std::string& groupName)
+{
+	return CResourceManager::GetInst()->FindChannelGroup(groupName);
+}

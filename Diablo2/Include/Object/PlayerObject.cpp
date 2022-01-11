@@ -1,16 +1,15 @@
 #include "PlayerObject.h"
 #include "Input.h"
 
-CPlayerObject::CPlayerObject()	:
-	mCharInfo{}
+CPlayerObject::CPlayerObject() :
+	CD2Object()
 {
 	SetTypeID<CPlayerObject>();
 }
 
 CPlayerObject::CPlayerObject(const CPlayerObject& obj)	:
-	CGameObject(obj)
+	CD2Object(obj)
 {
-	mCharInfo = obj.mCharInfo;
 }
 
 CPlayerObject::~CPlayerObject()
@@ -55,17 +54,17 @@ bool CPlayerObject::Init()
 
 void CPlayerObject::Start()
 {
-	CGameObject::Start();
+	CD2Object::Start();
 }
 
 void CPlayerObject::Update(float deltaTime)
 {
-	CGameObject::Update(deltaTime);
+	CD2Object::Update(deltaTime);
 }
 
 void CPlayerObject::PostUpdate(float deltaTime)
 {
-	CGameObject::PostUpdate(deltaTime);
+	CD2Object::PostUpdate(deltaTime);
 }
 
 CPlayerObject* CPlayerObject::Clone()

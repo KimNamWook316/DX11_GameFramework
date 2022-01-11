@@ -88,6 +88,7 @@
     <ClInclude Include="Render\RenderStateManager.h" />
     <ClInclude Include="Resource\Animation\AnimationManager.h" />
     <ClInclude Include="Resource\Animation\AnimationSequence2D.h" />
+    <ClInclude Include="Resource\Font\FontManager.h" />
     <ClInclude Include="Resource\Material\Material.h" />
     <ClInclude Include="Resource\Material\MaterialManager.h" />
     <ClInclude Include="Resource\Mesh\Mesh.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="Render\RenderStateManager.cpp" />
     <ClCompile Include="Resource\Animation\AnimationManager.cpp" />
     <ClCompile Include="Resource\Animation\AnimationSequence2D.cpp" />
+    <ClCompile Include="Resource\Font\FontManager.cpp" />
     <ClCompile Include="Resource\Material\Material.cpp" />
     <ClCompile Include="Resource\Material\MaterialManager.cpp" />
     <ClCompile Include="Resource\Mesh\Mesh.cpp" />

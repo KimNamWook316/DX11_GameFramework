@@ -114,6 +114,7 @@ bool CViewport::DoCollideMouse()
 		}
 	}
 
+	// 충돌 이후 사라져야 할 UI가 있는 경우
 	for (; iter != iterEnd;)
 	{
 		if (!(*iter)->IsActive())

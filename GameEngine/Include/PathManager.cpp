@@ -65,6 +65,7 @@ bool CPathManager::Init()
     AddPath(FONT_PATH, TEXT("Font\\"));
     AddPath(ANIMATION_PATH, TEXT("Animation\\"));
     AddPath(SCENE_PATH, TEXT("Scene\\"));
+    AddPath(SOUND_PATH, TEXT("Sound\\"));
 
     return true;
 }

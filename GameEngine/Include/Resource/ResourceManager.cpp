@@ -7,7 +7,9 @@ CResourceManager::CResourceManager() :
 	mShaderManager(nullptr),
 	mMaterialManager(nullptr),
 	mTextureManager(nullptr),
-	mAnimationManager(nullptr)
+	mAnimationManager(nullptr),
+	mSoundManager(nullptr),
+	mFontManager(nullptr)
 {
 }
 
@@ -18,6 +20,8 @@ CResourceManager::~CResourceManager()
 	SAFE_DELETE(mShaderManager);
 	SAFE_DELETE(mMaterialManager);
 	SAFE_DELETE(mTextureManager);
+	SAFE_DELETE(mSoundManager);
+	SAFE_DELETE(mFontManager);
 }
 
 bool CResourceManager::Init()
@@ -52,6 +56,20 @@ bool CResourceManager::Init()
 
 	mAnimationManager = new CAnimationManager;
 	if (!mAnimationManager->Init())
+	{
+		assert(false);
+		return false;
+	}
+
+	mSoundManager = new CSoundManager;
+	if (!mSoundManager->Init())
+	{
+		assert(false);
+		return false;
+	}
+
+	mFontManager = new CFontManager;
+	if (!mFontManager->Init())
 	{
 		assert(false);
 		return false;
@@ -185,6 +203,61 @@ bool CResourceManager::LoadSequence2D(const char* fileName, const std::string& p
 bool CResourceManager::LoadSequence2D(std::string& outName, const char* fileName, const std::string& pathName, CScene* scene)
 {
 	return mAnimationManager->LoadSequece(outName, fileName, pathName, scene);
+}
+
+bool CResourceManager::LoadSound(const std::string& channelGroupName, bool bLoop, const std::string& soundName, const char* fileName, const std::string& pathName)
+{
+	return mSoundManager->LoadSound(channelGroupName, bLoop, soundName, fileName, pathName);
+}
+
+bool CResourceManager::CreateSoundChannelGroup(const std::string& groupName)
+{
+	return mSoundManager->CreateSoundChannelGroup(groupName);
+}
+
+bool CResourceManager::SetVolume(int volume)
+{
+	return mSoundManager->SetVolume(volume);
+}
+
+bool CResourceManager::SetVolume(const std::string& groupName, int volume)
+{
+	return mSoundManager->SetVolume(groupName, volume);
+}
+
+bool CResourceManager::SoundPlay(const std::string& soundName)
+{
+	return mSoundManager->SoundPlay(soundName);
+}
+
+bool CResourceManager::SoundStop(const std::string& soundName)
+{
+	return mSoundManager->SoundStop(soundName);
+}
+
+bool CResourceManager::SoundPause(const std::string& soundName)
+{
+	return mSoundManager->SoundPause(soundName);
+}
+
+bool CResourceManager::SoundResume(const std::string& soundName)
+{
+	return mSoundManager->SoundResume(soundName);
+}
+
+CSound* CResourceManager::FindSound(const std::string& soundName)
+{
+	return mSoundManager->FindSound(soundName);
+}
+
+FMOD::ChannelGroup* CResourceManager::FindChannelGroup(const std::string& groupName)
+{
+	return mSoundManager->FindChannelGroup(groupName);
+}
+
+void CResourceManager::ReleaseSound(const std::string& soundName)
+{
+	mSoundManager->ReleaseSound(soundName);
 }
 
 

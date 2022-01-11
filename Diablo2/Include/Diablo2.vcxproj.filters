@@ -16,8 +16,11 @@
     <Filter Include="01. SceneMode">
       <UniqueIdentifier>{87af54b7-e502-4f78-afc0-33ef06bfca8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject">
+    <Filter Include="02. D2Object">
       <UniqueIdentifier>{3289cd78-5161-4b8f-80fb-bd0efb73fbef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. D2Object\01. Player">
+      <UniqueIdentifier>{45cee635-8688-47c1-9967-c1764ead18c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,8 +33,11 @@
     <ClCompile Include="Scene\TestScene.cpp">
       <Filter>01. SceneMode</Filter>
     </ClCompile>
+    <ClCompile Include="Object\D2Object.cpp">
+      <Filter>02. D2Object</Filter>
+    </ClCompile>
     <ClCompile Include="Object\PlayerObject.cpp">
-      <Filter>02. GameObject</Filter>
+      <Filter>02. D2Object\01. Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,14 +50,17 @@
     <ClInclude Include="Scene\TestScene.h">
       <Filter>01. SceneMode</Filter>
     </ClInclude>
-    <ClInclude Include="Object\PlayerObject.h">
-      <Filter>02. GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Dia2Info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dia2Flags.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\D2Object.h">
+      <Filter>02. D2Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerObject.h">
+      <Filter>02. D2Object\01. Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

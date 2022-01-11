@@ -15,11 +15,16 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <dinput.h>
+#include <dwrite.h>
+#include <dwrite_3.h>
+#include <d2d1.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "d2d1.lib")
 
 #include "Vector2.h"
 #include "Vector3.h"
@@ -50,6 +55,7 @@
 #define FONT_PATH		"Font" 
 #define ANIMATION_PATH	"Animation"
 #define SCENE_PATH		"Scene"
+#define SOUND_PATH		"Sound"
 
 #define SAFE_DELETE(p)  if(p) { delete p; p = nullptr; }
 #define SAFE_DELETE_ARRAY(p) if(p) { delete[] p; p = nullptr; }

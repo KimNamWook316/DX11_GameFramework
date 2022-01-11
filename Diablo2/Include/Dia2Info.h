@@ -4,11 +4,12 @@
 
 struct CharacterInfo
 {
-	eCharDir Direction;
+	Vector2 Dir;
+	eCharDir SpriteDir;
 	float MoveSpeed;
 
 	CharacterInfo()	:
-		Direction(eCharDir::S),
+		SpriteDir(eCharDir::S),
 		MoveSpeed(100.f)
 	{
 	}

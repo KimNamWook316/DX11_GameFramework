@@ -153,3 +153,10 @@ enum class eButtonState
 	Disabled,
 	Max,
 };
+
+enum class eButtonSoundState
+{
+	Hovered,
+	Clicked,
+	Max,
+};
