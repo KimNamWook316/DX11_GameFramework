@@ -183,6 +183,7 @@ bool CDevice::Init(HWND hWnd, unsigned int width, unsigned int height, bool wind
 		assert(false);
 		return false;
 	}
+	// Ref Count 증가한 surface release 처리
 	SAFE_RELEASE(backSurface);
 
 	return true;

@@ -23,6 +23,10 @@ public:
 	virtual void PostUpdate(float deltaTime) override;
 	virtual CPlayerObject* Clone();
 
+public:
+	void OnLButtonClicked(float deltaTime);
+	void OnRButtonClicked(float deltaTime);
+
 private:
 	CSharedPtr<CCameraComponent> mCamera;
 	CSharedPtr<CSpriteComponent> mSprite;

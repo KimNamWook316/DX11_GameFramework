@@ -268,7 +268,76 @@ void CAnimationSequence2DInstance::Load(const char* fullPath)
 		return;
 	}
 	
-	Load(fp);
+	int mapSize = 0;
+	fread(&mapSize, sizeof(int), 1, fp);
+
+	for (int i = 0; i < mapSize; ++i)
+	{
+		CAnimationSequence2DData* data = new CAnimationSequence2DData;
+
+		int length = 0;
+		fread(&length, sizeof(int), 1, fp);
+		char name[256] = {};
+		fread(name, sizeof(char), size_t(length), fp);
+		
+		data->Load(fp);
+
+		if (mScene)
+		{
+			char sequenceFullPath[MAX_PATH] = {};
+			int fullPathLength = strlen(fullPath);
+			for (int i = fullPathLength - 1; i > 0; --i)
+			{
+				if (fullPath[i] == '\\')
+				{
+					strncpy_s(sequenceFullPath, fullPath, i + 1);
+					break;
+				}
+			}
+
+			strcat_s(sequenceFullPath, data->mSequenceName.c_str());
+			strcat_s(sequenceFullPath, ".sqc");
+			
+			mScene->GetResource()->LoadSequence2DFullPath(sequenceFullPath);
+			data->mSequence = mScene->GetResource()->FindAnimationSequence2D(data->mSequenceName);
+		}
+		else
+		{
+			char sequenceFullPath[MAX_PATH] = {};
+			int fullPathLength = strlen(fullPath);
+			for (int i = fullPathLength - 1; i > 0; --i)
+			{
+				if (fullPath[i] == '\\')
+				{
+					strncpy_s(sequenceFullPath, fullPath, i + 1);
+					break;
+				}
+			}
+
+			strcat_s(sequenceFullPath, data->mSequenceName.c_str());
+			strcat_s(sequenceFullPath, ".sqc");
+			
+			CResourceManager::GetInst()->LoadSequence2DFullPath(sequenceFullPath);
+			data->mSequence = CResourceManager::GetInst()->FindAnimationSequece2D(data->mSequenceName);
+		}
+
+		mMapAnimation.insert(std::make_pair(name, data));
+	}
+
+	int length = 0;
+	fread(&length, sizeof(int), 1, fp);
+	char name[256] = {};
+	fread(name, sizeof(char), size_t(length), fp);
+	
+	mCurrentAnimation = mMapAnimation.find(name)->second;
+
+	fread(&mbPlay, sizeof(bool), 1, fp);
+
+	if (mScene)
+	{
+		mCBuffer = mScene->GetResource()->GetAnimation2DCBuffer();
+	}
+	//Load(fp);
 
 	fclose(fp);
 }
@@ -307,15 +376,6 @@ void CAnimationSequence2DInstance::Load(FILE* fp)
 			CResourceManager::GetInst()->LoadSequence2D(fileName);
 			data->mSequence = CResourceManager::GetInst()->FindAnimationSequece2D(data->mSequenceName);
 		}
-		
- //		if (mScene)
- //		{
- //			data->mSequence = mScene->GetResource()->FindAnimationSequence2D(data->mSequenceName);
- //		}
- //		else
- //		{
- //			data->mSequence = CResourceManager::GetInst()->FindAnimationSequece2D(data->mSequenceName);
- //		}
 
 		mMapAnimation.insert(std::make_pair(name, data));
 	}

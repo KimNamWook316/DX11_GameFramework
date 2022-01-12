@@ -41,6 +41,10 @@ bool CPlayerObject::Init()
 	mSprite->AddChild(mCamera);
 
 	// Key
+	CInput::GetInst()->CreateKey("LButtonDown", VK_LBUTTON);
+	CInput::GetInst()->CreateKey("RButtonDown", VK_RBUTTON);
+	CInput::GetInst()->SetKeyCallBack("LButtonDown", eKeyState::KeyState_Down, this, &CPlayerObject::OnLButtonClicked);
+	CInput::GetInst()->SetKeyCallBack("RButtonDown", eKeyState::KeyState_Down, this, &CPlayerObject::OnRButtonClicked);
 
 	float width = mSprite->GetMaterial()->GetTexture()->GetWidth();
 	float height = mSprite->GetMaterial()->GetTexture()->GetHeight();
@@ -48,6 +52,9 @@ bool CPlayerObject::Init()
 	mSprite->SetWorldScale(width / 15.f, height / 15.f, 1.f);
 	mBody->SetOffset(0.f, height / 30.f, 0.f);
 	mBody->SetExtent(width / 30.f, height / 30.f);
+
+	// CharInfo
+	mCharInfo.MaxMoveSpeed = 300.f;
 
 	return true;
 }
@@ -60,6 +67,8 @@ void CPlayerObject::Start()
 void CPlayerObject::Update(float deltaTime)
 {
 	CD2Object::Update(deltaTime);
+
+	AddWorldPos(Vector3(mCharInfo.Dir.x, mCharInfo.Dir.y, 0.f) * deltaTime * mCharInfo.CurMoveSpeed);
 }
 
 void CPlayerObject::PostUpdate(float deltaTime)
@@ -70,4 +79,18 @@ void CPlayerObject::PostUpdate(float deltaTime)
 CPlayerObject* CPlayerObject::Clone()
 {
 	return new CPlayerObject(*this);
+}
+
+void CPlayerObject::OnLButtonClicked(float deltaTime)
+{
+}
+
+void CPlayerObject::OnRButtonClicked(float deltaTime)
+{
+	Vector2 mouseWorldPos = CInput::GetInst()->GetMouseWorld2DPos();
+	SetDirection(mouseWorldPos - Vector2(GetWorldPos().x, GetWorldPos().y));
+	
+	SetMoveSpeed(mCharInfo.MaxMoveSpeed);
+	std::string animName = "TownWalk" + std::to_string(mCharInfo.SpriteDir);
+	mSprite->ChangeAnimation(animName);
 }

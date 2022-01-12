@@ -32,6 +32,20 @@ public:
 		SetDirection(Vector2(dir.x, dir.y));
 	}
 
+	void SetMaxMoveSpeed(const float& speed)
+	{
+		mCharInfo.MaxMoveSpeed = speed;
+	}
+
+	void SetMoveSpeed(const float& speed)
+	{
+		mCharInfo.CurMoveSpeed = speed;
+		if (mCharInfo.CurMoveSpeed > mCharInfo.MaxMoveSpeed)
+		{
+			mCharInfo.CurMoveSpeed = mCharInfo.MaxMoveSpeed;
+		}
+	}
+
 protected:
     CharacterInfo mCharInfo;
 };
