@@ -4,6 +4,12 @@ CMainWidget::CMainWidget()
 {
 }
 
+CMainWidget::CMainWidget(const CMainWidget& window)
+{
+	mButton = FindWidget<CButton>("Button");
+	mText = FindWidget<CText>("Text");
+}
+
 CMainWidget::~CMainWidget()
 {
 }
@@ -33,6 +39,17 @@ bool CMainWidget::Init()
 	
 	mButton->SetSound(eButtonSoundState::Hovered, "UI", "ButtonMouseOn", "TeemoSmile.mp3");
 	mButton->SetSound(eButtonSoundState::Clicked, "UI", "ButtonClick", "TeemoStartClicck.mp3");
+
+	mText = CreateWidget<CText>("Text");
+	mText->SetText(TEXT("Hello"));
+	mText->SetPos(200.f, 400.f);
+	mText->SetSize(100.f, 40.f);
+	mText->SetZorder(1);
+	mText->SetAlignH(eTextAlignH::Center);
+	mText->SetAlignV(eTextAlignV::Middle);
+	mText->SetShadowEnable(true);
+	mText->SetShadowColor(0.f, 1.f, 0.f);
+	mText->SetShadowOffset(2.f, 2.f);
 	return true;
 }
 
@@ -54,6 +71,11 @@ void CMainWidget::PostUpdate(float deltaTime)
 void CMainWidget::Render()
 {
 	CWidgetWindow::Render();
+}
+
+CMainWidget* CMainWidget::Clone()
+{
+	return new CMainWidget(*this);
 }
 
 void CMainWidget::onStartButtonClicked()

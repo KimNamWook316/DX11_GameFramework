@@ -29,6 +29,8 @@ CSceneComponent::CSceneComponent(const CSceneComponent& com)	:
 	CComponent(com),
 	mbIsRender(false)
 {
+	*this = com;
+
 	// 새로운 Transform Object생성 ( Transform은 공유될 필요가 없음 )
 	mTransform = com.mTransform->Clone();
 

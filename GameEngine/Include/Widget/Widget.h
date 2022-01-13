@@ -18,6 +18,7 @@ public:
     virtual void Update(float deltaTime);
     virtual void PostUpdate(float deltaTime);
     virtual void Render();
+    virtual CWidget* Clone();
 
     virtual bool DoCollideMouse(const Vector2& mousePos);
 
@@ -63,12 +64,12 @@ public:
         mPos = Vector2(x, y);
     }
 
-    void SetSize(const Vector2& size)
+    virtual void SetSize(const Vector2& size)
     {
         mSize = size;
     }
 
-    void SetSize(const float x, const float y)
+    virtual void SetSize(const float x, const float y)
     {
         mSize = Vector2(x, y);
     }
@@ -96,6 +97,7 @@ protected:
     Vector4 mTint;
     bool mbStart;
     bool mbMouseHovered;
+    bool mbCollisionMouseEnable;
 
     class CWidgetConstantBuffer* mCBuffer;
     CSharedPtr<class CMesh> mMesh;

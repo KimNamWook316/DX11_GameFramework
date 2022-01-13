@@ -112,6 +112,12 @@ bool CRenderManager::Init()
 	layer->LayerPriority = 0;
 	mRenderLayerList.push_back(layer);
 
+	// Widget Component Layer
+	layer = new RenderLayer;
+	layer->Name = "ScreenWidgetComponent";
+	layer->LayerPriority = 1;
+	mRenderLayerList.push_back(layer);
+
 	// Depth Disable µÈ »óÅÂ
 	mDepthDisableState = mRenderStateManager->FindRenderState("DepthDisable");
 	mAlphaBlendState = mRenderStateManager->FindRenderState("AlphaBlend");

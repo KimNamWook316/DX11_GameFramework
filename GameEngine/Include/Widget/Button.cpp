@@ -16,6 +16,9 @@ CButton::CButton(const CButton& button)	:
 	CWidget(button)
 {
 	meCurState = eButtonState::Normal;
+	mClickCallBack = nullptr;
+	mbHoverSoundPlaying = false;
+	mbClickSoundPlaying = false;
 }
 
 CButton::~CButton()
@@ -108,6 +111,11 @@ void CButton::Render()
 	mTint = mInfo[(int)meCurState].Tint;
 
 	CWidget::Render();
+}
+
+CButton* CButton::Clone()
+{
+	return new CButton(*this);
 }
 
 bool CButton::SetTexture(eButtonState state, const std::string& name, const TCHAR* fileName, const std::string& pathName)

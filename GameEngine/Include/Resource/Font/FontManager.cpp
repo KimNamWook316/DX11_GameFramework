@@ -285,17 +285,17 @@ bool CFontManager::CreateFontColor(const unsigned int color)
 
 ID2D1SolidColorBrush* CFontManager::FindFontColor(const float r, const float g, const float b, const float a)
 {
-	return FindFontColor(CreateFontColor(r, g, b, a));
+	return FindFontColor(CreateFontColorKey(r, g, b, a));
 }
 
 ID2D1SolidColorBrush* CFontManager::FindFontColor(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
 {
-	return FindFontColor(CreateFontColor(r, g, b, a));
+	return FindFontColor(CreateFontColorKey(r, g, b, a));
 }
 
 ID2D1SolidColorBrush* CFontManager::FindFontColor(const Vector4& color)
 {
-	return FindFontColor(CreateFontColor(color));
+	return FindFontColor(CreateFontColorKey(color));
 }
 
 ID2D1SolidColorBrush* CFontManager::FindFontColor(const unsigned int color)

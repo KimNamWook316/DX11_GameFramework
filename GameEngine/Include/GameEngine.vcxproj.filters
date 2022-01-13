@@ -165,6 +165,9 @@
     <Filter Include="02. Resource\07. Font">
       <UniqueIdentifier>{e928170b-e721-475b-b068-3fb4bad08319}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component\01. SceneComponent\04. WidgetComponent">
+      <UniqueIdentifier>{278cdae5-6105-4f16-8300-cd69909e23e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -518,6 +521,9 @@
     <ClInclude Include="Widget\Text.h">
       <Filter>09. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Component\WidgetComponent.h">
+      <Filter>05. Component\01. SceneComponent\04. WidgetComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -825,6 +831,9 @@
     </ClCompile>
     <ClCompile Include="Widget\Text.cpp">
       <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\WidgetComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\04. WidgetComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

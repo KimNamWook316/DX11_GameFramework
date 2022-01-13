@@ -13,13 +13,20 @@ CWidget::CWidget() :
 	mTint(255.f, 255.f, 255.f, 255.f),
 	mAngle(0.f),
 	mSize(50.f, 50.f),
-	mbMouseHovered(false)
+	mbMouseHovered(false),
+	mbCollisionMouseEnable(true)
 {
 }
 
 CWidget::CWidget(const CWidget& widget)
 {
+	*this = widget;
+
+	mRefCount = 0;
+	mOwner = nullptr;
 	mbMouseHovered = false;
+	mCBuffer = new CWidgetConstantBuffer;
+	mCBuffer->Init();
 }
 
 CWidget::~CWidget()
@@ -92,8 +99,18 @@ void CWidget::Render()
 	mMesh->Render();
 }
 
+CWidget* CWidget::Clone()
+{
+	return new CWidget(*this);
+}
+
 bool CWidget::DoCollideMouse(const Vector2& mousePos)
 {
+	if (!mbCollisionMouseEnable)
+	{
+		return false;
+	}
+
 	if (mousePos.x < mRenderPos.x)
 	{
 		return false;

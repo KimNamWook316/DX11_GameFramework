@@ -958,8 +958,8 @@ void CSpriteWindow::OnClickAutoSplit()
 		unsigned int width = texture->GetWidth();
 		unsigned int height = texture->GetHeight();
 
-		int frameWidth = width / frameCount;
-		int frameHeight = height / animCount;
+		int frameWidth = (int)(std::round((float)width / (float)frameCount));
+		int frameHeight = (int)(std::round((float)height / (float)animCount));
 
 		CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
 

@@ -7,9 +7,11 @@ class CWidgetWindow :
     public CRef
 {
     friend class CViewport;
+    friend class CWidgetComponent;
 
 protected:
     CWidgetWindow();
+    CWidgetWindow(const CWidgetWindow& window);
     virtual ~CWidgetWindow();
 
 public:
@@ -18,10 +20,16 @@ public:
     virtual void Update(float deltaTime);
     virtual void PostUpdate(float deltaTime);
     virtual void Render();
+    virtual CWidgetWindow* Clone();
 
     virtual bool DoCollideMouse(const Vector2& mousePos);
 
 public:
+    class CWidgetComponent* GetWidgetComponent() const
+    {
+        return mOwnerComponent;
+    }
+
     class CViewport* GetViewport() const
     {
         return mViewport;
@@ -84,7 +92,8 @@ public:
         {
             if (name == (*iter)->GetName())
             {
-                return (T*)(*iter);
+                // TODO : ?
+                return (T*)*(*iter);
             }
         }
         return nullptr;
@@ -112,6 +121,7 @@ private:
     static bool sortWidget(CSharedPtr<CWidget> src, CSharedPtr<CWidget> dest);
 
 protected:
+    class CWidgetComponent* mOwnerComponent;
     class CViewport* mViewport;
     bool mbVisable;
     int mZOrder; // Window³¢¸®ÀÇ Zorder

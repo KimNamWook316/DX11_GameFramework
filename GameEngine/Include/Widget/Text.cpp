@@ -23,6 +23,8 @@ CText::CText()	:
 	meAlignH(eTextAlignH::Left),
 	meAlignV(eTextAlignV::Middle)
 {
+	mbCollisionMouseEnable = false;
+
 	mText = new TCHAR[mTextCapacity];
 
 	memset(mText, 0, sizeof(TCHAR) * mTextCapacity);
@@ -34,6 +36,9 @@ CText::CText()	:
 	lstrcpy(mText, TEXT("Text"));
 
 	mTextCount = 4;
+
+	mColor.w = 1.f;
+	mShadowColor.w = 1.f;
 }
 
 CText::CText(const CText& widget)	:
@@ -59,7 +64,7 @@ CText::CText(const CText& widget)	:
 
 CText::~CText()
 {
-	SAFE_DELETE(mLayout);
+	SAFE_RELEASE(mLayout);
 	SAFE_DELETE_ARRAY(mText);
 	SAFE_DELETE_ARRAY(mFontName);
 }
@@ -137,7 +142,7 @@ void CText::Render()
 	// 텍스트를 그린다.
 	if (mbAlphaEnable)
 	{
-		mColorBrush->SetOpacity(mShadowOpacity);
+		mColorBrush->SetOpacity(mOpacity);
 	}
 	else
 	{
@@ -148,6 +153,11 @@ void CText::Render()
 		D2D1_DRAW_TEXT_OPTIONS_NONE);
 	
 	m2DTarget->EndDraw();
+}
+
+CText* CText::Clone()
+{
+	return new CText(*this);
 }
 
 bool CText::CreateTextLayout()

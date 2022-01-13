@@ -32,6 +32,7 @@ public:
     virtual void Update(float deltaTime) override;
     virtual void PostUpdate(float deltaTime) override;
     virtual void Render() override;
+    virtual CText* Clone();
 
 public:
     bool CreateTextLayout();
@@ -106,6 +107,18 @@ public:
             memset(mText, 0, sizeof(TCHAR) * mTextCapacity);
             CreateTextLayout();
         }
+    }
+
+    virtual void SetSize(const Vector2& size)   override
+    {
+        CWidget::SetSize(size);
+        CreateTextLayout();
+    }
+
+    virtual void SetSize(const float x, const float y)   override
+    {
+        CWidget::SetSize(x, y);
+        CreateTextLayout();
     }
 
 public:

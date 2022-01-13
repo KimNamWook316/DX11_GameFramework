@@ -160,3 +160,9 @@ enum class eButtonSoundState
 	Clicked,
 	Max,
 };
+
+enum class eWidgetComponentSpace
+{
+	Screen,
+	World,
+};

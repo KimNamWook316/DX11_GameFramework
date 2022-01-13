@@ -1,11 +1,30 @@
 #include "WidgetWindow.h"
+#include "../Scene/Scene.h"
+#include "../Component/WidgetComponent.h"
 
 CWidgetWindow::CWidgetWindow() :
 	mViewport(nullptr),
+	mOwnerComponent(nullptr),
 	mZOrder(0),
 	mSize(100.f, 100.f),
 	mbStart(false)
 {
+}
+
+CWidgetWindow::CWidgetWindow(const CWidgetWindow& window)
+{
+	*this = window;
+	mOwnerComponent = nullptr;
+
+	auto iter = window.mWidgetList.begin();
+	auto iterEnd = window.mWidgetList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		CWidget* widget = (*iter)->Clone();
+		widget->mOwner = this;
+		mWidgetList.push_back(widget);
+	}
 }
 
 CWidgetWindow::~CWidgetWindow()
@@ -27,6 +46,11 @@ void CWidgetWindow::Start()
 	for (; iter != iterEnd; ++iter)
 	{
 		(*iter)->Start();
+	}
+
+	if (mOwnerComponent)
+	{
+		mViewport = mOwnerComponent->GetScene()->GetViewport();
 	}
 }
 
@@ -118,6 +142,11 @@ void CWidgetWindow::Render()
 		(*iter)->Render();
 		++iter;
 	}
+}
+
+CWidgetWindow* CWidgetWindow::Clone()
+{
+	return new CWidgetWindow(*this);
 }
 
 bool CWidgetWindow::DoCollideMouse(const Vector2& mousePos)

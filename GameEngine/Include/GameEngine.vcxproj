@@ -40,6 +40,7 @@
     <ClInclude Include="Component\SpriteComponent.h" />
     <ClInclude Include="Component\StaticMeshComponent.h" />
     <ClInclude Include="Component\Transform.h" />
+    <ClInclude Include="Component\WidgetComponent.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineMath.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="Component\ColliderComponent.cpp" />
     <ClCompile Include="Component\ColliderPixel.cpp" />
     <ClCompile Include="Component\StaticMeshComponent.cpp" />
+    <ClCompile Include="Component\WidgetComponent.cpp" />
     <ClCompile Include="IMGUIButton.cpp" />
     <ClCompile Include="IMGUICheckBox.cpp" />
     <ClCompile Include="IMGUIChild.cpp" />

@@ -103,6 +103,7 @@ bool CSoundManager::CreateSoundChannelGroup(const std::string& groupName)
 	mMasterGroup->addGroup(group);
 
 	mMapGroup.insert(std::make_pair(groupName, group));
+	return true;
 }
 
 bool CSoundManager::SetVolume(int volume)

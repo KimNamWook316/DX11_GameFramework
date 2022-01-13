@@ -31,6 +31,7 @@ public:
     virtual void Update(float deltaTime) override;
     virtual void PostUpdate(float deltaTime) override;
     virtual void Render() override;
+    virtual CButton* Clone();
 
 public:
     void ButtonEnable(bool bEnable)
@@ -43,6 +44,7 @@ public:
         mInfo->Texture = texture;
     }
 
+public:
     bool SetTexture(eButtonState state, const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
     bool SetTextureFullPath(eButtonState state, const std::string& name, const TCHAR* fullPath);
     void SetTextureTint(eButtonState state, const Vector4& tint);
