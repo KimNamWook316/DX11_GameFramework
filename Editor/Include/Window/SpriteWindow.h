@@ -42,6 +42,7 @@ public:
     void OnClickSaveAnimation();
     void OnClickLoadAnimation();
     void OnDownReturnKey(float dummy);
+    void OnClickAutoSplit();
 
 // Setter
 public:
@@ -77,6 +78,11 @@ private:
     class CIMGUIListBox* mAnimationList;
     class CIMGUITextInput* mAnimationNameInput;
     class CIMGUIListBox* mAnimationFrameList;
+
+    // Auto Split Input
+    class CIMGUITextInput* mAutoSplitNameInput;
+    class CIMGUIInputInt* mSplitCountXInput;
+    class CIMGUIInputInt* mSplitCountYInput;
 
     // Text
     class CIMGUIText* mSpriteWidthText;

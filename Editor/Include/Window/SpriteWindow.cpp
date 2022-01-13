@@ -42,7 +42,10 @@ CSpriteWindow::CSpriteWindow()	:
 	mPlayScaleInput(nullptr),
 	mAnimationInstance(nullptr),
 	mSpriteWidthText(nullptr),
-	mSpriteHeightText(nullptr)
+	mSpriteHeightText(nullptr),
+	mAutoSplitNameInput(nullptr),
+	mSplitCountXInput(nullptr),
+	mSplitCountYInput(nullptr)
 {
 }
 
@@ -141,6 +144,20 @@ bool CSpriteWindow::Init()
 	infoCol->AddWidget<CIMGUISameLine>("line");
 	mSpriteHeightText = infoCol->AddWidget<CIMGUIText>("heightText");
 	mSpriteHeightText->SetText("0");
+	infoCol->AddWidget<CIMGUISeperator>("sperator");
+
+	// Auto Split
+	text = infoCol->AddWidget<CIMGUIText>("Text");
+	text->SetText("Auto Split");
+	mSplitCountXInput = infoCol->AddWidget<CIMGUIInputInt>("Frame Count", 30.f, 0.f);
+	mSplitCountXInput->SetSize(0.f, 0.f);
+	mSplitCountYInput = infoCol->AddWidget<CIMGUIInputInt>("Anim Count", 30.f, 0.f);
+	mSplitCountYInput->SetSize(0.f, 0.f);
+	mAutoSplitNameInput = infoCol->AddWidget<CIMGUITextInput>("Animation Name", 100.f, 100.f);
+	mAutoSplitNameInput->SetHintText("Animation Name");
+	button = infoCol->AddWidget<CIMGUIButton>("Split Auto");
+	button->SetClickCallBack(this, &CSpriteWindow::OnClickAutoSplit);
+	button->SetSize(0.f, 0.f);
 	infoCol->AddWidget<CIMGUISeperator>("sperator");
 
 	// Col3. CropImage
@@ -915,6 +932,66 @@ void CSpriteWindow::OnDownReturnKey(float dummy)
 	if (eEditMode::Sprite == CEditorManager::GetInst()->GetEditMode())
 	{
 		OnClickAddAnimationFrame();
+	}
+}
+
+void CSpriteWindow::OnClickAutoSplit()
+{
+	if (mSpriteEditObject)
+	{
+		CTexture* texture = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture();
+		const char* animName = mAutoSplitNameInput->GetTextMultiByte();
+
+		int frameCount = mSplitCountXInput->GetVal();
+		int animCount = mSplitCountYInput->GetVal();
+
+		// 예외처리
+		if (!texture)
+			return;
+		if (!animName)
+			return;
+		if (animCount < 1)
+			return;
+		if (frameCount < 1)
+			return;
+
+		unsigned int width = texture->GetWidth();
+		unsigned int height = texture->GetHeight();
+
+		int frameWidth = width / frameCount;
+		int frameHeight = height / animCount;
+
+		CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
+
+		for (int y = 0; y < animCount; ++y)
+		{
+			// 시퀀스 생성
+			std::string sequenceName = animName;
+			sequenceName += std::to_string(y);
+
+			if (!resource->CreateAnimationSequence2D(sequenceName, mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture()))
+			{
+				return;
+			}
+
+			// UI update
+			mAnimationList->AddItem(sequenceName);
+
+			// Animation Instance에 저장
+			mAnimationInstance->AddAnimation(sequenceName, sequenceName, mAnimLoopCheckBox->GetCheck(0),
+				mPlayTimeInput->GetVal(), mPlayScaleInput->GetVal(), 
+				mAnimReverseCheckBox->GetCheck(0));
+
+			CAnimationSequence2D* curSequence = resource->FindAnimationSequence2D(sequenceName);
+
+			for (int x = 0; x < frameCount; ++x)
+			{
+				// 프레임 추가
+				Vector2 startPos = Vector2(x * frameWidth, y * frameHeight);
+				Vector2 size = Vector2(frameWidth, frameHeight);
+				curSequence->AddFrame(startPos, size);
+			}
+		}
 	}
 }
 

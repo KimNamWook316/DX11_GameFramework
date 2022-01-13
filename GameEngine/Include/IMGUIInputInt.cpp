@@ -20,7 +20,10 @@ void CIMGUIInputInt::Render()
     ImGui::PushItemWidth(mSize.x);
     if (ImGui::InputInt(mName.c_str(), &mVal, mStep))
     {
-        mCallBack(mVal);
+        if (mCallBack)
+        {
+            mCallBack(mVal);
+        }
     }
     ImGui::PopItemWidth();
 }
