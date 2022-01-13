@@ -515,6 +515,9 @@
     <ClInclude Include="Resource\Font\FontManager.h">
       <Filter>02. Resource\07. Font</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\Text.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -819,6 +822,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Font\FontManager.cpp">
       <Filter>02. Resource\07. Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Text.cpp">
+      <Filter>09. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

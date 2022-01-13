@@ -57,6 +57,13 @@ void CWidget::PostUpdate(float deltaTime)
 	{
 		Start();
 	}
+
+	mRenderPos = mPos;
+
+	if (mOwner)
+	{
+		mRenderPos += mOwner->GetWindowPos();
+	}
 }
 
 void CWidget::Render()
@@ -69,7 +76,7 @@ void CWidget::Render()
 	Matrix matScale, matRot, matTrans;
 	matScale.Scaling(mSize.x, mSize.y, 1.f);
 	matRot.Rotation(0.f, 0.f, mAngle);
-	matTrans.Translation(mPos.x, mPos.y, 0.f);
+	matTrans.Translation(mRenderPos.x, mRenderPos.y, 0.f);
 
 	CCameraComponent* cam = mOwner->GetViewport()->GetScene()->GetCameraManager()->GetUICamera();
 
@@ -87,19 +94,19 @@ void CWidget::Render()
 
 bool CWidget::DoCollideMouse(const Vector2& mousePos)
 {
-	if (mousePos.x < mPos.x)
+	if (mousePos.x < mRenderPos.x)
 	{
 		return false;
 	}
-	else if (mousePos.x > mPos.x + mSize.x)
+	else if (mousePos.x > mRenderPos.x + mSize.x)
 	{
 		return false;
 	}
-	else if (mousePos.y < mPos.y)
+	else if (mousePos.y < mRenderPos.y)
 	{
 		return false;
 	}
-	else if (mousePos.y > mPos.y + mSize.y)
+	else if (mousePos.y > mRenderPos.y + mSize.y)
 	{
 		return false;
 	}

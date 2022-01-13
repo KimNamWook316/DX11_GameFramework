@@ -863,6 +863,7 @@ void CSpriteWindow::OnClickLoadAnimation()
 		{
 			mAnimationList->AddItem(mVecNames[i]);
 		}
+		mAnimationList->Sort(true);
 
 		if (!mAnimationFrameList->IsEmpty())
 		{

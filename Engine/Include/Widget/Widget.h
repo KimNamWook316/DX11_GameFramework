@@ -90,6 +90,7 @@ protected:
     class CWidgetWindow* mOwner;
     int mZOrder;
     Vector2 mPos;
+    Vector2 mRenderPos;
     Vector2 mSize;
     float mAngle;
     Vector4 mTint;

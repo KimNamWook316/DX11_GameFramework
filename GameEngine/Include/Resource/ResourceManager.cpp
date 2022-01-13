@@ -260,5 +260,100 @@ void CResourceManager::ReleaseSound(const std::string& soundName)
 	mSoundManager->ReleaseSound(soundName);
 }
 
+bool CResourceManager::CreateFontFile(const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+	return mFontManager->CreateFontFile(name, fileName, pathName);
+}
+
+bool CResourceManager::LoadFont(const std::string& name, const TCHAR* fontName, const int weight, const float fontSize, const TCHAR* localName, const int stretch)
+{
+	return mFontManager->LoadFont(name, fontName, weight, fontSize, localName, stretch);
+}
+
+const TCHAR* CResourceManager::GetFontFaceName(const std::string& name)
+{
+	return mFontManager->GetFontFaceName(name);
+}
+
+const char* CResourceManager::GetFontFaceNameMultybyte(const std::string& name)
+{
+	return mFontManager->GetFontFaceNameMultybyte(name);
+}
+
+bool CResourceManager::CreateFontColor(const float r, const float g, const float b, const float a)
+{
+	return mFontManager->CreateFontColor(r, g, b, a);
+}
+
+bool CResourceManager::CreateFontColor(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
+{
+	return mFontManager->CreateFontColor(r, g, b, a);
+}
+
+bool CResourceManager::CreateFontColor(const Vector4& color)
+{
+	return mFontManager->CreateFontColor(color);
+}
+
+bool CResourceManager::CreateFontColor(const unsigned int color)
+{
+	return mFontManager->CreateFontColor(color);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(const float r, const float g, const float b, const float a)
+{
+	return mFontManager->FindFontColor(r, g, b, a);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
+{
+	return mFontManager->FindFontColor(r, g, b, a);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(const Vector4& color)
+{
+	return mFontManager->FindFontColor(color);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(const unsigned int color)
+{
+	return mFontManager->FindFontColor(color);
+}
+
+unsigned int CResourceManager::CreateFontColorKey(const float r, const float g, const float b, const float a)
+{
+	return mFontManager->CreateFontColorKey(r, g, b, a);
+}
+
+unsigned int CResourceManager::CreateFontColorKey(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
+{
+	return mFontManager->CreateFontColorKey(r, g, b, a);
+}
+
+unsigned int CResourceManager::CreateFontColorKey(const Vector4& color)
+{
+	return mFontManager->CreateFontColorKey(color);
+}
+
+IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* text, IDWriteTextFormat* font, const float width, const float height)
+{
+	return mFontManager->CreateTextLayout(text, font, width, height);
+}
+
+IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* text, const std::string& fontName, const float width, const float height)
+{
+	return mFontManager->CreateTextLayout(text, fontName, width, height);
+}
+
+IDWriteFontCollection1* CResourceManager::FindFontFile(const std::string& name)
+{
+	return mFontManager->FindFontFile(name);
+}
+
+IDWriteTextFormat* CResourceManager::FindFont(const std::string& name)
+{
+	return mFontManager->FindFont(name);
+}
+
 
 

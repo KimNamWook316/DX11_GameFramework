@@ -22,7 +22,5 @@ bool CDefaultScene::Init()
 
 bool CDefaultScene::loadAnimationSequence2D()
 {
-    mScene->GetResource()->LoadSequence2D("one.sqc");
-    mScene->GetResource()->LoadSequence2D("two.sqc");
     return true;
 }

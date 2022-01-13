@@ -133,6 +133,7 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Widget\Button.h" />
+    <ClInclude Include="Widget\Text.h" />
     <ClInclude Include="Widget\Widget.h" />
     <ClInclude Include="Widget\WidgetWindow.h" />
   </ItemGroup>
@@ -236,6 +237,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Widget\Button.cpp" />
+    <ClCompile Include="Widget\Text.cpp" />
     <ClCompile Include="Widget\Widget.cpp" />
     <ClCompile Include="Widget\WidgetWindow.cpp" />
   </ItemGroup>

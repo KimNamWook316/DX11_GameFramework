@@ -100,6 +100,7 @@ public:
     {
         mVecItem.clear();
         mVecItemUTF8.clear();
+        mSelectIndex = -1;
     }
 
     void Sort(const bool bSort)
