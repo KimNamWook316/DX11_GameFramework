@@ -1,6 +1,18 @@
 #pragma once
 
-enum eCharDir
+enum class eObjectSpriteDir
+{
+	S,
+	SW,
+	W,
+	NW,
+	N,
+	NE,
+	E,
+	SE,
+};
+
+enum class ePlayerSpriteDir
 {
 	S,
 	SSW,
@@ -18,5 +30,4 @@ enum eCharDir
 	EES,
 	ES,
 	SSE,
-	END,
 };

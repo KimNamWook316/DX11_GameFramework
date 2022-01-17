@@ -24,6 +24,10 @@ public:
 	virtual CPlayerObject* Clone();
 
 public:
+	// 플레이어는 16방향 스프라이트 사용한다.
+	virtual void SetSpriteDir(const Vector2& dir);
+
+public:
 	void OnLButtonClicked(float deltaTime);
 	void OnRButtonClicked(float deltaTime);
 

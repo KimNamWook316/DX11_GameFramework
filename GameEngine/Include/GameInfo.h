@@ -306,3 +306,10 @@ struct WidgetCBuffer
 	int UseTexture;
 	Vector3 Dummy;
 };
+
+struct ProgressBarCBuffer
+{
+	float Percent;
+	int Dir;
+	Vector2 Empty;
+};

@@ -92,7 +92,6 @@ public:
         {
             if (name == (*iter)->GetName())
             {
-                // TODO : ?
                 return (T*)*(*iter);
             }
         }

@@ -4,6 +4,7 @@
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderBox2D.h"
 #include "Component/CameraComponent.h"
+#include "Component/WidgetComponent.h"
 
 class CPlayer2D : public CGameObject
 {
@@ -33,6 +34,7 @@ private:
 	CSharedPtr<CCameraComponent> mCamera;
 	CSharedPtr<CSpriteComponent> mSprite;
 	CSharedPtr<CColliderBox2D> mBody;
+	CSharedPtr<CWidgetComponent> mSimpleHUDWidget;
 
 	float mOpacity;
 	float mSpeed;

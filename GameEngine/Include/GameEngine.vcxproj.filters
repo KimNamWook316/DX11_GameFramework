@@ -524,6 +524,18 @@
     <ClInclude Include="Component\WidgetComponent.h">
       <Filter>05. Component\01. SceneComponent\04. WidgetComponent</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\Image.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\ProgressBar.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ProgressBarConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\06. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ProgressBarShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -834,6 +846,18 @@
     </ClCompile>
     <ClCompile Include="Component\WidgetComponent.cpp">
       <Filter>05. Component\01. SceneComponent\04. WidgetComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Image.cpp">
+      <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\ProgressBar.cpp">
+      <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ProgressBarConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\06. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ProgressBarShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

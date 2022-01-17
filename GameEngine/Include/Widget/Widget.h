@@ -1,6 +1,19 @@
 #pragma once
 
 #include "../Ref.h"
+#include "../Resource/Texture/Texture.h"
+
+struct WidgetImageInfo
+{
+    CSharedPtr<CTexture> Texture;
+    Vector4 Tint;
+    std::vector<AnimationFrameData> vecFrameData;
+
+    WidgetImageInfo()
+    {
+        Tint = Vector4::White;
+    }
+};
 
 class CWidget :
     public CRef

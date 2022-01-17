@@ -166,3 +166,11 @@ enum class eWidgetComponentSpace
 	Screen,
 	World,
 };
+
+enum class eProgressBarDir
+{
+	RightToLeft,
+	LeftToRight,
+	TopToBottom,
+	BottomToTop,
+};

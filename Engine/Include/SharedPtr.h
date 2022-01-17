@@ -102,7 +102,6 @@ public:
 	}
 
 	// 역참조
-	// TODO : 반환 T&, return *mPtr 해야 하는 것 아닌지?
 	T* operator * () const
 	{
 		return mPtr;

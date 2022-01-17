@@ -22,11 +22,11 @@ bool CMainScene::Init()
 
 	CPlayer2D* player = mScene->CreateGameObject<CPlayer2D>("Player");
 
-	//CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
+	CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
 
-	CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
+	//CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
 
-	mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
+	//mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	SetPlayerObj(player);
 

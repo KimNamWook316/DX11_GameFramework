@@ -5,6 +5,7 @@
 #include "ColliderShader.h"
 #include "ColliderPixelShader.h"
 #include "WidgetShader.h"
+#include "ProgressBarShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -58,6 +59,13 @@ bool CShaderManager::Init()
 		assert(false);
 		return false;
 	}
+	
+	// Progress Bar 쉐이더
+	if (!CreateShader<CProgressBarShader>("ProgressBarShader"))
+	{
+		assert(false);
+		return false;
+	}
 
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
@@ -76,6 +84,9 @@ bool CShaderManager::Init()
 		(int)eConstantBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("WidgetCBuffer", sizeof(WidgetCBuffer), 11,
+		(int)eConstantBufferShaderTypeFlags::Graphic);
+
+	CreateConstantBuffer("ProgressBarCBuffer", sizeof(ProgressBarCBuffer), 12,
 		(int)eConstantBufferShaderTypeFlags::Graphic);
 	
 	return true;

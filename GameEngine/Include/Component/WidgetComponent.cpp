@@ -3,6 +3,7 @@
 #include "../Scene/Scene.h"
 #include "../Scene/CameraManager.h"
 #include "../Device.h"
+#include "../Engine.h"
 
 CWidgetComponent::CWidgetComponent()
 {
@@ -13,6 +14,8 @@ CWidgetComponent::CWidgetComponent()
 	SetBoolInheritRotX(false);
 	SetBoolInheritRotY(false);
 	SetBoolInheritRotZ(false);
+	
+	mbIsRender = true;
 }
 
 CWidgetComponent::CWidgetComponent(const CWidgetComponent& com)
@@ -78,28 +81,31 @@ void CWidgetComponent::PostUpdate(float deltaTime)
 		Matrix matVP = matView * matProj;
 
 		Vector3 worldPos = GetWorldPos();
-		Vector3 projPos = worldPos.TransformCoord(matVP);
-		float viewZ = worldPos.TransformCoord(matView).z;
+		Vector3 viewPos = worldPos.TransformCoord(matView);
+		Vector3 projPos = viewPos.TransformCoord(matProj); // z로 나누기 전 좌표
 
-		projPos.x /= viewZ;
-		projPos.y /= viewZ;
-		projPos.z /= viewZ;
+		if (eWidgetComponentSpace::World == meSpace)
+		{
+			// 2D에서는 항상 1 -> 투영행렬의 3행4열의 1값과 2D좌표의 z 값과 곱하기 때문
+			float w = viewPos.x * matProj._14 + viewPos.y * matProj._24 + viewPos.z * matProj._34 + matProj._44;
+
+			// z로 나눠서, 투영공간 좌표로 변환
+			projPos.x /= w;
+			projPos.y /= w;
+			projPos.z /= w;
+		}
 		
 		Resolution RS = CDevice::GetInst()->GetResolution();
 
+		// 2D
 		Vector2 screenPos;
 		screenPos.x = projPos.x * (RS.Width / 2.f) + (RS.Width / 2.f);
-		screenPos.y = projPos.y * (RS.Height / -2.f) + (RS.Height / 2.f);
+		screenPos.y = projPos.y * (RS.Height / 2.f) + (RS.Height / 2.f);
 
 		mWidgetWindow->SetPos(screenPos);
 
 		mWidgetWindow->PostUpdate(deltaTime);
 	}
-}
-
-void CWidgetComponent::CheckCollision()
-{
-	CSceneComponent::CheckCollision();
 }
 
 void CWidgetComponent::PrevRender()
@@ -110,6 +116,8 @@ void CWidgetComponent::PrevRender()
 void CWidgetComponent::Render()
 {
 	CSceneComponent::Render();
+	
+	mWidgetWindow->Render();
 }
 
 void CWidgetComponent::PostRender()

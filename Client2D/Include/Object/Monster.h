@@ -3,6 +3,7 @@
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderBox2D.h"
+#include "Component/WidgetComponent.h"
 
 class CMonster :
     public CGameObject
@@ -36,6 +37,8 @@ public:
 private:
     CSharedPtr<CSpriteComponent> mSprite;
     CSharedPtr<CColliderBox2D> mBody;
+	CSharedPtr<CWidgetComponent> mSimpleHUDWidget;
+    class CSimpleHUD* mSimpleHUD;
 
     int mHP;
 };

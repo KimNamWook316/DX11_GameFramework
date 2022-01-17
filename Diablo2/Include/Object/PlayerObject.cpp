@@ -81,6 +81,99 @@ CPlayerObject* CPlayerObject::Clone()
 	return new CPlayerObject(*this);
 }
 
+void CPlayerObject::SetSpriteDir(const Vector2& dir)
+{
+	// South 축과의 각을 구한다.
+	float dirAngle = Vector2(0.f, -1.f).Angle(dir);
+
+ //	// dir.x > 0 == 오른쪽을 보는 경우
+ //	if (dirAngle <= 11.25f)
+ //	{
+ //		mCharInfo.SpriteDir = ePlayerSpriteDir::S;
+ //	}
+ //	else if (dirAngle <= 33.75f)
+ //	{
+ //		if (mCharInfo.Dir.x > 0)
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::SSE;
+ //		}
+ //		else
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::SSW;
+ //		}
+ //	}
+ //	else if (dirAngle <= 56.25f)
+ //	{
+ //		if (mCharInfo.Dir.x > 0)
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::ES;
+ //		}
+ //		else
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::SW;
+ //		}
+ //	}
+ //	else if (dirAngle <= 78.75f)
+ //	{
+ //		if (mCharInfo.Dir.x > 0)
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::EES;
+ //		}
+ //		else
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::WWS;
+ //		}
+ //	}
+ //	else if (dirAngle <= 101.25f)
+ //	{
+ //		if (mCharInfo.Dir.x > 0)
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::E;
+ //		}
+ //		else
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::W;
+ //		}
+ //	}
+ //	else if (dirAngle <= 123.75f)
+ //	{
+ //		if (mCharInfo.Dir.x > 0)
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::EEN;
+ //		}
+ //		else
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::WWN;
+ //		}
+ //	}
+ //	else if (dirAngle <= 146.25f)
+ //	{
+ //		if (mCharInfo.Dir.x > 0)
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::NE;
+ //		}
+ //		else
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::NW;
+ //		}
+ //	}
+ //	else if (dirAngle <= 168.75f)
+ //	{
+ //		if (mCharInfo.Dir.x > 0)
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::NNE;
+ //		}
+ //		else
+ //		{
+ //			mCharInfo.SpriteDir = ePlayerSpriteDir::NNW;
+ //		}
+ //	}
+ //	else if (dirAngle <= 191.25f)
+ //	{
+ //		mCharInfo.SpriteDir = ePlayerSpriteDir::N;
+ //	}
+}
+
 void CPlayerObject::OnLButtonClicked(float deltaTime)
 {
 }
@@ -91,6 +184,6 @@ void CPlayerObject::OnRButtonClicked(float deltaTime)
 	SetDirection(mouseWorldPos - Vector2(GetWorldPos().x, GetWorldPos().y));
 	
 	SetMoveSpeed(mCharInfo.MaxMoveSpeed);
-	std::string animName = "TownWalk" + std::to_string(mCharInfo.SpriteDir);
-	mSprite->ChangeAnimation(animName);
+	//std::string animName = "TownWalk" + std::to_string(mCharInfo.SpriteDir);
+	//mSprite->ChangeAnimation(animName);
 }

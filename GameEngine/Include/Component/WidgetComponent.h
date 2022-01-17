@@ -18,7 +18,6 @@ public:
     virtual void Start() override;
     virtual void Update(float deltaTime) override;
     virtual void PostUpdate(float deltaTime) override;
-    virtual void CheckCollision() override;
     virtual void PrevRender() override;
     virtual void Render() override;
     virtual void PostRender() override;

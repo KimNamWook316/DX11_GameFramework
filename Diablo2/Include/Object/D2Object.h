@@ -32,6 +32,8 @@ public:
 		SetDirection(Vector2(dir.x, dir.y));
 	}
 
+	virtual void SetSpriteDir(const Vector2& dir);
+
 	void SetMaxMoveSpeed(const float& speed)
 	{
 		mCharInfo.MaxMoveSpeed = speed;

@@ -3,18 +3,6 @@
 #include "Widget.h"
 #include "../Resource/Texture/Texture.h"
 
-struct ButtonStateInfo
-{
-    CSharedPtr<CTexture> Texture;
-    Vector4 Tint;
-    std::vector<AnimationFrameData> vecFrameData;
-
-    ButtonStateInfo()
-    {
-        Tint = Vector4::White;
-    }
-};
-
 class CButton :
     public CWidget
 {
@@ -71,7 +59,7 @@ public:
 
 protected:
     eButtonState meCurState;
-    ButtonStateInfo mInfo[(int)eButtonState::Max];
+    WidgetImageInfo mInfo[(int)eButtonState::Max];
     std::function<void()> mClickCallBack;
 
     CSharedPtr<class CSound> mSound[(int)eButtonSoundState::Max];

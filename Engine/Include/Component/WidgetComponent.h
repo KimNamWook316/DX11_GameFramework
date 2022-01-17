@@ -2,6 +2,7 @@
 
 #include "SceneComponent.h"
 #include "../Widget/WidgetWindow.h"
+#include "../Scene/Scene.h"
 
 class CWidgetComponent :
     public CSceneComponent
@@ -18,7 +19,6 @@ public:
     virtual void Start() override;
     virtual void Update(float deltaTime) override;
     virtual void PostUpdate(float deltaTime) override;
-    virtual void CheckCollision() override;
     virtual void PrevRender() override;
     virtual void Render() override;
     virtual void PostRender() override;
@@ -78,6 +78,7 @@ public:
         T* window = new T;
         window->SetName(name);
         window->mOwnerComponent = this;
+        window->mViewport = mScene->GetViewport();
 
         if (!window->Init())
         {
