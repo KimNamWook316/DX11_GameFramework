@@ -19,6 +19,7 @@ CEngine::CEngine()
 	, mbIsStart(false)
 	, meSpace(eEngineSpace::Space2D)
 	, mbPlay(true)
+	, meMouseState(eMouseState::Normal)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(413);

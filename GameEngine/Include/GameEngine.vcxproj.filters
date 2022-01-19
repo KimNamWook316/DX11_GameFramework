@@ -536,6 +536,9 @@
     <ClInclude Include="Resource\Shader\ProgressBarShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\WidgetImageData.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -858,6 +861,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\ProgressBarShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\WidgetImageData.cpp">
+      <Filter>09. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

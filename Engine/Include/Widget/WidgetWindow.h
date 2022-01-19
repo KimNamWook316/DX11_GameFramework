@@ -8,6 +8,7 @@ class CWidgetWindow :
 {
     friend class CViewport;
     friend class CWidgetComponent;
+    friend class CEngine;
 
 protected:
     CWidgetWindow();

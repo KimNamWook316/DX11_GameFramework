@@ -53,6 +53,8 @@ protected:
 public:
 	bool LoadTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
 	bool LoadTextureFullPath(const std::string& name, const TCHAR* fullPath);
+	bool LoadTexture(const std::string& name, const std::vector<TCHAR*> vecFileName, const std::string& pathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& name, const std::vector<TCHAR*> vecFullPath);
 
 public:
 	void SetShader(const int reg, const int eShaderType, const int index);

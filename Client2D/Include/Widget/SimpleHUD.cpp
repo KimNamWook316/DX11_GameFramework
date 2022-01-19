@@ -9,6 +9,7 @@ CSimpleHUD::CSimpleHUD(const CSimpleHUD& window)	:
 {
 	mNameText = FindWidget<CText>("NameText");
 	mHPBar = FindWidget<CProgressBar>("HPBar");
+	mImage = FindWidget<CImage>("Image");
 }
 
 CSimpleHUD::~CSimpleHUD()
@@ -38,10 +39,11 @@ bool CSimpleHUD::Init()
 		return false;
 	}
 
-	SetSize(100.f, 50.f);
+	SetSize(200.f, 200.f);
 
 	mHPBar = CreateWidget<CProgressBar>("HPBar");
 	mNameText = CreateWidget<CText>("NameText");
+	mImage = CreateWidget<CImage>("Image");
 
 	mNameText->SetText(TEXT("Name"));
 	mNameText->SetPos(25.f, 0.f);
@@ -52,7 +54,18 @@ bool CSimpleHUD::Init()
 	mNameText->SetAlignV(eTextAlignV::Top);
 
 	mHPBar->SetSize(100.f, 20.f);
-	mHPBar->SetTextureTint(255, 0, 0, 255);
+	mHPBar->SetDir(eProgressBarDir::TopToBottom);
+	mHPBar->SetTexture("HpBar", TEXT("Number.png"));
+	mHPBar->AddFrameData(Vector2(0.f, 0.f), Vector2(47.f, 68.f));
+	mHPBar->AddFrameData(Vector2(47.f, 0.f), Vector2(47.f, 68.f));
+	mHPBar->AddFrameData(Vector2(94.f, 0.f), Vector2(47.f, 68.f));
+	
+	mImage->SetPos(-100.f, -100.f);
+	mImage->SetSize(100.f, 100.f);
+	mImage->SetTexture("Image", TEXT("Teemo.jpg"));
+	mImage->AddFrameData(Vector2(0.f, 0.f), Vector2(200.f, 200.f));
+	mImage->AddFrameData(Vector2(200.f, 0.f), Vector2(200.f, 200.f));
+	mImage->AddFrameData(Vector2(400.f, 0.f), Vector2(200.f, 200.f));
 
 	return true;
 }

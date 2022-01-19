@@ -43,8 +43,8 @@ bool CMonster::Init()
 	mSprite->SetPivot(0.5f, 0.5f, 0.f);
 	mSprite->SetWorldPos(300.f, 300.f, 0.f);
 	mSimpleHUDWidget->SetRelativePos(-50.f, 50.f, 0.f);
-	mSimpleHUD->SetHPDir(eProgressBarDir::RightToLeft);
-	mSimpleHUD->SetHPPercent(0.5f);
+	mSimpleHUD->SetHPDir(eProgressBarDir::TopToBottom);
+	mSimpleHUD->SetHPPercent(0.39f);
 	
 	mBody->AddCollisionCallBack(eCollisionState::Enter, this, &CMonster::OnCollsionCallBack);
 

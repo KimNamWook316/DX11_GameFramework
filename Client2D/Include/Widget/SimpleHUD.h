@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Widget/WidgetWindow.h"
-#include "Widget/Button.h"
 #include "Widget/Text.h"
 #include "Widget/ProgressBar.h"
+#include "Widget/Image.h"
 
 class CSimpleHUD :
     public CWidgetWindow
@@ -31,7 +31,7 @@ public:
 
 private:
     CSharedPtr<CText> mNameText;
-    CSharedPtr<CButton> mButton;
     CSharedPtr<CProgressBar> mHPBar;
+    CSharedPtr<CImage> mImage;
 };
 

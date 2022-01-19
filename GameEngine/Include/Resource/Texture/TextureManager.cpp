@@ -118,6 +118,50 @@ CTexture* CTextureManager::FindTexture(const std::string& name)
 	return iter->second;
 }
 
+bool CTextureManager::LoadTexture(const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& path)
+{
+	CTexture* texture = FindTexture(name);
+
+	if (texture)
+	{
+		assert(false);
+		return false;
+	}
+
+	texture = new CTexture;
+	
+	if (!texture->LoadTexture(name, vecFileName, path))
+	{
+		assert(false);
+		return false;
+	}
+
+	mMapTexture.insert(std::make_pair(name, texture));
+	return true;
+}
+
+bool CTextureManager::LoadTextureFullPath(const std::string& name, const std::vector<TCHAR*>& vecFullPath)
+{
+	CTexture* texture = FindTexture(name);
+
+	if (texture)
+	{
+		assert(false);
+		return false;
+	}
+
+	texture = new CTexture;
+	
+	if (!texture->LoadTexture(name, vecFullPath))
+	{
+		assert(false);
+		return false;
+	}
+
+	mMapTexture.insert(std::make_pair(name, texture));
+	return true;
+}
+
 void CTextureManager::ReleaseTexture(const std::string& name)
 {
 	auto iter = mMapTexture.find(name);

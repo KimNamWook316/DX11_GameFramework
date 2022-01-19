@@ -63,6 +63,9 @@ public: // ===================== Texture =====================
 	bool LoadTexture(const std::string& name, const TCHAR* fileName, 
 		const std::string& filePath = TEXTURE_PATH);
 	bool LoadTextureFullPath(const std::string& name, const TCHAR* fullPath);
+	bool LoadTexture(const std::string& name, const std::vector<TCHAR*>& vecFileName, 
+		const std::string& path = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& name, const std::vector<TCHAR*>& vecFullPath);
 
 public: // ===================== Sequence2D =====================
 	bool CreateAnimationSequence2D(const std::string& name, const std::string& textureName,

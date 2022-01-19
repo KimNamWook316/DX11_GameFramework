@@ -10,6 +10,7 @@ CButton::CButton()	:
 	mbHoverSoundPlaying(false),
 	mbClickSoundPlaying(false)
 {
+	SetTypeID<CButton>();
 }
 
 CButton::CButton(const CButton& button)	:
@@ -23,6 +24,10 @@ CButton::CButton(const CButton& button)	:
 
 CButton::~CButton()
 {
+	for (int i = 0; i < (int)eButtonState::Max; ++i)
+	{
+		SAFE_DELETE(mImageData[i]);
+	}
 }
 
 bool CButton::Init()
@@ -32,6 +37,14 @@ bool CButton::Init()
 		assert(false);
 		return false;
 	}
+
+	for (int i = 0; i < (int)eButtonState::Max; ++i)
+	{
+		mImageData[i] = new CWidgetImageData;
+		mImageData[i]->SetOwnerWidget(this);
+		mImageData[i]->Init();
+	}
+
 	return true;
 }
 
@@ -44,6 +57,7 @@ void CButton::Update(float deltaTime)
 {
 	CWidget::Update(deltaTime);
 
+	// Sound
 	if (eButtonState::Disabled != meCurState)
 	{
 		if (mbMouseHovered)
@@ -95,6 +109,12 @@ void CButton::Update(float deltaTime)
 			meCurState = eButtonState::Normal;
 		}
 	}
+
+	// Animation
+	for (int i = 0; i < (int)eButtonState::Max; ++i)
+	{
+		mImageData[i]->Update(deltaTime);
+	}
 }
 
 void CButton::PostUpdate(float deltaTime)
@@ -104,12 +124,11 @@ void CButton::PostUpdate(float deltaTime)
 
 void CButton::Render()
 {
-	if (mInfo[(int)meCurState].Texture)
-	{
-		mInfo[(int)meCurState].Texture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, 0);
-	}
-	mTint = mInfo[(int)meCurState].Tint;
+	// 텍스쳐, 애니메이션 처리
+	mTint = mImageData[(int)meCurState]->GetImageTint();
+	mImageData[(int)meCurState]->SetShaderData();
 
+	// 실제 렌더
 	CWidget::Render();
 }
 
@@ -120,53 +139,31 @@ CButton* CButton::Clone()
 
 bool CButton::SetTexture(eButtonState state, const std::string& name, const TCHAR* fileName, const std::string& pathName)
 {
-	CSceneResource* sceneResource = mOwner->GetViewport()->GetScene()->GetResource();
-
-	if (!sceneResource->LoadTexture(name, fileName, pathName))
-	{
-		assert(false);
-		return false;
-	}
-	
-	mInfo[(int)state].Texture = sceneResource->FindTexture(name);
-
+	mImageData[(int)state]->SetTexture(name, fileName, pathName);
 	SetUseTexture(true);
 	return true;
 }
 
 bool CButton::SetTextureFullPath(eButtonState state, const std::string& name, const TCHAR* fullPath)
 {
-	CSceneResource* sceneResource = mOwner->GetViewport()->GetScene()->GetResource();
-
-	if (!sceneResource->LoadTextureFullPath(name, fullPath))
-	{
-		assert(false);
-		return false;
-	}
-	
-	mInfo[(int)state].Texture = sceneResource->FindTexture(name);
-	
+	mImageData[(int)state]->SetTexture(name, fullPath);
 	SetUseTexture(true);
 	return true;
 }
 
 void CButton::SetTextureTint(eButtonState state, const Vector4& tint)
 {
-	mInfo[(int)state].Tint = tint;
+	mImageData[(int)state]->SetTextureTint(tint);
 }
 
 void CButton::SetTextureTint(eButtonState state, const float r, const float g, const float b, const float a)
 {
-	mInfo[(int)state].Tint = Vector4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+	mImageData[(int)state]->SetTextureTint(r,g,b,a);
 }
 
 void CButton::AddFrameData(eButtonState state, const Vector2& start, const Vector2& size)
 {
-	AnimationFrameData data;
-	data.Start = start;
-	data.Size = size;
-	
-	mInfo[(int)state].vecFrameData.push_back(data);
+	mImageData[(int)state]->AddFrameData(start, size);
 }
 
 void CButton::SetSound(eButtonSoundState state, const std::string& soundName)

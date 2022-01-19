@@ -42,7 +42,7 @@ public:
             mPercent = 0.f;
         }
 
-        mProgressBarCBuffer->SetPercent(mPercent);
+        mProgressBarCBuffer->SetPercent(percent);
     }
 
     void SetDir(eProgressBarDir dir)
@@ -56,12 +56,7 @@ public:
         CWidget::Enable(bEnable);
     }
 
-    void SetTexture(CTexture* texture)
-    {
-        mInfo.Texture = texture;
-        SetUseTexture(true);
-    }
-  
+    void SetTexture(CTexture* texture);
     bool SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
     bool SetTextureFullPath(const std::string& name, const TCHAR* fullPath);
     void SetTextureTint(const Vector4& tint);
@@ -81,7 +76,8 @@ public:
     }
 
 protected:
-    WidgetImageInfo mInfo;
+    //WidgetImageInfo mInfo;
+    class CWidgetImageData* mImageData;
     std::function<void()> mMouseHoverCallBack;
     float mPercent;
     eProgressBarDir meDir;

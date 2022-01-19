@@ -4,15 +4,17 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "../Input.h"
+#include "WidgetImageData.h"
 
 CProgressBar::CProgressBar()	:
-	mInfo{},
+	mImageData(nullptr),
 	mMouseHoverCallBack(nullptr),
 	mPercent(1.f),
 	meDir(eProgressBarDir::RightToLeft),
 	mProgressBarCBuffer(nullptr),
 	mbStartMouseHover(false)
 {
+	SetTypeID<CProgressBar>();
 }
 
 CProgressBar::CProgressBar(const CProgressBar& widget)	:
@@ -30,6 +32,7 @@ CProgressBar::CProgressBar(const CProgressBar& widget)	:
 
 CProgressBar::~CProgressBar()
 {
+	SAFE_DELETE(mImageData);
 	SAFE_DELETE(mProgressBarCBuffer);
 }
 
@@ -41,7 +44,19 @@ bool CProgressBar::Init()
 		return false;
 	}
 
-	mShader = mOwner->GetViewport()->GetScene()->GetResource()->FindShader("ProgressBarShader");
+	if (mOwner->GetViewport())
+	{
+		mShader = mOwner->GetViewport()->GetScene()->GetResource()->FindShader("ProgressBarShader");
+	}
+	else
+	{
+		mShader = CResourceManager::GetInst()->FindShader("ProgressBarShader");
+	}
+
+	mImageData = new CWidgetImageData;
+	mImageData->SetOwnerWidget(this);
+	mImageData->Init();
+
 	mProgressBarCBuffer = new CProgressBarConstantBuffer;
 	mProgressBarCBuffer->Init();
 	mProgressBarCBuffer->SetDir(meDir);
@@ -57,6 +72,7 @@ void CProgressBar::Start()
 void CProgressBar::Update(float deltaTime)
 {
 	CWidget::Update(deltaTime);
+	mImageData->Update(deltaTime);
 
 	if (mbMouseHovered && !mbStartMouseHover)
 	{
@@ -76,11 +92,8 @@ void CProgressBar::PostUpdate(float deltaTime)
 
 void CProgressBar::Render()
 {
-	if (mInfo.Texture)
-	{
-		mInfo.Texture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, 0);
-	}
-	mTint = mInfo.Tint;
+	mTint = mImageData->GetImageTint();
+	mImageData->SetShaderData();
 	mProgressBarCBuffer->UpdateCBuffer();
 	CWidget::Render();
 }
@@ -90,50 +103,36 @@ CProgressBar* CProgressBar::Clone()
 	return new CProgressBar(*this);
 }
 
+void CProgressBar::SetTexture(CTexture* texture)
+{
+	mImageData->SetTexture(texture);
+}
+
 bool CProgressBar::SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName)
 {
-	CSceneResource* resource = mOwner->GetViewport()->GetScene()->GetResource();
-	
-	if (!resource->LoadTexture(name, fileName, pathName))
-	{
-		assert(false);
-		return false;
-	}
-
-	mInfo.Texture = resource->FindTexture(name);
+	mImageData->SetTexture(name, fileName, pathName);
 	SetUseTexture(true);
 	return true;
 }
 
 bool CProgressBar::SetTextureFullPath(const std::string& name, const TCHAR* fullPath)
 {
-	CSceneResource* resource = mOwner->GetViewport()->GetScene()->GetResource();
-	
-	if (!resource->LoadTextureFullPath(name, fullPath))
-	{
-		assert(false);
-		return false;
-	}
-
-	mInfo.Texture = resource->FindTexture(name);
+	mImageData->SetTextureFullPath(name, fullPath);
 	SetUseTexture(true);
 	return true;
 }
 
 void CProgressBar::SetTextureTint(const Vector4& tint)
 {
-	mInfo.Tint = tint;
+	mImageData->SetTextureTint(tint);
 }
 
 void CProgressBar::SetTextureTint(const float r, const float g, const float b, const float a)
 {
-	mInfo.Tint = Vector4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+	mImageData->SetTextureTint(r,g,b,a);
 }
 
 void CProgressBar::AddFrameData(const Vector2& start, const Vector2& size)
 {
-	AnimationFrameData data;
-	data.Start = start;
-	data.Size = size;
-	mInfo.vecFrameData.push_back(data);
+	mImageData->AddFrameData(start, size);
 }

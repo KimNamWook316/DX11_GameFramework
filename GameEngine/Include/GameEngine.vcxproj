@@ -140,6 +140,7 @@
     <ClInclude Include="Widget\ProgressBar.h" />
     <ClInclude Include="Widget\Text.h" />
     <ClInclude Include="Widget\Widget.h" />
+    <ClInclude Include="Widget\WidgetImageData.h" />
     <ClInclude Include="Widget\WidgetWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +250,7 @@
     <ClCompile Include="Widget\ProgressBar.cpp" />
     <ClCompile Include="Widget\Text.cpp" />
     <ClCompile Include="Widget\Widget.cpp" />
+    <ClCompile Include="Widget\WidgetImageData.cpp" />
     <ClCompile Include="Widget\WidgetWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

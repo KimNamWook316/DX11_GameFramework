@@ -48,6 +48,23 @@ public:
 		meSpace = space;
 	}
 
+public:
+	template <typename T>
+	T* CreateMouse(eMouseState eState, const std::string& name)
+	{
+		T* window = new T;
+		window->SetName(name);
+
+		if (!window->Init())
+		{
+			SAFE_RELEASE(window);
+			assert(false);
+			return false;
+		}
+		mMouseWidget[(int)eState] = window;
+		return window;
+	}
+
 private:
 	bool update(float deltaTime);
 	bool postUpdate(float deltaTime);
@@ -71,5 +88,7 @@ private:
 	bool		mbIsStart;
 	bool		mbPlay;
 	eEngineSpace meSpace;
+	eMouseState meMouseState;
+	CSharedPtr<class CWidgetWindow> mMouseWidget[(int)eMouseState::Max];
 };
 

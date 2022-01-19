@@ -8,8 +8,20 @@ struct WidgetImageInfo
     CSharedPtr<CTexture> Texture;
     Vector4 Tint;
     std::vector<AnimationFrameData> vecFrameData;
+	int mFrame;												// 몇 프레임 짜리인지	
+	float mTime;											// 실행시간
+	float mFrameTime;										// 프레임당 실행시간
+	float mPlayTime;										// 총 실행시간
+	float mPlayScale;										// 재생 배수
+	bool mbIsLoop;											// 반복되는 애니메이션인지
+	bool mbIsReverse;										// 역재생인지
 
-    WidgetImageInfo()
+    WidgetImageInfo()   :
+        mTime(0.f),
+        mPlayTime(1.f),
+        mPlayScale(1.f),
+        mbIsLoop(false),
+        mbIsReverse(false)
     {
         Tint = Vector4::White;
     }

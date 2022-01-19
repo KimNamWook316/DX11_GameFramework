@@ -4,10 +4,13 @@
 #include "../Scene/SceneResource.h"
 #include "../Scene/Viewport.h"
 #include "../Input.h"
+#include "WidgetImageData.h"
 
 CImage::CImage()	:
-	mClickCallBack(nullptr)
+	mClickCallBack(nullptr),
+	mImageData(nullptr)
 {
+	SetTypeID<CImage>();
 }
 
 CImage::CImage(const CImage& button)	:
@@ -18,6 +21,7 @@ CImage::CImage(const CImage& button)	:
 
 CImage::~CImage()
 {
+	SAFE_DELETE(mImageData);
 }
 
 bool CImage::Init()
@@ -27,6 +31,10 @@ bool CImage::Init()
 		assert(false);
 		return false;
 	}
+
+	mImageData = new CWidgetImageData;
+	mImageData->SetOwnerWidget(this);
+	mImageData->Init();
 	return true;
 }
 
@@ -37,6 +45,8 @@ void CImage::Start()
 
 void CImage::Update(float deltaTime)
 {
+	mImageData->Update(deltaTime);
+
 	CWidget::Update(deltaTime);
 }
 
@@ -47,12 +57,11 @@ void CImage::PostUpdate(float deltaTime)
 
 void CImage::Render()
 {
-	if (mInfo.Texture)
-	{
-		mInfo.Texture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, 0);
-	}
-	mTint = mInfo.Tint;
+	mTint = mImageData->GetImageTint();
+	// 텍스쳐, 애니메이션 처리
+	mImageData->SetShaderData();
 
+	// 실제 렌더
 	CWidget::Render();
 }
 
@@ -63,51 +72,43 @@ CImage* CImage::Clone()
 
 bool CImage::SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName)
 {
-	CSceneResource* sceneResource = mOwner->GetViewport()->GetScene()->GetResource();
-
-	if (!sceneResource->LoadTexture(name, fileName, pathName))
-	{
-		assert(false);
-		return false;
-	}
-	
-	mInfo.Texture = sceneResource->FindTexture(name);
-
+	mImageData->SetTexture(name, fileName, pathName);
 	SetUseTexture(true);
 	return true;
 }
 
 bool CImage::SetTextureFullPath(const std::string& name, const TCHAR* fullPath)
 {
-	CSceneResource* sceneResource = mOwner->GetViewport()->GetScene()->GetResource();
+	mImageData->SetTextureFullPath(name, fullPath);
+	SetUseTexture(true);
+	return true;
+}
 
-	if (!sceneResource->LoadTextureFullPath(name, fullPath))
-	{
-		assert(false);
-		return false;
-	}
-	
-	mInfo.Texture = sceneResource->FindTexture(name);
-	
+bool CImage::SetTexture(const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
+{
+	mImageData->SetTexture(name, vecFileName, pathName);
+	SetUseTexture(true);
+	return true;
+}
+
+bool CImage::SetTextureFullPath(const std::string& name, const std::vector<TCHAR*>& vecFullPath)
+{
+	mImageData->SetTextureFullPath(name, vecFullPath);
 	SetUseTexture(true);
 	return true;
 }
 
 void CImage::SetTextureTint(  const Vector4& tint)
 {
-	mInfo.Tint = tint;
+	mImageData->SetTextureTint(tint);
 }
 
 void CImage::SetTextureTint(  const float r, const float g, const float b, const float a)
 {
-	mInfo.Tint = Vector4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+	mImageData->SetTextureTint(r,g,b,a);
 }
 
 void CImage::AddFrameData(const Vector2& start, const Vector2& size)
 {
-	AnimationFrameData data;
-	data.Start = start;
-	data.Size = size;
-
-	mInfo.vecFrameData.push_back(data);
+	mImageData->AddFrameData(start, size);
 }

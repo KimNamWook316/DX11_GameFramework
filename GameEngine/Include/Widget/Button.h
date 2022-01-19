@@ -2,6 +2,7 @@
 
 #include "Widget.h"
 #include "../Resource/Texture/Texture.h"
+#include "WidgetImageData.h"
 
 class CButton :
     public CWidget
@@ -29,7 +30,7 @@ public:
 
     void SetTexture(eButtonState state, CTexture* texture)
     {
-        mInfo->Texture = texture;
+        mImageData[(int)state]->SetTexture(texture);
     }
 
 public:
@@ -59,7 +60,8 @@ public:
 
 protected:
     eButtonState meCurState;
-    WidgetImageInfo mInfo[(int)eButtonState::Max];
+    CWidgetImageData* mImageData[(int)eButtonState::Max];
+
     std::function<void()> mClickCallBack;
 
     CSharedPtr<class CSound> mSound[(int)eButtonSoundState::Max];

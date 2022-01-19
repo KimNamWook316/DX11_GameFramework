@@ -78,6 +78,9 @@
     <ClCompile Include="Widget\SimpleHUD.cpp">
       <Filter>03. UI</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\MouseNormal.cpp">
+      <Filter>03. UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -117,6 +120,9 @@
       <Filter>03. UI</Filter>
     </ClInclude>
     <ClInclude Include="Widget\SimpleHUD.h">
+      <Filter>03. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\MouseNormal.h">
       <Filter>03. UI</Filter>
     </ClInclude>
   </ItemGroup>

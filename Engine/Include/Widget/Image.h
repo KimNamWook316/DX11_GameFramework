@@ -29,6 +29,8 @@ public:
 public:
     bool SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
     bool SetTextureFullPath(const std::string& name, const TCHAR* fullPath);
+    bool SetTexture(const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName = TEXTURE_PATH);
+    bool SetTextureFullPath(const std::string& name, const std::vector<TCHAR*>& vecFullPath);
     void SetTextureTint(const Vector4& tint);
     void SetTextureTint(const float r, const float g, const float b, const float a);
     void AddFrameData(const Vector2& start, const Vector2& size);
@@ -47,7 +49,7 @@ public:
     }
 
 protected:
-    WidgetImageInfo mInfo;
+    class CWidgetImageData* mImageData;
     std::function<void()> mClickCallBack;
 };
 

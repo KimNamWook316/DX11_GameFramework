@@ -1,6 +1,8 @@
 #include "Widget.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Resource/ResourceManager.h"
+#include "../Scene/SceneManager.h"
 #include "../Scene/CameraManager.h"
 #include "../Component/CameraComponent.h"
 #include "../Resource/Shader/WidgetConstantBuffer.h"
@@ -36,8 +38,16 @@ CWidget::~CWidget()
 
 bool CWidget::Init()
 {
-	mShader = mOwner->GetViewport()->GetScene()->GetResource()->FindShader("WidgetShader");
-	mMesh = mOwner->GetViewport()->GetScene()->GetResource()->FindMesh("WidgetMesh");
+	if (mOwner->GetViewport())
+	{
+		mShader = mOwner->GetViewport()->GetScene()->GetResource()->FindShader("WidgetShader");
+		mMesh = mOwner->GetViewport()->GetScene()->GetResource()->FindMesh("WidgetMesh");
+	}
+	else
+	{
+		mShader = CResourceManager::GetInst()->FindShader("WidgetShader");
+		mMesh = CResourceManager::GetInst()->FindMesh("WidgetMesh");
+	}
 
 	mCBuffer = new CWidgetConstantBuffer;
 	mCBuffer->Init();
@@ -85,7 +95,21 @@ void CWidget::Render()
 	matRot.Rotation(0.f, 0.f, mAngle);
 	matTrans.Translation(mRenderPos.x, mRenderPos.y, 0.f);
 
-	CCameraComponent* cam = mOwner->GetViewport()->GetScene()->GetCameraManager()->GetUICamera();
+	CCameraComponent* cam = nullptr;
+
+	if (mOwner->GetViewport())
+	{
+		cam = mOwner->GetViewport()->GetScene()->GetCameraManager()->GetUICamera();
+	}
+	else
+	{
+		cam = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetUICamera();
+	}
+
+	if (!cam)
+	{
+		assert(false);
+	}
 
 	// 항상 고정 위치에 출력하기 때문에, 뷰공간 변환 필요 없음
 	Matrix matWP = matScale * matRot * matTrans * cam->GetProjMatrix();
@@ -132,7 +156,14 @@ bool CWidget::DoCollideMouse(const Vector2& mousePos)
 
 void CWidget::SetShader(const std::string& name)
 {
-	mShader = mOwner->GetViewport()->GetScene()->GetResource()->FindShader(name);
+	if (mOwner->GetViewport())
+	{
+		mShader = mOwner->GetViewport()->GetScene()->GetResource()->FindShader(name);
+	}
+	else
+	{
+		mShader = CResourceManager::GetInst()->FindShader(name);
+	}
 }
 
 void CWidget::SetUseTexture(bool bUse)
