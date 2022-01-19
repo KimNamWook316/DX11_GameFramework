@@ -29,7 +29,7 @@ bool CMouseNormal::Init()
 	
 	std::vector<TCHAR*> vecFileName;
 
-	for (int i = 0; i < 12; ++i)
+	for (int i = 0; i <= 12; ++i)
 	{
 		TCHAR* fileName = new TCHAR[MAX_PATH];
 		memset(fileName, 0, sizeof(TCHAR) * MAX_PATH);
@@ -38,6 +38,8 @@ bool CMouseNormal::Init()
 	}
 
 	mImage->SetTexture("MouseNormal", vecFileName);
+	mImage->SetSize(32.f, 31.f);
+	mImage->AddFrameDataFrameTexture(13);
 
 	for (int i = 0; i <= 12; ++i)
 	{

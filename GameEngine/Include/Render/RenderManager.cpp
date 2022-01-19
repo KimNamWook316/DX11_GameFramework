@@ -186,6 +186,14 @@ void CRenderManager::Render()
 	
 	CSceneManager::GetInst()->GetScene()->GetViewport()->Render();
 
+	// ¸¶¿ì½º ·»´õ
+	CWidgetWindow* mouseWidget = CEngine::GetInst()->GetMouseWidget();
+	
+	if (mouseWidget)
+	{
+		mouseWidget->Render();
+	}
+
 	mAlphaBlendState->ResetState();
 
 	if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)

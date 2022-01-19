@@ -254,3 +254,16 @@ void CWidgetImageData::AddFrameData(const Vector2& start, const Vector2& size)
 	mFrameTime = mPlayTime / mVecFrameData.size();
 	SetUseAnimation(true);
 }
+
+void CWidgetImageData::AddFrameDataFrameTexture(const int count)
+{
+	for (int i = 0; i < count; ++i)
+	{
+		AnimationFrameData data;
+		data.Start = Vector2(0.f, 0.f);
+		data.Size = Vector2((float)mTexture->GetWidth(), (float)mTexture->GetHeight());
+		mVecFrameData.push_back(data);
+	}
+	mFrameTime = mPlayTime / mVecFrameData.size();
+	SetUseAnimation(true);
+}

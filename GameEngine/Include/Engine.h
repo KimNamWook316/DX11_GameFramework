@@ -17,6 +17,11 @@ public:
 	void Logic();
 
 public:
+	class CWidgetWindow* GetMouseWidget()
+	{
+		return mMouseWidget[(int)meMouseState];
+	}
+
 	HWND GetWindowHandle() const
 	{
 		return mhWnd;
@@ -32,11 +37,13 @@ public:
 		return meSpace;
 	}
 
-public:
 	bool IsPlay() const
 	{
 		return mbPlay;
 	}
+
+public:
+	void SetMouseState(eMouseState state);
 
 	void SetPlay(bool bPlay)
 	{
@@ -90,5 +97,6 @@ private:
 	eEngineSpace meSpace;
 	eMouseState meMouseState;
 	CSharedPtr<class CWidgetWindow> mMouseWidget[(int)eMouseState::Max];
+	int mShowCursorCount;
 };
 

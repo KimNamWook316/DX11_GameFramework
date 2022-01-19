@@ -6,6 +6,7 @@
 #include "ColliderPixelShader.h"
 #include "WidgetShader.h"
 #include "ProgressBarShader.h"
+#include "NumberShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -62,6 +63,13 @@ bool CShaderManager::Init()
 	
 	// Progress Bar Ω¶¿Ã¥ı
 	if (!CreateShader<CProgressBarShader>("ProgressBarShader"))
+	{
+		assert(false);
+		return false;
+	}
+
+	// Number Widget Ω¶¿Ã¥ı
+	if (!CreateShader<CNumberShader>("NumberShader"))
 	{
 		assert(false);
 		return false;

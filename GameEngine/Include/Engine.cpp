@@ -20,6 +20,7 @@ CEngine::CEngine()
 	, meSpace(eEngineSpace::Space2D)
 	, mbPlay(true)
 	, meMouseState(eMouseState::Normal)
+	, mShowCursorCount(0)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(413);
@@ -189,22 +190,67 @@ void CEngine::Logic()
 	render(deltaTime);
 }
 
+void CEngine::SetMouseState(eMouseState state)
+{
+	if (mMouseWidget[(int)meMouseState])
+	{
+		// 초기화?
+	}
+	meMouseState = state;
+}
+
 bool CEngine::update(float deltaTime)
 {
-	if (CSceneManager::GetInst()->Update(deltaTime))
+	bool result = false;
+	result = CSceneManager::GetInst()->Update(deltaTime);
+
+	if (mMouseWidget[(int)meMouseState])
 	{
-		return true;
+		// 마우스 위치를 얻어온다.
+		Vector2 mousePos = CInput::GetInst()->GetMousePos();
+
+		// 마우스가 윈도우 창을 벗어난 경우, 윈도우 기본 마우스 커서를 보이게 한다.
+		if (mousePos.x < 0.f || mousePos.x > mRS.Width || mousePos.y < 0.f || mousePos.y > mRS.Height)
+		{
+			if (mShowCursorCount < 0)
+			{
+				// 주의할 점
+				// ShowCursor true 가 세번 실행되면, ShowCursor false가 세 번 실행되어야 감춰진다.
+				// 따라서 한 번씩만 처리할 수 있도록 해준 것
+				ShowCursor(true);
+				mShowCursorCount = 0;
+			}
+		}
+		else
+		{
+			if (mShowCursorCount == 0)
+			{
+				ShowCursor(false);
+				--mShowCursorCount;
+			}
+		}
+
+		// 마우스 위치 보정
+		mousePos.y -= mMouseWidget[(int)meMouseState]->GetWindowSize().y;
+		mMouseWidget[(int)meMouseState]->SetPos(mousePos);
+		// 업데이트
+		mMouseWidget[(int)meMouseState]->Update(deltaTime);
 	}
-	return false;
+
+	return result;
 }
 
 bool CEngine::postUpdate(float deltaTime)
 {
-	if (CSceneManager::GetInst()->PostUpdate(deltaTime))
+	bool result = false;
+
+	result = CSceneManager::GetInst()->PostUpdate(deltaTime);
+	
+	if (mMouseWidget[(int)meMouseState])
 	{
-		return true;
+		mMouseWidget[(int)meMouseState]->PostUpdate(deltaTime);
 	}
-	return false;
+	return result;
 }
 
 bool CEngine::render(float deltaTime)

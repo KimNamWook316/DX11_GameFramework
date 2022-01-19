@@ -169,6 +169,7 @@
     <ClCompile Include="Object\PlayerChild.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
     <ClCompile Include="Widget\MainWidget.cpp" />
+    <ClCompile Include="Widget\MouseAttack.cpp" />
     <ClCompile Include="Widget\MouseNormal.cpp" />
     <ClCompile Include="Widget\SimpleHUD.cpp" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Widget\MainWidget.h" />
+    <ClInclude Include="Widget\MouseAttack.h" />
     <ClInclude Include="Widget\MouseNormal.h" />
     <ClInclude Include="Widget\SimpleHUD.h" />
   </ItemGroup>

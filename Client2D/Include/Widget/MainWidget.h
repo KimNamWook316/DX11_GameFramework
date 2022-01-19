@@ -3,6 +3,7 @@
 #include "Widget/WidgetWindow.h"
 #include "Widget/Button.h"
 #include "Widget/Text.h"
+#include "Widget/Number.h"
 
 class CMainWidget :
     public CWidgetWindow
@@ -28,5 +29,8 @@ private:
 private:
     CSharedPtr<CButton> mButton;
     CSharedPtr<CText> mText;
+    CSharedPtr<CNumber> mHour;
+    CSharedPtr<CNumber> mMinute;
+    CSharedPtr<CNumber> mSecond;
 };
 

@@ -3,6 +3,7 @@
 #include "Resource/Material/Material.h"
 #include "MonsterAnimation.h"
 #include "../Widget/SimpleHUD.h"
+#include "Engine.h"
 
 CMonster::CMonster()
 {
@@ -46,7 +47,8 @@ bool CMonster::Init()
 	mSimpleHUD->SetHPDir(eProgressBarDir::TopToBottom);
 	mSimpleHUD->SetHPPercent(0.39f);
 	
-	mBody->AddCollisionCallBack(eCollisionState::Enter, this, &CMonster::OnCollsionCallBack);
+	mBody->AddCollisionMouseCallBack(eCollisionState::Enter, this, &CMonster::OnCollsionMouseCallBack);
+	mBody->AddCollisionMouseCallBack(eCollisionState::Exit, this, &CMonster::OnCollsionExitMouseCallBack);
 
 	mHP = 3;
 	return true;
@@ -67,7 +69,12 @@ CMonster* CMonster::Clone()
 	return new CMonster(*this);
 }
 
-void CMonster::OnCollsionCallBack(const CollisionResult& result)
+void CMonster::OnCollsionMouseCallBack(const CollisionResult& result)
 {
-	AddHP(-1);
+	CEngine::GetInst()->SetMouseState(eMouseState::State1);
+}
+
+void CMonster::OnCollsionExitMouseCallBack(const CollisionResult& result)
+{
+	CEngine::GetInst()->SetMouseState(eMouseState::Normal);
 }

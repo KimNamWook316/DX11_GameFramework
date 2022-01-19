@@ -26,7 +26,7 @@ bool CMainScene::Init()
 
 	//CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
 
-	//mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
+	mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	SetPlayerObj(player);
 

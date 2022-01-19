@@ -22,7 +22,8 @@ public:
 	virtual CMonster* Clone();
 
 public:
-    void OnCollsionCallBack(const CollisionResult& result);
+    void OnCollsionMouseCallBack(const CollisionResult& result);
+    void OnCollsionExitMouseCallBack(const CollisionResult& result);
 
 public:
     void AddHP(const int hp)

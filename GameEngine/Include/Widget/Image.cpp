@@ -112,3 +112,8 @@ void CImage::AddFrameData(const Vector2& start, const Vector2& size)
 {
 	mImageData->AddFrameData(start, size);
 }
+
+void CImage::AddFrameDataFrameTexture(const int count)
+{
+	mImageData->AddFrameDataFrameTexture(count);
+}

@@ -10,6 +10,7 @@
 #include <crtdbg.h>
 #include <functional>
 #include <string>
+#include <stack>
 #include <math.h>
 #include <algorithm>
 #include <d3d11.h>

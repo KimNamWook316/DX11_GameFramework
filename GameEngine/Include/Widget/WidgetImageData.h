@@ -17,6 +17,11 @@ public:
 	void SetShaderData();
 
 public:
+	CTexture* GetTexture() const
+	{
+		return mTexture;
+	}
+
 	Vector4 GetImageTint() const
 	{
 		return mTint;
@@ -31,6 +36,7 @@ public:
     void SetTextureTint(const Vector4& tint);
     void SetTextureTint(const float r, const float g, const float b, const float a);
     void AddFrameData(const Vector2& start, const Vector2& size);
+	void AddFrameDataFrameTexture(const int count);
 
 public:
 	void SetOwnerWidget(class CWidget* widget)

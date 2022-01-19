@@ -539,6 +539,12 @@
     <ClInclude Include="Widget\WidgetImageData.h">
       <Filter>09. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\Number.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\NumberShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -864,6 +870,12 @@
     </ClCompile>
     <ClCompile Include="Widget\WidgetImageData.cpp">
       <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Number.cpp">
+      <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\NumberShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
