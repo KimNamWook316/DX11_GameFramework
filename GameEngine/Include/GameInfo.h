@@ -11,6 +11,7 @@
 #include <functional>
 #include <string>
 #include <stack>
+#include <process.h>
 #include <math.h>
 #include <algorithm>
 #include <d3d11.h>
@@ -305,7 +306,8 @@ struct WidgetCBuffer
 	Vector4 Tint;
 	Matrix MatWP;
 	int UseTexture;
-	Vector3 Dummy;
+	float Opacity;
+	Vector2 Dummy;
 };
 
 struct ProgressBarCBuffer

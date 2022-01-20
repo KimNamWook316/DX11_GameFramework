@@ -305,7 +305,8 @@ struct WidgetCBuffer
 	Vector4 Tint;
 	Matrix MatWP;
 	int UseTexture;
-	Vector3 Dummy;
+	float Opacity;
+	Vector2 Dummy;
 };
 
 struct ProgressBarCBuffer

@@ -285,12 +285,12 @@ void CAnimationSequence2DInstance::Load(const char* fullPath)
 		if (mScene)
 		{
 			char sequenceFullPath[MAX_PATH] = {};
-			int fullPathLength = strlen(fullPath);
+			int fullPathLength = (int)strlen(fullPath);
 			for (int i = fullPathLength - 1; i > 0; --i)
 			{
 				if (fullPath[i] == '\\')
 				{
-					strncpy_s(sequenceFullPath, fullPath, i + 1);
+					strncpy_s(sequenceFullPath, fullPath, (size_t)i + (size_t)1);
 					break;
 				}
 			}
@@ -304,12 +304,12 @@ void CAnimationSequence2DInstance::Load(const char* fullPath)
 		else
 		{
 			char sequenceFullPath[MAX_PATH] = {};
-			int fullPathLength = strlen(fullPath);
+			int fullPathLength = (int)strlen(fullPath);
 			for (int i = fullPathLength - 1; i > 0; --i)
 			{
 				if (fullPath[i] == '\\')
 				{
-					strncpy_s(sequenceFullPath, fullPath, i + 1);
+					strncpy_s(sequenceFullPath, fullPath, (size_t)i + (size_t)1);
 					break;
 				}
 			}

@@ -165,6 +165,7 @@ bool CNumber::SetTexture(const std::string& name, const TCHAR* fileName, const s
 		mInfo.Texture = CResourceManager::GetInst()->FindTexture(name);
 	}
 	SetUseTexture(true);
+	return true;
 }
 
 bool CNumber::SetTextureFullPath(const std::string& name, const TCHAR* fullPath)
@@ -184,6 +185,7 @@ bool CNumber::SetTextureFullPath(const std::string& name, const TCHAR* fullPath)
 		mInfo.Texture = CResourceManager::GetInst()->FindTexture(name);
 	}
 	SetUseTexture(true);
+	return true;
 }
 
 bool CNumber::SetTexture(const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
@@ -222,6 +224,7 @@ bool CNumber::SetTextureFullPath(const std::string& name, const std::vector<TCHA
 		mInfo.Texture = CResourceManager::GetInst()->FindTexture(name);
 	}
 	SetUseTexture(true);
+	return true;
 }
 
 void CNumber::SetTextureTint(const Vector4& tint)

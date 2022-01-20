@@ -12,6 +12,7 @@ CWidget::CWidget() :
 	mbStart(false),
 	mCBuffer(nullptr),
 	mZOrder(0),
+	mOpacity(1.f),
 	mTint(255.f, 255.f, 255.f, 255.f),
 	mAngle(0.f),
 	mSize(50.f, 50.f),
@@ -118,6 +119,7 @@ void CWidget::Render()
 	// Render
 	mCBuffer->SetWP(matWP);
 	mCBuffer->SetTint(mTint);
+	mCBuffer->SetOpacity(mOpacity);
 	mCBuffer->UpdateCBuffer();
 	mShader->SetShader();
 	mMesh->Render();

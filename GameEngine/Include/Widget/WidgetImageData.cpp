@@ -77,7 +77,7 @@ void CWidgetImageData::Update(float deltaTime)
 		{
 			++mFrame;
 
-			if (mFrame == mVecFrameData.size())
+			if (mFrame == (int)mVecFrameData.size())
 			{
 				bIsAnimEnd = true;
 			}
@@ -90,7 +90,7 @@ void CWidgetImageData::Update(float deltaTime)
 		{
 			if (mbIsReverse)
 			{
-				mFrame = mVecFrameData.size() - 1;
+				mFrame = (int)mVecFrameData.size() - 1;
 			}
 			else
 			{
@@ -101,7 +101,7 @@ void CWidgetImageData::Update(float deltaTime)
 		{
 			if (mbIsReverse)
 			{
-				mFrame = mVecFrameData.size() - 1;
+				mFrame = (int)mVecFrameData.size() - 1;
 			}
 			else
 			{
@@ -231,6 +231,7 @@ bool CWidgetImageData::SetTextureFullPath(const std::string& name, const std::ve
 		CResourceManager::GetInst()->LoadTexture(name, vecFullPath);
 		mTexture = CResourceManager::GetInst()->FindTexture(name);
 	}
+	return true;
 }
 
 void CWidgetImageData::SetTextureTint(const Vector4& tint)

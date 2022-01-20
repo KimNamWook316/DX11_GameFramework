@@ -31,6 +31,11 @@ public:
         mBufferData.UseTexture = bUse ? 1 : 0;
     }
 
+    void SetOpacity(float opacity)
+    {
+        mBufferData.Opacity = opacity;
+    }
+
 protected:
     WidgetCBuffer mBufferData;
 };

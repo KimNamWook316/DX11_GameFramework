@@ -120,6 +120,7 @@ protected:
     Vector2 mSize;
     float mAngle;
     Vector4 mTint;
+    float mOpacity;
     bool mbStart;
     bool mbMouseHovered;
     bool mbCollisionMouseEnable;
