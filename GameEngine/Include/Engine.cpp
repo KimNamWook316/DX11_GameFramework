@@ -179,11 +179,11 @@ void CEngine::Logic()
 
 	CIMGUIManager::GetInst()->Update(deltaTime);
 	
-	if (!update(deltaTime))
+	if (update(deltaTime))
 	{
 		return;
 	}
-	if (!postUpdate(deltaTime))
+	if (postUpdate(deltaTime))
 	{
 		return;
 	}
@@ -201,8 +201,10 @@ void CEngine::SetMouseState(eMouseState state)
 
 bool CEngine::update(float deltaTime)
 {
-	bool result = false;
-	result = CSceneManager::GetInst()->Update(deltaTime);
+	if (CSceneManager::GetInst()->Update(deltaTime))
+	{
+		return true;
+	}
 
 	if (mMouseWidget[(int)meMouseState])
 	{
@@ -237,20 +239,21 @@ bool CEngine::update(float deltaTime)
 		mMouseWidget[(int)meMouseState]->Update(deltaTime);
 	}
 
-	return result;
+	return false;
 }
 
 bool CEngine::postUpdate(float deltaTime)
 {
-	bool result = false;
-
-	result = CSceneManager::GetInst()->PostUpdate(deltaTime);
+	if (CSceneManager::GetInst()->PostUpdate(deltaTime))
+	{
+		return true;
+	}
 	
 	if (mMouseWidget[(int)meMouseState])
 	{
 		mMouseWidget[(int)meMouseState]->PostUpdate(deltaTime);
 	}
-	return result;
+	return false;
 }
 
 bool CEngine::render(float deltaTime)

@@ -80,6 +80,12 @@ public:
 	}
 
 public:
+	void SetBeChange(bool bChange)
+	{
+		mbBeChange = bChange;
+	}
+
+public:
 	template <typename T>
 	bool CreateSceneMode()
 	{
@@ -93,6 +99,15 @@ public:
 		}
 
 		return true;
+	}
+
+	template <typename T>
+	T* CreateSceneModeNotInitilized()
+	{
+		mMode = new T;
+		mMode->mScene = this;
+
+		return (T*)*mMode;
 	}
 
 	// 파일로부터 로드할 때 -> Init하지 않고, 파일로부터 오브젝트들을 생성한다.
@@ -152,5 +167,6 @@ private:
 
 	std::list<CSharedPtr<CGameObject>> mObjList;
 	bool mbIsStart;
+	bool mbBeChange;
 };
 

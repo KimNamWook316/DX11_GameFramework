@@ -11,6 +11,10 @@ public:
 	bool PostUpdate(float deltaTime);
 
 public:
+	void CreateNextScene(bool bBeChangeNow = true);
+	void ChangeNextScene();
+
+public:
 	CScene* GetScene() const
 	{
 		return mScene;
@@ -65,6 +69,16 @@ public:
 		}
 	}
 
+	template <typename T>
+	T* CreateSceneModeNotInitilized(bool bCurrent = true)
+	{
+		if (bCurrent)
+		{
+			return mScene->CreateSceneModeNotInitilized<T>();
+		}
+		return mNextScene->CreateSceneModeNotInitilized<T>();
+	}
+
 	template<typename T>
 	void SetCreateSceneModeCallBack(T* obj, void(T::* func)(CScene*, size_t))
 	{
@@ -89,9 +103,13 @@ public:
 		mCreateAnimInstanceCallBack = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
 	}
 
+private:
+	bool changeScene();
+
 	DECLARE_SINGLE(CSceneManager)
 
 private:
+	CRITICAL_SECTION mCrt;
 	CScene* mScene;
 	CScene* mNextScene;
 	std::function<void(CScene*, size_t)> mCreateSceneModeCallBack;

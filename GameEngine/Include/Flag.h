@@ -196,10 +196,3 @@ enum class eMouseState
 	State10,
 	Max
 };
-
-enum class eImageDataType
-{
-	Sprite,
-	Animation,
-	Number,
-};

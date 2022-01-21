@@ -101,8 +101,13 @@ public:
 		return mPtr;
 	}
 
-	// 역참조
+	// SharedPtr에 대한 역참조
 	T* operator * () const
+	{
+		return mPtr;
+	}
+
+	T* Get()
 	{
 		return mPtr;
 	}

@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "../Render/RenderManager.h"
+#include "../Sync.h"
 
 DEFINITION_SINGLE(CSceneManager);
 
@@ -7,12 +8,14 @@ CSceneManager::CSceneManager()
 	: mScene(nullptr)
 	, mNextScene(nullptr)
 {
+	InitializeCriticalSection(&mCrt);
 }
 
 CSceneManager::~CSceneManager()
 {
 	SAFE_DELETE(mScene);
 	SAFE_DELETE(mNextScene);
+	DeleteCriticalSection(&mCrt);
 }
 
 bool CSceneManager::Init()
@@ -34,11 +37,48 @@ void CSceneManager::Start()
 bool CSceneManager::Update(float deltaTime)
 {
 	mScene->Update(deltaTime);
-	return true;
+	return changeScene();
 }
 
 bool CSceneManager::PostUpdate(float deltaTime)
 {
 	mScene->PostUpdate(deltaTime);
-	return true;
+	return changeScene();
+}
+
+void CSceneManager::CreateNextScene(bool bBeChangeNow)
+{
+	// 새로운 씬이 만들어지는 도중 Context Change가 일어나, Update를 돌리게 되는 현상 방지
+	CSync sync(&mCrt);
+
+	SAFE_DELETE(mNextScene);
+
+	mNextScene = new CScene;
+	mNextScene->SetBeChange(bBeChangeNow);
+}
+
+void CSceneManager::ChangeNextScene()
+{
+	CSync sync(&mCrt);
+	mNextScene->SetBeChange(true);
+}
+
+bool CSceneManager::changeScene()
+{
+	CSync sync(&mCrt);
+
+	if (mNextScene)
+	{
+		if (mNextScene->mbBeChange)
+		{
+			SAFE_DELETE(mScene);
+			mScene = mNextScene;
+			mNextScene = nullptr;
+
+			CRenderManager::GetInst()->SetObjList(&mScene->mObjList);
+			mScene->Start();
+			return true;
+		}
+	}
+	return false;
 }

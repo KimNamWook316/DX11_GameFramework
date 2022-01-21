@@ -17,6 +17,12 @@ public:
 	void Logic();
 
 public:
+	void Exit()
+	{
+		DestroyWindow(mhWnd);
+	}
+
+public:
 	class CWidgetWindow* GetMouseWidget()
 	{
 		return mMouseWidget[(int)meMouseState];

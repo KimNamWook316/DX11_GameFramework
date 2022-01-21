@@ -168,6 +168,9 @@
     <Filter Include="05. Component\01. SceneComponent\04. WidgetComponent">
       <UniqueIdentifier>{278cdae5-6105-4f16-8300-cd69909e23e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Engine\09. Thread">
+      <UniqueIdentifier>{835d5fb6-aafb-4dcc-9244-33749e9e1a24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -545,6 +548,15 @@
     <ClInclude Include="Resource\Shader\NumberShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
     </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>01. Engine\09. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Sync.h">
+      <Filter>01. Engine\09. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadQueue.h">
+      <Filter>01. Engine\09. Thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -876,6 +888,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\NumberShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>01. Engine\09. Thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

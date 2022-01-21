@@ -172,8 +172,8 @@ bool CWidgetWindow::DoCollideMouse(const Vector2& mousePos)
 		return false;
 	}
 
-	auto iter = mWidgetList.begin();
-	auto iterEnd = mWidgetList.end();
+	auto iter = mWidgetList.rbegin();
+	auto iterEnd = mWidgetList.rend();
 
 	for (; iter != iterEnd; ++iter)
 	{
@@ -199,5 +199,5 @@ bool CWidgetWindow::DoCollideMouse(const Vector2& mousePos)
 
 bool CWidgetWindow::sortWidget(CSharedPtr<CWidget> src, CSharedPtr<CWidget> dest)
 {
-	return src->GetZOrder() > dest->GetZOrder();
+	return src->GetZOrder() < dest->GetZOrder();
 }

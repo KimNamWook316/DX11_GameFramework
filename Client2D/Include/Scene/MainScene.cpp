@@ -20,15 +20,33 @@ bool CMainScene::Init()
 	createMaterial();
 	createAnimationSequence();
 
+	if (mLoadingFunction)
+	{
+		mLoadingFunction(false, 0.3f);
+	}
+	Sleep(2000);
+
 	CPlayer2D* player = mScene->CreateGameObject<CPlayer2D>("Player");
 
 	CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
+
+	if (mLoadingFunction)
+	{
+		mLoadingFunction(false, 0.6f);
+	}
+	Sleep(2000);
 
 	//CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
 
 	mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	SetPlayerObj(player);
+
+	if (mLoadingFunction)
+	{
+		mLoadingFunction(false, 0.8f);
+	}
+	Sleep(2000);
 
 	return true;
 }
