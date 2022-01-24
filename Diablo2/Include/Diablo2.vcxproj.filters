@@ -22,6 +22,12 @@
     <Filter Include="02. D2Object\01. Player">
       <UniqueIdentifier>{45cee635-8688-47c1-9967-c1764ead18c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. D2Object\00. ObjectState">
+      <UniqueIdentifier>{9c618da6-9345-41a6-8229-9816ebc98dc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. D2Object\00. ObjectState\01. PlayerState">
+      <UniqueIdentifier>{5ed51383-0141-4116-bb6d-dd5efb06bdf1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,8 +42,17 @@
     <ClCompile Include="Object\D2Object.cpp">
       <Filter>02. D2Object</Filter>
     </ClCompile>
-    <ClCompile Include="Object\PlayerObject.cpp">
+    <ClCompile Include="Object\D2Player.cpp">
       <Filter>02. D2Object\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\D2State.cpp">
+      <Filter>02. D2Object\00. ObjectState</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\D2PlayerTownIdle.cpp">
+      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\D2PlayerRun.cpp">
+      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,8 +74,17 @@
     <ClInclude Include="Object\D2Object.h">
       <Filter>02. D2Object</Filter>
     </ClInclude>
-    <ClInclude Include="Object\PlayerObject.h">
+    <ClInclude Include="Object\D2Player.h">
       <Filter>02. D2Object\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\D2State.h">
+      <Filter>02. D2Object\00. ObjectState</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\D2PlayerTownIdle.h">
+      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\D2PlayerRun.h">
+      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

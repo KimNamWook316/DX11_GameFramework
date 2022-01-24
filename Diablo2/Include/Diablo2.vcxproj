@@ -151,7 +151,10 @@
     <ClCompile Include="ClientManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\D2Object.cpp" />
-    <ClCompile Include="Object\PlayerObject.cpp" />
+    <ClCompile Include="Object\D2Player.cpp" />
+    <ClCompile Include="Object\D2PlayerRun.cpp" />
+    <ClCompile Include="Object\D2PlayerTownIdle.cpp" />
+    <ClCompile Include="Object\D2State.cpp" />
     <ClCompile Include="Scene\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +162,10 @@
     <ClInclude Include="Dia2Flags.h" />
     <ClInclude Include="Dia2Info.h" />
     <ClInclude Include="Object\D2Object.h" />
-    <ClInclude Include="Object\PlayerObject.h" />
+    <ClInclude Include="Object\D2Player.h" />
+    <ClInclude Include="Object\D2PlayerRun.h" />
+    <ClInclude Include="Object\D2PlayerTownIdle.h" />
+    <ClInclude Include="Object\D2State.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\TestScene.h" />
   </ItemGroup>

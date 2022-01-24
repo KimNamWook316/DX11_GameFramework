@@ -29,7 +29,7 @@ public:
 		float boarderColor[4]);
 	ID3D11SamplerState* FindSampler(const std::string& name);
 	void SetSampler(const std::string& name, const int reg,
-		const int shaderType = (int)eConstantBufferShaderTypeFlags::All);
+		const int shaderType = (int)eBufferShaderTypeFlags::All);
 
 private:
 	std::unordered_map<std::string, CSharedPtr<class CTexture>> mMapTexture;

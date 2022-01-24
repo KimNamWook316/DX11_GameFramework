@@ -171,6 +171,9 @@
     <Filter Include="01. Engine\09. Thread">
       <UniqueIdentifier>{835d5fb6-aafb-4dcc-9244-33749e9e1a24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\04. SturcturedBuffer">
+      <UniqueIdentifier>{2fd74c70-c9ff-4285-9942-179fe395de96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -557,6 +560,9 @@
     <ClInclude Include="ThreadQueue.h">
       <Filter>01. Engine\09. Thread</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\StructuredBuffer.h">
+      <Filter>02. Resource\02. Shader\04. SturcturedBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -892,6 +898,9 @@
     <ClCompile Include="Thread.cpp">
       <Filter>01. Engine\09. Thread</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Shader\StructuredBuffer.cpp">
+      <Filter>02. Resource\02. Shader\04. SturcturedBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat" />
@@ -925,6 +934,9 @@
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Widget.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\Shader\Particle.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

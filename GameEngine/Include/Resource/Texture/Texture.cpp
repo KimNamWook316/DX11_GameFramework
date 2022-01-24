@@ -433,23 +433,23 @@ void CTexture::SetShader(const int reg, const int eShaderType, const int index)
 	// 쉐이더리소스 쉐이더에 넘기기
 	if (meImageType != eImageType::Array)
 	{
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Vertex)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Vertex)
 		{
 			CDevice::GetInst()->GetContext()->VSSetShaderResources(reg, 1, &mVecTextureInfo[index]->ShaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Pixel)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Pixel)
 		{
 			CDevice::GetInst()->GetContext()->PSSetShaderResources(reg, 1, &mVecTextureInfo[index]->ShaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Hull)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Hull)
 		{
 			CDevice::GetInst()->GetContext()->HSSetShaderResources(reg, 1, &mVecTextureInfo[index]->ShaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Geometry)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Geometry)
 		{
 			CDevice::GetInst()->GetContext()->GSSetShaderResources(reg, 1, &mVecTextureInfo[index]->ShaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Compute)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Compute)
 		{
 			CDevice::GetInst()->GetContext()->CSSetShaderResources(reg, 1, &mVecTextureInfo[index]->ShaderResourceView);
 		}
@@ -466,23 +466,23 @@ void CTexture::ResetShader(const int reg, const int eShaderType, const int index
 
 	if (meImageType != eImageType::Array)
 	{
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Vertex)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Vertex)
 		{
 			CDevice::GetInst()->GetContext()->VSSetShaderResources(reg, 1, &shaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Pixel)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Pixel)
 		{
 			CDevice::GetInst()->GetContext()->PSSetShaderResources(reg, 1, &shaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Hull)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Hull)
 		{
 			CDevice::GetInst()->GetContext()->HSSetShaderResources(reg, 1, &shaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Geometry)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Geometry)
 		{
 			CDevice::GetInst()->GetContext()->GSSetShaderResources(reg, 1, &shaderResourceView);
 		}
-		if (eShaderType & (int)eConstantBufferShaderTypeFlags::Compute)
+		if (eShaderType & (int)eBufferShaderTypeFlags::Compute)
 		{
 			CDevice::GetInst()->GetContext()->CSSetShaderResources(reg, 1, &shaderResourceView);
 		}

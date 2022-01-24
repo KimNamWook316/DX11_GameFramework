@@ -32,5 +32,6 @@ private:
     CSharedPtr<CNumber> mHour;
     CSharedPtr<CNumber> mMinute;
     CSharedPtr<CNumber> mSecond;
+    CSharedPtr<CText> mFPSText;
 };
 

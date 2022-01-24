@@ -4,38 +4,16 @@
 
 struct CharacterInfo
 {
+	eSpriteDir SpriteDir;
 	Vector2 Dir;
 	float CurMoveSpeed;
 	float MaxMoveSpeed;
 
 	CharacterInfo()	:
+		SpriteDir(eSpriteDir::S),
 		Dir(0.f, -1.f),
 		CurMoveSpeed(0.f),
 		MaxMoveSpeed(0.f)
-	{
-	}
-};
-
-struct PlayerInfo
-{
-	CharacterInfo Info;
-	ePlayerSpriteDir SpriteDir;
-
-	PlayerInfo()	:
-		Info{},
-		SpriteDir(ePlayerSpriteDir::S)
-	{
-	}
-};
-
-struct ObjectInfo
-{
-	CharacterInfo Info;
-	eObjectSpriteDir SpriteDir;
-
-	ObjectInfo()	:
-		Info{},
-		SpriteDir(eObjectSpriteDir::S)
 	{
 	}
 };

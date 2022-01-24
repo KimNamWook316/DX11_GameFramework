@@ -129,7 +129,7 @@ void CNumber::Render()
 				assert(false);
 				break;
 			}
-			mInfo.Texture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, frame);
+			mInfo.Texture->SetShader(0, (int)eBufferShaderTypeFlags::Pixel, frame);
 		}
 		mTint = mInfo.Tint;
 		mRenderPos.x += (mSize.x * (float)i);
@@ -205,6 +205,7 @@ bool CNumber::SetTexture(const std::string& name, const std::vector<TCHAR*>& vec
 		mInfo.Texture = CResourceManager::GetInst()->FindTexture(name);
 	}
 	SetUseTexture(true);
+	return true;
 }
 
 bool CNumber::SetTextureFullPath(const std::string& name, const std::vector<TCHAR*>& vecFullPath)

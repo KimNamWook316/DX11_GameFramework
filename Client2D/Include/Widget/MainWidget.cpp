@@ -1,4 +1,5 @@
 #include "MainWidget.h"
+#include "Engine.h"
 
 CMainWidget::CMainWidget()
 {
@@ -11,6 +12,7 @@ CMainWidget::CMainWidget(const CMainWidget& window)
 	mHour = FindWidget<CNumber>("Hour");
 	mMinute = FindWidget<CNumber>("Minute");
 	mSecond = FindWidget<CNumber>("Second");
+	mFPSText = FindWidget<CText>("FPSText");
 }
 
 CMainWidget::~CMainWidget()
@@ -112,6 +114,17 @@ bool CMainWidget::Init()
 		SAFE_DELETE_ARRAY(vecFileName[i]);
 	}
 	vecFileName.clear();
+
+	mFPSText = CreateWidget<CText>("FPSText");
+	mFPSText->SetText(TEXT("FPSText"));
+	mFPSText->SetPos(900.f, 650.f);
+	mFPSText->SetSize(300.f, 40.f);
+	mFPSText->SetZorder(1);
+	mFPSText->SetColor(0.f, 0.f, 1.f);
+	mFPSText->SetAlignH(eTextAlignH::Center);
+	mFPSText->SetShadowEnable(true);
+	mFPSText->SetShadowOffset(2.f, 2.f);
+
 	return true;
 }
 
@@ -131,6 +144,16 @@ void CMainWidget::Update(float deltaTime)
 	mHour->SetNumber((int)time.wHour);
 	mMinute->SetNumber((int)time.wMinute);
 	mSecond->SetNumber((int)time.wSecond);
+
+	char FPS[256] = {};
+	sprintf_s(FPS, "FPS : %.5f", CEngine::GetInst()->GetFPS());
+
+	TCHAR convertFPS[256] = {};
+
+	int length = MultiByteToWideChar(CP_ACP, 0, FPS, -1, 0, 0);
+	MultiByteToWideChar(CP_ACP, 0, FPS, -1, convertFPS, length);
+
+	mFPSText->SetText(convertFPS);
 }
 
 void CMainWidget::PostUpdate(float deltaTime)

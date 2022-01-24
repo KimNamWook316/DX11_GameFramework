@@ -17,7 +17,7 @@ struct MaterialTextureInfo
 	MaterialTextureInfo() :
 		SamplerType(eSamplerType::Linear),
 		Register(0),
-		ShaderType((int)eConstantBufferShaderTypeFlags::Pixel)
+		ShaderType((int)eBufferShaderTypeFlags::Pixel)
 	{
 	}
 };

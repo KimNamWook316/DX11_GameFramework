@@ -230,27 +230,27 @@ void CTextureManager::SetSampler(const std::string& name, const int reg, const i
 		return;
 	}
 
-	if (shaderType & (int)eConstantBufferShaderTypeFlags::Vertex)
+	if (shaderType & (int)eBufferShaderTypeFlags::Vertex)
 	{
 		CDevice::GetInst()->GetContext()->VSSetSamplers(reg, 1, &sampler);
 	}
-	if (shaderType & (int)eConstantBufferShaderTypeFlags::Pixel)
+	if (shaderType & (int)eBufferShaderTypeFlags::Pixel)
 	{
 		CDevice::GetInst()->GetContext()->PSSetSamplers(reg, 1, &sampler);
 	}
-	if (shaderType & (int)eConstantBufferShaderTypeFlags::Hull)
+	if (shaderType & (int)eBufferShaderTypeFlags::Hull)
 	{
 		CDevice::GetInst()->GetContext()->HSSetSamplers(reg, 1, &sampler);
 	}
-	if (shaderType & (int)eConstantBufferShaderTypeFlags::Geometry)
+	if (shaderType & (int)eBufferShaderTypeFlags::Geometry)
 	{
 		CDevice::GetInst()->GetContext()->GSSetSamplers(reg, 1, &sampler);
 	}
-	if (shaderType & (int)eConstantBufferShaderTypeFlags::Domain)
+	if (shaderType & (int)eBufferShaderTypeFlags::Domain)
 	{
 		CDevice::GetInst()->GetContext()->DSSetSamplers(reg, 1, &sampler);
 	}
-	if (shaderType & (int)eConstantBufferShaderTypeFlags::Compute)
+	if (shaderType & (int)eBufferShaderTypeFlags::Compute)
 	{
 		CDevice::GetInst()->GetContext()->CSSetSamplers(reg, 1, &sampler);
 	}

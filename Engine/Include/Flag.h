@@ -32,7 +32,7 @@ enum class eComponentType
 	OBJ_COMP,
 };
 
-enum class eConstantBufferShaderTypeFlags
+enum class eBufferShaderTypeFlags
 {
 	Vertex = 0x1,
 	Pixel = 0x2,

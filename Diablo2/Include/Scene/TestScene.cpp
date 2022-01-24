@@ -1,6 +1,6 @@
 #include "TestScene.h"
 #include "Scene/Scene.h"
-#include "../Object/PlayerObject.h"
+#include "../Object/D2Player.h"
 
 CTestScene::CTestScene()
 {
@@ -13,7 +13,7 @@ CTestScene::~CTestScene()
 
 bool CTestScene::Init()
 {
-	CPlayerObject* plyaer = mScene->CreateGameObject<CPlayerObject>("Player");
-	SetPlayerObj(plyaer);
+	CD2Player* player = mScene->CreateGameObject<CD2Player>("Player");
+	SetPlayerObj(player);
 	return true;
 }

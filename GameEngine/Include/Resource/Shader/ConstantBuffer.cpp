@@ -54,32 +54,32 @@ void CConstantBuffer::UpdateBuffer(void* data)
 
 	// 각 쉐이더 파이프라인에 상수 버퍼를 할당한다.
 	// register의 범위는 0 ~ D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT(13)이다.
-	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Vertex)
+	if (meConstantBufferShaderType & (int)eBufferShaderTypeFlags::Vertex)
 	{
 		CDevice::GetInst()->GetContext()->VSSetConstantBuffers(mRegister, 1, &mBuffer);
 	}
 
-	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Pixel)
+	if (meConstantBufferShaderType & (int)eBufferShaderTypeFlags::Pixel)
 	{
 		CDevice::GetInst()->GetContext()->PSSetConstantBuffers(mRegister, 1, &mBuffer);
 	}
 
-	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Domain)
+	if (meConstantBufferShaderType & (int)eBufferShaderTypeFlags::Domain)
 	{
 		CDevice::GetInst()->GetContext()->DSSetConstantBuffers(mRegister, 1, &mBuffer);
 	}
 
-	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Hull)
+	if (meConstantBufferShaderType & (int)eBufferShaderTypeFlags::Hull)
 	{
 		CDevice::GetInst()->GetContext()->HSSetConstantBuffers(mRegister, 1, &mBuffer);
 	}
 
-	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Geometry)
+	if (meConstantBufferShaderType & (int)eBufferShaderTypeFlags::Geometry)
 	{
 		CDevice::GetInst()->GetContext()->GSSetConstantBuffers(mRegister, 1, &mBuffer);
 	}
 
-	if (meConstantBufferShaderType & (int)eConstantBufferShaderTypeFlags::Compute)
+	if (meConstantBufferShaderType & (int)eBufferShaderTypeFlags::Compute)
 	{
 		CDevice::GetInst()->GetContext()->CSSetConstantBuffers(mRegister, 1, &mBuffer);
 	}

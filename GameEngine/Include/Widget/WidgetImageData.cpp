@@ -138,14 +138,14 @@ void CWidgetImageData::SetShaderData()
 
 			mAnimationCBuffer->SetStartUV(startUV);
 			mAnimationCBuffer->SetEndUV(endUV);
-			mTexture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, 0);
+			mTexture->SetShader(0, (int)eBufferShaderTypeFlags::Pixel, 0);
 		}
 			break;
 		case eImageType::Frame:
 		{
 			mAnimationCBuffer->SetStartUV(Vector2(0.f, 0.f));
 			mAnimationCBuffer->SetEndUV(Vector2(1.f, 1.f));
-			mTexture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, mFrame);
+			mTexture->SetShader(0, (int)eBufferShaderTypeFlags::Pixel, mFrame);
 		}
 			break;
 		default:
@@ -158,7 +158,7 @@ void CWidgetImageData::SetShaderData()
 	}
 	else
 	{
-		mTexture->SetShader(0, (int)eConstantBufferShaderTypeFlags::Pixel, 0);
+		mTexture->SetShader(0, (int)eBufferShaderTypeFlags::Pixel, 0);
 		CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(false);
 		CRenderManager::GetInst()->GetStandard2DCBuffer()->UpdateCBuffer();
 	}

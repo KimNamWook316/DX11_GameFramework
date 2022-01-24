@@ -3,6 +3,18 @@
 #include "GameObject/GameObject.h"
 #include "../Dia2Info.h"
 
+struct StateCallBack
+{
+	bool bIsLoop;
+	std::function<void(float)> mCallBack;
+
+	StateCallBack() :
+		bIsLoop(false),
+		mCallBack(nullptr)
+	{
+	}
+};
+
 class CD2Object :
     public CGameObject
 {
@@ -48,7 +60,17 @@ public:
 		}
 	}
 
+public:
+	CharacterInfo GetCharInfo() const
+	{
+		return mCharInfo;
+	}
+
+protected:
+	virtual void AdjustSpriteSize();
+
 protected:
     CharacterInfo mCharInfo;
+	std::stack<class CD2State*> mStateStack;
 };
 

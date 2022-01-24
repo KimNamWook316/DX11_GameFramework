@@ -1,18 +1,6 @@
 #pragma once
 
-enum class eObjectSpriteDir
-{
-	S,
-	SW,
-	W,
-	NW,
-	N,
-	NE,
-	E,
-	SE,
-};
-
-enum class ePlayerSpriteDir
+enum class eSpriteDir
 {
 	S,
 	SSW,
@@ -30,4 +18,26 @@ enum class ePlayerSpriteDir
 	EES,
 	ES,
 	SSE,
+};
+
+enum class eInputState
+{
+	MouseLButton,
+	MouseRButton,
+};
+
+enum class ePlayerState
+{
+	TownIdle,
+	TownWalk,
+	Idle,
+	Run,
+	Attack1,
+	Attack2,
+	Hit,
+	Block,
+	Kick,
+	Special1,
+	Special2,
+	End
 };

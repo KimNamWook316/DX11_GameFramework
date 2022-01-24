@@ -48,9 +48,9 @@ bool CSceneManager::PostUpdate(float deltaTime)
 
 void CSceneManager::CreateNextScene(bool bBeChangeNow)
 {
-	// 새로운 씬이 만들어지는 도중 Context Change가 일어나, Update를 돌리게 되는 현상 방지
 	CSync sync(&mCrt);
 
+	// 다른 스레드가 이 영역에 접근하려고 하면, 그 Thread를 대기 상태로 설정하고, 수행이 끝날 때까지 기다린다.
 	SAFE_DELETE(mNextScene);
 
 	mNextScene = new CScene;

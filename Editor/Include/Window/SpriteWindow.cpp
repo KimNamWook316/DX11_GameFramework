@@ -293,7 +293,7 @@ void CSpriteWindow::OnClickLoadTexture()
 		mCropImage->SetTextureFullPath(convertFileName, filePath);
 
 		// 씬 스프라이트 오브젝트에 등록
-		mSpriteEditObject->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
+		mSpriteEditObject->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)eBufferShaderTypeFlags::Pixel,
 			convertFileName, filePath);
 
 		// Texture 크기 실제 비율에 맞게 수정
@@ -465,7 +465,7 @@ void CSpriteWindow::OnSelectAnimationList(int idx, const char* item)
 	if (selectAnimTexture != mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture())
 	{
 		mSpriteEditObject->GetSpriteComponent()->SetTexture(0, 0, 
-			(int)eConstantBufferShaderTypeFlags::Pixel, selectAnimTexture->GetName(), selectAnimTexture);
+			(int)eBufferShaderTypeFlags::Pixel, selectAnimTexture->GetName(), selectAnimTexture);
 
 		mSpriteEditObject->GetSpriteComponent()->SetWorldScale((float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(),
 			(float)mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
@@ -896,7 +896,7 @@ void CSpriteWindow::OnClickLoadAnimation()
 		}
 
 		mSpriteEditObject->GetSpriteComponent()->SetTexture(0, 0, 
-			(int)eConstantBufferShaderTypeFlags::Pixel, selectAnimTexture->GetName(), selectAnimTexture);
+			(int)eBufferShaderTypeFlags::Pixel, selectAnimTexture->GetName(), selectAnimTexture);
 
 		// Texture 크기 실제 비율에 맞게 수정
 		CTexture* texture = mSpriteEditObject->GetSpriteComponent()->GetMaterial()->GetTexture();

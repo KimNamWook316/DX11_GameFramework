@@ -36,7 +36,7 @@ public: // ===================== Shader =====================
 	}
 
 	bool CreateConstantBuffer(const std::string& name, const int size, const int reg,
-		const int eConstantBufferShaderType = (int)eConstantBufferShaderTypeFlags::All);
+		const int eConstantBufferShaderType = (int)eBufferShaderTypeFlags::All);
 
 	class CConstantBuffer* FindConstantBuffer(const std::string& name);
 

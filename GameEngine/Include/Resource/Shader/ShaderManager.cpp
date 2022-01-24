@@ -77,25 +77,25 @@ bool CShaderManager::Init()
 
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
-		(int)eConstantBufferShaderTypeFlags::Graphic);
+		(int)eBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("MaterialCbuffer", sizeof(MaterialCBuffer), 1,
-		(int)eConstantBufferShaderTypeFlags::Graphic);
+		(int)eBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("Standard2DCBuffer", sizeof(Standard2DCBuffer), 2,
-		(int)eConstantBufferShaderTypeFlags::Graphic);
+		(int)eBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("Animation2DCBuffer", sizeof(Animation2DCBuffer), 10,
-		(int)eConstantBufferShaderTypeFlags::Graphic);
+		(int)eBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("ColliderCBuffer", sizeof(ColliderCBuffer), 11,
-		(int)eConstantBufferShaderTypeFlags::Graphic);
+		(int)eBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("WidgetCBuffer", sizeof(WidgetCBuffer), 11,
-		(int)eConstantBufferShaderTypeFlags::Graphic);
+		(int)eBufferShaderTypeFlags::Graphic);
 
 	CreateConstantBuffer("ProgressBarCBuffer", sizeof(ProgressBarCBuffer), 12,
-		(int)eConstantBufferShaderTypeFlags::Graphic);
+		(int)eBufferShaderTypeFlags::Graphic);
 	
 	return true;
 }

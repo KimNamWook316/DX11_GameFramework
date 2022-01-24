@@ -29,7 +29,7 @@ bool CMaterialManager::Init()
 	mtrl = FindMaterial("BaseTexture");
 	mtrl->SetShader("Mesh2DShader");
 	CTexture* tex = CResourceManager::GetInst()->FindTexture("EngineDefaultTexture");
-	mtrl->AddTexture(0, (int)eConstantBufferShaderTypeFlags::Pixel, "EngineDefaultTexture", tex);
+	mtrl->AddTexture(0, (int)eBufferShaderTypeFlags::Pixel, "EngineDefaultTexture", tex);
 	mtrl->SetBaseColor(1.f, 1.f, 1.f, 1.f);
 
 	return true;

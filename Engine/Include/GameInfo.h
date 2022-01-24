@@ -11,6 +11,7 @@
 #include <functional>
 #include <string>
 #include <stack>
+#include <queue>
 #include <process.h>
 #include <math.h>
 #include <algorithm>

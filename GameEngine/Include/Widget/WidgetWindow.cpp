@@ -7,7 +7,8 @@ CWidgetWindow::CWidgetWindow() :
 	mOwnerComponent(nullptr),
 	mZOrder(0),
 	mSize(100.f, 100.f),
-	mbStart(false)
+	mbStart(false),
+	mbVisable(true)
 {
 }
 

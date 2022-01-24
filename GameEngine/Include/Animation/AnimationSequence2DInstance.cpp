@@ -58,7 +58,7 @@ void CAnimationSequence2DInstance::Start()
 {
 	if (mOwner && mCurrentAnimation)
 	{
-		mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
+		mOwner->SetTexture(0, 0, (int)eBufferShaderTypeFlags::Pixel,
 			mCurrentAnimation->mSequence->GetTexture()->GetName(), mCurrentAnimation->mSequence->GetTexture());
 	}
 }
@@ -288,7 +288,7 @@ void CAnimationSequence2DInstance::Load(const char* fullPath)
 			int fullPathLength = (int)strlen(fullPath);
 			for (int i = fullPathLength - 1; i > 0; --i)
 			{
-				if (fullPath[i] == '\\')
+				if (fullPath[i] == '\\' || fullPath[i] == '/')
 				{
 					strncpy_s(sequenceFullPath, fullPath, (size_t)i + (size_t)1);
 					break;
@@ -307,7 +307,7 @@ void CAnimationSequence2DInstance::Load(const char* fullPath)
 			int fullPathLength = (int)strlen(fullPath);
 			for (int i = fullPathLength - 1; i > 0; --i)
 			{
-				if (fullPath[i] == '\\')
+				if (fullPath[i] == '\\' || fullPath[i] == '/')
 				{
 					strncpy_s(sequenceFullPath, fullPath, (size_t)i + (size_t)1);
 					break;
@@ -444,7 +444,7 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName,
 		if (mOwner)
 		{
 			// SpriteComponent의 Material에 이 애니메이션의 텍스쳐를 등록한다.
-			mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
+			mOwner->SetTexture(0, 0, (int)eBufferShaderTypeFlags::Pixel,
 				anim->mSequence->GetTexture()->GetName(), anim->mSequence->GetTexture());
 		}
 	}
@@ -504,7 +504,7 @@ void CAnimationSequence2DInstance::AddAnimation(const TCHAR* fileName, const std
 		mCurrentAnimation = anim;
 		if (mOwner)
 		{
-			mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel, anim->mSequence->GetTexture()->GetName(),
+			mOwner->SetTexture(0, 0, (int)eBufferShaderTypeFlags::Pixel, anim->mSequence->GetTexture()->GetName(),
 				anim->mSequence->GetTexture());
 		}
 	}
@@ -555,7 +555,7 @@ void CAnimationSequence2DInstance::ChangeAnimation(const std::string& name)
 	
 	if (mOwner)
 	{
-		mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
+		mOwner->SetTexture(0, 0, (int)eBufferShaderTypeFlags::Pixel,
 			mCurrentAnimation->mSequence->GetTexture()->GetName(), mCurrentAnimation->mSequence->GetTexture());
 	}
 }
@@ -648,7 +648,7 @@ void CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& name)
 	if (mOwner)
 	{
 		// 텍스쳐를 현재 애니메이션의 텍스쳐로 변경한다. (다수의 텍스쳐를 사용할 수도 있기 때문)
-		mOwner->SetTexture(0, 0, (int)eConstantBufferShaderTypeFlags::Pixel,
+		mOwner->SetTexture(0, 0, (int)eBufferShaderTypeFlags::Pixel,
 			mCurrentAnimation->mSequence->GetTexture()->GetName(), mCurrentAnimation->mSequence->GetTexture());
 	}
 }

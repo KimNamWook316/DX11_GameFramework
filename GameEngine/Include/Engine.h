@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameInfo.h"
+#include "Timer.h"
 
 // 윈도우 생성 및 프로그램 로직, 디바이스 등 프로그램 전체를 관장하는 클래스
 class CEngine 
@@ -46,6 +47,16 @@ public:
 	bool IsPlay() const
 	{
 		return mbPlay;
+	}
+	
+	float GetFPS() const
+	{
+		return mTimer->GetFPS();
+	}
+
+	float GetDeltaTime() const
+	{
+		return mTimer->GetDeltaTIme();
 	}
 
 public:
