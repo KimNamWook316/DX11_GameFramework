@@ -7,6 +7,7 @@
 #include "WidgetShader.h"
 #include "ProgressBarShader.h"
 #include "NumberShader.h"
+#include "ParticleUpdateShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -75,6 +76,13 @@ bool CShaderManager::Init()
 		return false;
 	}
 
+	// Particle Update Compute 쉐이더
+	if (!CreateShader<CParticleUpdateShader>("ParticleUpdateShader"))
+	{
+		assert(false);
+		return false;
+	}
+
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
 		(int)eBufferShaderTypeFlags::Graphic);
@@ -96,7 +104,13 @@ bool CShaderManager::Init()
 
 	CreateConstantBuffer("ProgressBarCBuffer", sizeof(ProgressBarCBuffer), 12,
 		(int)eBufferShaderTypeFlags::Graphic);
+
+	CreateConstantBuffer("GlobalCBuffer", sizeof(GlobalCBuffer), 3,
+		(int)eBufferShaderTypeFlags::All);
 	
+	CreateConstantBuffer("ParticleCBuffer", sizeof(ParticleCBuffer), 11,
+		(int)eBufferShaderTypeFlags::Compute);
+
 	return true;
 }
 

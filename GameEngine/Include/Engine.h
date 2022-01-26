@@ -2,6 +2,7 @@
 
 #include "GameInfo.h"
 #include "Timer.h"
+#include "Resource/Texture/Texture.h"
 
 // 윈도우 생성 및 프로그램 로직, 디바이스 등 프로그램 전체를 관장하는 클래스
 class CEngine 
@@ -115,5 +116,8 @@ private:
 	eMouseState meMouseState;
 	CSharedPtr<class CWidgetWindow> mMouseWidget[(int)eMouseState::Max];
 	int mShowCursorCount;
+	class CGlobalConstantBuffer* mGlobalCBuffer;
+	float mGlobalAccTime; // 누적 시간
+	CSharedPtr<CTexture> mGlobalNoiseTexture; // GPU 랜덤 함수를 위한 노이즈 텍스처
 };
 

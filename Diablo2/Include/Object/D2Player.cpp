@@ -22,11 +22,6 @@ bool CD2Player::Init()
 {
 	CGameObject::Init();
 
-	// Sprite
-	mSprite = CreateComponent<CSpriteComponent>("Sprite");
-	SetRootSceneComponent(mSprite);
-	mSprite->SetPivot(0.5f, 0.f, 0.f);
-
 	// Animation
 	mSprite->LoadAnimationInstance("Player/Player.anim");
 	mSprite->GetAnimationInstance()->Play();
@@ -41,6 +36,9 @@ bool CD2Player::Init()
 	mCamera = CreateComponent<CCameraComponent>("Camera");
 	mCamera->OnViewportCenter();
 	mSprite->AddChild(mCamera);
+
+	// InputStack
+	mInputStack = CreateComponent<CInputStackComponent>("InputStack");
 
 	// Key
 	CInput::GetInst()->CreateKey("LButtonDown", VK_LBUTTON);
@@ -64,6 +62,7 @@ bool CD2Player::Init()
 	// State ¼³Á¤
 	CD2PlayerTownIdle* state = new CD2PlayerTownIdle;
 	mStateStack.push((CD2State*)state);
+	state->OnEnterState(0.f);
 
 	return true;
 }
@@ -90,14 +89,14 @@ CD2Player* CD2Player::Clone()
 
 void CD2Player::OnLButtonClicked(float deltaTime)
 {
-	CD2State* state = mStateStack.top();
-	state->PushInput(0, (int)eInputState::MouseLButton);
+	Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+	mInputStack->PushMouseInput(eMouseClickState::MouseLButton, mousePos);
 }
 
 void CD2Player::OnRButtonClicked(float deltaTime)
 {
-	CD2State* state = mStateStack.top();
-	state->PushInput(0, (int)eInputState::MouseRButton);
+	Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+	mInputStack->PushMouseInput(eMouseClickState::MouseRButton, mousePos);
 }
 
 void CD2Player::SetSpriteDir(const Vector2& dir)

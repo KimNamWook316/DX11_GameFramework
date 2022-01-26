@@ -28,6 +28,12 @@
     <Filter Include="02. D2Object\00. ObjectState\01. PlayerState">
       <UniqueIdentifier>{5ed51383-0141-4116-bb6d-dd5efb06bdf1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. D2Component">
+      <UniqueIdentifier>{0b7e0601-6b7c-4f53-8488-6796ffb5772f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. D2Component\01. ObjectComponent">
+      <UniqueIdentifier>{644c6ac5-580d-41ec-a1be-1fd41a45b669}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +59,12 @@
     </ClCompile>
     <ClCompile Include="Object\D2PlayerRun.cpp">
       <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\D2PlayerSpecialOne.cpp">
+      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\InputStackComponent.cpp">
+      <Filter>03. D2Component\01. ObjectComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="Object\D2PlayerRun.h">
       <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\D2PlayerSpecialOne.h">
+      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\InputStackComponent.h">
+      <Filter>03. D2Component\01. ObjectComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

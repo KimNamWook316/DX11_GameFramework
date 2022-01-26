@@ -4,13 +4,14 @@
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderBox2D.h"
 #include "Component/CameraComponent.h"
-#include "../Dia2Info.h"
+#include "../Component/InputStackComponent.h"
 
 class CD2Player final :
     public CD2Object 
 {
 	friend class CScene;
 	friend class CD2PlayerTownIdle;
+	friend class CD2PlayerRun;
 
 protected:
 	CD2Player();
@@ -32,13 +33,19 @@ public:
 	void OnLButtonClicked(float deltaTime);
 	void OnRButtonClicked(float deltaTime);
 
+public:
+	CInputStackComponent* GetInputStackComponent()
+	{
+		return mInputStack;
+	}
+
 protected:
 	virtual void AdjustSpriteSize() override;
 
 private:
 	// Components
 	CSharedPtr<CCameraComponent> mCamera;
-	CSharedPtr<CSpriteComponent> mSprite;
 	CSharedPtr<CColliderBox2D> mBody;
+	CSharedPtr<CInputStackComponent> mInputStack;
 };
 

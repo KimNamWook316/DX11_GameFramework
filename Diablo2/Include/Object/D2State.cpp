@@ -3,7 +3,8 @@
 
 CD2State::CD2State()	:
 	mOwnerObject(nullptr),
-	mbIsLoop(false)
+	mbIsLoop(false),
+	mbIsEnd(false)
 {
 }
 

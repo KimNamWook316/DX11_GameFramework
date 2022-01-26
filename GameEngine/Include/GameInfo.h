@@ -317,3 +317,56 @@ struct ProgressBarCBuffer
 	int Dir;
 	Vector2 Empty;
 };
+
+struct ParticleCBuffer
+{
+	unsigned int SpawnEnable; // 현재 파티클 생성 여부
+	Vector3 StartMin;
+	Vector3 StartMax;
+	unsigned int SpawnCountMax;
+	Vector3 ScaleMin;
+	float LifeTimeMin;
+	Vector3 ScaleMax;
+	float LifeTimeMax;
+	Vector4 ColorMin;
+	Vector4 ColorMax;
+	float SpeedMin;
+	float SpeedMax;
+	int IsMove;
+	int IsGravity;
+	Vector3 MoveDir;
+	int Is2D;
+	Vector3 MoveAngle;
+	float Dummy;
+};
+
+struct GlobalCBuffer
+{
+	float DeltaTime;
+	float AccTime; // 누적 시간
+	Vector2 Resolution;
+	Vector2 NoiseResolution; // 랜덤 함수를 위한 노이즈 텍스쳐 해상도
+	Vector2 Dummy;
+};
+
+struct ParticleInfo
+{
+	Vector3 WorldPos;
+	Vector3 Dir;
+	float Speed;
+	float LifeTime;
+	float LifeTimeMax;
+	float Alive;
+	float FallTime;
+	float FallStartY;
+};
+
+struct ParticleInfoShared
+{
+	unsigned int SpawnEnable;
+	Vector3 ScaleMin;
+	Vector3 ScaleMax;
+	Vector4 ColorMin;
+	Vector4 ColorMax;
+	int GravityEnable;
+};

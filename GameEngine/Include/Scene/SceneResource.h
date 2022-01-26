@@ -5,6 +5,7 @@
 #include "../Resource/Material/Material.h"
 #include "../Resource/Texture/Texture.h"
 #include "../Resource/Sound/Sound.h"
+#include "../Resource/Particle/Particle.h"
 #include "../Resource/Animation/AnimationSequence2D.h"
 #include "../Resource/ResourceManager.h"
 
@@ -109,6 +110,10 @@ public: // ===================== Sound =====================
 	CSound* FindSound(const std::string& soundName);
 	FMOD::ChannelGroup* FindChannelGroup(const std::string& groupName);
 
+public: // ===================== Particle =====================
+	bool CreateParticle(const std::string& name);
+	CParticle* FindParticle(const std::string& name);
+
 private:
 	class CScene* mScene;
 	std::unordered_map <std::string, CSharedPtr<CMesh>> mMapMesh;
@@ -117,5 +122,6 @@ private:
 	std::unordered_map <std::string, CSharedPtr<CTexture>> mMapTexture;
 	std::unordered_map <std::string, CSharedPtr<CAnimationSequence2D>> mMapSequence2D;
 	std::unordered_map <std::string, CSharedPtr<CSound>> mMapSound;
+	std::unordered_map <std::string, CSharedPtr<CParticle>> mMapParticle;
 };
 

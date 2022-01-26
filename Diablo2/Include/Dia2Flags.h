@@ -20,7 +20,7 @@ enum class eSpriteDir
 	SSE,
 };
 
-enum class eInputState
+enum class eMouseClickState
 {
 	MouseLButton,
 	MouseRButton,

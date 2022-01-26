@@ -17,3 +17,9 @@ struct CharacterInfo
 	{
 	}
 };
+
+struct MouseInputInfo
+{
+    eMouseClickState State;
+    Vector2 Position;
+};

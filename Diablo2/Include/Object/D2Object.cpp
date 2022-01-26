@@ -20,6 +20,12 @@ CD2Object::~CD2Object()
 bool CD2Object::Init()
 {
 	CGameObject::Init();
+
+	// Sprite
+	mSprite = CreateComponent<CSpriteComponent>("Sprite");
+	SetRootSceneComponent(mSprite);
+	mSprite->SetPivot(0.5f, 0.f, 0.f);
+
 	return true;
 }
 
@@ -54,8 +60,16 @@ void CD2Object::Update(float deltaTime)
 	}
 	else
 	{
-		curState->Update(deltaTime);
+		if (curState->mbIsEnd && curState->mbIsLoop)
+		{
+			curState->OnExitState(deltaTime);
+			mStateStack.pop();
+			SAFE_DELETE(curState);
+			curState = mStateStack.top();
+			curState->OnEnterState(deltaTime);
+		}
 	}
+	curState->Update(deltaTime);
 }
 
 void CD2Object::PostUpdate(float deltaTime)

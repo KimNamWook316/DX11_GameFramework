@@ -2,6 +2,7 @@
 
 #include "GameObject/GameObject.h"
 #include "../Dia2Info.h"
+#include "Component/SpriteComponent.h"
 
 struct StateCallBack
 {
@@ -66,11 +67,27 @@ public:
 		return mCharInfo;
 	}
 
+	eSpriteDir GetSpriteDir() const
+	{
+		return mCharInfo.SpriteDir;
+	}
+
+	float GetMaxMoveSpeed() const
+	{
+		return mCharInfo.MaxMoveSpeed;
+	}
+
+	CSpriteComponent* GetSpriteComponent() const
+	{
+		return mSprite;
+	}
+
 protected:
 	virtual void AdjustSpriteSize();
 
 protected:
     CharacterInfo mCharInfo;
+	CSharedPtr<CSpriteComponent> mSprite;
 	std::stack<class CD2State*> mStateStack;
 };
 

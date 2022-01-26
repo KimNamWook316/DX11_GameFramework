@@ -8,6 +8,8 @@
 #include "Input.h"
 #include "Timer.h"
 #include "IMGUIManager.h"
+#include "Resource/Shader/GlobalConstantBuffer.h"
+#include "Resource/Texture/Texture.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -21,6 +23,8 @@ CEngine::CEngine()
 	, mbPlay(true)
 	, meMouseState(eMouseState::Normal)
 	, mShowCursorCount(0)
+	, mGlobalCBuffer(nullptr)
+	, mGlobalAccTime(0.f)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(413);
@@ -35,6 +39,7 @@ CEngine::~CEngine()
 	CCollisionManager::DestroyInst();
 	CResourceManager::DestroyInst();
 	CIMGUIManager::DestroyInst();
+	SAFE_DELETE(mGlobalCBuffer);
 	CDevice::DestroyInst();
 	SAFE_DELETE(mTimer);
 }
@@ -119,6 +124,20 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 		return false;
 	}
 
+	// Global Constant Buffer Init
+	mGlobalCBuffer = new CGlobalConstantBuffer;
+	if (!mGlobalCBuffer->Init())
+	{
+		assert(false);
+		return false;
+	}
+	mGlobalCBuffer->SetResolution(mRS);
+
+	// Noise Texture (for GPU Random) Init
+	CResourceManager::GetInst()->LoadTexture("GlobalNoiseTexture", TEXT("noise_01.png"));
+	mGlobalNoiseTexture = CResourceManager::GetInst()->FindTexture("mGlobalNoiseTexture");
+	mGlobalNoiseTexture->SetShader(100, (int)eBufferShaderTypeFlags::All, 0);
+
 	return true;
 }
 
@@ -174,6 +193,10 @@ void CEngine::Logic()
 	{
 		deltaTime = 0.f;
 	}
+
+	mGlobalAccTime += deltaTime;
+	mGlobalCBuffer->SetAccTime(mGlobalAccTime);
+	mGlobalCBuffer->UpdateCBuffer();
 
 	CInput::GetInst()->Update(deltaTime);
 
