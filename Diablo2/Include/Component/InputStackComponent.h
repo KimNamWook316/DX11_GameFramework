@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Component/ObjectComponent.h"
+#include "Component/SceneComponent.h"
 #include "../Dia2Info.h"
 
 class CInputStackComponent :
-    public CObjectComponent
+    public CSceneComponent
 {
-    friend class CD2Player;
+    friend class CGameObject;
 
 protected:
     CInputStackComponent();
@@ -39,12 +40,28 @@ public:
 public:
     MouseInputInfo GetMouseInputTop() const
     {
-        return mMouseInputStack.top();
+        if (!mMouseInputStack.empty())
+        {
+            return mMouseInputStack.top();
+        }
     }
 
     char GetKeyInputTop() const
     {
-        return mKeyInputStack.top();
+        if (!mMouseInputStack.empty())
+        {
+            return mKeyInputStack.top();
+        }
+    }
+
+    bool IsMouseInputEmpty()
+    {
+        return mMouseInputStack.empty();
+    }
+
+    bool IsKeyInputEmpty()
+    {
+        return mKeyInputStack.empty();
     }
 
 public:
@@ -62,6 +79,24 @@ public:
         {
             mKeyInputStack.pop();
         }
+    }
+
+    void ClearMouseInput()
+    {
+		while (!mMouseInputStack.empty())
+		{
+			mMouseInputStack.pop();
+		}
+        mClearTimer = 0.f;
+    }
+
+    void ClearKeyInput()
+    {
+		while (!mKeyInputStack.empty())
+		{
+			mKeyInputStack.pop();
+		}
+        mClearTimer = 0.f;
     }
 
 private:

@@ -26,8 +26,8 @@ private:
 	D3D11_BUFFER_DESC mDesc;
 	ID3D11Buffer* mBuffer;
 
-	ID3D11ShaderResourceView* mSRV;
-	ID3D11UnorderedAccessView* mUAV;
+	ID3D11ShaderResourceView* mSRV;		// Cpu -> Gpu 로 보낼 때 이 뷰를 통함 (dynamic buffer일 때)
+	ID3D11UnorderedAccessView* mUAV;	// Gpu -> Cpu 로 받을 때 이 뷰를 통함 (!dynamic)
 
 	unsigned int mSize;
 	unsigned int mCount;

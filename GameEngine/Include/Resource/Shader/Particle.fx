@@ -183,6 +183,7 @@ struct GeometryParticleOutput
 // in : 값을 함수 안으로 넘겨줄 때
 // out : 함수 안에서 결과를 넘겨받을 때, 함수 안에서 이 값을 이용한 연산 불가
 // inout : Reference
+// https://woo-dev.tistory.com/260  : GS 설명
 [maxvertexcount(6)]
 void ParticleGS(point VertexParticleOutput[1],
 	inout TriangleStream<GeometryParticleOutput> output)

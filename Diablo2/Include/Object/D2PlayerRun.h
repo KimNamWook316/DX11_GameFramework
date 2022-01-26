@@ -20,5 +20,6 @@ public:
 
 private:
     class CInputStackComponent* mInputStack;
+    Vector2 mTargetPos;
 };
 

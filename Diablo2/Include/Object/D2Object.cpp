@@ -60,7 +60,7 @@ void CD2Object::Update(float deltaTime)
 	}
 	else
 	{
-		if (curState->mbIsEnd && curState->mbIsLoop)
+		if (curState->mbIsEnd)
 		{
 			curState->OnExitState(deltaTime);
 			mStateStack.pop();

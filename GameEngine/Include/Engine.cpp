@@ -135,7 +135,7 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	// Noise Texture (for GPU Random) Init
 	CResourceManager::GetInst()->LoadTexture("GlobalNoiseTexture", TEXT("noise_01.png"));
-	mGlobalNoiseTexture = CResourceManager::GetInst()->FindTexture("mGlobalNoiseTexture");
+	mGlobalNoiseTexture = CResourceManager::GetInst()->FindTexture("GlobalNoiseTexture");
 	mGlobalNoiseTexture->SetShader(100, (int)eBufferShaderTypeFlags::All, 0);
 
 	return true;

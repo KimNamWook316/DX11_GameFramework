@@ -6,7 +6,7 @@ CInputStackComponent::CInputStackComponent()	:
 }
 
 CInputStackComponent::CInputStackComponent(const CInputStackComponent& com)	:
-	CObjectComponent(com)
+	CSceneComponent(com)
 {
 	*this = com;
 	mClearTimer = 0.f;
@@ -18,7 +18,7 @@ CInputStackComponent::~CInputStackComponent()
 
 bool CInputStackComponent::Init()
 {
-	if (!CObjectComponent::Init())
+	if (!CSceneComponent::Init())
 	{
 		return false;
 	}
@@ -28,7 +28,7 @@ bool CInputStackComponent::Init()
 
 void CInputStackComponent::Update(float deltaTime)
 {
-	CObjectComponent::Update(deltaTime);
+	CSceneComponent::Update(deltaTime);
 
 	mClearTimer += deltaTime;
 
@@ -40,7 +40,7 @@ void CInputStackComponent::Update(float deltaTime)
 		}
 		while (!mKeyInputStack.empty())
 		{
-			mKeyInputStack.empty();
+			mKeyInputStack.pop();
 		}
 		mClearTimer = 0.f;
 	}
@@ -48,22 +48,22 @@ void CInputStackComponent::Update(float deltaTime)
 
 void CInputStackComponent::PostUpdate(float deltaTime)
 {
-	CObjectComponent::PostUpdate(deltaTime);
+	CSceneComponent::PostUpdate(deltaTime);
 }
 
 void CInputStackComponent::PrevRender()
 {
-	CObjectComponent::PrevRender();
+	CSceneComponent::PrevRender();
 }
 
 void CInputStackComponent::Render()
 {
-	CObjectComponent::Render();
+	CSceneComponent::Render();
 }
 
 void CInputStackComponent::PostRender()
 {
-	CObjectComponent::PostRender();
+	CSceneComponent::PostRender();
 }
 
 CInputStackComponent* CInputStackComponent::Clone()

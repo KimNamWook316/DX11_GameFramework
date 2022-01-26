@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GameInfo.h"
 #include "Dia2Flags.h"
 
 struct CharacterInfo

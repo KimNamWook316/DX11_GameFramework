@@ -16,5 +16,8 @@ public:
     virtual void OnExitState(float deltaTime) override;
     virtual void Clear() override;
     virtual CD2State* GetNextState() override;
+
+private:
+    class CInputStackComponent* mInputStack;
 };
 

@@ -86,7 +86,7 @@ public:
 
 			if (!mRootSceneComponent)
 			{
-				mRootSceneComponent = comp;
+				mRootSceneComponent = (class CSceneComponent*)comp;
 			}
 		}
 		

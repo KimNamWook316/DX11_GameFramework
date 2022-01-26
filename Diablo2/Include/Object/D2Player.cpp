@@ -16,11 +16,17 @@ CD2Player::CD2Player(const CD2Player& obj)	:
 
 CD2Player::~CD2Player()
 {
+	while(!mStateStack.empty())
+	{
+		CD2State* state = mStateStack.top();
+		mStateStack.pop();
+		SAFE_DELETE(state);
+	}
 }
 
 bool CD2Player::Init()
 {
-	CGameObject::Init();
+	CD2Object::Init();
 
 	// Animation
 	mSprite->LoadAnimationInstance("Player/Player.anim");
@@ -39,6 +45,7 @@ bool CD2Player::Init()
 
 	// InputStack
 	mInputStack = CreateComponent<CInputStackComponent>("InputStack");
+	mSprite->AddChild(mInputStack);
 
 	// Key
 	CInput::GetInst()->CreateKey("LButtonDown", VK_LBUTTON);
@@ -57,11 +64,12 @@ bool CD2Player::Init()
 
 	// TODO : ¿¢¼¿ ·Îµù
 	// CharInfo
-	mCharInfo.MaxMoveSpeed = 300.f;
+	mCharInfo.MaxMoveSpeed = 100.f;
 
 	// State ¼³Á¤
 	CD2PlayerTownIdle* state = new CD2PlayerTownIdle;
 	mStateStack.push((CD2State*)state);
+	state->mOwnerObject = this;
 	state->OnEnterState(0.f);
 
 	return true;

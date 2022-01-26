@@ -67,7 +67,6 @@ bool CStructuredBuffer::Init(const std::string& name, const unsigned int size, c
 		mDesc.Usage = D3D11_USAGE_DYNAMIC;
 		mDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
 	}
-	// Only CPU Read(?)
 	else
 	{
 		mDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;

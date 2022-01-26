@@ -77,11 +77,11 @@ bool CShaderManager::Init()
 	}
 
 	// Particle Update Compute 쉐이더
-	if (!CreateShader<CParticleUpdateShader>("ParticleUpdateShader"))
-	{
-		assert(false);
-		return false;
-	}
+ //	if (!CreateShader<CParticleUpdateShader>("ParticleUpdateShader"))
+ //	{
+ //		assert(false);
+ //		return false;
+ //	}
 
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,

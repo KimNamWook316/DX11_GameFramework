@@ -8,10 +8,6 @@ CD2State::CD2State()	:
 {
 }
 
-CD2State::CD2State()
-{
-}
-
 CD2State::CD2State(const CD2State& state)	:
 	mOwnerObject(nullptr),
 	mbIsLoop(false)
