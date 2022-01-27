@@ -596,6 +596,9 @@
     <ClInclude Include="Component\ParticleComponent.h">
       <Filter>05. Component\01. SceneComponent\05. ParticleComponent</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\ParticleRenderShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\05. ParticleShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -952,6 +955,9 @@
     <ClCompile Include="Component\ParticleComponent.cpp">
       <Filter>05. Component\01. SceneComponent\05. ParticleComponent</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Shader\ParticleRenderShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\05. ParticleShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat" />
@@ -987,7 +993,7 @@
     <FxCompile Include="..\Bin\Shader\Widget.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="Resource\Shader\Particle.fx">
+    <FxCompile Include="..\Bin\Shader\Particle.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

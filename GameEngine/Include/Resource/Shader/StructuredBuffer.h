@@ -21,6 +21,17 @@ public:
 	void CopyResource(CStructuredBuffer* buffer);
 	CStructuredBuffer* Clone();
 
+public:
+	ID3D11Buffer* GetBuffer() const
+	{
+		return mBuffer;
+	}
+
+	const std::string& GetName() const
+	{
+		return mName;
+	}
+
 private:
 	std::string mName;
 	D3D11_BUFFER_DESC mDesc;

@@ -20,6 +20,41 @@ public:
     void AddStructuredBuffer(const std::string& name, unsigned int size, unsigned int count,
         int reg, bool bDynamic = false,
         int structuredBufferShaderType = (int)eBufferShaderTypeFlags::Compute);
+	bool ResizeBuffer(const std::string& name, unsigned int size, unsigned int count,
+		int reg, bool bDynamic = false,
+		int structuredBufferShaderType = (int)eBufferShaderTypeFlags::Compute);
+	void CloneStructuredBuffer(std::vector<class CStructuredBuffer*>& outVecBuffer);
+
+public:
+	CMaterial* CloneMaterial() const
+	{
+		return mMaterial->Clone();
+	}
+
+	CParticleUpdateShader* GetUpdateShader() const
+	{
+		return mUpdateShader;
+	}
+
+	CParticleConstantBuffer* CloneConstantBuffer() const
+	{
+		return mCBuffer->Clone();
+	}
+
+	float GetSpawnTime() const
+	{
+		return mSpawnTime;
+	}
+
+	CParticleConstantBuffer* GetCBuffer() const
+	{
+		return mCBuffer;
+	}
+
+	int GetSpawnCountMax() const
+	{
+		return mSpawnCountMax;
+	}
 
 public:
 	void SetSpawnEnable(const unsigned int count)
@@ -27,10 +62,7 @@ public:
 		mCBuffer->SetSpawnEnable(count);
 	}
 
-	void SetSpawnCountMax(const unsigned int count)
-	{
-		mCBuffer->SetSpawnCountMax(count);
-	}
+	void SetSpawnCountMax(const unsigned int count);
 	
 	void SetStartMin(const Vector3& val)
 	{
@@ -70,6 +102,11 @@ public:
 	void SetColorMax(const Vector4& val)
 	{
 		mCBuffer->SetColorMax(val);
+	}
+
+	void SetSpawnTime(const float val)
+	{
+		mSpawnTime = val;
 	}
 
 	void SetLifeTimeMin(const float val)
@@ -117,5 +154,6 @@ private:
     CParticleConstantBuffer* mCBuffer;
     float mSpawnTime;
     bool mb2D;
+	int mSpawnCountMax;
 };
 

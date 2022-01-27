@@ -8,6 +8,7 @@
 #include "ProgressBarShader.h"
 #include "NumberShader.h"
 #include "ParticleUpdateShader.h"
+#include "ParticleRenderShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -77,11 +78,18 @@ bool CShaderManager::Init()
 	}
 
 	// Particle Update Compute 쉐이더
- //	if (!CreateShader<CParticleUpdateShader>("ParticleUpdateShader"))
- //	{
- //		assert(false);
- //		return false;
- //	}
+	if (!CreateShader<CParticleUpdateShader>("ParticleUpdateShader"))
+	{
+		assert(false);
+		return false;
+	}
+
+	// Particle Render Shader
+	if (!CreateShader<CParticleRenderShader>("ParticleRenderShader"))
+	{
+		assert(false);
+		return false;
+	}
 
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
