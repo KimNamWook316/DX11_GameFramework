@@ -25,6 +25,11 @@ public:
 	{
 		return mBufferData.StartMax;
 	}
+	
+	int GetSpawnCount() const
+	{
+		return mBufferData.SpawnCountMax;
+	}
 
 public:
 	void SetSpawnEnable(const unsigned int count)

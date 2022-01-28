@@ -11,6 +11,8 @@ protected:
 public:
     virtual bool Init();
     virtual void Render();
+    virtual void RenderInstancing(const int count);
+    virtual void RenderInstancing(ID3D11Buffer* instancingBuffer, const unsigned int instanceSize, const int count);
 
     virtual bool CreateMesh(void* vertexData, const int size, const int count, D3D11_USAGE usage,
         D3D11_PRIMITIVE_TOPOLOGY primitive, void* indetData = nullptr, const int indexSize = 0,

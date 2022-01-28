@@ -21,6 +21,13 @@ CParticle::CParticle(const CParticle& particle)
 
 CParticle::~CParticle()
 {
+	size_t size = mVecStructuredBuffer.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecStructuredBuffer[i]);
+	}
+	
 	SAFE_DELETE(mCBuffer);
 }
 

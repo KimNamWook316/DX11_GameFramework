@@ -27,7 +27,7 @@ CEngine::CEngine()
 	, mGlobalAccTime(0.f)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(413);
+	//_CrtSetBreakAlloc(271567);
 }
 
 CEngine::~CEngine() 
@@ -137,6 +137,7 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	CResourceManager::GetInst()->LoadTexture("GlobalNoiseTexture", TEXT("noise_01.png"));
 	mGlobalNoiseTexture = CResourceManager::GetInst()->FindTexture("GlobalNoiseTexture");
 	mGlobalNoiseTexture->SetShader(100, (int)eBufferShaderTypeFlags::All, 0);
+	mGlobalCBuffer->SetNoiseResolution((float)mGlobalNoiseTexture->GetWidth(), (float)mGlobalNoiseTexture->GetHeight());
 
 	return true;
 }
@@ -195,6 +196,7 @@ void CEngine::Logic()
 	}
 
 	mGlobalAccTime += deltaTime;
+	mGlobalCBuffer->SetDeltaTime(deltaTime);
 	mGlobalCBuffer->SetAccTime(mGlobalAccTime);
 	mGlobalCBuffer->UpdateCBuffer();
 

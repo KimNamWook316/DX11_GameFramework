@@ -23,6 +23,7 @@ public:
 private:
     void createMaterial();
     void createAnimationSequence();
+    void createParticle();
 
 private:
     CSharedPtr<CMainWidget> mMainWidget;

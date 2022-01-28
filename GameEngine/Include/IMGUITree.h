@@ -7,6 +7,7 @@ class CIMGUITree :
 {
     friend class CIMGUIWindow;
     friend class CIMGUIChild;
+    friend class CIMGUIWidgetList;
 
 protected:
     CIMGUITree();

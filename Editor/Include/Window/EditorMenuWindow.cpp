@@ -14,6 +14,12 @@
 #include "IMGUIManager.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"
+#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
+#include "Component/ColliderPixel.h"
+#include "Component/CameraComponent.h"
+#include "Component/WidgetComponent.h"
+#include "Component/ParticleComponent.h"
 #include "Engine.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
@@ -64,6 +70,12 @@ bool CEditorMenuWindow::Init()
     mCreatableComponentsComboBox = AddWidget<CIMGUIComboBox>("Component List", 150.f, 0.f);
     mCreatableComponentsComboBox->AddItem("SpriteComponent");
     mCreatableComponentsComboBox->AddItem("StaticMeshComponent");
+    mCreatableComponentsComboBox->AddItem("ColliderBox2D");
+    mCreatableComponentsComboBox->AddItem("ColliderCircle");
+    mCreatableComponentsComboBox->AddItem("ColliderPixel");
+    mCreatableComponentsComboBox->AddItem("Camera");
+    mCreatableComponentsComboBox->AddItem("Widget");
+    mCreatableComponentsComboBox->AddItem("Particle");
 
     mComponentNameInput = AddWidget<CIMGUITextInput>("Component Name", 100.f, 0.f);
     
@@ -142,20 +154,38 @@ void CEditorMenuWindow::OnClickCreateComponent()
         return;
     }
 
-    int selectIdx = mCreatableObjectsComboBox->GetSelectIndex();
+    int selectIdx = mCreatableComponentsComboBox->GetSelectIndex();
 
     if (selectIdx == -1)
     {
         return;
     }
 
-    switch ((eSceneComponentType)selectIdx)
+    switch ((eCreateSceneComponentType)selectIdx)
     {
-    case eSceneComponentType::Sprite:
+    case eCreateSceneComponentType::Sprite:
         obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eSceneComponentType::StaticMesh:
-        obj->CreateComponent<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
+    case eCreateSceneComponentType::StaticMesh:
+        obj->CreateComponentAddChild<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
+        break;
+    case eCreateSceneComponentType::ColliderBox2D:
+        obj->CreateComponentAddChild<CColliderBox2D>(mComponentNameInput->GetTextMultiByte());
+        break;
+    case eCreateSceneComponentType::ColliderCircle:
+        obj->CreateComponentAddChild<CColliderCircle>(mComponentNameInput->GetTextMultiByte());
+        break;
+    case eCreateSceneComponentType::ColliderPixel:
+        obj->CreateComponentAddChild<CColliderPixel>(mComponentNameInput->GetTextMultiByte());
+        break;
+    case eCreateSceneComponentType::Camera:
+        obj->CreateComponentAddChild<CCameraComponent>(mComponentNameInput->GetTextMultiByte());
+        break;
+    case eCreateSceneComponentType::Widget:
+        obj->CreateComponentAddChild<CWidgetComponent>(mComponentNameInput->GetTextMultiByte());
+        break;
+    case eCreateSceneComponentType::Particle:
+        obj->CreateComponentAddChild<CParticleComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     default:
         assert(false);

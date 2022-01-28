@@ -32,7 +32,8 @@ CStructuredBuffer::CStructuredBuffer(const CStructuredBuffer& buffer)
 		uavDesc.Format = DXGI_FORMAT_UNKNOWN;
 		uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 		uavDesc.Buffer.FirstElement = 0;
-		uavDesc.Buffer.NumElements = 0;
+		uavDesc.Buffer.Flags = 0;
+		uavDesc.Buffer.NumElements = mCount;
 
 		CDevice::GetInst()->GetDevice()->CreateUnorderedAccessView(mBuffer, &uavDesc, &mUAV);
 	}
@@ -105,7 +106,8 @@ bool CStructuredBuffer::Init(const std::string& name, const unsigned int size, c
 		uavDesc.Format = DXGI_FORMAT_UNKNOWN;
 		uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 		uavDesc.Buffer.FirstElement = 0;
-		uavDesc.Buffer.NumElements = 0;
+		uavDesc.Buffer.Flags = 0;
+		uavDesc.Buffer.NumElements = mCount;
 
 		if (FAILED(CDevice::GetInst()->GetDevice()->CreateUnorderedAccessView(mBuffer, &uavDesc, &mUAV)))
 		{
@@ -171,37 +173,29 @@ void CStructuredBuffer::SetShader()
 
 void CStructuredBuffer::SetShader(const int reg, const int structuredBufferShaderTypeFlag)
 {
-	if (mbDynamic)
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Vertex)
 	{
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Vertex)
-		{
-			CDevice::GetInst()->GetContext()->VSSetShaderResources(reg, 1, &mSRV);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Pixel)
-		{
-			CDevice::GetInst()->GetContext()->PSSetShaderResources(reg, 1, &mSRV);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Hull)
-		{
-			CDevice::GetInst()->GetContext()->HSSetShaderResources(reg, 1, &mSRV);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Domain)
-		{
-			CDevice::GetInst()->GetContext()->DSSetShaderResources(reg, 1, &mSRV);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Geometry)
-		{
-			CDevice::GetInst()->GetContext()->GSSetShaderResources(reg, 1, &mSRV);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Compute)
-		{
-			CDevice::GetInst()->GetContext()->CSSetShaderResources(reg, 1, &mSRV);
-		}
+		CDevice::GetInst()->GetContext()->VSSetShaderResources(reg, 1, &mSRV);
 	}
-	else
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Pixel)
 	{
-		unsigned int count = 1;
-		CDevice::GetInst()->GetContext()->CSSetUnorderedAccessViews(reg, 1, &mUAV, &count);
+		CDevice::GetInst()->GetContext()->PSSetShaderResources(reg, 1, &mSRV);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Hull)
+	{
+		CDevice::GetInst()->GetContext()->HSSetShaderResources(reg, 1, &mSRV);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Domain)
+	{
+		CDevice::GetInst()->GetContext()->DSSetShaderResources(reg, 1, &mSRV);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Geometry)
+	{
+		CDevice::GetInst()->GetContext()->GSSetShaderResources(reg, 1, &mSRV);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Compute)
+	{
+		CDevice::GetInst()->GetContext()->CSSetShaderResources(reg, 1, &mSRV);
 	}
 }
 
@@ -246,40 +240,31 @@ void CStructuredBuffer::ResetShader()
 
 void CStructuredBuffer::ResetShader(const int reg, const int structuredBufferShaderTypeFlag)
 {
-	if (mbDynamic)
-	{
-		ID3D11ShaderResourceView* srv = nullptr;
+	ID3D11ShaderResourceView* srv = nullptr;
 
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Vertex)
-		{
-			CDevice::GetInst()->GetContext()->VSSetShaderResources(reg, 1, &srv);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Pixel)
-		{
-			CDevice::GetInst()->GetContext()->PSSetShaderResources(reg, 1, &srv);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Hull)
-		{
-			CDevice::GetInst()->GetContext()->HSSetShaderResources(reg, 1, &srv);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Domain)
-		{
-			CDevice::GetInst()->GetContext()->DSSetShaderResources(reg, 1, &srv);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Geometry)
-		{
-			CDevice::GetInst()->GetContext()->GSSetShaderResources(reg, 1, &srv);
-		}
-		if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Compute)
-		{
-			CDevice::GetInst()->GetContext()->CSSetShaderResources(reg, 1, &srv);
-		}
-	}
-	else
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Vertex)
 	{
-		unsigned int count = 1;
-		ID3D11UnorderedAccessView* uav = nullptr;
-		CDevice::GetInst()->GetContext()->CSSetUnorderedAccessViews(reg, 1, &uav, &count);
+		CDevice::GetInst()->GetContext()->VSSetShaderResources(reg, 1, &srv);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Pixel)
+	{
+		CDevice::GetInst()->GetContext()->PSSetShaderResources(reg, 1, &srv);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Hull)
+	{
+		CDevice::GetInst()->GetContext()->HSSetShaderResources(reg, 1, &srv);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Domain)
+	{
+		CDevice::GetInst()->GetContext()->DSSetShaderResources(reg, 1, &srv);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Geometry)
+	{
+		CDevice::GetInst()->GetContext()->GSSetShaderResources(reg, 1, &srv);
+	}
+	if (structuredBufferShaderTypeFlag & (int)eBufferShaderTypeFlags::Compute)
+	{
+		CDevice::GetInst()->GetContext()->CSSetShaderResources(reg, 1, &srv);
 	}
 }
 

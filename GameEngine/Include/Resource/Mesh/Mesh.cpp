@@ -116,8 +116,8 @@ void CMesh::Render()
 
 	for (size_t i = 0; i < size; ++i)
 	{
-		unsigned int	stride = mVecContainer[i]->VB.Size;	// 데이터 간의 거리 : Vertex 자체의 크기
-		unsigned int	offset = 0;							// 시작점
+		unsigned int	stride = (unsigned int)mVecContainer[i]->VB.Size;	// 데이터 간의 거리 : Vertex 자체의 크기
+		unsigned int	offset = 0;											// 시작점
 
 		// Input Assembler 단계
 		// Vertex 이어주는 방식 설정
@@ -156,6 +156,78 @@ void CMesh::Render()
 			// 설정된 Topology로, VetexBuffer만으로 그린다.
 			CDevice::GetInst()->GetContext()->Draw(
 				mVecContainer[i]->VB.Count, 0);
+		}
+	}
+}
+
+void CMesh::RenderInstancing(const int count)
+{
+	size_t size = mVecContainer.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		unsigned int stride = (unsigned int)mVecContainer[i]->VB.Size;
+		unsigned int offset = 0;
+
+		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(mVecContainer[i]->Primitive);
+		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1,
+			&mVecContainer[i]->VB.Buffer, &stride, &offset);
+		
+		size_t idxCount = mVecContainer[i]->vecIB.size();
+
+		if (idxCount > 0)
+		{
+			for (size_t j = 0; j < idxCount; ++j)
+			{
+				CDevice::GetInst()->GetContext()->IASetIndexBuffer(mVecContainer[i]->vecIB[j].Buffer,
+					mVecContainer[i]->vecIB[j].Fmt, 0);
+				CDevice::GetInst()->GetContext()->DrawIndexedInstanced(
+					mVecContainer[i]->vecIB[j].Count, count, 0, 0, 0);
+			}
+		}
+		else
+		{
+			CDevice::GetInst()->GetContext()->IASetIndexBuffer(nullptr,
+				DXGI_FORMAT_UNKNOWN, 0);
+			CDevice::GetInst()->GetContext()->DrawInstanced(
+				mVecContainer[i]->VB.Count, count, 0, 0);
+		}
+	}
+}
+
+void CMesh::RenderInstancing(ID3D11Buffer* instancingBuffer, const unsigned int instanceSize, const int count)
+{
+	size_t size = mVecContainer.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		unsigned int stride[2] = { (unsigned int)mVecContainer[i]->VB.Size, instanceSize };
+		unsigned int offset[2] = {};
+
+		ID3D11Buffer* buffer[2] = { mVecContainer[i]->VB.Buffer, instancingBuffer };
+
+		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(mVecContainer[i]->Primitive);
+		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 2,
+			buffer, stride, offset);
+		
+		size_t idxCount = mVecContainer[i]->vecIB.size();
+
+		if (idxCount > 0)
+		{
+			for (size_t j = 0; j < idxCount; ++j)
+			{
+				CDevice::GetInst()->GetContext()->IASetIndexBuffer(mVecContainer[i]->vecIB[j].Buffer,
+					mVecContainer[i]->vecIB[j].Fmt, 0);
+				CDevice::GetInst()->GetContext()->DrawIndexedInstanced(
+					mVecContainer[i]->vecIB[j].Count, count, 0, 0, 0);
+			}
+		}
+		else
+		{
+			CDevice::GetInst()->GetContext()->IASetIndexBuffer(nullptr,
+				DXGI_FORMAT_UNKNOWN, 0);
+			CDevice::GetInst()->GetContext()->DrawInstanced(
+				mVecContainer[i]->VB.Count, count, 0, 0);
 		}
 	}
 }

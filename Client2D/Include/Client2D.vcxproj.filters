@@ -37,6 +37,9 @@
     <Filter Include="03. UI">
       <UniqueIdentifier>{734a964a-f181-4d39-bc52-6643688d07f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Object\06. Particle">
+      <UniqueIdentifier>{f78c7c2c-64a1-4b67-a63c-895ae88b7cc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="Scene\LoadingThread.cpp">
       <Filter>01. SceneMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BubbleParticle.cpp">
+      <Filter>02. Object\06. Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="Scene\LoadingThread.h">
       <Filter>01. SceneMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BubbleParticle.h">
+      <Filter>02. Object\06. Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

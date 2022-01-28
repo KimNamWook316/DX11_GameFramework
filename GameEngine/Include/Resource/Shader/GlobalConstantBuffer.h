@@ -37,6 +37,11 @@ public:
         mBufferData.NoiseResolution = res;
     }
 
+    void SetNoiseResolution(const float x, const float y)
+    {
+        SetNoiseResolution(Vector2(x, y));
+    }
+
 private:
     GlobalCBuffer mBufferData;
 };

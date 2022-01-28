@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClCompile Include="ClientManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\BubbleParticle.cpp" />
     <ClCompile Include="Object\Bullet.cpp" />
     <ClCompile Include="Object\BulletCamera.cpp" />
     <ClCompile Include="Object\Monster.cpp" />
@@ -181,6 +182,7 @@
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientManager.h" />
+    <ClInclude Include="Object\BubbleParticle.h" />
     <ClInclude Include="Object\Bullet.h" />
     <ClInclude Include="Object\BulletCamera.h" />
     <ClInclude Include="Object\Monster.h" />

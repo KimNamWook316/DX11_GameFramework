@@ -57,6 +57,11 @@ public:
 	}
 
 public:
+	void SetMaterial(CMaterial* material)
+	{
+		mMaterial = material;
+	}
+
 	void SetSpawnEnable(const unsigned int count)
 	{
 		mCBuffer->SetSpawnEnable(count);

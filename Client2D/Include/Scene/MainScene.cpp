@@ -4,6 +4,7 @@
 #include "../Object/Player2D.h"
 #include "../Object/Monster.h"
 #include "../Object/PixelTest.h"
+#include "../Object/BubbleParticle.h"
 #include "Scene/SceneResource.h";
 
 CMainScene::CMainScene()
@@ -19,12 +20,12 @@ bool CMainScene::Init()
 {
 	createMaterial();
 	createAnimationSequence();
+	createParticle();
 
 	if (mLoadingFunction)
 	{
 		mLoadingFunction(false, 0.3f);
 	}
-	Sleep(2000);
 
 	CPlayer2D* player = mScene->CreateGameObject<CPlayer2D>("Player");
 
@@ -34,7 +35,6 @@ bool CMainScene::Init()
 	{
 		mLoadingFunction(false, 0.6f);
 	}
-	Sleep(2000);
 
 	//CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
 
@@ -46,13 +46,24 @@ bool CMainScene::Init()
 	{
 		mLoadingFunction(false, 0.8f);
 	}
-	Sleep(2000);
+
+	for (int i = 0; i < 100; ++i)
+	{
+		CBubbleParticle* bubbleParticle = mScene->CreateGameObject<CBubbleParticle>("BubbleParticle");
+		bubbleParticle->SetRelativePos(-100.f + i * 10.f, 0.f, 0.f);
+	}
+
 
 	return true;
 }
 
 void CMainScene::createMaterial()
 {
+	mScene->GetResource()->CreateMaterial<CMaterial>("Bubble");
+	CMaterial* material = mScene->GetResource()->FindMaterial("Bubble");
+
+	material->AddTexture(0, (int)eBufferShaderTypeFlags::Pixel, "Bubble", TEXT("Particle/Bubbles99px.png"));
+	material->SetShader("ParticleRenderShader");
 }
 
 void CMainScene::createAnimationSequence()
@@ -91,4 +102,24 @@ void CMainScene::createAnimationSequence()
 		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerAttack", Vector2(i * 89.f, 0.f), Vector2(89.f, 91.f));
 	}
 
-} 
+}
+void CMainScene::createParticle()
+{
+	mScene->GetResource()->CreateParticle("Bubble");
+	CParticle* particle = mScene->GetResource()->FindParticle("Bubble");
+
+	CMaterial* material = mScene->GetResource()->FindMaterial("Bubble");
+
+	particle->SetMaterial(material);
+	particle->SetSpawnCountMax(100);
+	particle->SetLifeTimeMin(1.f);
+	particle->SetLifeTimeMax(2.f);
+	particle->SetScaleMin(Vector3(50.f, 50.f, 1.f));
+	particle->SetScaleMax(Vector3(20.f, 20.f, 1.f));
+	particle->SetSpeedMin(10.f);
+	particle->SetSpeedMax(500.f);
+	particle->SetMoveDir(Vector3(0.5f, 0.5f, 0.f));
+	particle->SetStartMin(Vector3(-100.f, -100.f, 0.f));
+	particle->SetStartMax(Vector3(100.f, 100.f, 0.f));
+	particle->SetIsMove(true);
+}

@@ -2,26 +2,20 @@
 
 #include "IMGUIWidget.h"
 
-class CIMGUIChild :
+class CIMGUIWidgetList :
     public CIMGUIWidget
 {
     friend class CIMGUIWindow;
     friend class CIMGUITree;
-    friend class CIMGUIWidgetList;
+	friend class CIMGUIChild;
 
 protected:
-    CIMGUIChild();
-    virtual ~CIMGUIChild();
+    CIMGUIWidgetList();
+    virtual ~CIMGUIWidgetList();
 
 public:
     virtual bool Init() override;
     virtual void Render() override;
-
-public:
-    void EnableBorder(bool bEnable)
-    {
-        mbBorder = bEnable;
-    }
 
 public:
     template <typename T>
@@ -45,6 +39,5 @@ public:
 
 protected:
     std::vector<class CIMGUIWidget*> mVecChild;
-    bool mbBorder;
 };
 

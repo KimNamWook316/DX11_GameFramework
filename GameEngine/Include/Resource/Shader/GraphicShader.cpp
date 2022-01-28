@@ -273,7 +273,7 @@ bool CGraphicShader::LoadGeometryShader(const char* entryName, const TCHAR* file
 	ID3DBlob* error = nullptr;
 
 	if (FAILED(D3DCompileFromFile(fullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-		entryName, "gs_5_0", flag, 0, &mDSBlob, &error)))
+		entryName, "gs_5_0", flag, 0, &mGSBlob, &error)))
 	{
 		OutputDebugStringA((char*)error->GetBufferPointer());
 		OutputDebugStringA("\n");

@@ -26,7 +26,7 @@ bool CDetailWindow::Init()
     CIMGUIWindow::Init();
 
     CIMGUIChild* child = AddWidget<CIMGUIChild>("detailWindowChild1", 300.f, 300.f);
-    child->EnableBorder(true);
+    child->EnableBorder(false);
     CIMGUITree* tree = child->AddWidget<CIMGUITree>("Transform");
     CIMGUIText* text = tree->AddWidget<CIMGUIText>("text");
     text->SetText("Position");

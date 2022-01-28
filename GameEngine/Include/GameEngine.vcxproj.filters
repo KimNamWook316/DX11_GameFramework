@@ -599,6 +599,9 @@
     <ClInclude Include="Resource\Shader\ParticleRenderShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\05. ParticleShader</Filter>
     </ClInclude>
+    <ClInclude Include="IMGUIWidgetList.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -957,6 +960,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\ParticleRenderShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\05. ParticleShader</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIWidgetList.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

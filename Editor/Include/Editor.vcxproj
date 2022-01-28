@@ -157,6 +157,7 @@
     <ClInclude Include="Object\SpriteEditObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
+    <ClInclude Include="SpriteControlWidget.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Window\DetailWindow.h" />
     <ClInclude Include="Window\EditorMenuWindow.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
+    <ClCompile Include="SpriteControlWidget.cpp" />
     <ClCompile Include="Window\DetailWindow.cpp" />
     <ClCompile Include="Window\EditorMenuWindow.cpp" />
     <ClCompile Include="Window\ObjectHierachyWindow.cpp" />

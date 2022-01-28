@@ -162,7 +162,6 @@ CMaterial* CSceneResource::FindMaterial(const std::string& name)
 
 		if (!findNotInScene)
 		{
-			assert(false);
 			return nullptr;
 		}
 

@@ -75,6 +75,7 @@
     <ClInclude Include="IMGUITextInput.h" />
     <ClInclude Include="IMGUITree.h" />
     <ClInclude Include="IMGUIWidget.h" />
+    <ClInclude Include="IMGUIWidgetList.h" />
     <ClInclude Include="IMGUIWindow.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="IMGUITree.cpp" />
     <ClCompile Include="IMGUIWidget.cpp" />
     <ClCompile Include="IMGUIManager.cpp" />
+    <ClCompile Include="IMGUIWidgetList.cpp" />
     <ClCompile Include="IMGUIWindow.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
@@ -327,6 +329,9 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ParticleVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ParticleVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

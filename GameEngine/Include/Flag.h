@@ -87,6 +87,12 @@ enum class eSceneComponentType
 {
 	Sprite,
 	StaticMesh,
+	ColliderBox2D,
+	ColliderCircle,
+	ColliderPixel,
+	Camera,
+	Widget,
+	Particle,
 	Max
 };
 

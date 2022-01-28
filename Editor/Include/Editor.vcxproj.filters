@@ -22,6 +22,9 @@
     <Filter Include="03. Object">
       <UniqueIdentifier>{3f5d84f5-1afd-4173-a087-90e0e4030edb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. IMGUIWidget">
+      <UniqueIdentifier>{53651112-eb44-4bdc-a420-71c37d976375}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -66,6 +69,9 @@
     <ClInclude Include="Object\CameraObject.h">
       <Filter>03. Object</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -100,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="Object\CameraObject.cpp">
       <Filter>03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

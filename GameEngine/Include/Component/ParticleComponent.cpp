@@ -118,10 +118,16 @@ void CParticleComponent::PostUpdate(float deltaTime)
 	// 생성되어야 할 파티클의 전체 수에서 64를 나눈다. 만약 64개가 최대 파티클 수라면
 	// 필요한 그룹의 수는 1개이다. 64개 미만에서는 0이 나오므로 1을 더해줘야 함
 	// 100개일 경우 그룹은 2개, 이 때 스레드는 128개가 생성되지만, 쉐이더 코드에서 나머지 28개가 생성되지 않게 막아주고 있음
-	int groupCount = mParticle->GetSpawnCountMax() / 64 == 0 ? 1 : mParticle->GetSpawnCountMax() / 64;
+	int groupCount = mParticle->GetSpawnCountMax() / 64 + 1;
 
 	// RW 구조화 버퍼를 Compute Shader를 통해 Update
 	mUpdateShader->Excute(groupCount, 1, 1);
+
+	for (size_t i = 0; i < bufferCount; ++i)
+	{
+		// RW 구조화 버퍼를 파이프라인에 연결
+		mVecStructuredBuffer[i]->ResetShader();
+	}
 }
 
 void CParticleComponent::PrevRender()
@@ -147,7 +153,7 @@ void CParticleComponent::Render()
 	}
 
 	// 인스턴싱을 이용해서 그린다.
-
+	mMesh->RenderInstancing(mCBuffer->GetSpawnCount());
 
 	for (size_t i = 0; i < bufferCount; ++i)
 	{

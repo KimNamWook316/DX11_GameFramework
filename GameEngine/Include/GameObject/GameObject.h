@@ -95,6 +95,42 @@ public:
 	}
 
 	template <typename T>
+	T* CreateComponentAddChild(const std::string& name)
+	{
+		T* comp = new T;
+
+		comp->SetName(name);
+		comp->SetScene(mScene);
+		comp->SetGameObject(this);
+
+		if (!comp->Init())
+		{
+			SAFE_RELEASE(comp);
+			return nullptr;
+		}
+
+		if (comp->GetComponentType() == eComponentType::OBJ_COMP)
+		{
+			mVecObjectComponent.push_back((class CObjectComponent*)comp);
+		}
+		else
+		{
+			mSceneComponentList.push_back((class CSceneComponent*)comp);
+
+			if (!mRootSceneComponent)
+			{
+				mRootSceneComponent = (class CSceneComponent*)comp;
+			}
+			else
+			{
+				mRootSceneComponent->AddChild((class CSceneComponent*)comp);
+			}
+		}
+		
+		return comp;
+	}
+
+	template <typename T>
 	T* FindSceneComponentFromType()
 	{
 		auto iter = mSceneComponentList.begin();

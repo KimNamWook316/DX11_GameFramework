@@ -55,8 +55,8 @@ bool CEditorManager::Init(HINSTANCE hInst)
 
 	// GUI
 	mSpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("Editor");
-	mObjectHierachyWindow = CIMGUIManager::GetInst()->AddWindow<CObjectHierachyWindow>("Object Hierachy");
-	mDetailWindow = CIMGUIManager::GetInst()->AddWindow<CDetailWindow>("Details");
+	mObjectHierachyWindow = CIMGUIManager::GetInst()->AddWindow<CObjectHierachyWindow>("Hierachy");
+	mDetailWindow = CIMGUIManager::GetInst()->AddWindow<CDetailWindow>("Inspector");
 	mEditorMenuWindow = CIMGUIManager::GetInst()->AddWindow<CEditorMenuWindow>("Editor Menu");
 
 	// Layer
