@@ -28,6 +28,8 @@ public:
 		return meComponentType;
 	}
 
+	virtual void GetAllComponentsPointer(std::vector<CComponent*>& outVecPointers);
+
 public:
 	virtual void SetScene(class CScene* scene);
 	virtual void SetGameObject(class CGameObject* object);

@@ -1,13 +1,14 @@
 #pragma once
 
-#include "IMGUIWidgetList.h"
+#include "ComponentControlWidget.h"
 
 class CSpriteControlWidget :
-    public CIMGUIWidgetList
+    public CComponentControlWidget 
 {
     friend class CIMGUIWindow;
+    friend class CDetailWindow;
 
-public:
+protected:
     CSpriteControlWidget();
     virtual ~CSpriteControlWidget();
 
@@ -16,8 +17,6 @@ public:
     virtual void Render() override;
 
 public:
-    class CSpriteComponent* mSpriteComponent;
-
     /*
         Sprite 
         BaseColor

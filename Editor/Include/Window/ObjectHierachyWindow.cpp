@@ -5,6 +5,8 @@
 #include "IMGUISameLine.h"
 #include "GameObject/GameObject.h"
 #include "Scene/SceneManager.h"
+#include "DetailWindow.h"
+#include "IMGUIManager.h"
 
 CObjectHierachyWindow::CObjectHierachyWindow()	:
 	mObjectListBox(nullptr),
@@ -72,6 +74,10 @@ void CObjectHierachyWindow::OnSelectObject(int idx, const char* item)
 	{
 		mComponentListBox->AddItem(vecNames[i].Name);
 	}
+
+	// Update Inspector Window
+	CDetailWindow* inspectorWindow = (CDetailWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Inspector");
+	inspectorWindow->UpdateComponentUI(obj);
 }
 
 void CObjectHierachyWindow::OnSelectComponent(int idx, const char* item)

@@ -62,7 +62,7 @@ bool CIMGUIManager::Init(HWND hWnd)
 
 void CIMGUIManager::Update(float deltaTime)
 {
-	// 윈도우 없으면 실행 안함
+ //	// 윈도우 없으면 실행 안함
 	if (mMapWindow.empty())
 	{
 		return;
@@ -100,6 +100,7 @@ void CIMGUIManager::Update(float deltaTime)
 void CIMGUIManager::Render()
 {
 	// DEMO
+	// Update 주석처리 해야 함
  //	static bool bOpen = true;
  //	ImGui_ImplDX11_NewFrame();
  //	ImGui_ImplWin32_NewFrame();
@@ -114,7 +115,7 @@ void CIMGUIManager::Render()
  //		ImGui::UpdatePlatformWindows();
  //		ImGui::RenderPlatformWindowsDefault();
  //	}
-
+ //
 	if (mMapWindow.empty())
 	{
 		return;

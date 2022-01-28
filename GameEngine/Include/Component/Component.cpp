@@ -18,6 +18,11 @@ CComponent::~CComponent()
 {
 }
 
+void CComponent::GetAllComponentsPointer(std::vector<CComponent*>& outVecPointers)
+{
+	outVecPointers.push_back(this);
+}
+
 void CComponent::SetScene(CScene* scene)
 {
 	mScene = scene;

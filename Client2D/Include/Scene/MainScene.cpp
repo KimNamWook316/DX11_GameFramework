@@ -101,8 +101,8 @@ void CMainScene::createAnimationSequence()
 	{
 		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerAttack", Vector2(i * 89.f, 0.f), Vector2(89.f, 91.f));
 	}
-
 }
+
 void CMainScene::createParticle()
 {
 	mScene->GetResource()->CreateParticle("Bubble");
@@ -114,8 +114,8 @@ void CMainScene::createParticle()
 	particle->SetSpawnCountMax(100);
 	particle->SetLifeTimeMin(1.f);
 	particle->SetLifeTimeMax(2.f);
-	particle->SetScaleMin(Vector3(50.f, 50.f, 1.f));
-	particle->SetScaleMax(Vector3(20.f, 20.f, 1.f));
+	particle->SetScaleMin(Vector3(1.f, 1.f, 1.f));
+	particle->SetScaleMax(Vector3(50.f, 50.f, 1.f));
 	particle->SetSpeedMin(10.f);
 	particle->SetSpeedMax(500.f);
 	particle->SetMoveDir(Vector3(0.5f, 0.5f, 0.f));

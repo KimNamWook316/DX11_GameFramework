@@ -33,6 +33,7 @@ public:
 
 public:
 	void GetAllSceneComponentsName(std::vector<FindComponentName>& outNames);
+	virtual void GetAllComponentsPointer(std::vector<CComponent*>& outVecPointers) override;
 
 public:
 	bool GetIsRender()	const

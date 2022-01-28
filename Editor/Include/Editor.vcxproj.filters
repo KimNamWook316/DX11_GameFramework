@@ -69,7 +69,10 @@
     <ClInclude Include="Object\CameraObject.h">
       <Filter>03. Object</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteControlWidget.h">
+    <ClInclude Include="WIdget\SpriteControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="WIdget\ComponentControlWidget.h">
       <Filter>04. IMGUIWidget</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,7 +110,10 @@
     <ClCompile Include="Object\CameraObject.cpp">
       <Filter>03. Object</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteControlWidget.cpp">
+    <ClCompile Include="WIdget\ComponentControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="WIdget\SpriteControlWidget.cpp">
       <Filter>04. IMGUIWidget</Filter>
     </ClCompile>
   </ItemGroup>

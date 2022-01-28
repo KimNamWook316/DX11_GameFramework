@@ -33,6 +33,7 @@ public:
 
 	class CComponent* FindComponent(const std::string& name);
 	void GetAllSceneComponentsName(std::vector<FindComponentName>& outNames);
+	void GetAllComponentsPointer(std::vector<CComponent*>& outPointers);
 
 public:
 	void SetScene(class CScene* scene);

@@ -16,6 +16,7 @@ public:
 	void Open();
 	void Close();
 	void ClosePopUp();
+	void ClearWidget();
 	class CIMGUIWidget* FindWidget(const std::string& name);
 
 public:

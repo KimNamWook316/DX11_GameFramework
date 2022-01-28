@@ -41,7 +41,7 @@ void CIMGUIWindow::Update(float deltaTime)
     {
         return;
     }
-
+    
     // 새로운 IMGUI 윈도우 시작, 닫힌 상태라면 윈도우 open -> false;
     if (!ImGui::Begin(mName.c_str(), &mbOpen, mWindowFlag))
     {
@@ -60,7 +60,6 @@ void CIMGUIWindow::Update(float deltaTime)
         mbIsFocused = false;
     }
 
-    // TODO : 폰트 기본으로 설정해놓음
     //CIMGUIManager::GetInst()->PushCurrentFont();
     
     // Widget들 모두 Render
@@ -99,6 +98,25 @@ void CIMGUIWindow::ClosePopUp()
     }
 
     mVecPopUpWidget.clear();
+}
+
+void CIMGUIWindow::ClearWidget()
+{
+    size_t size = mVecPopUpWidget.size();
+
+    for (size_t i = 0; i < size; ++i)
+    {
+        SAFE_DELETE(mVecPopUpWidget[i]);
+    }
+
+    size = mVecWidget.size();
+
+    for (size_t i = 0; i < size; ++i)
+    {
+        SAFE_DELETE(mVecWidget[i]);
+    }
+
+    mVecWidget.clear();
 }
 
 CIMGUIWidget* CIMGUIWindow::FindWidget(const std::string& name)

@@ -111,6 +111,7 @@ void CParticleComponent::PostUpdate(float deltaTime)
 	for (size_t i = 0; i < bufferCount; ++i)
 	{
 		// RW 구조화 버퍼를 파이프라인에 연결
+		// Compute Shader가 이 버퍼에 기록한다.
 		mVecStructuredBuffer[i]->SetShader();
 	}
 
@@ -125,7 +126,6 @@ void CParticleComponent::PostUpdate(float deltaTime)
 
 	for (size_t i = 0; i < bufferCount; ++i)
 	{
-		// RW 구조화 버퍼를 파이프라인에 연결
 		mVecStructuredBuffer[i]->ResetShader();
 	}
 }
@@ -144,6 +144,7 @@ void CParticleComponent::Render()
 	for (size_t i = 0; i < bufferCount; ++i)
 	{
 		// gParticleArraySRV, gParticleSharedSRV에 구조화버퍼 보내고, Geometry Shader에 바인드 
+		// Compute Shader에서 이 버퍼에 기록했고, 이제 SRV를 통해 Geometry Shader가 읽게 한다.
 		mVecStructuredBuffer[i]->SetShader(30 + (int)i, (int)eBufferShaderTypeFlags::Geometry);
 	}
 	

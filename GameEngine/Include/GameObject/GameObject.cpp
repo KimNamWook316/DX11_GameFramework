@@ -76,6 +76,21 @@ void CGameObject::GetAllSceneComponentsName(std::vector<FindComponentName>& outN
 	mRootSceneComponent->GetAllSceneComponentsName(outNames);
 }
 
+void CGameObject::GetAllComponentsPointer(std::vector<CComponent*>& outPointers)
+{
+	if (mRootSceneComponent)
+	{
+		mRootSceneComponent->GetAllComponentsPointer(outPointers);
+	}
+
+	size_t size = mVecObjectComponent.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecObjectComponent[i]->GetAllComponentsPointer(outPointers);
+	}
+}
+
 void CGameObject::SetScene(CScene* scene)
 {
 	mScene = scene;
