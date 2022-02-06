@@ -177,6 +177,41 @@ public: // getter
 		return mWorldAxis[axis];
 	}
 
+	bool GetInheritScale() const
+	{
+		return mbInheritScale;
+	}
+
+	bool GetInheritRotX() const
+	{
+		return mbInheritRotX;
+	}
+
+	bool GetInheritRotY() const
+	{
+		return mbInheritRotY;
+	}
+
+	bool GetInheritRotZ() const
+	{
+		return mbInheritRotZ;
+	}
+
+	bool GetInheritPosX() const
+	{
+		return mbInheritPosX;
+	}
+
+	bool GetInheritPosY() const
+	{
+		return mbInheritPosY;
+	}
+
+	bool GetInheritPosZ() const
+	{
+		return mbInheritPosZ;
+	}
+
 public:
 	void SetInheritScaleValue();
 	void SetInheritRotValue(bool bIsCurrent);

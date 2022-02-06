@@ -86,6 +86,7 @@ public:
 	void SetLoop(const std::string& name, bool bLoop);
 	void SetReverse(const std::string& name, bool bReverse);
 	void SetCurrentAnimation(const std::string& name);
+	void SetCurrentFrame(const int idx);
 
 public:
 	void SetScene(class CScene* scene)

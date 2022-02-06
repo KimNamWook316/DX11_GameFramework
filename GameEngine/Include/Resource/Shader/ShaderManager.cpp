@@ -119,6 +119,9 @@ bool CShaderManager::Init()
 	CreateConstantBuffer("ParticleCBuffer", sizeof(ParticleCBuffer), 11,
 		(int)eBufferShaderTypeFlags::Compute);
 
+	CreateConstantBuffer("DissolveCBuffer", sizeof(DissolveCBuffer), 4,
+		(int)eBufferShaderTypeFlags::Pixel);
+
 	return true;
 }
 

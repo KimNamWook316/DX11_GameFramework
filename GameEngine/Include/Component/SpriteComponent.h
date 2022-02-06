@@ -51,6 +51,11 @@ public:
 		return mAnimation;
 	}
 
+	bool GetIsTransparentActive() const
+	{
+		return mMaterial->GetIsTransparentActive();
+	}
+
 public:
 	void AddTexture(const int reg, const int shaderType, const std::string& name,
 		class CTexture* texture);
@@ -113,7 +118,7 @@ public:
 	template <typename T>
 	void SceneLoadAnimationInstance()
 	{
-		T* anim;
+		T* anim = new T;
 		anim->SetScene(mScene);
 		anim->SetOwner(this);
 		SAFE_DELETE(mAnimation);

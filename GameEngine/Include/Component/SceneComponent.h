@@ -270,6 +270,41 @@ public:
 		return mLayerName;
 	}
 
+	bool GetInheritScale() const
+	{
+		return mTransform->GetInheritScale();
+	}
+
+	bool GetInheritRotX() const
+	{
+		return mTransform->GetInheritRotX();
+	}
+
+	bool GetInheritRotY() const
+	{
+		return mTransform->GetInheritRotY();
+	}
+
+	bool GetInheritRotZ() const
+	{
+		return mTransform->GetInheritRotZ();
+	}
+
+	bool GetInheritPosX() const
+	{
+		return mTransform->GetInheritPosX();
+	}
+
+	bool GetInheritPosY() const
+	{
+		return mTransform->GetInheritPosY();
+	}
+
+	bool GetInheritPosZ() const
+	{
+		return mTransform->GetInheritPosZ();
+	}
+
 public:
 	void SetPivot(const Vector3& Pivot)
 	{

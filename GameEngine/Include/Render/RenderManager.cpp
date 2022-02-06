@@ -112,10 +112,16 @@ bool CRenderManager::Init()
 	layer->LayerPriority = 0;
 	mRenderLayerList.push_back(layer);
 
+	// Particle Layer
+	layer = new RenderLayer;
+	layer->Name = "Particle";
+	layer->LayerPriority = 1;
+	mRenderLayerList.push_back(layer);
+
 	// Widget Component Layer
 	layer = new RenderLayer;
 	layer->Name = "ScreenWidgetComponent";
-	layer->LayerPriority = 1;
+	layer->LayerPriority = 2;
 	mRenderLayerList.push_back(layer);
 
 	// Depth Disable ╣х ╩Себ

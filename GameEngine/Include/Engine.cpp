@@ -33,6 +33,7 @@ CEngine::CEngine()
 CEngine::~CEngine() 
 {
 	CSceneManager::DestroyInst();
+
 	CInput::DestroyInst();
 	CRenderManager::DestroyInst();
 	CPathManager::DestroyInst();

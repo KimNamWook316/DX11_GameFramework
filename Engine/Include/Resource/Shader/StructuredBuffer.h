@@ -11,7 +11,7 @@ public:
 
 public:
 	bool Init(const std::string& name, const unsigned int size, const unsigned int count,
-		const int reg, const bool bDynamic, const int structuredBufferShaderTypeFlag);
+		const int reg, const bool bDynamic, const int structuredBufferShaderTypeFlag = (int)eBufferShaderTypeFlags::Compute);
 	void UpdateBuffer(void* data, int count);
 	void SetShader();
 	void SetShader(const int reg, const int structuredBufferShaderTypeFlag);

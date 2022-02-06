@@ -33,6 +33,11 @@ public:
 	void Load(FILE* fp);
 
 public:
+	const std::string& GetName() const
+	{
+		return mName;
+	}
+
 	bool IsLoop() const
 	{
 		return mbIsLoop;

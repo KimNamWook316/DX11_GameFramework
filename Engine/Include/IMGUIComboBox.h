@@ -100,6 +100,21 @@ public:
         mFlag |= flag;
     }
 
+    void SetCurrentItem(const std::string& name)
+    {
+        size_t size = mVecItemUTF8.size();
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            if (mVecItemUTF8[i] == name)
+            {
+                mPrevName = mVecItemUTF8[i];
+                mSelectIndex = (int)i;
+                return;
+            }
+        }
+    }
+
 public:
     template <typename T>
     void SetSelectCallBack(T* obj, void(T::* func)(int, const char*))

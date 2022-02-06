@@ -108,6 +108,7 @@ void CScene::PostUpdate(float deltaTime)
 		{
 			iter = mObjList.erase(iter);
 			iterEnd = mObjList.end();
+			continue;
 		}
 
 		if (!(*iter)->IsEnable())

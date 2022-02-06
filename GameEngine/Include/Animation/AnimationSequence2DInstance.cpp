@@ -653,6 +653,11 @@ void CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& name)
 	}
 }
 
+void CAnimationSequence2DInstance::SetCurrentFrame(const int idx)
+{
+	mCurrentAnimation->mFrame = idx;
+}
+
 CAnimationSequence2DData* CAnimationSequence2DInstance::findAnimation(const std::string& name)
 {
 	auto iter = mMapAnimation.find(name);

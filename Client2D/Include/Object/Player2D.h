@@ -27,6 +27,7 @@ private:
 	void rotationZ(float deltaTime);
 	void attack();
 	void skill1();
+    void Fire(float deltaTime);
 	
 	void playAttackAnim(float deltaTime);
 

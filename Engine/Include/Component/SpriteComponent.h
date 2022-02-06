@@ -51,6 +51,11 @@ public:
 		return mAnimation;
 	}
 
+	bool GetIsTransparentActive() const
+	{
+		return mMaterial->GetIsTransparentActive();
+	}
+
 public:
 	void AddTexture(const int reg, const int shaderType, const std::string& name,
 		class CTexture* texture);

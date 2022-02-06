@@ -370,3 +370,16 @@ struct ParticleInfoShared
 	Vector4 ColorMax;
 	int GravityEnable;
 };
+
+struct DissolveCBuffer
+{
+	Vector4 InLineColor;
+	Vector4 OutLineColor;
+	Vector4 CenterLineColor;
+	float Burn;
+	int Inverse;
+	float InFilter;
+	float OutFilter;
+	float CenterFilter;
+	Vector3 Dummy;
+};

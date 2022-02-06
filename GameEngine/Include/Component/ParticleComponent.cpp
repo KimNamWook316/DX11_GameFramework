@@ -12,6 +12,8 @@ CParticleComponent::CParticleComponent()	:
 {
 	SetTypeID<CParticleComponent>();
 	mbIsRender = true;
+
+	mLayerName = "Particle";
 }
 
 CParticleComponent::CParticleComponent(const CParticleComponent& com)	:
@@ -218,5 +220,4 @@ void CParticleComponent::SetParticle(CParticle* particle)
 void CParticleComponent::SetSpawnTime(const float time)
 {
 	mSpawnTimeMax = time;
-	mParticle->SetSpawnTime(time);
 }

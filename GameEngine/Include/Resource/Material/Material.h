@@ -94,6 +94,28 @@ public:
 		return mVecTextureInfo[textureIdx].Texture->GetHeight();
 	}
 
+	const Vector4& GetBaseColor() const
+	{
+		return mBaseColor;
+	}
+
+	float GetOpacity() const
+	{
+		return mOpacity;
+	}
+
+	bool GetIsTransparentActive() const
+	{
+		if (mRenderStateArray[(int)eRenderStateType::Blend])
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 private:
 	void SetConstantBuffer(class CMaterialConstantBuffer* buffer)
 	{

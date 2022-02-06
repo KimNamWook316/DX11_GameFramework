@@ -1,4 +1,5 @@
 #include "EditorMenuWindow.h"
+#include "DetailWindow.h"
 #include "IMGUIButton.h"
 #include "IMGUITextInput.h"
 #include "IMGUIComboBox.h"
@@ -123,7 +124,7 @@ void CEditorMenuWindow::OnClickCreateObject()
         break;
     }
 
-    CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Object Hierachy");
+    CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Hierachy");
 
     if (hierachyWindow)
     {
@@ -133,7 +134,7 @@ void CEditorMenuWindow::OnClickCreateObject()
 
 void CEditorMenuWindow::OnClickCreateComponent()
 {
-    CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Object Hierachy");
+    CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Hierachy");
 
     CGameObject* obj = nullptr;
 
@@ -192,12 +193,16 @@ void CEditorMenuWindow::OnClickCreateComponent()
         break;
     }
 
+    // hierachy component list¿¡ Ãß°¡
     if (hierachyWindow)
     {
         CIMGUIListBox* componentList = hierachyWindow->GetComponentListBox();
-
         componentList->AddItem(mComponentNameInput->GetTextMultiByte());
     }
+
+    // inspector update
+    CDetailWindow* inspector = (CDetailWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Inspector");
+    inspector->UpdateComponentUI(obj);
 }
 
 void CEditorMenuWindow::OnClickSaveScene()

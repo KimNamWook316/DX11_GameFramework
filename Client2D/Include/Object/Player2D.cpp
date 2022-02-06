@@ -6,6 +6,7 @@
 #include "Animation/AnimationSequence2DInstance.h"
 #include "BulletCamera.h"
 #include "../Widget/SimpleHUD.h"
+#include "MuzzleParticle.h"
 
 CPlayer2D::CPlayer2D()	:
 	mOpacity(1.f),
@@ -47,6 +48,10 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::moveDown);
 	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::playAttackAnim);
 	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("Move", KeyState_Down, this, &CPlayer2D::move);
+
+	CInput::GetInst()->CreateKey("muzzle", VK_SPACE);
+	CInput::GetInst()->SetKeyCallBack<CPlayer2D>("muzzle", KeyState_Down, this, &CPlayer2D::Fire);
+
 
  //	mSprite->SetEndCallBack<CPlayer2D>("Attack", this, &CPlayer2D::skill1);
  //	mSprite->SetPlayTime("Attack", 0.5f);
@@ -181,6 +186,13 @@ void CPlayer2D::skill1()
 
 	bullet->SetWorldRotZ(-rot);
 	mSprite->ChangeAnimation("Idle_Front");
+}
+
+void CPlayer2D::Fire(float deltaTime)
+{
+	Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+	CMuzzleParticle* muzzleParticle = mScene->CreateGameObject<CMuzzleParticle>("MuzzleParticle");
+	muzzleParticle->SetRelativePos(Vector3(mousePos.x, mousePos.y, 0.f));
 }
 
 void CPlayer2D::playAttackAnim(float deltaTime)

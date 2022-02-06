@@ -19,6 +19,23 @@ CGraphicShader::CGraphicShader()
 	meType = eShaderType::GRAPHIC;
 }
 
+CGraphicShader::CGraphicShader(const CGraphicShader& shader)	:
+	CShader(shader)
+{
+	mInputLayout = nullptr;
+	mInputSize = shader.mInputSize;
+	mVS = nullptr;
+	mPS = nullptr;
+	mHS = nullptr;
+	mDS = nullptr;
+	mGS = nullptr;
+	mVSBlob = nullptr;
+	mPSBlob = nullptr;
+	mHSBlob = nullptr;
+	mDSBlob = nullptr;
+	mGSBlob = nullptr;
+}
+
 CGraphicShader::~CGraphicShader()
 {
 	SAFE_RELEASE(mInputLayout);
@@ -48,6 +65,11 @@ void CGraphicShader::SetShader()
 
 	// Inputlayout을 설정한다.
 	CDevice::GetInst()->GetContext()->IASetInputLayout(mInputLayout);
+}
+
+CGraphicShader* CGraphicShader::Clone()
+{
+	return nullptr;
 }
 
 void CGraphicShader::AddInputDesc(const char* name, unsigned int index, DXGI_FORMAT fmt, 

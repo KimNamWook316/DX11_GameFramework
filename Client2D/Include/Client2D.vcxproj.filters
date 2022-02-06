@@ -105,6 +105,15 @@
     <ClCompile Include="Object\BubbleParticle.cpp">
       <Filter>02. Object\06. Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Object\SmokeParticle.cpp">
+      <Filter>02. Object\06. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\MuzzleParticle.cpp">
+      <Filter>02. Object\06. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\RainParticle.cpp">
+      <Filter>02. Object\06. Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -171,6 +180,15 @@
       <Filter>01. SceneMode</Filter>
     </ClInclude>
     <ClInclude Include="Object\BubbleParticle.h">
+      <Filter>02. Object\06. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\SmokeParticle.h">
+      <Filter>02. Object\06. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MuzzleParticle.h">
+      <Filter>02. Object\06. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\RainParticle.h">
       <Filter>02. Object\06. Particle</Filter>
     </ClInclude>
   </ItemGroup>

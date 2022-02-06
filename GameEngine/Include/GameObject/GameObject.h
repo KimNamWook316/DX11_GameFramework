@@ -43,6 +43,11 @@ public:
 		mRootSceneComponent = component;
 	}
 
+	void SetLifeSpan(const float lifeSpan)
+	{
+		mLifeSpan = lifeSpan;
+	}
+
 public:
 	void AddChildGameObject(CGameObject* obj);
 
@@ -690,5 +695,6 @@ protected:
 
 	CGameObject* mParent;	// 부모 게임 오브젝트
 	std::vector<CSharedPtr<CGameObject>> mVecChildGameObj; // 자식 게임 오브젝트
+	float mLifeSpan;
 };
 

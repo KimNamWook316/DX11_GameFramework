@@ -25,6 +25,11 @@ public:
 		return mMaterial;
 	}
 
+	bool GetIsTransparentActive() const
+	{
+		return mMaterial->GetIsTransparentActive();
+	}
+
 public:
 	virtual bool Init();
 	virtual void Start();
