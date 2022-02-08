@@ -5,12 +5,7 @@
 class CIMGUISliderFloat :
     public CIMGUIWidget
 {
-	friend class CIMGUIWindow;
-	friend class CIMGUITree;
-	friend class CIMGUIChild;
-    friend class CIMGUIWidgetList;
-
-protected:
+public:
 	CIMGUISliderFloat();
 	virtual ~CIMGUISliderFloat();
 

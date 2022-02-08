@@ -2,6 +2,7 @@
 
 #include "../Shader/GraphicShader.h"
 #include "../Texture/Texture.h"
+#include "../Shader/MaterialConstantBuffer.h"
 
 // Material이 들고 있는 텍스쳐와 정보
 struct MaterialTextureInfo
@@ -152,7 +153,7 @@ public:
 private:
 	void SetConstantBuffer(class CMaterialConstantBuffer* buffer)
 	{
-		mCBuffer = buffer;
+		mCBuffer = buffer->Clone();
 	}
 
 protected:

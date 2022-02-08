@@ -12,12 +12,7 @@ enum class eImGuiTextInputType
 class CIMGUITextInput :
     public CIMGUIWidget
 {
-    friend class CIMGUIWindow;
-    friend class CIMGUITree;
-    friend class CIMGUIChild;
-    friend class CIMGUIWidgetList;
-
-protected:
+public:
     CIMGUITextInput();
     virtual ~CIMGUITextInput();
 

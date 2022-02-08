@@ -20,6 +20,8 @@ CMaterial::CMaterial(const CMaterial& mat)
 	*this = mat;
 	mScene = nullptr;
 	mRefCount = 0;
+	mCBuffer = mat.mCBuffer->Clone();
+	mCBuffer->Init();
 	mRenderCallBackList.clear();
 }
 
@@ -32,6 +34,8 @@ CMaterial::~CMaterial()
 	{
 		SAFE_DELETE(*iter);
 	}
+
+	SAFE_DELETE(mCBuffer);
 }
 
 void CMaterial::SetShader(const std::string& shaderName)

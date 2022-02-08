@@ -1,6 +1,9 @@
 #include "ColliderControlWidget.h"
 #include "IMGUIWindow.h"
 #include "GameObject/GameObject.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneResource.h"
+#include "Scene/SceneCollision.h"
 #include "Component/ColliderComponent.h"
 #include "Component/ColliderCircle.h"
 #include "Component/ColliderBox2D.h"
@@ -20,10 +23,11 @@ CColliderControlWidget::CColliderControlWidget()	:
 	mOffsetWidget(nullptr),
 	mCollsionProfileWidget(nullptr),
 	mEditCollisionProfileWidget(nullptr),
+	mTypeText(nullptr),
 	mEditBox2DWidth(nullptr),
 	mEditBox2DHeight(nullptr),
-	mEditCircleCenter(nullptr),
-	mEditCircleRadius(nullptr)
+	mEditCircleRadius(nullptr),
+	mSeperator(nullptr)
 {
 }
 
@@ -73,10 +77,12 @@ bool CColliderControlWidget::Init()
 	{
 	case eColliderType::Box2D:
 	{
-		text = AddWidget<CIMGUIText>("text");
-		text->SetText("BoxInfo");
+		mTypeText = AddWidget<CIMGUIText>("text");
+		mTypeText->SetText("BoxInfo");
 		mEditBox2DWidth = AddWidget<CIMGUIInputFloat>("Width");
 		mEditBox2DHeight = AddWidget<CIMGUIInputFloat>("Height");
+		mEditBox2DWidth->SetStep(1.f);
+		mEditBox2DHeight->SetStep(1.f);
 
 		Box2DInfo boxInfo = static_cast<CColliderBox2D*>(mComponent)->GetInfo();
 		mEditBox2DWidth->SetVal(boxInfo.Length.x);
@@ -88,30 +94,28 @@ bool CColliderControlWidget::Init()
 	}
 	case eColliderType::Circle2D:
 	{
-		text = AddWidget<CIMGUIText>("text");
-		text->SetText("CircleInfo");
-		mEditCircleCenter = AddWidget<CIMGUIInputFloat2>("Center");
+		mTypeText = AddWidget<CIMGUIText>("text");
+		mTypeText->SetText("CircleInfo");
 		mEditCircleRadius = AddWidget<CIMGUIInputFloat>("Radius");
+		mEditCircleRadius->SetStep(1.f);
 
 		CircleInfo circleInfo = static_cast<CColliderCircle*>(mComponent)->GetInfo();
-		mEditCircleCenter->SetVal(circleInfo.Center.x, circleInfo.Center.y);
 		mEditCircleRadius->SetVal(circleInfo.Radius);
 
-		mEditCircleCenter->SetCallBack(this, &CColliderControlWidget::OnChangeCircleCenter);
 		mEditCircleRadius->SetCallBack(this, &CColliderControlWidget::OnChangeCircleRadius);
 		break;
 	}
 	case eColliderType::Pixel:
 	{
-		text = AddWidget<CIMGUIText>("text");
-		text->SetText("PixelInfo");
+		mTypeText = AddWidget<CIMGUIText>("text");
+		mTypeText->SetText("PixelInfo");
 		break;
 	}
 	default:
 		assert(false);
 		break;
 	}
-	AddWidget<CIMGUISeperator>("seperator");
+	mSeperator = AddWidget<CIMGUISeperator>("seperator");
 
 	// Widget 설정
 	mColliderTypeWidget->AddItem("Box2D");
@@ -190,8 +194,7 @@ void CColliderControlWidget::OnSelectColliderType(int idx, const char* label)
 		return;
 	}
 
-	meType = select;
-	onChangeType();
+	changeType(select);
 }
 
 void CColliderControlWidget::OnChangeOffsetWidget(float val[3])
@@ -219,22 +222,19 @@ void CColliderControlWidget::OnChangeBoxHeight(float val)
 	static_cast<CColliderBox2D*>(mComponent)->SetHeight(val);
 }
 
-void CColliderControlWidget::OnChangeCircleCenter(float val[2])
-{
-	static_cast<CColliderCircle*>(mComponent)->SetCenter(Vector2(val[0], val[1]));
-}
-
 void CColliderControlWidget::OnChangeCircleRadius(float val)
 {
 	static_cast<CColliderCircle*>(mComponent)->SetRadius(val);
 }
 
-void CColliderControlWidget::onChangeType()
+void CColliderControlWidget::changeType(eColliderType type)
 {
-	// TODO : Component 교체
 	CGameObject* obj = mComponent->GetGameObject();
 
-	switch (meType)
+	// Collider List에서 제거
+	mComponent->GetScene()->GetCollision()->DeleteCollider((CColliderComponent*)mComponent);
+
+	switch (type)
 	{
 	case eColliderType::Box2D:
 		mComponent = obj->ReplaceComponent<CColliderBox2D>(mComponent, mComponent->GetName());
@@ -249,6 +249,59 @@ void CColliderControlWidget::onChangeType()
 		assert(false);
 		break;
 	}
-
 	mComponent->Start();
+	static_cast<CColliderComponent*>(mComponent)->SetOffset(mOffsetWidget->GetX(), mOffsetWidget->GetY(), 0.f);
+
+	// 이전 타입 위젯 삭제
+	switch (meType)
+	{
+	case eColliderType::Box2D:
+		DeleteWidget((CIMGUIWidget*)mEditBox2DWidth);
+		DeleteWidget((CIMGUIWidget*)mEditBox2DHeight);
+		DeleteWidget((CIMGUIWidget*)mSeperator);
+		break;
+	case eColliderType::Circle2D:
+		DeleteWidget((CIMGUIWidget*)mEditCircleRadius);
+		DeleteWidget((CIMGUIWidget*)mSeperator);
+		break;
+	case eColliderType::Pixel:
+		break;
+	default:
+		break;
+	}
+	
+	// 현재 타입 위젯 등록
+	meType = type;
+
+	if (eColliderType::Box2D == meType)
+	{
+		mTypeText->SetText("BoxInfo");
+		mEditBox2DWidth = AddWidget<CIMGUIInputFloat>("Width");
+		mEditBox2DHeight = AddWidget<CIMGUIInputFloat>("Height");
+
+		Box2DInfo boxInfo = static_cast<CColliderBox2D*>(mComponent)->GetInfo();
+		mEditBox2DWidth->SetVal(boxInfo.Length.x);
+		mEditBox2DHeight->SetVal(boxInfo.Length.y);
+		mEditBox2DWidth->SetStep(1.f);
+		mEditBox2DHeight->SetStep(1.f);
+
+		mEditBox2DWidth->SetCallBack(this, &CColliderControlWidget::OnChangeBoxWidth);
+		mEditBox2DHeight->SetCallBack(this, &CColliderControlWidget::OnChangeBoxHeight);
+	}
+	else if (eColliderType::Circle2D == meType)
+	{
+		mTypeText->SetText("CircleInfo");
+		mEditCircleRadius = AddWidget<CIMGUIInputFloat>("Radius");
+		mEditCircleRadius->SetStep(1.f);
+
+		CircleInfo circleInfo = static_cast<CColliderCircle*>(mComponent)->GetInfo();
+
+		mEditCircleRadius->SetVal(circleInfo.Radius);
+		mEditCircleRadius->SetCallBack(this, &CColliderControlWidget::OnChangeCircleRadius);
+	}
+	else if (eColliderType::Pixel == meType)
+	{
+
+	}
+	mSeperator = AddWidget<CIMGUISeperator>("seperator");
 }

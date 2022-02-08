@@ -6,7 +6,8 @@ CMaterialConstantBuffer::CMaterialConstantBuffer()	:
 {
 }
 
-CMaterialConstantBuffer::CMaterialConstantBuffer(const CMaterialConstantBuffer& buffer)
+CMaterialConstantBuffer::CMaterialConstantBuffer(const CMaterialConstantBuffer& buffer)	:
+	CConstantBufferBase(buffer)
 {
 	mBufferData = buffer.mBufferData;
 }

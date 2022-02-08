@@ -342,7 +342,17 @@ void CSceneCollision::AddCollider(CColliderComponent* collider)
 
 void CSceneCollision::DeleteCollider(CColliderComponent* collider)
 {
-	// TODO : 충돌체 지우기
+	auto iter = mColliderList.begin();
+	auto iterEnd = mColliderList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter) == collider)
+		{
+			mColliderList.erase(iter);
+			return;
+		}
+	}
 }
 
 void CSceneCollision::classifyColliderBySection()

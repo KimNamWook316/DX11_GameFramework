@@ -5,12 +5,7 @@
 class CIMGUIInputFloat :
     public CIMGUIWidget
 {
-    friend class CIMGUIWindow;
-    friend class CIMGUITree;
-    friend class CIMGUIChild;
-    friend class CIMGUIWidgetList;
-
-protected:
+public:
     CIMGUIInputFloat();
     virtual ~CIMGUIInputFloat();
 

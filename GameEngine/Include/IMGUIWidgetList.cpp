@@ -1,6 +1,7 @@
 #include "IMGUIWidgetList.h"
 
-CIMGUIWidgetList::CIMGUIWidgetList()
+CIMGUIWidgetList::CIMGUIWidgetList()	:
+	mSize(0)
 {
 }
 
@@ -21,9 +22,26 @@ bool CIMGUIWidgetList::Init()
 
 void CIMGUIWidgetList::Render()
 {
-	size_t size = mVecChild.size();
-	for (size_t i = 0; i < size; ++i)
+	mSize = mVecChild.size();
+	for (size_t i = 0; i < mSize; ++i)
 	{
 		mVecChild[i]->Render();
+	}
+}
+
+void CIMGUIWidgetList::DeleteWidget(CIMGUIWidget* widget)
+{
+	auto iter = mVecChild.begin();
+	auto iterEnd = mVecChild.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (widget == (*iter))
+		{
+			SAFE_DELETE(*iter);
+			mVecChild.erase(iter);
+			mSize = mVecChild.size();
+			return;
+		}
 	}
 }

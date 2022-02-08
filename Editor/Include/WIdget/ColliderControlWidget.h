@@ -22,21 +22,21 @@ public:
 	void OnClickEditProfile();
 	void OnChangeBoxWidth(float val);
 	void OnChangeBoxHeight(float val);
-	void OnChangeCircleCenter(float val[2]);
 	void OnChangeCircleRadius(float val);
 
 private:
-	void onChangeType();
+	void changeType(eColliderType type);
 
 protected:
 	class CIMGUIComboBox* mColliderTypeWidget;
 	class CIMGUIInputFloat3* mOffsetWidget;
 	class CIMGUIComboBox* mCollsionProfileWidget;
 	class CIMGUIButton* mEditCollisionProfileWidget;
+	class CIMGUIText* mTypeText;
 	class CIMGUIInputFloat* mEditBox2DWidth;
 	class CIMGUIInputFloat* mEditBox2DHeight;
-	class CIMGUIInputFloat2* mEditCircleCenter;
 	class CIMGUIInputFloat* mEditCircleRadius;
+	class CIMGUISeperator* mSeperator;
 
 	eColliderType meType;
     static int mWindowID;

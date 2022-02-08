@@ -5,12 +5,7 @@
 class CIMGUIColor4 :
     public CIMGUIWidget
 {
-	friend class CIMGUIWindow;
-	friend class CIMGUITree;
-	friend class CIMGUIChild;
-    friend class CIMGUIWidgetList;
-    
-protected:
+public:
 	CIMGUIColor4();
 	virtual ~CIMGUIColor4();
 

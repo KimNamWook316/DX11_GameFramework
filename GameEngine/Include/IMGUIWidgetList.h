@@ -5,17 +5,16 @@
 class CIMGUIWidgetList :
     public CIMGUIWidget
 {
-    friend class CIMGUIWindow;
-    friend class CIMGUITree;
-	friend class CIMGUIChild;
-
-protected:
+public:
     CIMGUIWidgetList();
     virtual ~CIMGUIWidgetList();
 
 public:
     virtual bool Init() override;
     virtual void Render() override;
+
+public:
+    void DeleteWidget(CIMGUIWidget* widget);
 
 public:
     template <typename T>
@@ -39,5 +38,6 @@ public:
 
 protected:
     std::vector<class CIMGUIWidget*> mVecChild;
+    size_t mSize;
 };
 

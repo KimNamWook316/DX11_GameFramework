@@ -3,12 +3,7 @@
 class CIMGUIColor3 :
     public CIMGUIWidget
 {
-	friend class CIMGUIWindow;
-	friend class CIMGUITree;
-	friend class CIMGUIChild;
-    friend class CIMGUIWidgetList;
-    
-protected:
+public:
 	CIMGUIColor3();
 	virtual ~CIMGUIColor3();
 
