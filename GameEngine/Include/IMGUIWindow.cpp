@@ -2,12 +2,15 @@
 #include "IMGUIWidget.h"
 #include "IMGUIManager.h"
 
+unsigned long CIMGUIWindow::mWindowID = 0;
+
 CIMGUIWindow::CIMGUIWindow() :
     mbOpen(true),
     mWindowFlag(ImGuiWindowFlags_NoCollapse),
     mbModalPopUp(false),
     mbIsFocused(false)
 {
+    ++mWindowID;
 }
 
 CIMGUIWindow::~CIMGUIWindow()

@@ -200,7 +200,8 @@ struct MaterialCBuffer
 {
 	Vector4 BaseColor;
 	float	Opacity;
-	Vector3 Dummy;
+	int		DissolveEnable;
+	Vector2 Dummy;
 };
 
 struct AnimationFrameData
@@ -369,4 +370,17 @@ struct ParticleInfoShared
 	Vector4 ColorMin;
 	Vector4 ColorMax;
 	int GravityEnable;
+};
+
+struct DissolveCBuffer
+{
+	Vector4 InLineColor;
+	Vector4 OutLineColor;
+	Vector4 CenterLineColor;
+	float Filter;
+	int Inverse;
+	float InFilter;
+	float OutFilter;
+	float CenterFilter;
+	Vector3 Dummy;
 };

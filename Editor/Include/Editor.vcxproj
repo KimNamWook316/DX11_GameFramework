@@ -158,6 +158,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Widget\ColliderControlWidget.h" />
     <ClInclude Include="WIdget\ComponentControlWidget.h" />
     <ClInclude Include="WIdget\SpriteControlWidget.h" />
     <ClInclude Include="Window\DetailWindow.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
+    <ClCompile Include="Widget\ColliderControlWidget.cpp" />
     <ClCompile Include="WIdget\ComponentControlWidget.cpp" />
     <ClCompile Include="WIdget\SpriteControlWidget.cpp" />
     <ClCompile Include="Window\DetailWindow.cpp" />

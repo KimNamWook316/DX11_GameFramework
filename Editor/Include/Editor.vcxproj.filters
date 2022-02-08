@@ -75,6 +75,9 @@
     <ClInclude Include="WIdget\ComponentControlWidget.h">
       <Filter>04. IMGUIWidget</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\ColliderControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -114,6 +117,9 @@
       <Filter>04. IMGUIWidget</Filter>
     </ClCompile>
     <ClCompile Include="WIdget\SpriteControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\ColliderControlWidget.cpp">
       <Filter>04. IMGUIWidget</Filter>
     </ClCompile>
   </ItemGroup>

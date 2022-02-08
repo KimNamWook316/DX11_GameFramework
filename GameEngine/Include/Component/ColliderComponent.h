@@ -60,6 +60,11 @@ public:
         return meColliderType;
     }
 
+    Vector3 GetOffset() const
+    {
+        return mOffset;
+    }
+
     Vector3 GetMinPos() const
     {
         return mMinPos;

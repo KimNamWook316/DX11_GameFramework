@@ -340,6 +340,11 @@ void CSceneCollision::AddCollider(CColliderComponent* collider)
 	mColliderList.push_back(collider);
 }
 
+void CSceneCollision::DeleteCollider(CColliderComponent* collider)
+{
+	// TODO : 충돌체 지우기
+}
+
 void CSceneCollision::classifyColliderBySection()
 {
 	auto iter = mColliderList.begin();

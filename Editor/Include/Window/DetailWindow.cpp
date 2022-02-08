@@ -12,8 +12,12 @@
 #include "GameObject/GameObject.h"
 #include "Scene/SceneManager.h"
 #include "Component/SpriteComponent.h"
-#include "../WIdget/ComponentControlWidget.h"
+#include "Component/ColliderCircle.h"
+#include "Component/ColliderBox2D.h"
+#include "Component/ColliderPixel.h"
+#include "../Widget/ComponentControlWidget.h"
 #include "../Widget/SpriteControlWidget.h"
+#include "../Widget/ColliderControlWidget.h"
 
 CDetailWindow::CDetailWindow()
 {
@@ -61,6 +65,24 @@ CComponentControlWidget* CDetailWindow::CreateControlWidget(CComponent* comp)
     if (comp->GetTypeID() == typeid(CSpriteComponent).hash_code())
     {
         return (CComponentControlWidget*)(new CSpriteControlWidget);
+    }
+    else if (comp->GetTypeID() == typeid(CColliderBox2D).hash_code())
+    {
+        CColliderControlWidget* widget = new CColliderControlWidget;
+        widget->meType = eColliderType::Box2D;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CColliderCircle).hash_code())
+    {
+        CColliderControlWidget* widget = new CColliderControlWidget;
+        widget->meType = eColliderType::Circle2D;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CColliderPixel).hash_code())
+    {
+        CColliderControlWidget* widget = new CColliderControlWidget;
+        widget->meType = eColliderType::Pixel;
+        return widget;
     }
     else
     {

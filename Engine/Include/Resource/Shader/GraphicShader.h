@@ -8,11 +8,13 @@ class CGraphicShader : public CShader
 
 protected:
 	CGraphicShader();
+	CGraphicShader(const CGraphicShader& shader);
 	virtual ~CGraphicShader() = 0;
 
 public:
 	virtual bool Init() = 0;
 	virtual void SetShader();
+	virtual CGraphicShader* Clone();
 
 	// 정점 구조체의 성분을 DX에게 알려주기 위한 InputDesc 배열을 추가하기 위한 함수
 	void AddInputDesc(const char* name, unsigned int index,

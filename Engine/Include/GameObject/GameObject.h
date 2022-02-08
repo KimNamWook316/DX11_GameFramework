@@ -32,6 +32,8 @@ public:
 	}
 
 	class CComponent* FindComponent(const std::string& name);
+	void DeleteComponent(class CComponent* comp);
+	void DeleteComponent(const std::string& name);
 	void GetAllSceneComponentsName(std::vector<FindComponentName>& outNames);
 	void GetAllComponentsPointer(std::vector<CComponent*>& outPointers);
 
@@ -133,6 +135,75 @@ public:
 			}
 		}
 		
+		return comp;
+	}
+
+	template <typename T>
+	T* ReplaceComponent(CComponent* targetComp, const std::string& newCompName)
+	{
+		T* comp = new T;
+
+		comp->SetName(newCompName);
+		comp->SetScene(mScene);
+		comp->SetGameObject(this);
+
+		if (!comp->Init())
+		{
+			SAFE_RELEASE(comp);
+			return nullptr;
+		}
+
+		if (eComponentType::OBJ_COMP == targetComp->GetComponentType())
+		{
+			size_t idx = 0;
+			size_t size = mVecObjectComponent.size();
+			
+			for (; idx < size; ++idx)
+			{
+				if (targetComp == mVecObjectComponent[idx])
+				{
+					break;
+				}
+			}
+
+			CObjectComponent* old = mVecObjectComponent[idx];
+			mVecObjectComponent[idx] = (CObjectComponent*)comp;
+			SAFE_RELEASE(old);
+		}
+		else
+		{
+			CSceneComponent* target = static_cast<CSceneComponent*>(targetComp);
+			CSceneComponent* targetParent = target->mParent;
+			std::vector<CComponent*> targetChild;
+			target->GetAllChildPointer(targetChild);
+
+			size_t size = targetChild.size();
+			for (size_t i = 0; i < size; ++i)
+			{
+				static_cast<CSceneComponent*>(comp)->AddChild((CSceneComponent*)targetChild[i]);
+			}
+
+			if (target == mRootSceneComponent)
+			{
+				mRootSceneComponent = comp;
+			}
+			else
+			{
+				targetParent->AddChild(comp);
+				targetParent->DeleteChild(target);
+			}
+
+			auto iter = mSceneComponentList.begin();
+			auto iterEnd = mSceneComponentList.end();
+			for (; iter != iterEnd; ++iter)
+			{
+				if (nullptr == (*iter))
+				{
+					mSceneComponentList.erase(iter);
+					break;
+				}
+			}
+		}
 		return comp;
 	}
 

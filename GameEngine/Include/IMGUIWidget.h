@@ -61,10 +61,16 @@ public:
 		mColor.Value.w = a / 255.f;
 	}
 
+	const unsigned int GetWidgetID() const
+	{
+		return mWidgetID;
+	}
+
 protected:
 	std::string mName;
 	class CIMGUIWindow* mOwner;
 	ImVec2 mSize;
 	ImColor mColor;
 	ImFont* mFont;
+	static unsigned long mWidgetID;
 }; 

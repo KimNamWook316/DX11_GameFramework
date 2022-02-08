@@ -40,6 +40,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("Skill1", '1');
 
 	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
+	CResourceManager::GetInst()->SetVolume(10);
 
 	// 마우스 위젯 설정
 	CMouseNormal* mouseNormal = CEngine::GetInst()->CreateMouse<CMouseNormal>(eMouseState::Normal, "MouseNormal");

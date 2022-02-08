@@ -20,27 +20,33 @@ public:
 	virtual CGameObject* Clone();
 
 private:
-	void move(float deltaTime);
 	void moveUp(float deltaTime);
 	void moveDown(float deltaTime);
 	void rotationZInv(float deltaTime);
 	void rotationZ(float deltaTime);
-	void attack();
-	void skill1();
-    void Fire(float deltaTime);
-	
-	void playAttackAnim(float deltaTime);
+	void attack(float deltaTime);
+	void attack1(float deltaTime);
+	void skill1(float deltaTime);
 
 private:
-	CSharedPtr<CCameraComponent> mCamera;
-	CSharedPtr<CSpriteComponent> mSprite;
-	CSharedPtr<CColliderBox2D> mBody;
-	CSharedPtr<CWidgetComponent> mSimpleHUDWidget;
+	CSharedPtr<CSpriteComponent>    mSprite;
+	CSharedPtr<CSpriteComponent>    mChildLeftSprite;
+	CSharedPtr<CSpriteComponent>    mChildRightSprite;
+	CSharedPtr<CSceneComponent>     mChildLeftMuzzle;
+	CSharedPtr<CSceneComponent>     mChildRightMuzzle;
+	CSharedPtr<CSceneComponent>     mChildRoot;
+	CSharedPtr<CSceneComponent>     mMuzzle;
+
+	CSharedPtr<CSpriteComponent>    mChild1Sprite;
+	CSharedPtr<CSpriteComponent>    mChild2Sprite;
+	CSharedPtr<CSpriteComponent>    mChild3Sprite;
+	CSharedPtr<CSpriteComponent>    mChild4Sprite;
+
+	CSharedPtr<CColliderBox2D>       mBody;
+	CSharedPtr<CCameraComponent>     mCamera;
+
+	CSharedPtr<CWidgetComponent>     mSimpleHUDWidget;
 
 	float mOpacity;
-	float mSpeed;
-	bool mbIsMoving;
-	Vector3 mMovePosition;
-	Vector3 mDirection;
 };
 

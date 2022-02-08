@@ -162,36 +162,40 @@ void CEditorMenuWindow::OnClickCreateComponent()
         return;
     }
 
+    CSceneComponent* comp = nullptr;
+
     switch ((eCreateSceneComponentType)selectIdx)
     {
     case eCreateSceneComponentType::Sprite:
-        obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eCreateSceneComponentType::StaticMesh:
-        obj->CreateComponentAddChild<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponentAddChild<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eCreateSceneComponentType::ColliderBox2D:
-        obj->CreateComponentAddChild<CColliderBox2D>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponentAddChild<CColliderBox2D>(mComponentNameInput->GetTextMultiByte());
         break;
     case eCreateSceneComponentType::ColliderCircle:
-        obj->CreateComponentAddChild<CColliderCircle>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponentAddChild<CColliderCircle>(mComponentNameInput->GetTextMultiByte());
         break;
     case eCreateSceneComponentType::ColliderPixel:
-        obj->CreateComponentAddChild<CColliderPixel>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponentAddChild<CColliderPixel>(mComponentNameInput->GetTextMultiByte());
         break;
     case eCreateSceneComponentType::Camera:
-        obj->CreateComponentAddChild<CCameraComponent>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponentAddChild<CCameraComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eCreateSceneComponentType::Widget:
-        obj->CreateComponentAddChild<CWidgetComponent>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponentAddChild<CWidgetComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eCreateSceneComponentType::Particle:
-        obj->CreateComponentAddChild<CParticleComponent>(mComponentNameInput->GetTextMultiByte());
+        comp = obj->CreateComponentAddChild<CParticleComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     default:
         assert(false);
         break;
     }
+    
+    comp->Start();
 
     // hierachy component list¿¡ Ãß°¡
     if (hierachyWindow)

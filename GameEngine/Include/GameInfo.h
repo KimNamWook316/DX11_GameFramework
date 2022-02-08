@@ -200,7 +200,8 @@ struct MaterialCBuffer
 {
 	Vector4 BaseColor;
 	float	Opacity;
-	Vector3 Dummy;
+	int		DissolveEnable;
+	Vector2 Dummy;
 };
 
 struct AnimationFrameData
@@ -376,7 +377,7 @@ struct DissolveCBuffer
 	Vector4 InLineColor;
 	Vector4 OutLineColor;
 	Vector4 CenterLineColor;
-	float Burn;
+	float Filter;
 	int Inverse;
 	float InFilter;
 	float OutFilter;

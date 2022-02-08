@@ -189,6 +189,12 @@
     <Filter Include="05. Component\01. SceneComponent\05. ParticleComponent">
       <UniqueIdentifier>{46ab2934-93e4-45d5-b8aa-2625439bd592}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component\02. ObjectComponent\01. Dissolve">
+      <UniqueIdentifier>{25fc5596-1c2b-41b3-aa38-c8fe3e364557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\09. Dissolve">
+      <UniqueIdentifier>{f6e88940-258b-4958-a7d0-a5339097ef3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -617,6 +623,15 @@
     <ClInclude Include="IMGUISliderFloat.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Component\DissolveComponent.h">
+      <Filter>05. Component\02. ObjectComponent\01. Dissolve</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\DissolveConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\09. Dissolve</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIInputFloat2.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -992,6 +1007,15 @@
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
     <ClCompile Include="IMGUISliderFloat.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\DissolveComponent.cpp">
+      <Filter>05. Component\02. ObjectComponent\01. Dissolve</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\DissolveConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\09. Dissolve</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIInputFloat2.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>

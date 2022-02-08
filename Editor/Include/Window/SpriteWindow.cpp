@@ -437,7 +437,7 @@ void CSpriteWindow::OnClickDeleteAnimationFrame()
 	// 재생중인 애니메이션 프레임 정보 업데이트
 	if (mAnimationInstance->IsPlay())
 	{
-		mAnimationInstance->ReplayCurrentAnimation();
+		mAnimationInstance->Replay();
 	}
 
 	// UI clear
@@ -536,8 +536,7 @@ void CSpriteWindow::OnClickPlayAnimation()
 {
 	if (mAnimationInstance->GetCurrentAnimation() != nullptr)
 	{
-		mAnimationInstance->ReplayCurrentAnimation();
-		mAnimationInstance->Play();
+		mAnimationInstance->Replay();
 	}
 }
 

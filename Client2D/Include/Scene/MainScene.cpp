@@ -32,16 +32,16 @@ bool CMainScene::Init()
 
 	CPlayer2D* player = mScene->CreateGameObject<CPlayer2D>("Player");
 
-	//CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
+	CMonster* monster = mScene->CreateGameObject<CMonster>("Monster");
 
 	if (mLoadingFunction)
 	{
 		mLoadingFunction(false, 0.6f);
 	}
 
-	//CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
+	CPixelTest* pixelTest = mScene->CreateGameObject<CPixelTest>("PixelTest");
 
-	//mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
+	mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	SetPlayerObj(player);
 
@@ -50,18 +50,18 @@ bool CMainScene::Init()
 		mLoadingFunction(false, 0.8f);
 	}
 
-	//CBubbleParticle* bubbleParticle = mScene->CreateGameObject<CBubbleParticle>("BubbleParticle");
-	//bubbleParticle->SetRelativePos(200.f, 200.f, 0.f);
-
-	CSmokeParticle* smokeParticle = mScene->CreateGameObject<CSmokeParticle>("SmokeParticle");
-	smokeParticle->SetRelativePos(400.f, 200.f, 0.f);
-
- //	CMuzzleParticle* muzzleParticle = mScene->CreateGameObject<CMuzzleParticle>("MuzzleParticle");
- //	muzzleParticle->SetRelativePos(100.f, 200.f, 0.f);
-
-	CRainParticle* rainParticle = mScene->CreateGameObject<CRainParticle>("RainParticle");
-	rainParticle->SetRelativePos(640.f, 0.f, 0.f);
-
+ //	CBubbleParticle* bubbleParticle = mScene->CreateGameObject<CBubbleParticle>("BubbleParticle");
+ //	bubbleParticle->SetRelativePos(200.f, 200.f, 0.f);
+ //
+ //	CSmokeParticle* smokeParticle = mScene->CreateGameObject<CSmokeParticle>("SmokeParticle");
+ //	smokeParticle->SetRelativePos(400.f, 200.f, 0.f);
+ //
+ // //	CMuzzleParticle* muzzleParticle = mScene->CreateGameObject<CMuzzleParticle>("MuzzleParticle");
+ // //	muzzleParticle->SetRelativePos(100.f, 200.f, 0.f);
+ //
+ //	CRainParticle* rainParticle = mScene->CreateGameObject<CRainParticle>("RainParticle");
+ //	rainParticle->SetRelativePos(640.f, 0.f, 0.f);
+ //
 	return true;
 }
 
@@ -106,38 +106,11 @@ void CMainScene::createMaterial()
 
 void CMainScene::createAnimationSequence()
 {
- 	mScene->GetResource()->LoadSequence2D("PlayerIdle_Front.sqc");
-	mScene->GetResource()->CreateAnimationSequence2D("PlayerIdle_Back", 
-		"PlayerIdle", TEXT("Sorceress_Town_Idle.png"));
-	mScene->GetResource()->CreateAnimationSequence2D("PlayerMove_Front", 
-		"PlayerMove", TEXT("Sorceress_Town_Move.png"));
-	mScene->GetResource()->CreateAnimationSequence2D("PlayerMove_Back", 
-		"PlayerMove", TEXT("Sorceress_Town_Move.png"));
-	mScene->GetResource()->CreateAnimationSequence2D("PlayerMove_Right", 
-		"PlayerMove", TEXT("Sorceress_Town_Move.png"));
-	mScene->GetResource()->CreateAnimationSequence2D("PlayerMove_Left", 
-		"PlayerMove", TEXT("Sorceress_Town_Move.png"));
-	mScene->GetResource()->CreateAnimationSequence2D("PlayerAttack", 
-		"PlayerAttack", TEXT("Sorceress_Special_Attack_1.png"));
-	
-	for (int i = 0; i < 6; ++i)
-	{
-		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerIdle_Back", Vector2(i * 42.f, 0.f), Vector2(42.f, 73.f));
-	}
+	mScene->GetResource()->CreateAnimationSequence2D("PlayerIdle", "Player", TEXT("Player.png"));
 
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 7; ++i)
 	{
-		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerMove_Front", Vector2(i * 48.f, 0.f), Vector2(48.f, 75.f));
-	}
-
-	for (int i = 0; i < 8; ++i)
-	{
-		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerMove_Back", Vector2(i * 48.f, 600.f), Vector2(48.f, 75.f));
-	}
-
-	for (int i = 0; i < 14; ++i)
-	{
-		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerAttack", Vector2(i * 89.f, 0.f), Vector2(89.f, 91.f));
+		mScene->GetResource()->AddAnimationSequece2DFrame("PlayerIdle", Vector2(i * 50.f, 148.f), Vector2(50.f, 37.f));
 	}
 }
 

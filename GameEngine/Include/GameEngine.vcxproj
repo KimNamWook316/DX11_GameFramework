@@ -35,6 +35,7 @@
     <ClInclude Include="Component\ColliderComponent.h" />
     <ClInclude Include="Component\ColliderPixel.h" />
     <ClInclude Include="Component\Component.h" />
+    <ClInclude Include="Component\DissolveComponent.h" />
     <ClInclude Include="Component\ObjectComponent.h" />
     <ClInclude Include="Component\ParticleComponent.h" />
     <ClInclude Include="Component\SceneComponent.h" />
@@ -66,6 +67,7 @@
     <ClInclude Include="IMGUIImage.h" />
     <ClInclude Include="IMGUIInfo.h" />
     <ClInclude Include="IMGUIInputFloat.h" />
+    <ClInclude Include="IMGUIInputFloat2.h" />
     <ClInclude Include="IMGUIInputFloat3.h" />
     <ClInclude Include="IMGUIInputInt.h" />
     <ClInclude Include="IMGUILabel.h" />
@@ -113,6 +115,7 @@
     <ClInclude Include="Resource\Shader\ComputeShader.h" />
     <ClInclude Include="Resource\Shader\ConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ConstantBufferBase.h" />
+    <ClInclude Include="Resource\Shader\DissolveConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\GlobalConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\GraphicShader.h" />
     <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h" />
@@ -177,6 +180,7 @@
     <ClCompile Include="Component\ColliderCircle.cpp" />
     <ClCompile Include="Component\ColliderComponent.cpp" />
     <ClCompile Include="Component\ColliderPixel.cpp" />
+    <ClCompile Include="Component\DissolveComponent.cpp" />
     <ClCompile Include="Component\ParticleComponent.cpp" />
     <ClCompile Include="Component\StaticMeshComponent.cpp" />
     <ClCompile Include="Component\WidgetComponent.cpp" />
@@ -189,6 +193,7 @@
     <ClCompile Include="IMGUIDummy.cpp" />
     <ClCompile Include="IMGUIImage.cpp" />
     <ClCompile Include="IMGUIInputFloat.cpp" />
+    <ClCompile Include="IMGUIInputFloat2.cpp" />
     <ClCompile Include="IMGUIInputFloat3.cpp" />
     <ClCompile Include="IMGUIInputInt.cpp" />
     <ClCompile Include="IMGUILabel.cpp" />
@@ -242,6 +247,7 @@
     <ClCompile Include="Resource\Shader\ComputeShader.cpp" />
     <ClCompile Include="Resource\Shader\ConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ConstantBufferBase.cpp" />
+    <ClCompile Include="Resource\Shader\DissolveConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\GlobalConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\GraphicShader.cpp" />
     <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp" />

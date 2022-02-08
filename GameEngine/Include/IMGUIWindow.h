@@ -23,6 +23,12 @@ public:
 	bool IsWindowFocused(ImGuiFocusedFlags_ eFlag = ImGuiFocusedFlags_None) const;
 
 public:
+	const unsigned long GetWindowID() const
+	{
+		return mWindowID;
+	}
+
+public:
 	template <typename T>
 	T* AddWidget(const std::string& name, const float width = 100.f, const float height = 100.f)
 	{
@@ -95,5 +101,6 @@ protected:
 
 protected:
 	bool mbIsFocused;
+	static unsigned long mWindowID;
 };
 

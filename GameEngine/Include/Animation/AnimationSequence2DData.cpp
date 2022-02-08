@@ -24,10 +24,20 @@ CAnimationSequence2DData::~CAnimationSequence2DData()
 	}
 }
 
-void CAnimationSequence2DData::Replay()
+void CAnimationSequence2DData::Reset()
 {
-	mFrame = 0;
-	mTime = 0;
+	// CallBack 호출되지 않은 상태로 변경
+	auto iter = mVecNotify.begin();
+	auto iterEnd = mVecNotify.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->bIsCalled = false;
+	}
+	
+	// Play 관련 변수들 초기화
+	mFrame = 0.f;
+	mTime = 0.f;
 }
 
 void CAnimationSequence2DData::Save(FILE* fp)

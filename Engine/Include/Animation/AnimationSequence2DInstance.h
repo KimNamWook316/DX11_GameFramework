@@ -30,6 +30,15 @@ public:
 		mbPlay = true;
 	}
 
+	void Replay()
+	{
+		if (mCurrentAnimation)
+		{
+			mCurrentAnimation->Reset();
+			mbPlay = true;
+		}
+	}
+
 	void Stop()
 	{
 		mbPlay = false;
@@ -40,6 +49,7 @@ public:
 		return mbPlay;
 	}
 
+	bool IsEndFrame();
 
 public:
 	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop = true,
@@ -49,9 +59,7 @@ public:
 	void DeleteAnimation(const std::string& name);
 	void ChangeAnimation(const std::string& name);
 	bool CheckCurrentAnimation(const std::string& name);
-
-public:
-	void ReplayCurrentAnimation();
+	CAnimationSequence2DData* FindAnimation(const std::string& name);
 
 public:
 	CAnimationSequence2DData* GetCurrentAnimation() const
@@ -103,7 +111,7 @@ public:
 	template <typename T>
 	void SetEndCallBack(const std::string& name, T* obj, void(T::* func)())
 	{
-		CAnimationSequence2DData* data = findAnimation(name);
+		CAnimationSequence2DData* data = FindAnimation(name);
 
 		if (!data)
 		{
@@ -116,7 +124,7 @@ public:
 	template <typename T>
 	void AddNotify(const std::string& name, const int frame, T* obj, void(T::* func)())
 	{
-		CAnimationSequence2DData* data = findAnimation(name);
+		CAnimationSequence2DData* data = FindAnimation(name);
 
 		if (!data)
 		{
@@ -131,9 +139,6 @@ public:
 	{
 		mTypeID = typeid(T).hash_code();
 	}
-
-protected:
-	CAnimationSequence2DData* findAnimation(const std::string& name);
 
 protected:
 	size_t mTypeID;

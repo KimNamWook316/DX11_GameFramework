@@ -41,6 +41,18 @@ public:
         SetWorldScale(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
     }
 
+    void SetWidth(const float width)
+    {
+        mInfo.Length.x = width;
+        SetWorldScale(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
+    }
+
+    void SetHeight(const float height)
+    {
+        mInfo.Length.y = height;
+        SetWorldScale(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
+    }
+
 private:
     Box2DInfo mInfo;
 };

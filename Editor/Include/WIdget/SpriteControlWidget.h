@@ -14,7 +14,6 @@ protected:
 
 public:
     virtual bool Init() override;
-    virtual void Render() override;
 
 public:
     void OnChangePosition(float value[3]);
@@ -31,6 +30,8 @@ public:
     void OnChangeAnimationFrame(int frame);
     void OnClickPlayAnimation();
     void OnSelectAnimationList(int idx, const char* name);
+
+    void OnUpdateAnimInstFrame();
 
 protected:
     class CIMGUIInputFloat3* mPositionWidget;
@@ -49,5 +50,7 @@ protected:
     class CIMGUISliderInt* mAnimationFrameWidget;
     class CIMGUIButton* mAnimationPlayButton;
     class CIMGUIComboBox* mAnimationListWidget;
+
+    class CAnimationSequence2DInstance* mAnimInst;
 };
 

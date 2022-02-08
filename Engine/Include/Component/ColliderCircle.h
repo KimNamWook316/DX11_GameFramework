@@ -42,6 +42,17 @@ public:
         SetWorldScale(mInfo.Radius * 2.f, mInfo.Radius * 2.f, 1.f);
     }
 
+    void SetCenter(const Vector2& center)
+    {
+        mInfo.Center = center;
+    }
+
+    void SetRadius(const float radius)
+    {
+        mInfo.Radius = radius;
+        SetWorldScale(mInfo.Radius * 2.f, mInfo.Radius * 2.f, 1.f);
+    }
+
 protected:
     CircleInfo mInfo;
 };

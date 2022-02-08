@@ -26,6 +26,11 @@ public:
         mBufferData.Opacity = opacity;
     }
 
+    void SetDissolveEnable(bool bEnable)
+    {
+        mBufferData.DissolveEnable = bEnable ? 1 : 0;
+    }
+
 protected:
     MaterialCBuffer mBufferData;
 };

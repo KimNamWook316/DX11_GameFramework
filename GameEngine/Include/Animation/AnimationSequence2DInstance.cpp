@@ -395,10 +395,15 @@ void CAnimationSequence2DInstance::Load(FILE* fp)
 	}
 }
 
+bool CAnimationSequence2DInstance::IsEndFrame()
+{
+	return (mCurrentAnimation->GetAnimationSequence()->GetFrameCount() - 1 == mCurrentAnimation->GetCurrentFrame());
+}
+
 void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
 {
 	// 이미 해당 애니메이션이 존재하는지 체크
-	CAnimationSequence2DData* anim = findAnimation(name);
+	CAnimationSequence2DData* anim = FindAnimation(name);
 
 	if (anim)
 	{
@@ -455,7 +460,7 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& sequenceName,
 void CAnimationSequence2DInstance::AddAnimation(const TCHAR* fileName, const std::string& pathName, 
 	const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
 {
-	CAnimationSequence2DData* anim = findAnimation(name);
+	CAnimationSequence2DData* anim = FindAnimation(name);
 
 	if (anim)
 	{
@@ -514,7 +519,7 @@ void CAnimationSequence2DInstance::AddAnimation(const TCHAR* fileName, const std
 
 void CAnimationSequence2DInstance::DeleteAnimation(const std::string& name)
 {
-	auto iter = findAnimation(name);
+	auto iter = FindAnimation(name);
 	
 	if (iter == nullptr)
 	{
@@ -542,7 +547,7 @@ void CAnimationSequence2DInstance::ChangeAnimation(const std::string& name)
 		mCurrentAnimation->mVecNotify[i]->bIsCalled = false;
 	}
 
-	mCurrentAnimation = findAnimation(name);
+	mCurrentAnimation = FindAnimation(name);
 
 	if (!mCurrentAnimation)
 	{
@@ -565,14 +570,9 @@ bool CAnimationSequence2DInstance::CheckCurrentAnimation(const std::string& name
 	return mCurrentAnimation->mName == name;
 }
 
-void CAnimationSequence2DInstance::ReplayCurrentAnimation()
-{
-	mCurrentAnimation->Replay();
-}
-
 void CAnimationSequence2DInstance::SetPlayTime(const std::string& name, const float playTime)
 {
-	CAnimationSequence2DData* anim = findAnimation(name);
+	CAnimationSequence2DData* anim = FindAnimation(name);
 
 	if (!anim)
 	{
@@ -586,7 +586,7 @@ void CAnimationSequence2DInstance::SetPlayTime(const std::string& name, const fl
 
 void CAnimationSequence2DInstance::SetPlayScale(const std::string& name, const float playScale)
 {
-	CAnimationSequence2DData* anim = findAnimation(name);
+	CAnimationSequence2DData* anim = FindAnimation(name);
 
 	if (!anim)
 	{
@@ -599,7 +599,7 @@ void CAnimationSequence2DInstance::SetPlayScale(const std::string& name, const f
 
 void CAnimationSequence2DInstance::SetLoop(const std::string& name, bool bLoop)
 {
-	CAnimationSequence2DData* anim = findAnimation(name);
+	CAnimationSequence2DData* anim = FindAnimation(name);
 
 	if (!anim)
 	{
@@ -612,7 +612,7 @@ void CAnimationSequence2DInstance::SetLoop(const std::string& name, bool bLoop)
 
 void CAnimationSequence2DInstance::SetReverse(const std::string& name, bool bReverse)
 {
-	CAnimationSequence2DData* anim = findAnimation(name);
+	CAnimationSequence2DData* anim = FindAnimation(name);
 
 	if (!anim)
 	{
@@ -626,7 +626,7 @@ void CAnimationSequence2DInstance::SetReverse(const std::string& name, bool bRev
 void CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& name)
 {
 	// 현재 애니메이션으로 설정할 애니메이션을 찾는다.
-	mCurrentAnimation = findAnimation(name);
+	mCurrentAnimation = FindAnimation(name);
 
 	if (!mCurrentAnimation)
 	{
@@ -658,7 +658,7 @@ void CAnimationSequence2DInstance::SetCurrentFrame(const int idx)
 	mCurrentAnimation->mFrame = idx;
 }
 
-CAnimationSequence2DData* CAnimationSequence2DInstance::findAnimation(const std::string& name)
+CAnimationSequence2DData* CAnimationSequence2DInstance::FindAnimation(const std::string& name)
 {
 	auto iter = mMapAnimation.find(name);
 

@@ -2,8 +2,9 @@
 
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
-#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
 #include "Component/WidgetComponent.h"
+#include "Component/DissolveComponent.h"
 
 class CMonster :
     public CGameObject
@@ -26,21 +27,18 @@ public:
     void OnCollsionExitMouseCallBack(const CollisionResult& result);
 
 public:
-    void AddHP(const int hp)
-    {
-        mHP += hp;
-        if (mHP <= 0)
-        {
-            Destroy();
-        }
-    }
+	void OnCollisionEnter(const CollisionResult& result);
+	void OnCollisionExit(const CollisionResult& result);
+
+private:
+    void dissolveEnd();
 
 private:
     CSharedPtr<CSpriteComponent> mSprite;
-    CSharedPtr<CColliderBox2D> mBody;
+    CSharedPtr<CColliderCircle> mBody;
+    CSharedPtr<CDissolveComponent> mDissolve;
 	CSharedPtr<CWidgetComponent> mSimpleHUDWidget;
     class CSimpleHUD* mSimpleHUD;
-
     int mHP;
 };
 

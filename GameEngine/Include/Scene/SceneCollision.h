@@ -54,6 +54,7 @@ public:
 	void CreateSection();
 	void Clear();
 	void AddCollider(class CColliderComponent* collider);
+	void DeleteCollider(class CColliderComponent* collider);
 
 private:
 	void classifyColliderBySection();

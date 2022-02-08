@@ -22,6 +22,12 @@ struct MaterialTextureInfo
 	}
 };
 
+struct RenderCallBack
+{
+	std::function<void()> Func;
+	void* Obj;
+};
+
 class CMaterial : public CRef
 {
 	friend class CMaterialManager;
@@ -53,6 +59,7 @@ public:
 	void SetTransparency(bool bEnable);
 	void SetOpacity(const float val);
 	void AddOpacity(const float val);
+	void SetDissolve(bool bEnable);
 
 public:
 	void SetBaseColor(const Vector4& color);
@@ -116,6 +123,32 @@ public:
 		}
 	}
 
+public:
+	template <typename T>
+	void AddRenderCallBack(T* obj, void(T::* func)())
+	{
+		RenderCallBack* callBack = new RenderCallBack;
+		callBack->Obj = obj;
+		callBack->Func = std::bind(func, obj);
+		mRenderCallBackList.push_back(callBack);
+	}
+
+	void DeleteRenderCallBack(void* obj)
+	{
+		auto iter = mRenderCallBackList.begin();
+		auto iterEnd = mRenderCallBackList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if (obj == (*iter)->Obj)
+			{
+				SAFE_DELETE(*iter);
+				mRenderCallBackList.erase(iter);
+				break;
+			}
+		}
+	}
+
 private:
 	void SetConstantBuffer(class CMaterialConstantBuffer* buffer)
 	{
@@ -134,6 +167,7 @@ protected:
 	// MaterialManager에서 하나만 가지고 있다.
 	class CMaterialConstantBuffer* mCBuffer;
 	CSharedPtr<class CRenderState> mRenderStateArray[(int)eRenderStateType::MAX];
+	std::list<RenderCallBack*> mRenderCallBackList;
 
 private:
 	class CScene* mScene;

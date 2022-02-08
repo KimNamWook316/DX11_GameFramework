@@ -26,7 +26,7 @@ private:
 	~CAnimationSequence2DData();
 
 public:
-	void Replay();
+	void Reset();
 
 public:
 	void Save(FILE* fp);

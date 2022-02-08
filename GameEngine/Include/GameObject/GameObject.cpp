@@ -64,7 +64,86 @@ CComponent* CGameObject::FindComponent(const std::string& name)
 		}
 	}
 
+	auto iterObj = mVecObjectComponent.begin();
+	auto iterObjEnd = mVecObjectComponent.end();
+
+	for (; iterObj != iterObjEnd; ++iter)
+	{
+		if (name == (*iterObj)->GetName())
+		{
+			return *iterObj;
+		}
+	}
+
 	return nullptr;
+}
+
+void CGameObject::DeleteComponent(CComponent* comp)
+{
+	if (!comp)
+	{
+		return;
+	}
+
+	if (eComponentType::SCENE_COMP == comp->GetComponentType())
+	{
+		CSceneComponent* sceneComp = static_cast<CSceneComponent*>(comp);
+
+		// 루트 컴포넌트일 경우 가장 앞에 있는 자식 오브젝트를 루트로 올린다.
+		if (mRootSceneComponent == comp)
+		{
+			std::vector<CComponent*> childs;
+			sceneComp->GetAllChildPointer(childs);
+			mRootSceneComponent = (CSceneComponent*)childs[0];	
+			static_cast<CSceneComponent*>(mRootSceneComponent)->mParent = nullptr;
+			
+			size_t size = childs.size();
+			for (size_t i = 1; i < size; ++i)
+			{
+				mRootSceneComponent->AddChild((CSceneComponent*)childs[i]);
+			}
+		}
+		// 루트 컴포넌트가 아닌 경우, 이 컴포넌트의 모든 자식들을 이 컴포넌트의 부모에 연결한다.
+		else
+		{
+			CSceneComponent* parent = sceneComp->mParent;
+
+			std::vector<CComponent*> childs;
+			sceneComp->GetAllChildPointer(childs);
+
+			size_t size = childs.size();
+			for (size_t i = 0; i < size; ++i)
+			{
+				parent->AddChild((CSceneComponent*)childs[i]);
+			}
+			
+			parent->DeleteChild((CSceneComponent*)comp);
+		}
+
+		// 삭제 
+		mSceneComponentList.remove(sceneComp);
+	}
+	else
+	{
+		auto iter = mVecObjectComponent.begin();
+		auto iterEnd = mVecObjectComponent.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter) == comp)
+			{
+				break;
+			}
+		}
+
+		// 삭제
+		mVecObjectComponent.erase(iter);
+	}
+}
+
+void CGameObject::DeleteComponent(const std::string& name)
+{
+	DeleteComponent(FindComponent(name));
 }
 
 void CGameObject::GetAllSceneComponentsName(std::vector<FindComponentName>& outNames)

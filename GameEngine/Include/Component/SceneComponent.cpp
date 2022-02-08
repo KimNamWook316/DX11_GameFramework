@@ -246,6 +246,16 @@ void CSceneComponent::GetAllComponentsPointer(std::vector<CComponent*>& outVecPo
 	}
 }
 
+void CSceneComponent::GetAllChildPointer(std::vector<CComponent*>& outVecPointers)
+{
+	size_t size = mVecChild.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		outVecPointers.push_back(mVecChild[i]);
+	}
+}
+
 // GameObject의 씬 컴포넌트 리스트에 이 객체를 등록한다.
 void CSceneComponent::SetThisToGameObject(CGameObject* obj)
 {

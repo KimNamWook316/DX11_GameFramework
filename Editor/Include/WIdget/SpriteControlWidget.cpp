@@ -10,6 +10,7 @@
 #include "IMGUISliderInt.h"
 #include "IMGUIComboBox.h"
 #include "IMGUISameLine.h"
+#include "IMGUISeperator.h"
 #include "Component/SpriteComponent.h"
 #include "Engine.h"
 #include "PathManager.h"
@@ -27,10 +28,12 @@ CSpriteControlWidget::CSpriteControlWidget()	:
 	mInheritPosWidget(nullptr),
 	mInheritRotWidget(nullptr),
 	mLoadAnimationWidget(nullptr),
+	mAnimationWidget(nullptr),
 	mAnimationNameWidget(nullptr),
 	mAnimationFrameWidget(nullptr),
 	mAnimationPlayButton(nullptr),
-	mAnimationListWidget(nullptr)
+	mAnimationListWidget(nullptr),
+	mAnimInst(nullptr)
 {
 }
 
@@ -40,6 +43,7 @@ CSpriteControlWidget::~CSpriteControlWidget()
 
 bool CSpriteControlWidget::Init()
 {
+	// Widget
 	CIMGUIText* text = AddWidget<CIMGUIText>("Sprite Component");
 	text->SetText("Sprite Component");
 	mPositionWidget = AddWidget<CIMGUIInputFloat3>("Position");
@@ -54,8 +58,6 @@ bool CSpriteControlWidget::Init()
 	mInheritScaleWidget = AddWidget<CIMGUICheckBox>("InheritScale");
 	mInheritPosWidget = AddWidget<CIMGUICheckBox>("InheritScale");
 	mInheritRotWidget = AddWidget<CIMGUICheckBox>("InheritScale");
-
-	// Animation
 	mAnimationWidget = AddWidget<CIMGUITree>("Animation");
 	mLoadAnimationWidget = mAnimationWidget->AddWidget<CIMGUIButton>("Load", 50.f, 0.f);
 	mLoadAnimationWidget->SetClickCallBack(this, &CSpriteControlWidget::OnClickLoadAnimation);
@@ -65,6 +67,7 @@ bool CSpriteControlWidget::Init()
 	mAnimationPlayButton = mAnimationWidget->AddWidget<CIMGUIButton>("Play", 0.f, 0.f);
 	mAnimationWidget->AddWidget<CIMGUISameLine>("Line");
 	mAnimationFrameWidget = mAnimationWidget->AddWidget<CIMGUISliderInt>("Frame", 200.f);
+	AddWidget<CIMGUISeperator>("sperator");
 
 	// CallBack
 	mPositionWidget->SetCallBack(this, &CSpriteControlWidget::OnChangePosition);	
@@ -122,11 +125,6 @@ bool CSpriteControlWidget::Init()
 	mInheritPosWidget->SetCheck(2, comp->GetInheritPosZ());
 
 	return true;
-}
-
-void CSpriteControlWidget::Render()
-{
-	CComponentControlWidget::Render();
 }
 
 void CSpriteControlWidget::OnChangePosition(float value[3])
@@ -226,12 +224,12 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 		static_cast<CSpriteComponent*>(mComponent)->LoadAnimationInstanceFullPath(fullPath);
 
 		// Animation 초기화
-		CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
-		animInst->Start();
-		animInst->Play();
+		mAnimInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+		mAnimInst->Start();
+		mAnimInst->Play();
 
 		// Size 조절
-		Vector2 spriteSize = animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
+		Vector2 spriteSize = mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
 		static_cast<CSpriteComponent*>(mComponent)->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
 		mScaleWidget->SetX(spriteSize.x);
 		mScaleWidget->SetY(spriteSize.y);
@@ -241,8 +239,10 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 		mAnimationNameWidget->SetText(fullPath);
 
 		// Animation List
+		mAnimationListWidget->Clear();
+
 		std::vector<std::string> animNames;
-		animInst->GetAnimationNames(animNames);
+		mAnimInst->GetAnimationNames(animNames);
 
 		size_t size = animNames.size();
 		for (size_t i = 0; i < size; ++i)
@@ -251,41 +251,81 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 		}
 		mAnimationListWidget->Sort(true);
 		
-		std::string curAnimName = animInst->GetCurrentAnimation()->GetName();
+		std::string curAnimName = mAnimInst->GetCurrentAnimation()->GetName();
 		mAnimationListWidget->SetCurrentItem(curAnimName);
 
 		// Frame Widget
-		mAnimationFrameWidget->SetMax(animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
+		mAnimationFrameWidget->SetMax(mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
+
+		// CallBack 등록
+		for (size_t i = 0; i < size; ++i)
+		{
+			CAnimationSequence2DData* data = mAnimInst->FindAnimation(animNames[i]);
+
+			int frameCount = data->GetAnimationSequence()->GetFrameCount();
+			
+			for (int j = 0; j < frameCount; ++j)
+			{
+				mAnimInst->AddNotify(animNames[i], j, this, &CSpriteControlWidget::OnUpdateAnimInstFrame);
+			}
+		}
 	}
 }
 
 void CSpriteControlWidget::OnChangeAnimationFrame(int frame)
 {
 	// Stop
-	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
-	animInst->Stop();
+	mAnimInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	mAnimInst->Stop();
 
 	// Set Frame
-	animInst->SetCurrentFrame(frame);
+	mAnimInst->SetCurrentFrame(frame);
 }
 
 void CSpriteControlWidget::OnClickPlayAnimation()
 {
+	if (!mAnimInst)
+	{
+		return;
+	}
+
+	if (!mAnimInst->GetCurrentAnimation()->IsLoop() && mAnimInst->IsEndFrame())
+	{
+		mAnimInst->Replay();
+		return;
+	}
+	
+	bool bPlay = mAnimInst->IsPlay();
+
+	if (bPlay)
+	{
+		mAnimInst->Stop();
+	}
+	else
+	{
+		mAnimInst->Play();
+	}
 }
 
 void CSpriteControlWidget::OnSelectAnimationList(int idx, const char* name)
 {
 	// Change Animation
-	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
 	std::string animName = name;
-	animInst->ChangeAnimation(animName);
+	mAnimInst->ChangeAnimation(animName);
 
 	// Size
-	Vector2 spriteSize = animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
+	Vector2 spriteSize = mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
 	static_cast<CSpriteComponent*>(mComponent)->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
 	mScaleWidget->SetX(spriteSize.x);
 	mScaleWidget->SetY(spriteSize.y);
 
 	// Frame
-	mAnimationFrameWidget->SetMax(animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
+	mAnimationFrameWidget->SetValue(0);
+	mAnimationFrameWidget->SetMax(mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
+}
+
+void CSpriteControlWidget::OnUpdateAnimInstFrame()
+{
+	int currentFrame = mAnimInst->GetCurrentAnimation()->GetCurrentFrame();
+	mAnimationFrameWidget->SetValue(currentFrame);
 }

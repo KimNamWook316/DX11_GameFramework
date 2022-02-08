@@ -20,10 +20,18 @@ CMaterial::CMaterial(const CMaterial& mat)
 	*this = mat;
 	mScene = nullptr;
 	mRefCount = 0;
+	mRenderCallBackList.clear();
 }
 
 CMaterial::~CMaterial()
 {
+	auto iter = mRenderCallBackList.begin();
+	auto iterEnd = mRenderCallBackList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE(*iter);
+	}
 }
 
 void CMaterial::SetShader(const std::string& shaderName)
@@ -77,6 +85,14 @@ void CMaterial::Render()
 	for (size_t i = 0; i < size; ++i)
 	{
 		mVecTextureInfo[i].Texture->SetShader(mVecTextureInfo[i].Register, mVecTextureInfo[i].ShaderType, 0);
+	}
+
+	auto iter = mRenderCallBackList.begin();
+	auto iterEnd = mRenderCallBackList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->Func();
 	}
 }
 
@@ -301,6 +317,11 @@ void CMaterial::AddOpacity(const float val)
 	{
 		mOpacity = 1.f;
 	}
+}
+
+void CMaterial::SetDissolve(bool bEnable)
+{
+	mCBuffer->SetDissolveEnable(bEnable);
 }
 
 void CMaterial::SetBaseColor(const Vector4& color)

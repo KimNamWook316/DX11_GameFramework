@@ -11,6 +11,7 @@ public:
 	bool SetCollisionState(const std::string& name, eCollisionChannel eChannel,
 		eCollisionInteraction state);
 	CollisionProfile* FindProfile(const std::string& name);
+	void GetProfileNames(std::vector<std::string>& outNames);
 
 	DECLARE_SINGLE(CCollisionManager)
 
