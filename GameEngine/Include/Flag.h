@@ -202,3 +202,15 @@ enum class eMouseState
 	State10,
 	Max
 };
+
+enum class eTileShape
+{
+	Rect,
+	Rhombus,
+};
+
+enum class eTileType
+{
+	Normal,
+	Wall,
+};

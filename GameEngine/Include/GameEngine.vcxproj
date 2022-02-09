@@ -41,6 +41,8 @@
     <ClInclude Include="Component\SceneComponent.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
     <ClInclude Include="Component\StaticMeshComponent.h" />
+    <ClInclude Include="Component\Tile.h" />
+    <ClInclude Include="Component\TileMapComponent.h" />
     <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Component\WidgetComponent.h" />
     <ClInclude Include="Device.h" />
@@ -183,6 +185,8 @@
     <ClCompile Include="Component\DissolveComponent.cpp" />
     <ClCompile Include="Component\ParticleComponent.cpp" />
     <ClCompile Include="Component\StaticMeshComponent.cpp" />
+    <ClCompile Include="Component\Tile.cpp" />
+    <ClCompile Include="Component\TileMapComponent.cpp" />
     <ClCompile Include="Component\WidgetComponent.cpp" />
     <ClCompile Include="IMGUIButton.cpp" />
     <ClCompile Include="IMGUICheckBox.cpp" />

@@ -1,0 +1,122 @@
+#include "Tile.h"
+
+CTile::CTile()	:
+	meShape(eTileShape::Rect),
+	meTileType(eTileType::Normal),
+	mAnimInstance(nullptr),
+	mOwner(nullptr),
+	mIndexX(-1),
+	mIndexY(-1),
+	mIndex(-1)
+{
+}
+
+CTile::CTile(const CTile& tile)
+{
+	*this = tile;
+
+	mAnimInstance = tile.mAnimInstance->Clone();
+}
+
+CTile::~CTile()
+{
+	SAFE_DELETE(mAnimInstance);
+}
+
+void CTile::Update(float deltaTime)
+{
+	if (mAnimInstance)
+	{
+		mAnimInstance->Update(deltaTime);
+	}
+}
+
+void CTile::AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
+{
+	if (!mAnimInstance)
+	{
+		mAnimInstance = new CAnimationSequence2DInstance;
+	}
+
+	mAnimInstance->AddAnimation(sequenceName, name, bIsLoop, playTime, playScale, bIsReverse);
+}
+
+void CTile::AddAnimation(const TCHAR* fileName, const std::string& pathName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
+{
+	if (!mAnimInstance)
+	{
+		mAnimInstance = new CAnimationSequence2DInstance;
+	}
+
+	mAnimInstance->AddAnimation(fileName, pathName, name, bIsLoop, playTime, playScale, bIsReverse);
+}
+
+bool CTile::CheckCurrentAnimation(const std::string& name)
+{
+	if (!mAnimInstance)
+	{
+		return false;
+	}
+
+	return mAnimInstance->CheckCurrentAnimation(name);
+}
+
+void CTile::ChangeAnimation(const std::string& name)
+{
+	if (!mAnimInstance)
+	{
+		return;
+	}
+
+	return mAnimInstance->ChangeAnimation(name);
+}
+
+void CTile::SetPlayTime(const std::string& name, const float playTime)
+{
+	if (!mAnimInstance)
+	{
+		return;
+	}
+
+	return mAnimInstance->SetPlayTime(name, playTime);
+}
+
+void CTile::SetPlayScale(const std::string& name, const float playScale)
+{
+	if (!mAnimInstance)
+	{
+		return;
+	}
+
+	return mAnimInstance->SetPlayScale(name, playScale);
+}
+
+void CTile::SetLoop(const std::string& name, bool bLoop)
+{
+	if (!mAnimInstance)
+	{
+		return;
+	}
+
+	return mAnimInstance->SetLoop(name, bLoop);
+}
+
+void CTile::SetReverse(const std::string& name, bool bReverse)
+{
+	if (!mAnimInstance)
+	{
+		return;
+	}
+
+	return mAnimInstance->SetReverse(name, bReverse);
+}
+
+void CTile::SetCurrentAnimation(const std::string& name)
+{
+	if (!mAnimInstance)
+	{
+		return;
+	}
+
+	return mAnimInstance->SetCurrentAnimation(name);
+}

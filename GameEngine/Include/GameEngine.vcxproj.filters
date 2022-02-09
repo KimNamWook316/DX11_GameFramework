@@ -195,6 +195,9 @@
     <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\09. Dissolve">
       <UniqueIdentifier>{f6e88940-258b-4958-a7d0-a5339097ef3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component\01. SceneComponent\06. TileMapComponent">
+      <UniqueIdentifier>{24e22fbb-d4ca-4c6c-bc0f-e2d8e6706226}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -632,6 +635,12 @@
     <ClInclude Include="IMGUIInputFloat2.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Component\TileMapComponent.h">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Tile.h">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1017,6 +1026,12 @@
     </ClCompile>
     <ClCompile Include="IMGUIInputFloat2.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\TileMapComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Tile.cpp">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
