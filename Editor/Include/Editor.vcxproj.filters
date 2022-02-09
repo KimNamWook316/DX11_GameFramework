@@ -78,6 +78,15 @@
     <ClInclude Include="Widget\ColliderControlWidget.h">
       <Filter>04. IMGUIWidget</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\WidgetControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\CollisionProfileWindow.h">
+      <Filter>02. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -121,6 +130,15 @@
     </ClCompile>
     <ClCompile Include="Widget\ColliderControlWidget.cpp">
       <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\WidgetControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\CollisionProfileWindow.cpp">
+      <Filter>02. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

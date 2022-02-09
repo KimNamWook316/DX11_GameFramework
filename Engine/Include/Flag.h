@@ -103,16 +103,16 @@ enum class eCollisionChannel
 	Monster,
 	PlayerAttack,
 	MonsterAttack,
-	Cutom1,
-	Cutom2,
-	Cutom3,
-	Cutom4,
-	Cutom5,
-	Cutom6,
-	Cutom7,
-	Cutom8,
-	Cutom9,
-	Cutom10,
+	Custom1,
+	Custom2,
+	Custom3,
+	Custom4,
+	Custom5,
+	Custom6,
+	Custom7,
+	Custom8,
+	Custom9,
+	Custom10,
 	Max
 };
 
@@ -201,4 +201,16 @@ enum class eMouseState
 	State9,
 	State10,
 	Max
+};
+
+enum class eTileShape
+{
+	Rect,
+	Rhombus,
+};
+
+enum class eTileType
+{
+	Normal,
+	Wall,
 };

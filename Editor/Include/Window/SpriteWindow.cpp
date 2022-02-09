@@ -188,11 +188,11 @@ bool CSpriteWindow::Init()
 	text->SetText("Animation Value");
 	mAnimLoopCheckBox = infoCol->AddWidget<CIMGUICheckBox>("Loop", 30.f, 0.f);
 	mAnimLoopCheckBox->AddCheckInfo("Loop");
-	mAnimLoopCheckBox->SetCallBack(this, &CSpriteWindow::OnClickLoopCheckBox);
+	mAnimLoopCheckBox->SetCallBackLabel(this, &CSpriteWindow::OnClickLoopCheckBox);
 	infoCol->AddWidget<CIMGUISameLine>("line");
 	mAnimReverseCheckBox = infoCol->AddWidget<CIMGUICheckBox>("Reverse", 30.f, 0.f);
 	mAnimReverseCheckBox->AddCheckInfo("Reverse");
-	mAnimReverseCheckBox->SetCallBack(this, &CSpriteWindow::OnClickReverseCheckBox);
+	mAnimReverseCheckBox->SetCallBackLabel(this, &CSpriteWindow::OnClickReverseCheckBox);
 	mPlayTimeInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Time", 200.f, 0.f);
 	mPlayTimeInput->SetCallBack(this, &CSpriteWindow::OnPlayTimeInputChanged);
 	mPlayScaleInput = infoCol->AddWidget<CIMGUIInputFloat>("Play Scale", 200.f, 0.f);

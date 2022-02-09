@@ -34,7 +34,14 @@ void CIMGUICheckBox::Render()
     {
         if (ImGui::Checkbox(mVecCheckInfo[i]->LabelUTF8, &mVecCheckInfo[i]->bCheck))
         {
-            mCallBack(mVecCheckInfo[i]->LabelUTF8, mVecCheckInfo[i]->bCheck);
+            if (mCallBackLabel)
+            {
+                mCallBackLabel(mVecCheckInfo[i]->LabelUTF8, mVecCheckInfo[i]->bCheck);
+            }
+            else if (mCallBackIdx) 
+            {
+                mCallBackIdx((int)i, mVecCheckInfo[i]->bCheck);
+            }
         }
 
         if (mbMultiColumn)

@@ -59,9 +59,15 @@ public:
 
 public:
     template <typename T>
-    void SetCallBack(T* obj, void(T::* func)(const char*, bool))
+    void SetCallBackLabel(T* obj, void(T::* func)(const char*, bool))
     {
-        mCallBack = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+        mCallBackLabel = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+    }
+
+    template <typename T>
+    void SetCallBackIdx(T* obj, void(T::* func)(int, bool))
+    {
+        mCallBackIdx = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
     }
 
 protected:
@@ -69,6 +75,7 @@ protected:
     bool mbMultiColumn;
     int mColNum;
     float mSpacingX;
-    std::function<void(const char*, bool)> mCallBack;
+    std::function<void(const char*, bool)> mCallBackLabel;
+    std::function<void(int, bool)> mCallBackIdx;
 };
 

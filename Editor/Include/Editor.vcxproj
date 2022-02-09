@@ -158,9 +158,12 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="Widget\ColliderControlWidget.h" />
     <ClInclude Include="WIdget\ComponentControlWidget.h" />
     <ClInclude Include="WIdget\SpriteControlWidget.h" />
+    <ClInclude Include="Widget\WidgetControlWidget.h" />
+    <ClInclude Include="Window\CollisionProfileWindow.h" />
     <ClInclude Include="Window\DetailWindow.h" />
     <ClInclude Include="Window\EditorMenuWindow.h" />
     <ClInclude Include="Window\ObjectHierachyWindow.h" />
@@ -174,9 +177,12 @@
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="Widget\ColliderControlWidget.cpp" />
     <ClCompile Include="WIdget\ComponentControlWidget.cpp" />
     <ClCompile Include="WIdget\SpriteControlWidget.cpp" />
+    <ClCompile Include="Widget\WidgetControlWidget.cpp" />
+    <ClCompile Include="Window\CollisionProfileWindow.cpp" />
     <ClCompile Include="Window\DetailWindow.cpp" />
     <ClCompile Include="Window\EditorMenuWindow.cpp" />
     <ClCompile Include="Window\ObjectHierachyWindow.cpp" />

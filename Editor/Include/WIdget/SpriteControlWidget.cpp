@@ -75,11 +75,11 @@ bool CSpriteControlWidget::Init()
 	mRotWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeRot);
 	mPivotWidget->SetCallBack(this, &CSpriteControlWidget::OnChangePivot);
 	mColorWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeBaseColor);
-	mTransparencyWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeTransparency);
+	mTransparencyWidget->SetCallBackLabel(this, &CSpriteControlWidget::OnChangeTransparency);
 	mOpacityWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeOpacity);
-	mInheritScaleWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeInheritScale);
-	mInheritPosWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeInheritPos);
-	mInheritRotWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeInheritRot);
+	mInheritScaleWidget->SetCallBackLabel(this, &CSpriteControlWidget::OnChangeInheritScale);
+	mInheritPosWidget->SetCallBackLabel(this, &CSpriteControlWidget::OnChangeInheritPos);
+	mInheritRotWidget->SetCallBackLabel(this, &CSpriteControlWidget::OnChangeInheritRot);
 	mAnimationFrameWidget->SetCallBack(this, &CSpriteControlWidget::OnChangeAnimationFrame);
 	mAnimationPlayButton->SetClickCallBack(this, &CSpriteControlWidget::OnClickPlayAnimation);
 	mAnimationListWidget->SetSelectCallBack(this, &CSpriteControlWidget::OnSelectAnimationList);

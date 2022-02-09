@@ -1,4 +1,6 @@
 #include "ColliderControlWidget.h"
+#include "IMGUIManager.h"
+#include "../Window/CollisionProfileWindow.h"
 #include "IMGUIWindow.h"
 #include "GameObject/GameObject.h"
 #include "Scene/Scene.h"
@@ -209,7 +211,7 @@ void CColliderControlWidget::OnSelectCollisionProfile(int idx, const char* label
 
 void CColliderControlWidget::OnClickEditProfile()
 {
-	// TODO : 프로파일 편집 윈도우 띄우기
+	CIMGUIManager::GetInst()->AddWindow<CCollisionProfileWindow>("Collision Profile");
 }
 
 void CColliderControlWidget::OnChangeBoxWidth(float val)
