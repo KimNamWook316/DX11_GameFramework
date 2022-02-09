@@ -10,7 +10,8 @@ CResourceManager::CResourceManager() :
 	mAnimationManager(nullptr),
 	mSoundManager(nullptr),
 	mFontManager(nullptr),
-	mParticleManager(nullptr)
+	mParticleManager(nullptr),
+	mExcelManager(nullptr)
 {
 }
 
@@ -24,6 +25,7 @@ CResourceManager::~CResourceManager()
 	SAFE_DELETE(mSoundManager);
 	SAFE_DELETE(mFontManager);
 	SAFE_DELETE(mParticleManager);
+	SAFE_DELETE(mExcelManager);
 }
 
 bool CResourceManager::Init()
@@ -79,6 +81,13 @@ bool CResourceManager::Init()
 
 	mParticleManager = new CParticleManager;
 	if (!mParticleManager->Init())
+	{
+		assert(false);
+		return false;
+	}
+
+	mExcelManager = new CExcelManager;
+	if (!mExcelManager->Init())
 	{
 		assert(false);
 		return false;
@@ -387,6 +396,36 @@ CParticle* CResourceManager::FindParticle(const std::string& name)
 void CResourceManager::ReleaseParticle(const std::string& name)
 {
 	mParticleManager->ReleaseParticle(name);
+}
+
+CExcelData* CResourceManager::FindData(const std::string& name)
+{
+	return mExcelManager->FindData(name);
+}
+
+bool CResourceManager::DeleteData(const std::string& name)
+{
+	return mExcelManager->DeleteData(name);
+}
+
+bool CResourceManager::SaveCSV(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fileName, const std::string& pathName)
+{
+	return mExcelManager->SaveCSV(data, name, fileName, pathName);
+}
+
+bool CResourceManager::SaveCSVFullPath(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fullPath)
+{
+	return mExcelManager->SaveCSV(data, name, fullPath);
+}
+
+bool CResourceManager::LoadCSV(const std::string& name, const char* fileName, const std::string& pathName)
+{
+	return mExcelManager->LoadCSV(name, fileName, pathName);
+}
+
+bool CResourceManager::LoadCSVFullPath(const char* fullPath)
+{
+	return mExcelManager->LoadCSV(fullPath);
 }
 
 

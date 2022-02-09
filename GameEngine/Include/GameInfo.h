@@ -59,6 +59,7 @@
 #define ANIMATION_PATH	"Animation"
 #define SCENE_PATH		"Scene"
 #define SOUND_PATH		"Sound"
+#define EXCEL_PATH		"Excel"
 
 #define SAFE_DELETE(p)  if(p) { delete p; p = nullptr; }
 #define SAFE_DELETE_ARRAY(p) if(p) { delete[] p; p = nullptr; }
@@ -383,4 +384,9 @@ struct DissolveCBuffer
 	float OutFilter;
 	float CenterFilter;
 	Vector3 Dummy;
+};
+
+struct ExcelData
+{
+	std::vector<std::vector<std::string>> Data;
 };

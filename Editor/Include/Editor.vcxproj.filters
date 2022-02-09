@@ -16,14 +16,14 @@
     <Filter Include="01. Scene">
       <UniqueIdentifier>{f0fc0a98-1987-491c-a192-e5e5d1dcdc8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. Editor">
-      <UniqueIdentifier>{faaeb3f7-880c-4cd3-abc3-7b0c23824ab2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. Object">
       <UniqueIdentifier>{3f5d84f5-1afd-4173-a087-90e0e4030edb}</UniqueIdentifier>
     </Filter>
     <Filter Include="04. IMGUIWidget">
       <UniqueIdentifier>{53651112-eb44-4bdc-a420-71c37d976375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Window">
+      <UniqueIdentifier>{faaeb3f7-880c-4cd3-abc3-7b0c23824ab2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +43,7 @@
       <Filter>01. Scene</Filter>
     </ClInclude>
     <ClInclude Include="Window\SpriteWindow.h">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClInclude>
     <ClInclude Include="Object\SpriteEditObject.h">
       <Filter>03. Object</Filter>
@@ -52,13 +52,13 @@
       <Filter>03. Object</Filter>
     </ClInclude>
     <ClInclude Include="Window\ObjectHierachyWindow.h">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClInclude>
     <ClInclude Include="Window\EditorMenuWindow.h">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClInclude>
     <ClInclude Include="Window\DetailWindow.h">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClInclude>
     <ClInclude Include="EditorInfo.h">
       <Filter>Header Files</Filter>
@@ -82,7 +82,7 @@
       <Filter>04. IMGUIWidget</Filter>
     </ClInclude>
     <ClInclude Include="Window\CollisionProfileWindow.h">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
@@ -99,7 +99,7 @@
       <Filter>01. Scene</Filter>
     </ClCompile>
     <ClCompile Include="Window\SpriteWindow.cpp">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClCompile>
     <ClCompile Include="Object\SpriteEditObject.cpp">
       <Filter>03. Object</Filter>
@@ -108,13 +108,13 @@
       <Filter>03. Object</Filter>
     </ClCompile>
     <ClCompile Include="Window\ObjectHierachyWindow.cpp">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClCompile>
     <ClCompile Include="Window\EditorMenuWindow.cpp">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClCompile>
     <ClCompile Include="Window\DetailWindow.cpp">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClCompile>
     <ClCompile Include="Object\Player2D.cpp">
       <Filter>03. Object</Filter>
@@ -135,7 +135,7 @@
       <Filter>04. IMGUIWidget</Filter>
     </ClCompile>
     <ClCompile Include="Window\CollisionProfileWindow.cpp">
-      <Filter>02. Editor</Filter>
+      <Filter>02. Window</Filter>
     </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
