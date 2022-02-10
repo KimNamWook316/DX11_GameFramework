@@ -173,6 +173,7 @@
     <ClCompile Include="Object\PlayerChild.cpp" />
     <ClCompile Include="Object\RainParticle.cpp" />
     <ClCompile Include="Object\SmokeParticle.cpp" />
+    <ClCompile Include="Object\TileMapObject.cpp" />
     <ClCompile Include="Scene\LoadingScene.cpp" />
     <ClCompile Include="Scene\LoadingThread.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Object\PlayerChild.h" />
     <ClInclude Include="Object\RainParticle.h" />
     <ClInclude Include="Object\SmokeParticle.h" />
+    <ClInclude Include="Object\TileMapObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\LoadingScene.h" />
     <ClInclude Include="Scene\LoadingThread.h" />

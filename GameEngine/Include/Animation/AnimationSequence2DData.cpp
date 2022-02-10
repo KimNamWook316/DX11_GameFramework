@@ -36,7 +36,7 @@ void CAnimationSequence2DData::Reset()
 	}
 	
 	// Play 관련 변수들 초기화
-	mFrame = 0.f;
+	mFrame = 0;
 	mTime = 0.f;
 }
 

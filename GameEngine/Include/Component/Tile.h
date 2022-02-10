@@ -39,7 +39,7 @@ public:
 		return meShape;
 	}
 
-	const Vector3& GetSize() const
+	const Vector2& GetSize() const
 	{
 		return mSize;
 	}
@@ -74,12 +74,50 @@ public:
 		return mIndex;
 	}
 
+public:
+	void SetIndex(const int idxX, const int idxY, const int idx)
+	{
+		mIndexX = idxX;
+		mIndexY = idxY;
+		mIndex = idx;
+	}
+
+	void SetShape(eTileShape eShape)
+	{
+		meShape = eShape;
+	}
+
+	void SetTileType(eTileType type)
+	{
+		meTileType = type;
+	}
+
+	void SetPos(const Vector3& pos)
+	{
+		mPos = pos;
+	}
+
+	void SetPos(const float x, const float y, const float z)
+	{
+		mPos = Vector3(x, y, z);
+	}
+
+	void SetSize(const Vector2& size)
+	{
+		mSize = size;
+	}
+
+	void SetSize(const float x, const float y)
+	{
+		mSize = Vector2(x, y);
+	}
+
 private:
 	class CTileMapComponent* mOwner;
 	eTileShape meShape;
 	eTileType meTileType;
-	Vector3 mPos;
-	Vector3 mSize;
+	Vector3 mPos;	// Left Bottom
+	Vector2 mSize;
 	Vector3 mCenter;
 	Matrix mMatWorld;
 	CAnimationSequence2DInstance* mAnimInstance;

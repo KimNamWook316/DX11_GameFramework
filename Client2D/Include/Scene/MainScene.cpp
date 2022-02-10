@@ -8,6 +8,7 @@
 #include "../Object/SmokeParticle.h"
 #include "../Object/MuzzleParticle.h"
 #include "../Object/RainParticle.h"
+#include "../Object/TileMapObject.h"
 #include "Scene/SceneResource.h";
 
 CMainScene::CMainScene()
@@ -44,6 +45,8 @@ bool CMainScene::Init()
 	mMainWidget = mScene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	SetPlayerObj(player);
+
+	CTileMapObject* tileMap = mScene->CreateGameObject<CTileMapObject>("TileMap");
 
 	if (mLoadingFunction)
 	{
@@ -102,6 +105,12 @@ void CMainScene::createMaterial()
 	material->SetShader("ParticleRenderShader");
 	material->SetRenderState("AlphaBlend");
 	material->SetTransparency(true);
+
+	mScene->GetResource()->CreateMaterial<CMaterial>("TileMap");
+	material = mScene->GetResource()->FindMaterial("TileMap");
+	material->AddTexture(0, (int)eBufferShaderTypeFlags::Pixel, "Tile", TEXT("Floors.png"));
+	material->SetShader("TileMapShader");
+	material->SetRenderState("AlphaBlend");
 }
 
 void CMainScene::createAnimationSequence()

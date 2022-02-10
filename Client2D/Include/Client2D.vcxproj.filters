@@ -40,6 +40,9 @@
     <Filter Include="02. Object\06. Particle">
       <UniqueIdentifier>{f78c7c2c-64a1-4b67-a63c-895ae88b7cc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Object\07. TileMap">
+      <UniqueIdentifier>{5af58cb4-0356-415a-bad0-d50d03cca05b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="Object\RainParticle.cpp">
       <Filter>02. Object\06. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TileMapObject.cpp">
+      <Filter>02. Object\07. TileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="Object\RainParticle.h">
       <Filter>02. Object\06. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TileMapObject.h">
+      <Filter>02. Object\07. TileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

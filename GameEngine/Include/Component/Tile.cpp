@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include "TileMapComponent.h"
 
 CTile::CTile()	:
 	meShape(eTileShape::Rect),
@@ -29,6 +30,15 @@ void CTile::Update(float deltaTime)
 	{
 		mAnimInstance->Update(deltaTime);
 	}
+
+	Vector3 ownerPos = mOwner->GetWorldPos();
+	Vector3 pos = ownerPos + mPos;
+
+	Matrix matScale, matTranslate;
+	matScale.Scaling(mSize.x, mSize.y, 1.f);
+	matTranslate.Translation(mPos);
+
+	mMatWorld = matScale * matTranslate;
 }
 
 void CTile::AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)

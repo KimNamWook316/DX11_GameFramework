@@ -1,6 +1,6 @@
 #include "ComputeShader.h"
 #include "../../PathManager.h"
-#include "../../Device.h";
+#include "../../Device.h"
 
 CComputeShader::CComputeShader()	:
 	mCS(nullptr),

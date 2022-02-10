@@ -4,7 +4,7 @@
 #include "Scene/CameraManager.h"
 #include "Scene/Scene.h"
 #include "Component/CameraComponent.h"
-#include "Engine.h";
+#include "Engine.h"
 
 DEFINITION_SINGLE(CInput)
 

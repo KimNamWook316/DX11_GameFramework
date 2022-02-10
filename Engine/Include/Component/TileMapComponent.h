@@ -26,6 +26,9 @@ public:
 	virtual CTileMapComponent* Clone() override;
 
 public:
+	void CreateTile(eTileShape eShape, const int countX, const int countY, const Vector2& size);
+
+public:
 	void SetBackBaseColor(const Vector4& color);
 	void SetBackBaseColor(const float r, const float g, const float b, const float a);
 	void SetBackRenderState(class CRenderState* state);
@@ -64,12 +67,44 @@ public:
         return mBackMaterial;
     }
 
+	eTileShape GetTileShape() const
+	{
+		return meTileShape;
+	}
+
+	int GetTileCountX() const
+	{
+		return mCountX;
+	}
+
+	int GetTileCountY() const
+	{
+		return mCountY;
+	}
+
+	const Vector2& GetTileSize() const
+	{
+		return mTileSize;
+	}
+
 public:
-    void SetMaterial(CMaterial* material);
+    void SetBackMaterial(CMaterial* material);
+	void SetTileMaterial(CMaterial* material);
+
+private:
+	int getTileRenderIndexX(const Vector3& pos);
+	int getTileRenderIndexY(const Vector3& pos);
 
 protected:
     CSharedPtr<CSpriteMesh> mBackMesh;
     CSharedPtr<CMaterial> mBackMaterial;
+	CSharedPtr<CMaterial> mTileMaterial;
     std::vector<CTile*> mVecTile;
+	class CTileMapConstantBuffer* mCBuffer;
+	eTileShape meTileShape;
+	int mCountX;
+	int mCountY;
+	int mRenderCount;
+	Vector2 mTileSize;
 };
 

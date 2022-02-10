@@ -9,6 +9,7 @@
 #include "NumberShader.h"
 #include "ParticleUpdateShader.h"
 #include "ParticleRenderShader.h"
+#include "TileMapShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -91,6 +92,13 @@ bool CShaderManager::Init()
 		return false;
 	}
 
+	// TileMap Shader
+	if (!CreateShader<CTileMapShader>("TileMapShader"))
+	{
+		assert(false);
+		return false;
+	}
+
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
 		(int)eBufferShaderTypeFlags::Graphic);
@@ -121,6 +129,9 @@ bool CShaderManager::Init()
 
 	CreateConstantBuffer("DissolveCBuffer", sizeof(DissolveCBuffer), 4,
 		(int)eBufferShaderTypeFlags::Pixel);
+
+	CreateConstantBuffer("TileMapCBuffer", sizeof(TileMapCBuffer), 12,
+		(int)eBufferShaderTypeFlags::Graphic);
 
 	return true;
 }

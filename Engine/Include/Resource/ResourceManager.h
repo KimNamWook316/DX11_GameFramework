@@ -8,6 +8,7 @@
 #include "Sound/SoundManager.h"
 #include "Font/FontManager.h"
 #include "Particle/ParticleManager.h"
+#include "Excel/ExcelManager.h"
 
 // 다양한 리소스들을 모두 관리할 매니저 (메쉬, 오디오 등등 모든 리소스는 이 객체에서만 관리한다.)
 // CResource라는 클래스를 만들어, 모든 리소스가 상속받게 하여, 맵 하나로 관리하는 법도 있다.
@@ -131,6 +132,14 @@ public: // ===================== Particle =====================
 	CParticle* FindParticle(const std::string& name);
 	void ReleaseParticle(const std::string& name);
 
+public: // ===================== Particle =====================
+	CExcelData* FindData(const std::string& name);
+	bool DeleteData(const std::string& name);
+	bool SaveCSV(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool SaveCSVFullPath(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fullPath);
+	bool LoadCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool LoadCSVFullPath(const char* fullPath);
+
 	DECLARE_SINGLE(CResourceManager)
 
 private:
@@ -142,5 +151,6 @@ private:
 	CSoundManager* mSoundManager;
 	CFontManager* mFontManager;
 	CParticleManager* mParticleManager;
+	CExcelManager* mExcelManager;
 };
 

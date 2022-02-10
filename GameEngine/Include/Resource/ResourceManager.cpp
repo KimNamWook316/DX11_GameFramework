@@ -425,7 +425,7 @@ bool CResourceManager::LoadCSV(const std::string& name, const char* fileName, co
 
 bool CResourceManager::LoadCSVFullPath(const char* fullPath)
 {
-	return mExcelManager->LoadCSV(fullPath);
+	return mExcelManager->LoadCSVFullPath(fullPath);
 }
 
 

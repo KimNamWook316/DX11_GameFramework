@@ -108,20 +108,25 @@ bool CRenderManager::Init()
 
 	// Defulat Layer
 	RenderLayer* layer = new RenderLayer;
-	layer->Name = "Default";
+	layer->Name = "Back";
 	layer->LayerPriority = 0;
+	mRenderLayerList.push_back(layer);
+
+	layer = new RenderLayer;
+	layer->Name = "Default";
+	layer->LayerPriority = 1;
 	mRenderLayerList.push_back(layer);
 
 	// Particle Layer
 	layer = new RenderLayer;
 	layer->Name = "Particle";
-	layer->LayerPriority = 1;
+	layer->LayerPriority = 2;
 	mRenderLayerList.push_back(layer);
 
 	// Widget Component Layer
 	layer = new RenderLayer;
 	layer->Name = "ScreenWidgetComponent";
-	layer->LayerPriority = 2;
+	layer->LayerPriority = 3;
 	mRenderLayerList.push_back(layer);
 
 	// Depth Disable ╣х ╩Себ

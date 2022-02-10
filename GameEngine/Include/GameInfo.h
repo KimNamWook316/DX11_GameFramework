@@ -386,7 +386,12 @@ struct DissolveCBuffer
 	Vector3 Dummy;
 };
 
-struct ExcelData
+struct TileMapCBuffer
 {
-	std::vector<std::vector<std::string>> Data;
+	Vector2 ImageSize;
+	Vector2 Size;
+	Vector2 Start;
+	Vector2 End;
+	Matrix MatWVP;
 };
+
