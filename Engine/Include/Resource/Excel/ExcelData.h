@@ -11,24 +11,45 @@ private:
 	~CExcelData();
 
 public:
-	bool SaveCSV(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
-	bool SaveCSVFullPath(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fullPath);
+	bool Init();
+	void SetLabel(const std::vector<std::string>& labels);
+	void AddLabel(const std::string& label);
+	void SetData(const std::string& name, const std::vector<std::string>& data);
+	void SetData(const std::string& name, const std::string& label, const std::string& data);
+	void SetData(const std::string& name, const std::string& label, int data);
+	void SetData(const std::string& name, const std::string& label, float data);
+	void SetData(const std::string& name, const std::string& label, bool data);
+	void Clear();
+
+public:
+	bool SaveCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool SaveCSVFullPath(const std::string& name, const char* fullPath);
 	bool LoadCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool LoadCSVFullPath(const char* fullPath);
 
 public:
 	const std::string& GetName() const
 	{
-		return mName;
+		return mInfo.Name;
 	}
 
-	const std::vector<std::vector<std::string>>& GetData() const
+	const std::vector<std::string>& GetLabels() const
 	{
-		return mData;
+		return mInfo.Labels;
+	}
+
+	std::vector<std::string>* FindData(const std::string& name);
+
+public:
+	void SetName(const std::string& name)
+	{
+		mInfo.Name = name;
 	}
 
 private:
-	std::string mName;
-	std::vector<std::vector<std::string>> mData;
+	int getLabelIndex(const std::string& label);
+		
+private:
+	ExcelInfo mInfo;
 };
 

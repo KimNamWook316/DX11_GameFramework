@@ -135,9 +135,9 @@ public: // ===================== Particle =====================
 public: // ===================== Particle =====================
 	CExcelData* FindData(const std::string& name);
 	bool DeleteData(const std::string& name);
-	bool SaveCSV(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
-	bool SaveCSVFullPath(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fullPath);
-	bool LoadCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool SaveCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool SaveCSVFullPath(const std::string& name, const char* fullPath);
+	bool LoadCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool LoadCSVFullPath(const char* fullPath);
 
 	DECLARE_SINGLE(CResourceManager)

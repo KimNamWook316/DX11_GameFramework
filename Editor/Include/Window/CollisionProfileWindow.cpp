@@ -1,5 +1,8 @@
 #include "CollisionProfileWindow.h"
 #include "Collision/CollisionManager.h"
+#include "Resource/ResourceManager.h"
+#include "Engine.h"
+#include "PathManager.h"
 #include "IMGUIManager.h"
 #include "IMGUIListBox.h"
 #include "IMGUITextInput.h"
@@ -9,7 +12,6 @@
 #include "IMGUIText.h"
 #include "IMGUISeperator.h"
 #include "IMGUISameLine.h"
-#include "../Util.h"
 
 CCollisionProfileWindow::CCollisionProfileWindow()	:
 	mProfileList(nullptr),
@@ -137,5 +139,28 @@ void CCollisionProfileWindow::OnCheckInteraction(int idx, bool bCheck)
 
 void CCollisionProfileWindow::OnClickSave()
 {
-	// TODO : Save as csv
+    TCHAR filePath[MAX_PATH] = {};
+
+    OPENFILENAME openFile = {};
+
+    openFile.lStructSize = sizeof(OPENFILENAME);
+    openFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+    openFile.lpstrFilter = TEXT("csv File\0*.csv\0모든 파일\0*.*");
+    openFile.lpstrFile = filePath;
+    openFile.nMaxFile = MAX_PATH;
+    openFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(EXCEL_PATH)->Path;
+
+    if (GetSaveFileName(&openFile) != 0)
+    {
+        char convertFullPath[MAX_PATH] = {};
+
+        int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
+        WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
+
+		std::vector<std::vector<std::string>> data;
+
+		// TODO : 데이터 정리
+
+		//CResourceManager::GetInst()->SaveCSVFullPath(data, "CollsionProfileInfo", convertFullPath);
+    }
 }

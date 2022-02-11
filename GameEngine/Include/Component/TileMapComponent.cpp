@@ -1,8 +1,9 @@
 #include "TileMapComponent.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
-#include "CameraComponent.h"
+#include "../Resource/Shader/StructuredBuffer.h"
 #include "../Resource/Shader/TileMapConstantBuffer.h"
+#include "CameraComponent.h"
 
 CTileMapComponent::CTileMapComponent()
 {
@@ -14,6 +15,15 @@ CTileMapComponent::CTileMapComponent()
 	mRenderCount = 0;
 	meTileShape = eTileShape::Rect;
 	mLayerName = "Back";
+	mTileInfoBuffer = nullptr;
+
+	for (int i = 0; i < (int)eTileType::Max; ++i)
+	{
+		mTileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
+	}
+
+	mTileColor[(int)eTileType::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
+	mbEditMode = false;
 }
 
 CTileMapComponent::CTileMapComponent(const CTileMapComponent& comp)	:
@@ -35,10 +45,23 @@ CTileMapComponent::CTileMapComponent(const CTileMapComponent& comp)	:
 	{
 		mCBuffer = comp.mCBuffer->Clone();
 	}
+
+	if (comp.mTileInfoBuffer)
+	{
+		mTileInfoBuffer = comp.mTileInfoBuffer->Clone();
+	}
+
+	for (int i = 0; i < (int)eTileType::Max; ++i)
+	{
+		mTileColor[i] = comp.mTileColor[i];
+	}
+	
+	mbEditMode = comp.mbEditMode;
 }
 
 CTileMapComponent::~CTileMapComponent()
 {
+	SAFE_DELETE(mTileInfoBuffer);
 	SAFE_DELETE(mCBuffer);
 
 	size_t size = mVecTile.size();
@@ -90,7 +113,11 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 	endX = getTileRenderIndexX(RT);
 	endY = getTileRenderIndexY(RT);
 
-	mRenderCount = (endX - startX + 1) * (endY - startY + 1);
+	Matrix matView, matProj;
+	matView = camera->GetViewMatrix();
+	matProj = camera->GetProjMatrix();
+
+	mRenderCount = 0;
 
 	for (int i = startY; i <= endY; ++i)
 	{
@@ -98,8 +125,25 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 		{
 			int index = i * mCountX + j;
 			mVecTile[index]->Update(DeltaTime);
+
+			if (mVecTile[index]->GetIsRender())
+			{
+				if (mbEditMode)
+				{
+					mVecTileInfo[mRenderCount].TileColor = mTileColor[(int)mVecTile[index]->GetTileType()];
+				}
+
+				mVecTileInfo[mRenderCount].TileStart = mVecTile[index]->GetFrameStart();
+				mVecTileInfo[mRenderCount].TileEnd = mVecTile[index]->GetFrameEnd();
+				mVecTileInfo[mRenderCount].Opacity = mVecTile[index]->GetOpacity();
+				mVecTileInfo[mRenderCount].MatWVP = mVecTile[index]->GetWorldMatrix() * matView * matProj;
+				mVecTileInfo[mRenderCount].MatWVP.Transpose();
+				++mRenderCount;
+			}
 		}
 	}
+
+	mTileInfoBuffer->UpdateBuffer(&mVecTileInfo[0], mRenderCount);
 }
 
 void CTileMapComponent::PrevRender()
@@ -120,45 +164,12 @@ void CTileMapComponent::Render()
 
 	if (mTileMaterial)
 	{
-		CCameraComponent* camera = mScene->GetCameraManager()->GetCurrentCamera();
-
-		Resolution RS = camera->GetResolution();
-
-		Vector3 LB = camera->GetWorldPos();
-		Vector3 RT = LB + Vector3((float)RS.Width, (float)RS.Height, 0.f);
-
-		int startX, endX, startY, endY;
-
-		startX = getTileRenderIndexX(LB);
-		startY = getTileRenderIndexY(LB);
-		endX = getTileRenderIndexX(RT);
-		endY = getTileRenderIndexY(RT);
-
-		mRenderCount = (endX - startX + 1) * (endY - startY + 1);
-
-		for (int i = startY; i <= endY; ++i)
-		{
-			for (int j = startX; j <= endX; ++j)
-			{
-				int idx = i * mCountX + j;
-
-				mCBuffer->SetImageStart(Vector2(0.f, 0.f));
-				mCBuffer->SetImageEnd(Vector2(64.f, 64.f));
-
-				Matrix matWVP = mVecTile[idx]->GetWorldMatrix();
-
-				matWVP *= camera->GetViewMatrix();
-				matWVP *= camera->GetProjMatrix();
-
-				matWVP.Transpose();
-
-				mCBuffer->SetWVP(matWVP);
-
-				mTileMaterial->Render();
-				mBackMesh->Render(); // ??
-				mTileMaterial->Reset();
-			}
-		}
+		mTileInfoBuffer->SetShader();
+		mCBuffer->UpdateCBuffer();
+		mTileMaterial->Render();
+		mBackMesh->RenderInstancing(mRenderCount);
+		mTileMaterial->Reset();
+		mTileInfoBuffer->ResetShader();
 	}
 }
 
@@ -232,7 +243,7 @@ void CTileMapComponent::CreateTile(eTileShape eShape, const int countX, const in
 		{
 			for (int j = 0; j < mCountX; ++j)
 			{
-				pos = Vector3(j, i, 0).TransformCoord(matIsometric);
+				pos = Vector3((float)j, (float)i, 0).TransformCoord(matIsometric);
 				int idx = i * mCountX + j;
 				mVecTile[idx]->SetPos(pos);
 			}
@@ -245,6 +256,84 @@ void CTileMapComponent::CreateTile(eTileShape eShape, const int countX, const in
 	}
 
 	mCBuffer->SetTileSize(Vector2(mTileSize.x, mTileSize.y));
+	mCount = mCountX * mCountY;
+	SetWorldInfo();
+}
+
+void CTileMapComponent::SetWorldInfo()
+{
+	SAFE_DELETE(mTileInfoBuffer);
+
+	mTileInfoBuffer = new CStructuredBuffer;
+
+	// CPU에서 일괄적으로 쓰고 보낼것이기 때문에 dynamic
+	mTileInfoBuffer->Init("TileInfo", sizeof(TileInfo), mCountX * mCountY, 40, true, (int)eBufferShaderTypeFlags::Vertex);
+
+	mVecTileInfo.resize(mCount);
+
+	for (int i = 0; i < mCount; ++i)
+	{
+		mVecTileInfo[i].TileColor = Vector4(1.f, 1.f, 1.f, 1.f);
+		mVecTileInfo[i].Opacity = 1.f;
+	}
+}
+
+void CTileMapComponent::SetTileDefaultFrame(const Vector2& start, const Vector2& end)
+{
+	for (int i = 0; i < mCount; ++i)
+	{
+		mVecTile[i]->SetFrameStart(start);
+		mVecTile[i]->SetFrameEnd(end);
+	}
+}
+
+void CTileMapComponent::SetTileDefaultFrame(const float startX, const float startY, const float endX, const float endY)
+{
+	for (int i = 0; i < mCount; ++i)
+	{
+		mVecTile[i]->SetFrameStart(Vector2(startX, startY));
+		mVecTile[i]->SetFrameEnd(Vector2(endX, endY));
+	}
+}
+
+void CTileMapComponent::SetTileFrame(const int idxX, const int idxY, const float startX, const float startY, const float endX, const float endY)
+{
+	mVecTile[idxY * mCountX + idxX]->SetFrameStart(Vector2(startX, startY));
+	mVecTile[idxY * mCountX + idxX]->SetFrameEnd(Vector2(endX, endY));
+}
+
+void CTileMapComponent::SetTileFrame(const int idx, const float startX, const float startY, const float endX, const float endY)
+{
+	mVecTile[idx]->SetFrameStart(Vector2(startX, startY));
+	mVecTile[idx]->SetFrameEnd(Vector2(endX, endY));
+}
+
+void CTileMapComponent::SetTileFrame(const Vector3& pos, const float startX, const float startY, const float endX, const float endY)
+{
+}
+
+void CTileMapComponent::SetTileOpacity(const int idxX, const int idxY, const float opacity)
+{
+	mVecTile[idxY * mCountX + idxX]->SetOpacity(opacity);
+}
+
+void CTileMapComponent::SetTileOpacity(const int idx, const float opacity)
+{
+	mVecTile[idx]->SetOpacity(opacity);
+}
+
+void CTileMapComponent::SetTileOpacity(const Vector3& pos, const float opacity)
+{
+}
+
+void CTileMapComponent::SetTileColor(eTileType type, const float r, const float g, const float b, const float a)
+{
+	mTileColor[(int)type] = Vector4(r, g, b, a);
+}
+
+void CTileMapComponent::SetTileColor(eTileType type, const Vector4& color)
+{
+	mTileColor[(int)type] = color;
 }
 
 void CTileMapComponent::SetBackBaseColor(const Vector4& color)

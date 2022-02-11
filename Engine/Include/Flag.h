@@ -213,4 +213,5 @@ enum class eTileType
 {
 	Normal,
 	Wall,
+	Max
 };

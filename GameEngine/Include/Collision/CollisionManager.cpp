@@ -42,6 +42,8 @@ bool CCollisionManager::Init()
 	SetCollisionState("MonsterAttack", eCollisionChannel::PlayerAttack, eCollisionInteraction::Ignore);
 	SetCollisionState("MonsterAttack", eCollisionChannel::MonsterAttack, eCollisionInteraction::Ignore);
 
+	makeCSVData();
+
 	return true;
 }
 
@@ -66,6 +68,8 @@ bool CCollisionManager::CreateProfile(const std::string& name, eCollisionChannel
 	}
 
 	mMapProfile.insert(std::make_pair(name, profile));
+	
+	addCSVData(*profile);
 
 	return true;
 }
@@ -104,5 +108,52 @@ void CCollisionManager::GetProfileNames(std::vector<std::string>& outNames)
 	for (; iter != iterEnd; ++iter)
 	{
 		outNames.push_back(iter->first);
+	}
+}
+
+void CCollisionManager::addCSVData(const CollisionProfile& profile)
+{
+	std::vector<std::string> row;
+	row.push_back(profile.Name);
+	row.push_back(CUtil::CollisionChannelToString(profile.Channel));
+
+	for (size_t i = 0; i < (int)eCollisionChannel::Max; ++i)
+	{
+		row.push_back(CUtil::CollsionInteractionToString(profile.vecInteraction[i]));
+	}
+
+	mCSVData.push_back(row);
+}
+
+void CCollisionManager::makeCSVData()
+{
+	mCSVData.clear();
+
+	std::vector<std::string> labels;
+	labels.push_back("ProfileName");
+	labels.push_back("Channel");
+
+	for (size_t i = 0; i < (int)eCollisionChannel::Max; ++i)
+	{
+		labels.push_back(CUtil::CollisionChannelToString((eCollisionChannel)i));
+	}
+
+	mCSVData.push_back(labels);
+
+	auto iter = mMapProfile.begin();
+	auto iterEnd = mMapProfile.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		std::vector<std::string> row;
+		row.push_back(iter->first);
+		row.push_back(CUtil::CollisionChannelToString(iter->second->Channel));
+
+		for (size_t i = 0; i < (int)eCollisionChannel::Max; ++i)
+		{
+			row.push_back(CUtil::CollsionInteractionToString(iter->second->vecInteraction[i]));
+		}
+
+		mCSVData.push_back(row);
 	}
 }

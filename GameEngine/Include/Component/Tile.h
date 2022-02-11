@@ -13,6 +13,7 @@ private:
 	~CTile();
 
 public:
+	void Start();
 	void Update(float deltaTime);
 
 public:
@@ -27,6 +28,10 @@ public:
 	void SetLoop(const std::string& name, bool bLoop);
 	void SetReverse(const std::string& name, bool bReverse);
 	void SetCurrentAnimation(const std::string& name);
+
+public:
+	void Save(FILE* fp);
+	void Load(FILE* fp);
 
 public:
 	eTileType GetTileType() const
@@ -74,6 +79,26 @@ public:
 		return mIndex;
 	}
 
+	float GetOpacity() const
+	{
+		return mOpacity;
+	}
+	
+	Vector2 GetFrameStart() const
+	{
+		return mFrameStart;
+	}
+
+	Vector2 GetFrameEnd() const
+	{
+		return mFrameEnd;
+	}
+
+	bool GetIsRender() const
+	{
+		return mFrameStart.x != 0.f || mFrameStart.y != 0.f || mFrameEnd.x != 0.f || mFrameEnd.y != 0.f;
+	}
+
 public:
 	void SetIndex(const int idxX, const int idxY, const int idx)
 	{
@@ -112,6 +137,31 @@ public:
 		mSize = Vector2(x, y);
 	}
 
+	void SetOpacity(const float opacity)
+	{
+		mOpacity = opacity;
+	}
+
+	void SetFrameStart(const Vector2& frame)
+	{
+		mFrameStart = frame;
+	}
+
+	void SetFrameStart(const float x, const float y)
+	{
+		mFrameStart = Vector2(x, y);
+	}
+
+	void SetFrameEnd(const Vector2& frame)
+	{
+		mFrameEnd = frame;
+	}
+
+	void SetFrameEnd(const float x, const float y)
+	{
+		mFrameEnd = Vector2(x, y);
+	}
+
 private:
 	class CTileMapComponent* mOwner;
 	eTileShape meShape;
@@ -124,5 +174,8 @@ private:
 	int mIndexX;
 	int mIndexY;
 	int mIndex;
+	Vector2 mFrameStart;
+	Vector2 mFrameEnd;
+	float mOpacity;
 };
 

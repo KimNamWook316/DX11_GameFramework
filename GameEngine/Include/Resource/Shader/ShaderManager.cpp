@@ -130,7 +130,7 @@ bool CShaderManager::Init()
 	CreateConstantBuffer("DissolveCBuffer", sizeof(DissolveCBuffer), 4,
 		(int)eBufferShaderTypeFlags::Pixel);
 
-	CreateConstantBuffer("TileMapCBuffer", sizeof(TileMapCBuffer), 12,
+	CreateConstantBuffer("TileMapCBuffer", sizeof(TileMapCBuffer), 11,
 		(int)eBufferShaderTypeFlags::Graphic);
 
 	return true;

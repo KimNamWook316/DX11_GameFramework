@@ -27,6 +27,7 @@ bool CTileMapObject::Init()
 
 	CMaterial* mat = mScene->GetResource()->FindMaterial("TileMap");
 	mTileMap->SetTileMaterial(mat);
+	mTileMap->SetTileDefaultFrame(0.f, 64.f, 64.f, 128.f);
 	return true;
 }
 

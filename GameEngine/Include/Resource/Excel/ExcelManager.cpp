@@ -48,7 +48,7 @@ bool CExcelManager::DeleteData(const std::string& name)
 	return true;
 }
 
-bool CExcelManager::SaveCSV(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fileName, const std::string& pathName)
+bool CExcelManager::SaveCSV(const std::string& name, const char* fileName, const std::string& pathName)
 {
 	CExcelData* excelData = FindData(name);
 
@@ -57,10 +57,10 @@ bool CExcelManager::SaveCSV(const std::vector<std::vector<std::string>>& data, c
 		excelData = new CExcelData;
 	}
 
-	return excelData->SaveCSV(data, name, fileName, pathName);
+	return excelData->SaveCSV(name, fileName, pathName);
 }
 
-bool CExcelManager::SaveCSVFullPath(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fullPath)
+bool CExcelManager::SaveCSVFullPath(const std::string& name, const char* fullPath)
 {
 	CExcelData* excelData = FindData(name);
 
@@ -69,28 +69,29 @@ bool CExcelManager::SaveCSVFullPath(const std::vector<std::vector<std::string>>&
 		excelData = new CExcelData;
 	}
 
-	return excelData->SaveCSVFullPath(data, name, fullPath);
+	return excelData->SaveCSVFullPath(name, fullPath);
 }
 
-bool CExcelManager::LoadCSV(const std::string& name, const char* fileName, const std::string& pathName)
+bool CExcelManager::LoadCSV(const char* fileName, const std::string& pathName)
 {
-	CExcelData* data = FindData(name);
-
-	if (data)
-	{
-		return true;
-	}
-
-	data = new CExcelData;
-
-	if (!data->LoadCSV(fileName, pathName))
-	{
-		SAFE_DELETE(data);
-		return false;
-	}
-	
-	mMapExcelData.insert(std::make_pair(name, data));
-	return true;
+	// TODO : Fix
+ //	CExcelData* data = FindData(name);
+ //
+ //	if (data)
+ //	{
+ //		return true;
+ //	}
+ //
+ //	data = new CExcelData;
+ //
+ //	if (!data->LoadCSV(fileName, pathName))
+ //	{
+ //		SAFE_DELETE(data);
+ //		return false;
+ //	}
+ //	
+ //	mMapExcelData.insert(std::make_pair(name, data));
+ 	return true;
 }
 
 bool CExcelManager::LoadCSVFullPath(const char* fullPath)

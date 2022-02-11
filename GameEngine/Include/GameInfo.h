@@ -34,6 +34,7 @@
 #include "Vector4.h"
 #include "Matrix.h"
 #include "SharedPtr.h"
+#include "Util.h"
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
@@ -82,6 +83,8 @@ private:\
 	~Type();
 
 #define DEFINITION_SINGLE(Type) Type* Type::mInst = nullptr;
+
+typedef std::vector<std::vector<std::string>> csvData;
 
 struct Resolution 
 {
@@ -395,3 +398,19 @@ struct TileMapCBuffer
 	Matrix MatWVP;
 };
 
+struct TileInfo
+{
+	Matrix MatWVP;
+	Vector2 TileStart;
+	Vector2 TileEnd;
+	Vector4 TileColor;
+	float Opacity;
+	Vector3 Dummy;
+};
+
+struct ExcelInfo
+{
+	std::string Name;
+	std::vector<std::string> Labels;
+	std::unordered_map<std::string, std::vector<std::string>*> Data;
+};

@@ -207,6 +207,9 @@
     <Filter Include="02. Resource\02. Shader\02. ShaderClass\06. TileMapShader">
       <UniqueIdentifier>{2ec661e9-9686-4835-a542-f3fb54366282}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99. Util">
+      <UniqueIdentifier>{c4169037-5e92-44ea-b0db-9d88251b3904}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -662,6 +665,9 @@
     <ClInclude Include="Resource\Shader\TileMapShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\06. TileMapShader</Filter>
     </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>99. Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1065,6 +1071,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\TileMapShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\06. TileMapShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>99. Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

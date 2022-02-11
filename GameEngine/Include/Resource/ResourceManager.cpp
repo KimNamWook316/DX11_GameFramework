@@ -408,19 +408,19 @@ bool CResourceManager::DeleteData(const std::string& name)
 	return mExcelManager->DeleteData(name);
 }
 
-bool CResourceManager::SaveCSV(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fileName, const std::string& pathName)
+bool CResourceManager::SaveCSV(const std::string& name, const char* fileName, const std::string& pathName)
 {
-	return mExcelManager->SaveCSV(data, name, fileName, pathName);
+	return mExcelManager->SaveCSV(name, fileName, pathName);
 }
 
-bool CResourceManager::SaveCSVFullPath(const std::vector<std::vector<std::string>>& data, const std::string& name, const char* fullPath)
+bool CResourceManager::SaveCSVFullPath(const std::string& name, const char* fullPath)
 {
-	return mExcelManager->SaveCSV(data, name, fullPath);
+	return mExcelManager->SaveCSV(name, fullPath);
 }
 
-bool CResourceManager::LoadCSV(const std::string& name, const char* fileName, const std::string& pathName)
+bool CResourceManager::LoadCSV(const char* fileName, const std::string& pathName)
 {
-	return mExcelManager->LoadCSV(name, fileName, pathName);
+	return mExcelManager->LoadCSV(fileName, pathName);
 }
 
 bool CResourceManager::LoadCSVFullPath(const char* fullPath)

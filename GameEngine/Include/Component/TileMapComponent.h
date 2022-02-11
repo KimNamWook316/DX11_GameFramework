@@ -27,6 +27,17 @@ public:
 
 public:
 	void CreateTile(eTileShape eShape, const int countX, const int countY, const Vector2& size);
+	void SetWorldInfo();
+	void SetTileDefaultFrame(const Vector2& start, const Vector2& end);
+	void SetTileDefaultFrame(const float startX, const float startY, const float endX, const float endY);
+	void SetTileFrame(const int idxX, const int idxY, const float startX, const float startY, const float endX, const float endY);
+	void SetTileFrame(const int idx, const float startX, const float startY, const float endX, const float endY);
+	void SetTileFrame(const Vector3& pos, const float startX, const float startY, const float endX, const float endY);
+	void SetTileOpacity(const int idxX, const int idxY, const float opacity);
+	void SetTileOpacity(const int idx, const float opacity);
+	void SetTileOpacity(const Vector3& pos, const float opacity);
+	void SetTileColor(eTileType type, const float r, const float g, const float b, const float a);
+	void SetTileColor(eTileType type, const Vector4& color);
 
 public:
 	void SetBackBaseColor(const Vector4& color);
@@ -60,6 +71,12 @@ public:
 public:
 	virtual void Save(FILE* fp) override;
 	virtual void Load(FILE* fp) override;
+
+public:
+	void EnableEditMode(bool bEnable)
+	{
+		mbEditMode = bEnable;
+	}
 
 public:
     CMaterial* GetMaterial() const
@@ -100,11 +117,16 @@ protected:
     CSharedPtr<CMaterial> mBackMaterial;
 	CSharedPtr<CMaterial> mTileMaterial;
     std::vector<CTile*> mVecTile;
+	std::vector<TileInfo> mVecTileInfo;
 	class CTileMapConstantBuffer* mCBuffer;
+	class CStructuredBuffer* mTileInfoBuffer;
 	eTileShape meTileShape;
 	int mCountX;
 	int mCountY;
+	int mCount;
 	int mRenderCount;
 	Vector2 mTileSize;
+	Vector4 mTileColor[(int)eTileType::Max];
+	bool mbEditMode;
 };
 

@@ -1,5 +1,6 @@
 #include "Tile.h"
 #include "TileMapComponent.h"
+#include "../Resource/Animation/AnimationSequence2D.h"
 
 CTile::CTile()	:
 	meShape(eTileShape::Rect),
@@ -8,7 +9,8 @@ CTile::CTile()	:
 	mOwner(nullptr),
 	mIndexX(-1),
 	mIndexY(-1),
-	mIndex(-1)
+	mIndex(-1),
+	mOpacity(1.f)
 {
 }
 
@@ -24,11 +26,20 @@ CTile::~CTile()
 	SAFE_DELETE(mAnimInstance);
 }
 
+void CTile::Start()
+{
+	mCenter = mPos + Vector3(mSize.x / 2.f, mSize.y / 2.f, 0.f);
+}
+
 void CTile::Update(float deltaTime)
 {
 	if (mAnimInstance)
 	{
 		mAnimInstance->Update(deltaTime);
+
+		int frame = mAnimInstance->GetCurrentAnimation()->GetCurrentFrame();
+		mFrameStart = mAnimInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(frame).Start;
+		mFrameEnd = mFrameStart + mAnimInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(frame).Size;
 	}
 
 	Vector3 ownerPos = mOwner->GetWorldPos();
@@ -129,4 +140,12 @@ void CTile::SetCurrentAnimation(const std::string& name)
 	}
 
 	return mAnimInstance->SetCurrentAnimation(name);
+}
+
+void CTile::Save(FILE* fp)
+{
+}
+
+void CTile::Load(FILE* fp)
+{
 }
