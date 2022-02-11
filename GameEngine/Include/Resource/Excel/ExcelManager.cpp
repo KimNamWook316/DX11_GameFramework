@@ -23,7 +23,27 @@ bool CExcelManager::Init()
 	return true;
 }
 
-CExcelData* CExcelManager::FindData(const std::string& name)
+bool CExcelManager::CreateCSV(const std::string& name)
+{
+	CExcelData* data = FindCSV(name);
+
+	if (data)
+	{
+		return true;
+	}
+	
+	data = new CExcelData;
+	if (!data->Init())
+	{
+		SAFE_DELETE(data);
+		return false;
+	}
+
+	mMapExcelData.insert(std::make_pair(name, data));
+	return true;
+}
+
+CExcelData* CExcelManager::FindCSV(const std::string& name)
 {
 	auto iter = mMapExcelData.find(name);
 
@@ -50,48 +70,48 @@ bool CExcelManager::DeleteData(const std::string& name)
 
 bool CExcelManager::SaveCSV(const std::string& name, const char* fileName, const std::string& pathName)
 {
-	CExcelData* excelData = FindData(name);
+	CExcelData* excelData = FindCSV(name);
 
-	if (excelData)
+	if (!excelData)
 	{
-		excelData = new CExcelData;
+		return false;
 	}
 
-	return excelData->SaveCSV(name, fileName, pathName);
+	return excelData->SaveCSV(fileName, pathName);
 }
 
 bool CExcelManager::SaveCSVFullPath(const std::string& name, const char* fullPath)
 {
-	CExcelData* excelData = FindData(name);
+	CExcelData* excelData = FindCSV(name);
 
-	if (excelData)
+	if (!excelData)
 	{
-		excelData = new CExcelData;
+		return false;
 	}
 
-	return excelData->SaveCSVFullPath(name, fullPath);
+	return excelData->SaveCSVFullPath(fullPath);
 }
 
 bool CExcelManager::LoadCSV(const char* fileName, const std::string& pathName)
 {
-	// TODO : Fix
- //	CExcelData* data = FindData(name);
- //
- //	if (data)
- //	{
- //		return true;
- //	}
- //
- //	data = new CExcelData;
- //
- //	if (!data->LoadCSV(fileName, pathName))
- //	{
- //		SAFE_DELETE(data);
- //		return false;
- //	}
- //	
- //	mMapExcelData.insert(std::make_pair(name, data));
- 	return true;
+	CExcelData* data = new CExcelData;
+
+	if (!data->LoadCSV(fileName, pathName))
+	{
+		SAFE_DELETE(data);
+		return false;
+	}
+
+	// 이미 해당 데이터가 로딩되어 있는 경우
+	std::string name = data->GetName();
+	if (FindCSV(name))
+	{
+		SAFE_DELETE(data);
+		return false;
+	}
+	
+	mMapExcelData.insert(std::make_pair(data->GetName(), data));
+	return true;
 }
 
 bool CExcelManager::LoadCSVFullPath(const char* fullPath)
@@ -105,7 +125,7 @@ bool CExcelManager::LoadCSVFullPath(const char* fullPath)
 	}
 	
 	std::string name = data->GetName();
-	if (FindData(name))
+	if (FindCSV(name))
 	{
 		SAFE_DELETE(data);
 		return true;

@@ -61,5 +61,5 @@ std::string CUtil::CollisionChannelToString(eCollisionChannel eChan)
 
 std::string CUtil::CollsionInteractionToString(eCollisionInteraction eInterAction)
 {
-	return eCollisionInteraction::Collision == eInterAction ? "Collision" : "Ignore";
+	return eCollisionInteraction::Collision == eInterAction ? "TRUE" : "FALSE";
 }

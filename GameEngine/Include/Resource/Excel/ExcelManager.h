@@ -14,7 +14,8 @@ public:
 	bool Init();
 
 public:
-	CExcelData* FindData(const std::string& name);
+	bool CreateCSV(const std::string& name);
+	CExcelData* FindCSV(const std::string& name);
 	bool DeleteData(const std::string& name);
 
 public:

@@ -398,9 +398,14 @@ void CResourceManager::ReleaseParticle(const std::string& name)
 	mParticleManager->ReleaseParticle(name);
 }
 
-CExcelData* CResourceManager::FindData(const std::string& name)
+bool CResourceManager::CreateCSV(const std::string& name)
 {
-	return mExcelManager->FindData(name);
+	return mExcelManager->CreateCSV(name);
+}
+
+CExcelData* CResourceManager::FindCSV(const std::string& name)
+{
+	return mExcelManager->FindCSV(name);
 }
 
 bool CResourceManager::DeleteData(const std::string& name)

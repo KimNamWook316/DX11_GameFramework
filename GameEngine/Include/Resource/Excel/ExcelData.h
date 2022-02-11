@@ -22,8 +22,8 @@ public:
 	void Clear();
 
 public:
-	bool SaveCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
-	bool SaveCSVFullPath(const std::string& name, const char* fullPath);
+	bool SaveCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool SaveCSVFullPath(const char* fullPath);
 	bool LoadCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool LoadCSVFullPath(const char* fullPath);
 

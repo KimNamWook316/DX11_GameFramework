@@ -90,7 +90,7 @@ void CExcelData::SetData(const std::string& name, const std::string& label, floa
 
 void CExcelData::SetData(const std::string& name, const std::string& label, bool data)
 {
-	std::string str = data ? "true" : "false";
+	std::string str = data ? "TRUE" : "FALSE";
 	SetData(name, label, str);
 }
 
@@ -109,7 +109,7 @@ void CExcelData::Clear()
 	mInfo.Data.clear();
 }
 
-bool CExcelData::SaveCSV(const std::string& name, const char* fileName, const std::string& pathName)
+bool CExcelData::SaveCSV(const char* fileName, const std::string& pathName)
 {
 	const PathInfo* path = CPathManager::GetInst()->FindPath(pathName);
 
@@ -121,48 +121,79 @@ bool CExcelData::SaveCSV(const std::string& name, const char* fileName, const st
 	}
 	strcat_s(fullPath, fileName);
 
-	return SaveCSVFullPath(name, fullPath);
+	return SaveCSVFullPath(fullPath);
 }
 
-bool CExcelData::SaveCSVFullPath(const std::string& name, const char* fullPath)
+bool CExcelData::SaveCSVFullPath(const char* fullPath)
 {
- //	mInfo.Name = name;
- //
- //	FILE* fp = nullptr;
- //	fopen_s(&fp, fullPath, "wt");
- //
- //	if (!fp)
- //	{
- //		assert(false);
- //		return false;
- //	}
- //
- //	fputs(mInfo.Name.c_str(), fp);
- //
- //	size_t rowCount = mInfo.Sheet.size();
- //	for (size_t i = 0; i < rowCount; ++i)
- //	{
- //		char buf[1024] = {};
- //
- //		size_t colCount = mInfo.Sheet[i].size();
- //		for (size_t j = 0; j < colCount; ++j)
- //		{
- //			int length = (int)mInfo.Sheet[i][j].length();
- //			strcpy_s(buf, length, mInfo.Sheet[i][j].c_str());
- //
- //			if (j == colCount - 1)
- //			{
- //				strcat_s(buf, "\n");
- //			}
- //			else
- //			{
- //				strcat_s(buf, ",");
- //			}
- //		}
- //		fputs(buf, fp);
- //	}
- //
- //	fclose(fp);
+	FILE* fp = nullptr;
+	fopen_s(&fp, fullPath, "wt");
+
+	if (!fp)
+	{
+		assert(false);
+		return false;
+	}
+
+	char buf[1024] = {};
+
+	// Name
+	fputs(mInfo.Name.c_str(), fp);
+	fputs("\n", fp);
+	
+	// Label
+	fputs(",", fp);
+	size_t labelCount = mInfo.Labels.size();
+	for (size_t i = 0; i < labelCount; ++i)
+	{
+		int length = mInfo.Labels[i].length();
+		strcpy_s(buf, length + 1, mInfo.Labels[i].c_str());
+		if (i == labelCount - 1)
+		{
+			strcat_s(buf, "\n");
+		}
+		else
+		{
+			strcat_s(buf, ",");
+		}
+		fputs(buf, fp);
+	}
+
+	// Data
+	auto iter = mInfo.Data.begin();
+	auto iterEnd = mInfo.Data.end();
+
+	int count = 0;
+	int rowCount = (int)mInfo.Data.size();
+	for (; iter != iterEnd; ++iter)
+	{
+		int length = iter->first.length();
+		strcpy_s(buf, length + 1, iter->first.c_str());
+		strcat_s(buf, ",");
+		fputs(buf, fp);
+		
+		size_t dataCount = iter->second->size();
+		for (size_t i = 0; i < dataCount; ++i)
+		{
+			std::string data = (*(iter->second))[i];
+			length = data.length();
+			strcpy_s(buf, length + 1, data.c_str());
+
+			if (i == dataCount - 1 && count != rowCount - 2)
+			{
+				strcat_s(buf, "\n");
+			}
+			else
+			{
+				strcat_s(buf, ",");
+			}
+
+			fputs(buf, fp);
+		}
+		++rowCount;
+	}
+	
+	fclose(fp);
 	return true;
 }
 
@@ -183,41 +214,56 @@ bool CExcelData::LoadCSV(const char* fileName, const std::string& pathName)
 
 bool CExcelData::LoadCSVFullPath(const char* fullPath)
 {
- //	FILE* fp = nullptr;
- //
- //	fopen_s(&fp, fullPath, "rt");
- //
- //	if (!fp)
- //	{
- //		assert(false);
- //		return false;
- //	}
- //
- //	char name[64] = {};
- //	fgets(name, 64, fp);
- //	mInfo.Name = name;
- //
- //	char buf[1024] = {};
- //
- //	while (0 == feof(fp))
- //	{
- //		std::vector<std::string> row;
- //		fgets(buf, 1024, fp);
- //
- //		char* context = nullptr;
- //		char* elementBuf = strtok_s(buf, ",", &context);
- //
- //		while (elementBuf != NULL)
- //		{
- //			row.push_back(elementBuf);
- //			elementBuf = strtok_s(NULL, ",", &context);
- //		}
- //		
- //		mInfo.Sheet.push_back(row);
- //	}
- //	
- //	fclose(fp);
- 	return true;
+	FILE* fp = nullptr;
+
+	fopen_s(&fp, fullPath, "rt");
+
+	if (!fp)
+	{
+		assert(false);
+		return false;
+	}
+
+	// name
+	char name[64] = {};
+	fgets(name, 64, fp);
+	int len = strlen(name);
+	name[len - 2] = '\0'; // , 제거
+	mInfo.Name = name;
+
+	// label
+	char buf[1024] = {};
+	fgets(buf, 1024, fp);
+	char* context = nullptr;
+	char* element = strtok_s(buf, ",", &context);
+	while (!element)
+	{
+		// 처음 잘린 문자는 무시한다. 맨 앞이 ,이기 때문에
+		element = strtok_s(NULL, ",", &context);
+		mInfo.Labels.push_back(element);
+	}
+
+	// data
+	std::string dataName;
+	std::vector<std::string>* row = nullptr;
+	while (0 == feof(fp))
+	{
+		row = new std::vector<std::string>;
+		fgets(buf, 1024, fp);
+		element = strtok_s(buf, ",", &context);
+		dataName = element;
+		
+		while (!element)
+		{
+			element = strtok_s(NULL, ",", &context);
+			row->push_back(element);
+		}
+
+		mInfo.Data.insert(std::make_pair(dataName, row));
+	}
+	
+	fclose(fp);
+	return true;
 }
 
 std::vector<std::string>* CExcelData::FindData(const std::string& name)

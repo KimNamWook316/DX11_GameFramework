@@ -1,4 +1,5 @@
 #include "CollisionManager.h"
+#include "../Resource/ResourceManager.h"
 
 DEFINITION_SINGLE(CCollisionManager)
 
@@ -42,8 +43,6 @@ bool CCollisionManager::Init()
 	SetCollisionState("MonsterAttack", eCollisionChannel::PlayerAttack, eCollisionInteraction::Ignore);
 	SetCollisionState("MonsterAttack", eCollisionChannel::MonsterAttack, eCollisionInteraction::Ignore);
 
-	makeCSVData();
-
 	return true;
 }
 
@@ -68,8 +67,6 @@ bool CCollisionManager::CreateProfile(const std::string& name, eCollisionChannel
 	}
 
 	mMapProfile.insert(std::make_pair(name, profile));
-	
-	addCSVData(*profile);
 
 	return true;
 }
@@ -111,49 +108,39 @@ void CCollisionManager::GetProfileNames(std::vector<std::string>& outNames)
 	}
 }
 
-void CCollisionManager::addCSVData(const CollisionProfile& profile)
+bool CCollisionManager::MakeCSV()
 {
-	std::vector<std::string> row;
-	row.push_back(profile.Name);
-	row.push_back(CUtil::CollisionChannelToString(profile.Channel));
-
-	for (size_t i = 0; i < (int)eCollisionChannel::Max; ++i)
+	if (!CResourceManager::GetInst()->CreateCSV("CollisionProfileInfo"))
 	{
-		row.push_back(CUtil::CollsionInteractionToString(profile.vecInteraction[i]));
+		return false;
 	}
 
-	mCSVData.push_back(row);
-}
+	CExcelData* csv = CResourceManager::GetInst()->FindCSV("CollisionProfileInfo");
+	csv->Clear();
+	
+	csv->SetName("CollisionProfileInfo");
+	csv->AddLabel("Channel");
 
-void CCollisionManager::makeCSVData()
-{
-	mCSVData.clear();
-
-	std::vector<std::string> labels;
-	labels.push_back("ProfileName");
-	labels.push_back("Channel");
-
-	for (size_t i = 0; i < (int)eCollisionChannel::Max; ++i)
+	for (int i = 0; i < (int)eCollisionChannel::Max; ++i)
 	{
-		labels.push_back(CUtil::CollisionChannelToString((eCollisionChannel)i));
+		csv->AddLabel(CUtil::CollisionChannelToString((eCollisionChannel)i));
 	}
-
-	mCSVData.push_back(labels);
-
+	
+	std::vector<std::string> profileData;
 	auto iter = mMapProfile.begin();
 	auto iterEnd = mMapProfile.end();
-
 	for (; iter != iterEnd; ++iter)
 	{
-		std::vector<std::string> row;
-		row.push_back(iter->first);
-		row.push_back(CUtil::CollisionChannelToString(iter->second->Channel));
-
-		for (size_t i = 0; i < (int)eCollisionChannel::Max; ++i)
+		profileData.push_back(CUtil::CollisionChannelToString(iter->second->Channel));
+		for (int i = 0; i < (int)eCollisionChannel::Max; ++i)
 		{
-			row.push_back(CUtil::CollsionInteractionToString(iter->second->vecInteraction[i]));
+			std::string bCollision;
+			profileData.push_back(CUtil::CollsionInteractionToString(iter->second->vecInteraction[i]));
 		}
-
-		mCSVData.push_back(row);
+		
+		csv->SetData(iter->first, profileData);
+		profileData.clear();
 	}
+
+	return true;
 }

@@ -132,8 +132,9 @@ public: // ===================== Particle =====================
 	CParticle* FindParticle(const std::string& name);
 	void ReleaseParticle(const std::string& name);
 
-public: // ===================== Particle =====================
-	CExcelData* FindData(const std::string& name);
+public: // ===================== Excel =====================
+	bool CreateCSV(const std::string& name);
+	CExcelData* FindCSV(const std::string& name);
 	bool DeleteData(const std::string& name);
 	bool SaveCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool SaveCSVFullPath(const std::string& name, const char* fullPath);
