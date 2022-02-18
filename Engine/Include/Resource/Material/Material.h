@@ -124,6 +124,11 @@ public:
 		}
 	}
 
+	bool IsTextureEmpty() const
+	{
+		return mVecTextureInfo.empty();
+	}
+
 public:
 	template <typename T>
 	void AddRenderCallBack(T* obj, void(T::* func)())

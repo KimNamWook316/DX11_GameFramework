@@ -2,7 +2,8 @@
 
 CThread::CThread()	:
 	mThread(0),
-	mStartEvent(0)
+	mStartEvent(0),
+	mbLoop(false)
 {
 }
 

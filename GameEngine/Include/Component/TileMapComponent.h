@@ -26,7 +26,17 @@ public:
 	virtual CTileMapComponent* Clone() override;
 
 public:
+	int GetTileIndexX(const Vector3& pos);
+	int GetTileIndexY(const Vector3& pos);
+	int GetTileIndex(const Vector3& pos);
+	CTile* GetTile(const Vector3& pos);
+	CTile* GetTile(const int x, const int y);
+	CTile* GetTile(const int idx);
+
+public:
 	void CreateTile(eTileShape eShape, const int countX, const int countY, const Vector2& size);
+	void ClearTile();
+
 	void SetWorldInfo();
 	void SetTileDefaultFrame(const Vector2& start, const Vector2& end);
 	void SetTileDefaultFrame(const float startX, const float startY, const float endX, const float endY);
@@ -68,6 +78,25 @@ public:
 		const std::string& name, const std::vector<TCHAR*>& vecFileName,
 		const std::string& pathName = TEXTURE_PATH);
 
+	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
+		class CTexture* texture);
+	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
+		const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
+	void AddTileTextureFullPath(const int reg, const int shaderType, const std::string& name,
+		const TCHAR* fullPath);
+	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
+		const std::vector<TCHAR*>& vecFileName, const std::string& pathName = TEXTURE_PATH);
+
+	void SetTileTexture(const int index, const int reg, const int shaderType,
+		const std::string& name, class CTexture* texture);
+	void SetTileTexture(const int index, const int reg, const int shaderType,
+		const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
+	void SetTileTextureFullPath(const int index, const int reg, const int shaderType,
+		const std::string& name, const TCHAR* fullPath);
+	void SetTileTexture(const int index, const int reg, const int shaderType,
+		const std::string& name, const std::vector<TCHAR*>& vecFileName,
+		const std::string& pathName = TEXTURE_PATH);
+
 public:
 	virtual void Save(FILE* fp) override;
 	virtual void Load(FILE* fp) override;
@@ -79,10 +108,15 @@ public:
 	}
 
 public:
-    CMaterial* GetMaterial() const
+    CMaterial* GetBackMaterial() const
     {
         return mBackMaterial;
     }
+
+	CMaterial* GetTileMaterial() const
+	{
+		return mTileMaterial;
+	}
 
 	eTileShape GetTileShape() const
 	{
@@ -128,5 +162,8 @@ protected:
 	Vector2 mTileSize;
 	Vector4 mTileColor[(int)eTileType::Max];
 	bool mbEditMode;
+	float mTileDiagonal;
+	Matrix mMatWorldToIso;
+	Matrix mMatIsoToWorld;
 };
 

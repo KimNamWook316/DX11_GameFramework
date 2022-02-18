@@ -72,9 +72,11 @@
     <ClInclude Include="IMGUIInputFloat2.h" />
     <ClInclude Include="IMGUIInputFloat3.h" />
     <ClInclude Include="IMGUIInputInt.h" />
+    <ClInclude Include="IMGUIInputInt2.h" />
     <ClInclude Include="IMGUILabel.h" />
     <ClInclude Include="IMGUIListBox.h" />
     <ClInclude Include="IMGUIManager.h" />
+    <ClInclude Include="IMGUIPopUpModal.h" />
     <ClInclude Include="IMGUIRadioButton.h" />
     <ClInclude Include="IMGUISameLine.h" />
     <ClInclude Include="IMGUISeperator.h" />
@@ -148,6 +150,9 @@
     <ClInclude Include="Resource\Texture\TextureManager.h" />
     <ClInclude Include="Scene\CameraManager.h" />
     <ClInclude Include="Scene\CollisionSection.h" />
+    <ClInclude Include="Scene\Navigation.h" />
+    <ClInclude Include="Scene\NavigationManager.h" />
+    <ClInclude Include="Scene\NavigationThread.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneCollision.h" />
     <ClInclude Include="Scene\SceneManager.h" />
@@ -205,8 +210,10 @@
     <ClCompile Include="IMGUIInputFloat2.cpp" />
     <ClCompile Include="IMGUIInputFloat3.cpp" />
     <ClCompile Include="IMGUIInputInt.cpp" />
+    <ClCompile Include="IMGUIInputInt2.cpp" />
     <ClCompile Include="IMGUILabel.cpp" />
     <ClCompile Include="IMGUIListBox.cpp" />
+    <ClCompile Include="IMGUIPopUpModal.cpp" />
     <ClCompile Include="IMGUIRadioButton.cpp" />
     <ClCompile Include="IMGUISameLine.cpp" />
     <ClCompile Include="IMGUISeperator.cpp" />
@@ -286,6 +293,9 @@
     <ClCompile Include="Resource\Texture\TextureManager.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
     <ClCompile Include="Scene\CollisionSection.cpp" />
+    <ClCompile Include="Scene\Navigation.cpp" />
+    <ClCompile Include="Scene\NavigationManager.cpp" />
+    <ClCompile Include="Scene\NavigationThread.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneCollision.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />

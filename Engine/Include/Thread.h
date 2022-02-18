@@ -24,6 +24,12 @@ private:
 	static unsigned int __stdcall threadFunction(void* arg);
 
 public:
+	void SetLoop(bool bLoop)
+	{
+		mbLoop = bLoop;
+	}
+
+public:
 	template <typename T>
 	static T* CreateThread(const std::string& name)
 	{
@@ -42,5 +48,6 @@ protected:
 	std::string mName;
 	HANDLE mThread;
 	HANDLE mStartEvent;
+	bool mbLoop;
 };
 

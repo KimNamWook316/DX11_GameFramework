@@ -108,7 +108,7 @@ void CMainScene::createMaterial()
 
 	mScene->GetResource()->CreateMaterial<CMaterial>("TileMap");
 	material = mScene->GetResource()->FindMaterial("TileMap");
-	material->AddTexture(0, (int)eBufferShaderTypeFlags::Pixel, "Tile", TEXT("Floors.png"));
+	material->AddTexture(0, (int)eBufferShaderTypeFlags::Pixel, "Tile", TEXT("Diablos_Lair_Floor_TRS/Diablos_Lair_Floor_10.png"));
 	material->SetShader("TileMapShader");
 	material->SetRenderState("AlphaBlend");
 }

@@ -72,6 +72,13 @@ void CIMGUIWindow::Update(float deltaTime)
     {
         mVecWidget[i]->Render();
     }
+
+    size = mVecPopUpWidget.size();
+
+    for (size_t i = 0; i < size; ++i)
+    {
+        mVecPopUpWidget[i]->Render();
+    }
     
     //CIMGUIManager::GetInst()->PopCurrentFont();
 

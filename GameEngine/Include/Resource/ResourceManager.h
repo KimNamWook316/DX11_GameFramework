@@ -135,7 +135,7 @@ public: // ===================== Particle =====================
 public: // ===================== Excel =====================
 	bool CreateCSV(const std::string& name);
 	CExcelData* FindCSV(const std::string& name);
-	bool DeleteData(const std::string& name);
+	bool DeleteCSV(const std::string& name);
 	bool SaveCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool SaveCSVFullPath(const std::string& name, const char* fullPath);
 	bool LoadCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);

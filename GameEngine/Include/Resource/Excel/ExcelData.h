@@ -14,12 +14,16 @@ public:
 	bool Init();
 	void SetLabel(const std::vector<std::string>& labels);
 	void AddLabel(const std::string& label);
+	void AddRow(const std::string& rowName);
+	bool DeleteRow(const std::string& name);
+	bool RenameRow(const std::string& prevName, const std::string& changeName);
 	void SetData(const std::string& name, const std::vector<std::string>& data);
 	void SetData(const std::string& name, const std::string& label, const std::string& data);
 	void SetData(const std::string& name, const std::string& label, int data);
 	void SetData(const std::string& name, const std::string& label, float data);
 	void SetData(const std::string& name, const std::string& label, bool data);
 	void Clear();
+	void ClearData();
 
 public:
 	bool SaveCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);
@@ -38,7 +42,24 @@ public:
 		return mInfo.Labels;
 	}
 
-	std::vector<std::string>* FindData(const std::string& name);
+	void GetRowNames(std::vector<std::string>& outNames) const;
+	{
+		
+	}
+
+	size_t GetDataSize() const
+	{
+		return mInfo.Data.size();
+	}
+
+	const std::unordered_map<std::string, std::vector<std::string>*>& GetTable() const
+	{
+		return mInfo.Data;
+	}
+
+	const std::unordered_map<std::string, std::vector<std::string>*> GetRowWithName(const int idx);
+	std::vector<std::string>* GetRow(const std::string& name);
+	const std::string& FindData(const std::string& name, const std::string& label);
 
 public:
 	void SetName(const std::string& name)
@@ -48,6 +69,7 @@ public:
 
 private:
 	int getLabelIndex(const std::string& label);
+	std::vector<std::string>* findOrderedData(const std::string& name);
 		
 private:
 	ExcelInfo mInfo;

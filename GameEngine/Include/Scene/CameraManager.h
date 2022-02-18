@@ -15,7 +15,7 @@ public:
 	bool Init();
 	void Start();
 	void Update(float deltaTime);
-	void PostUpate(float deltaTime);
+	void PostUpdate(float deltaTime);
 
 public:
 	CCameraComponent* GetCurrentCamera() const

@@ -8,15 +8,27 @@ CExcelData::CExcelData()	:
 
 CExcelData::~CExcelData()
 {
-	auto iter = mInfo.Data.begin();
-	auto iterEnd = mInfo.Data.end();
-
-	for (; iter != iterEnd; ++iter)
 	{
-		SAFE_DELETE(iter->second);
-	}
+		auto iter = mInfo.Data.begin();
+		auto iterEnd = mInfo.Data.end();
 
-	mInfo.Data.clear();
+		for (; iter != iterEnd; ++iter)
+		{
+			SAFE_DELETE(iter->second);
+		}
+
+		mInfo.Data.clear();
+	}
+	{
+		size_t size = mInfo.PushOrderedData.size();
+
+		for (size_t i = 0; i < size; ++i)
+		{
+			SAFE_DELETE(mInfo.PushOrderedData[i]);
+		}
+
+		mInfo.PushOrderedData.clear();
+	}
 }
 
 bool CExcelData::Init()
@@ -45,28 +57,82 @@ void CExcelData::AddLabel(const std::string& label)
 	mInfo.Labels.push_back(label);
 }
 
+void CExcelData::AddRow(const std::string& rowName)
+{
+	std::vector<std::string>* found = GetRow(rowName);
+
+	if (found)
+	{
+		return;
+	}
+
+	found = new std::vector<std::string>;
+	found->resize(mInfo.Labels.size());
+	mInfo.Data.insert(std::make_pair(rowName, found));
+	
+	std::vector<std::string>* orderedData = new std::vector<std::string>;
+	orderedData->push_back(rowName);
+	orderedData->resize(mInfo.Labels.size() + 1);
+	mInfo.PushOrderedData.push_back(orderedData);
+}
+
 void CExcelData::SetData(const std::string& name, const std::vector<std::string>& data)
 {
-	std::vector<std::string>* found = FindData(name);
+	std::vector<std::string>* found = GetRow(name);
 
 	if (!found)
 	{
 		found = new std::vector<std::string>;
 		mInfo.Data.insert(std::make_pair(name, found));
+
+		// Ordered Data 에는 Row의 Name도 들어간다.
+		std::vector<std::string>* orderedData = new std::vector<std::string>;
+		orderedData->push_back(name);
+
+		size_t size = found->size();
+		for (size_t i = 0; i < size; ++i)
+		{
+			orderedData->push_back((*found)[i]);
+		}
+		
+		mInfo.PushOrderedData.push_back(orderedData);
 	}
 
-	*found = data;
+	size_t size = found->size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		(*found)[i] = data[i];
+	}
+
+	std::vector<std::string>* orderedData = findOrderedData(name);
+		
+	size = orderedData->size();
+	for (size_t i = 1; i < size; ++i)
+	{
+		(*orderedData)[i] = data[i - 1];
+	}
 }
 
 void CExcelData::SetData(const std::string& name, const std::string& label, const std::string& data)
 {
-	std::vector<std::string>* found = FindData(name);
+	std::vector<std::string>* found = GetRow(name);
 
 	if (!found)
 	{
 		found = new std::vector<std::string>;
 		found->resize(mInfo.Labels.size());
 		mInfo.Data.insert(std::make_pair(name, found));
+
+		std::vector<std::string>* orderedData = new std::vector<std::string>;
+		orderedData->push_back(name);
+
+		size_t size = found->size();
+		for (size_t i = 0; i < size; ++i)
+		{
+			orderedData->push_back((*found)[i]);
+		}
+		
+		mInfo.PushOrderedData.push_back(orderedData);
 	}
 
 	int labelIdx = getLabelIndex(label);
@@ -76,6 +142,9 @@ void CExcelData::SetData(const std::string& name, const std::string& label, cons
 	}
 
 	(*found)[labelIdx] = data;
+
+	std::vector<std::string>* orderedData = findOrderedData(name);
+	(*orderedData)[labelIdx + 1] = data;
 }
 
 void CExcelData::SetData(const std::string& name, const std::string& label, int data)
@@ -94,6 +163,62 @@ void CExcelData::SetData(const std::string& name, const std::string& label, bool
 	SetData(name, label, str);
 }
 
+bool CExcelData::DeleteRow(const std::string& name)
+{
+	auto iter = mInfo.Data.find(name);
+	
+	if (iter == mInfo.Data.end())
+	{
+		return false;
+	}
+
+	SAFE_DELETE(iter->second);
+	mInfo.Data.erase(iter);
+
+	auto iterVec = mInfo.PushOrderedData.begin();
+	auto iterVecEnd = mInfo.PushOrderedData.end();
+
+	for (; iterVec != iterVecEnd; ++iterVec)
+	{
+		if ((**iterVec)[0] == name)
+		{
+			SAFE_DELETE(*iterVec);
+			mInfo.PushOrderedData.erase(iterVec);
+			break;
+		}
+	}
+
+	return true;
+}
+
+bool CExcelData::RenameRow(const std::string& prevName, const std::string& changeName)
+{
+	auto iter = mInfo.Data.find(prevName);
+	
+	if (iter == mInfo.Data.end())
+	{
+		return false;
+	}
+
+	std::vector<std::string>* data = iter->second;
+	mInfo.Data.erase(iter);
+	mInfo.Data.insert(std::make_pair(changeName, data));
+
+	auto iterVec = mInfo.PushOrderedData.begin();
+	auto iterVecEnd = mInfo.PushOrderedData.end();
+
+	for (; iterVec != iterVecEnd; ++iterVec)
+	{
+		if ((**iterVec)[0] == prevName)
+		{
+			(**iterVec)[0] = changeName;
+			break;
+		}
+	}
+
+	return true;
+}
+
 void CExcelData::Clear()
 {
 	mInfo.Labels.clear();
@@ -106,7 +231,38 @@ void CExcelData::Clear()
 		SAFE_DELETE(iter->second);
 	}
 
-	mInfo.Data.clear();
+	mInfo.Data.clear();	
+	
+	size_t size = mInfo.PushOrderedData.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mInfo.PushOrderedData[i]);
+	}
+
+	mInfo.PushOrderedData.clear();
+}
+
+void CExcelData::ClearData()
+{	
+	auto iter = mInfo.Data.begin();
+	auto iterEnd = mInfo.Data.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE(iter->second);
+	}
+
+	mInfo.Data.clear();	
+	
+	size_t size = mInfo.PushOrderedData.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mInfo.PushOrderedData[i]);
+	}
+
+	mInfo.PushOrderedData.clear();
 }
 
 bool CExcelData::SaveCSV(const char* fileName, const std::string& pathName)
@@ -160,26 +316,19 @@ bool CExcelData::SaveCSVFullPath(const char* fullPath)
 	}
 
 	// Data
-	auto iter = mInfo.Data.begin();
-	auto iterEnd = mInfo.Data.end();
-
-	int count = 0;
-	int rowCount = (int)mInfo.Data.size();
-	for (; iter != iterEnd; ++iter)
+	size_t colSize = mInfo.PushOrderedData.size();
+	for (size_t i = 0; i < colSize; ++i)
 	{
-		int length = iter->first.length();
-		strcpy_s(buf, length + 1, iter->first.c_str());
-		strcat_s(buf, ",");
-		fputs(buf, fp);
+		std::vector<std::string>* row = mInfo.PushOrderedData[i];
 		
-		size_t dataCount = iter->second->size();
-		for (size_t i = 0; i < dataCount; ++i)
-		{
-			std::string data = (*(iter->second))[i];
-			length = data.length();
-			strcpy_s(buf, length + 1, data.c_str());
+		size_t rowSize = row->size();
 
-			if (i == dataCount - 1 && count != rowCount - 2)
+		for (size_t j = 0; j < rowSize; ++j)
+		{
+			int length = (*row)[j].length();
+			strcpy_s(buf, length + 1, (*row)[j].c_str());
+
+			if (j == rowSize - 1)
 			{
 				strcat_s(buf, "\n");
 			}
@@ -187,12 +336,10 @@ bool CExcelData::SaveCSVFullPath(const char* fullPath)
 			{
 				strcat_s(buf, ",");
 			}
-
 			fputs(buf, fp);
 		}
-		++rowCount;
 	}
-	
+
 	fclose(fp);
 	return true;
 }
@@ -261,12 +408,51 @@ bool CExcelData::LoadCSVFullPath(const char* fullPath)
 
 		mInfo.Data.insert(std::make_pair(dataName, row));
 	}
+
+	// TODO : Ordered Data
 	
 	fclose(fp);
 	return true;
 }
 
-std::vector<std::string>* CExcelData::FindData(const std::string& name)
+void CExcelData::GetRowNames(std::vector<std::string>& outNames) const
+{
+	size_t size = mInfo.PushOrderedData.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		outNames.push_back((*mInfo.PushOrderedData[i])[0]);
+	}
+}
+
+// TODO : 포인터 return
+const std::unordered_map<std::string, std::vector<std::string>*> CExcelData::GetRowWithName(const int idx)
+{
+	std::unordered_map<std::string, std::vector<std::string>*> out;
+
+	if (idx < 0 || idx >= mInfo.Data.size())
+	{
+		assert(false);
+		return out;
+	}
+
+	int count = 0;
+	
+	auto iter = mInfo.Data.begin();
+	auto iterEnd = mInfo.Data.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (idx == count)
+		{
+			out.insert(std::make_pair(iter->first, iter->second));
+			return out;
+		}
+		++count;
+	}
+}
+
+std::vector<std::string>* CExcelData::GetRow(const std::string& name)
 {
 	auto iter = mInfo.Data.find(name);
 	
@@ -276,6 +462,14 @@ std::vector<std::string>* CExcelData::FindData(const std::string& name)
 	}
 
 	return iter->second;
+}
+
+const std::string& CExcelData::FindData(const std::string& name, const std::string& label)
+{
+	std::vector<std::string>* row = GetRow(name);
+	int idx = getLabelIndex(label);
+
+	return (*row)[idx];
 }
 
 int CExcelData::getLabelIndex(const std::string& label)
@@ -292,4 +486,18 @@ int CExcelData::getLabelIndex(const std::string& label)
 	}
 
 	return -1;
+}
+
+std::vector<std::string>* CExcelData::findOrderedData(const std::string& name)
+{
+	size_t size = mInfo.PushOrderedData.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (name == (*mInfo.PushOrderedData[i])[0])
+		{
+			return mInfo.PushOrderedData[i];
+		}
+	}
+	return nullptr;
 }

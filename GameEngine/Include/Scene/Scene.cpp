@@ -8,11 +8,13 @@ CScene::CScene()
 	mResource = new CSceneResource;
 	mCollision = new CSceneCollision;
 	mCameraManager = new CCameraManager;
+	mNavManager = new CNavigationManager;
 	mViewport = new CViewport;
 
 	mMode->mScene = this;
 	mResource->mScene = this;
 	mCameraManager->mScene = this;
+	mNavManager->mScene = this;
 	mCollision->mScene = this;
 	mViewport->mScene = this;
 
@@ -20,6 +22,7 @@ CScene::CScene()
 
 	mCollision->Init();
 	mCameraManager->Init();
+	mNavManager->Init();
 	mViewport->Init();
 
 	mbBeChange = true;
@@ -28,6 +31,7 @@ CScene::CScene()
 CScene::~CScene()
 {
 	SAFE_DELETE(mCameraManager);
+	SAFE_DELETE(mNavManager);
 	SAFE_DELETE(mCollision);
 	SAFE_DELETE(mResource);
 	SAFE_DELETE(mViewport);
@@ -49,6 +53,7 @@ void CScene::Start()
 
 	mCollision->Start();
 	mCameraManager->Start();
+	mNavManager->Start();
 	mViewport->Start();
 
 	// 플레이어가 있고, 플레이어가 카메라를 가지고 있다면 플레이어 카메라를 기본 카메라로 설정
@@ -91,6 +96,10 @@ void CScene::Update(float deltaTime)
 		++iter;
 	}
 
+	mCameraManager->Update(deltaTime);
+
+	mNavManager->Update(deltaTime);
+
 	// UI Viewport update
 	mViewport->Update(deltaTime);
 }
@@ -120,6 +129,8 @@ void CScene::PostUpdate(float deltaTime)
 		(*iter)->PostUpdate(deltaTime);
 		++iter;
 	}
+
+	mCameraManager->PostUpdate(deltaTime);
 
 	mViewport->PostUpdate(deltaTime);
 

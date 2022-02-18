@@ -64,6 +64,7 @@ public:
 			assert(false);
 			return nullptr;
 		}
+		mVecPopUpWidget.push_back(widget);
 		return widget;
 	}
 

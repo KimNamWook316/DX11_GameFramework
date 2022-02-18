@@ -408,9 +408,9 @@ CExcelData* CResourceManager::FindCSV(const std::string& name)
 	return mExcelManager->FindCSV(name);
 }
 
-bool CResourceManager::DeleteData(const std::string& name)
+bool CResourceManager::DeleteCSV(const std::string& name)
 {
-	return mExcelManager->DeleteData(name);
+	return mExcelManager->DeleteCSV(name);
 }
 
 bool CResourceManager::SaveCSV(const std::string& name, const char* fileName, const std::string& pathName)
@@ -420,7 +420,7 @@ bool CResourceManager::SaveCSV(const std::string& name, const char* fileName, co
 
 bool CResourceManager::SaveCSVFullPath(const std::string& name, const char* fullPath)
 {
-	return mExcelManager->SaveCSV(name, fullPath);
+	return mExcelManager->SaveCSVFullPath(name, fullPath);
 }
 
 bool CResourceManager::LoadCSV(const char* fileName, const std::string& pathName)

@@ -210,6 +210,9 @@
     <Filter Include="99. Util">
       <UniqueIdentifier>{c4169037-5e92-44ea-b0db-9d88251b3904}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Scene\06. Navigation">
+      <UniqueIdentifier>{79a8f23f-d16c-4fad-8d1c-1cf03dfe9284}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -668,6 +671,21 @@
     <ClInclude Include="Util.h">
       <Filter>99. Util</Filter>
     </ClInclude>
+    <ClInclude Include="IMGUIInputInt2.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIPopUpModal.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\NavigationManager.h">
+      <Filter>03. Scene\06. Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\NavigationThread.h">
+      <Filter>03. Scene\06. Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Navigation.h">
+      <Filter>03. Scene\06. Navigation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1074,6 +1092,21 @@
     </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>99. Util</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIInputInt2.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIPopUpModal.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\NavigationManager.cpp">
+      <Filter>03. Scene\06. Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\NavigationThread.cpp">
+      <Filter>03. Scene\06. Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Navigation.cpp">
+      <Filter>03. Scene\06. Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

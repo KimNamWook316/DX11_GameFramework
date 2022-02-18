@@ -118,7 +118,6 @@ bool CCollisionManager::MakeCSV()
 	CExcelData* csv = CResourceManager::GetInst()->FindCSV("CollisionProfileInfo");
 	csv->Clear();
 	
-	csv->SetName("CollisionProfileInfo");
 	csv->AddLabel("Channel");
 
 	for (int i = 0; i < (int)eCollisionChannel::Max; ++i)

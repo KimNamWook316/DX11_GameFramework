@@ -4,6 +4,7 @@
 #include "SceneResource.h"
 #include "SceneCollision.h"
 #include "CameraManager.h"
+#include "NavigationManager.h"
 #include "Viewport.h"
 #include "../GameObject/GameObject.h"
 
@@ -61,6 +62,11 @@ public:
 	CCameraManager* GetCameraManager() const
 	{
 		return mCameraManager;
+	}
+
+	CNavigationManager* GetNavigationManager() const
+	{
+		return mNavManager;
 	}
 
 	CViewport* GetViewport() const
@@ -163,6 +169,7 @@ private:
 	CSceneResource* mResource;
 	CSceneCollision* mCollision;
 	CCameraManager* mCameraManager;
+	CNavigationManager* mNavManager;
 	CViewport* mViewport;
 
 	std::list<CSharedPtr<CGameObject>> mObjList;

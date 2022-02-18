@@ -44,7 +44,7 @@ void CCameraManager::Update(float deltaTime)
 	}
 }
 
-void CCameraManager::PostUpate(float deltaTime)
+void CCameraManager::PostUpdate(float deltaTime)
 {
 	if ("DefualtCamera" == mCurrentCamera->GetName())
 	{

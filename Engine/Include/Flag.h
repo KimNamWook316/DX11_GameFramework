@@ -93,6 +93,7 @@ enum class eSceneComponentType
 	Camera,
 	Widget,
 	Particle,
+	TileMap,
 	Max
 };
 
@@ -214,4 +215,11 @@ enum class eTileType
 	Normal,
 	Wall,
 	Max
+};
+
+enum class eNavNodeType
+{
+	None,
+	Open,
+	Closed,
 };

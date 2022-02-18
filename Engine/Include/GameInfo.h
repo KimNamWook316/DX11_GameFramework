@@ -413,4 +413,18 @@ struct ExcelInfo
 	std::string Name;
 	std::vector<std::string> Labels;
 	std::unordered_map<std::string, std::vector<std::string>*> Data;
+	std::vector<std::vector<std::string>*> PushOrderedData;
+};
+
+struct NavWorkData
+{
+	std::function<void(const std::vector<Vector3>&)> CallBack;
+	Vector3 Start;
+	Vector3 End;
+};
+
+struct NavResultData
+{
+	std::function<void(const std::vector<Vector3>&)> CallBack;
+	std::vector<Vector3> vecPath;
 };

@@ -15,9 +15,11 @@
 #include "Component/ColliderCircle.h"
 #include "Component/ColliderBox2D.h"
 #include "Component/ColliderPixel.h"
+#include "Component/TileMapComponent.h"
 #include "../Widget/ComponentControlWidget.h"
 #include "../Widget/SpriteControlWidget.h"
 #include "../Widget/ColliderControlWidget.h"
+#include "../Widget/TileMapControlWidget.h"
 
 CDetailWindow::CDetailWindow()
 {
@@ -82,6 +84,11 @@ CComponentControlWidget* CDetailWindow::CreateControlWidget(CComponent* comp)
     {
         CColliderControlWidget* widget = new CColliderControlWidget;
         widget->meType = eColliderType::Pixel;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CTileMapComponent).hash_code())
+    {
+        CTileMapControlWidget* widget = new CTileMapControlWidget;
         return widget;
     }
     else

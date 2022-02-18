@@ -70,7 +70,7 @@ public:
         mVecItem.erase(iter);
 
         auto iterUTF = mVecItemUTF8.begin() + idx;
-        mVecItemUTF8.erase(iter);
+        mVecItemUTF8.erase(iterUTF);
     }
 
     void Clear()

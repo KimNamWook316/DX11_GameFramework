@@ -23,11 +23,11 @@ bool CTileMapObject::Init()
 	mTileMap = CreateComponent<CTileMapComponent>("TileMap");
 	SetRootSceneComponent(mTileMap);
 
-	mTileMap->CreateTile(eTileShape::Rect, 100, 100, Vector2(64.f, 64.f));
+	mTileMap->CreateTile(eTileShape::Rhombus, 100, 100, Vector2(160.f, 80.f));
 
 	CMaterial* mat = mScene->GetResource()->FindMaterial("TileMap");
 	mTileMap->SetTileMaterial(mat);
-	mTileMap->SetTileDefaultFrame(0.f, 64.f, 64.f, 128.f);
+	mTileMap->SetTileDefaultFrame(0.f, 0.f, 160.f, 80.f);
 	return true;
 }
 

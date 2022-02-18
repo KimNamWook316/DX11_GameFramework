@@ -3,6 +3,7 @@
 #include "../Scene/SceneResource.h"
 #include "../Resource/Shader/StructuredBuffer.h"
 #include "../Resource/Shader/TileMapConstantBuffer.h"
+#include "../Scene/NavigationManager.h"
 #include "CameraComponent.h"
 
 CTileMapComponent::CTileMapComponent()
@@ -13,6 +14,7 @@ CTileMapComponent::CTileMapComponent()
 	mCountX = 0;
 	mCountY = 0;
 	mRenderCount = 0;
+	mTileDiagonal = 0.f;
 	meTileShape = eTileShape::Rect;
 	mLayerName = "Back";
 	mTileInfoBuffer = nullptr;
@@ -99,51 +101,65 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 {
 	CSceneComponent::PostUpdate(DeltaTime);
 
-	CCameraComponent* camera = mScene->GetCameraManager()->GetCurrentCamera();
-
-	Resolution RS = camera->GetResolution();
-
-	Vector3 LB = camera->GetWorldPos();
-	Vector3 RT = LB + Vector3((float)RS.Width, (float)RS.Height, 0.f);
-
-	int startX, startY, endX, endY;
-
-	startX = getTileRenderIndexX(LB);
-	startY = getTileRenderIndexY(LB);
-	endX = getTileRenderIndexX(RT);
-	endY = getTileRenderIndexY(RT);
-
-	Matrix matView, matProj;
-	matView = camera->GetViewMatrix();
-	matProj = camera->GetProjMatrix();
-
-	mRenderCount = 0;
-
-	for (int i = startY; i <= endY; ++i)
+	if (!mVecTile.empty())
 	{
-		for (int j = startX; j <= endX; ++j)
+		CCameraComponent* camera = mScene->GetCameraManager()->GetCurrentCamera();
+
+		Resolution RS = camera->GetResolution();
+
+		Vector3 LB = camera->GetWorldPos();
+		Vector3 RT = LB + Vector3((float)RS.Width, (float)RS.Height, 0.f);
+		Vector3 LT = Vector3(LB.x, RT.y, 0.f);
+		Vector3 RB = Vector3(RT.x, LB.y, 0.f);
+
+		int startX, startY, endX, endY;
+
+		startX = getTileRenderIndexX(LB);
+		endX = getTileRenderIndexX(RT);
+
+		if (eTileShape::Rect == meTileShape)
 		{
-			int index = i * mCountX + j;
-			mVecTile[index]->Update(DeltaTime);
+			startY = getTileRenderIndexY(LB);
+			endY = getTileRenderIndexY(RT);
+		}
+		else if (eTileShape::Rhombus == meTileShape)
+		{
+			startY = getTileRenderIndexY(RB);
+			endY = getTileRenderIndexY(LT);
+		}
 
-			if (mVecTile[index]->GetIsRender())
+		Matrix matView, matProj;
+		matView = camera->GetViewMatrix();
+		matProj = camera->GetProjMatrix();
+
+		mRenderCount = 0;
+
+		for (int i = startY; i <= endY; ++i)
+		{
+			for (int j = startX; j <= endX; ++j)
 			{
-				if (mbEditMode)
-				{
-					mVecTileInfo[mRenderCount].TileColor = mTileColor[(int)mVecTile[index]->GetTileType()];
-				}
+				int index = i * mCountX + j;
+				mVecTile[index]->Update(DeltaTime);
 
-				mVecTileInfo[mRenderCount].TileStart = mVecTile[index]->GetFrameStart();
-				mVecTileInfo[mRenderCount].TileEnd = mVecTile[index]->GetFrameEnd();
-				mVecTileInfo[mRenderCount].Opacity = mVecTile[index]->GetOpacity();
-				mVecTileInfo[mRenderCount].MatWVP = mVecTile[index]->GetWorldMatrix() * matView * matProj;
-				mVecTileInfo[mRenderCount].MatWVP.Transpose();
-				++mRenderCount;
+				if (mVecTile[index]->GetIsRender())
+				{
+					if (mbEditMode)
+					{
+						mVecTileInfo[mRenderCount].TileColor = mTileColor[(int)mVecTile[index]->GetTileType()];
+					}
+
+					mVecTileInfo[mRenderCount].TileStart = mVecTile[index]->GetFrameStart();
+					mVecTileInfo[mRenderCount].TileEnd = mVecTile[index]->GetFrameEnd();
+					mVecTileInfo[mRenderCount].Opacity = mVecTile[index]->GetOpacity();
+					mVecTileInfo[mRenderCount].MatWVP = mVecTile[index]->GetWorldMatrix() * matView * matProj;
+					mVecTileInfo[mRenderCount].MatWVP.Transpose();
+					++mRenderCount;
+				}
 			}
 		}
-	}
 
-	mTileInfoBuffer->UpdateBuffer(&mVecTileInfo[0], mRenderCount);
+		mTileInfoBuffer->UpdateBuffer(&mVecTileInfo[0], mRenderCount);
+	}
 }
 
 void CTileMapComponent::PrevRender()
@@ -162,7 +178,7 @@ void CTileMapComponent::Render()
 		mBackMaterial->Reset();
 	}
 
-	if (mTileMaterial)
+	if (mTileMaterial && !mVecTile.empty())
 	{
 		mTileInfoBuffer->SetShader();
 		mCBuffer->UpdateCBuffer();
@@ -183,8 +199,125 @@ CTileMapComponent* CTileMapComponent::Clone()
 	return new CTileMapComponent(*this);
 }
 
+int CTileMapComponent::GetTileIndexX(const Vector3& pos)
+{
+	if (eTileShape::Rect == meTileShape)
+	{
+		float convertX = pos.x - GetWorldPos().x;
+
+		int idxX = (int)(convertX / mTileSize.x);
+
+		if (idxX < 0 || idxX >= mCountX)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxX;
+		}
+	}
+	else if (eTileShape::Rhombus == meTileShape)
+	{
+		Vector3 convertPos = Vector3(pos - GetWorldPos()).TransformCoord(mMatWorldToIso);
+		
+		int idxX = (int)(convertPos.x / mTileDiagonal);
+
+		if (idxX < 0 || idxX >= mCountX)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxX;
+		}
+	}
+	return -1;
+}
+
+int CTileMapComponent::GetTileIndexY(const Vector3& pos)
+{
+	if (eTileShape::Rect == meTileShape)
+	{
+		float convertY = pos.y - GetWorldPos().y;
+
+		int idxY = (int)(convertY / mTileSize.y);
+
+		if (idxY < 0 || idxY >= mCountY)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxY;
+		}
+	}
+	else if (eTileShape::Rhombus == meTileShape)
+	{
+		Vector3 convertPos = Vector3(pos - GetWorldPos()).TransformCoord(mMatWorldToIso);
+		
+		int idxY = (int)(convertPos.y / mTileDiagonal);
+
+		if (idxY < 0 || idxY >= mCountY)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxY;
+		}
+	}
+	return -1;
+}
+
+int CTileMapComponent::GetTileIndex(const Vector3& pos)
+{
+	int idxX = GetTileIndexX(pos);
+	int idxY = GetTileIndexY(pos);
+
+	if (-1 == idxX || -1 == idxY)
+	{
+		return -1;
+	}
+
+	return idxY * mCountX + idxX;
+}
+
+CTile* CTileMapComponent::GetTile(const Vector3& pos)
+{
+	int idx = GetTileIndex(pos);
+
+	if (-1 == idx)
+	{
+		return nullptr;
+	}
+	
+	return mVecTile[idx];
+}
+
+CTile* CTileMapComponent::GetTile(const int x, const int y)
+{
+	if (x < 0 || x >= mCountX || y < 0 || y >= mCountY)
+	{
+		return nullptr;
+	}
+
+	return mVecTile[y * mCountY + x];
+}
+
+CTile* CTileMapComponent::GetTile(const int idx)
+{
+	if (idx < 0 || idx > mCount)
+	{
+		return nullptr;
+	}
+
+	return mVecTile[idx];
+}
+
 void CTileMapComponent::CreateTile(eTileShape eShape, const int countX, const int countY, const Vector2& size)
 {
+	ClearTile();
+
 	meTileShape = eShape;
 	mCountX = countX;
 	mCountY = countY;
@@ -232,18 +365,24 @@ void CTileMapComponent::CreateTile(eTileShape eShape, const int countX, const in
 		break;
 	case eTileShape::Rhombus:
 	{
+		mTileDiagonal = sqrt((mTileSize.x / 2.f) * (mTileSize.x / 2.f) +
+			(mTileSize.y / 2.f) * (mTileSize.y / 2.f));
+
+		mMatIsoToWorld.v[0] = Vector4((2.f * sqrt(5.f)/ 5.f) - 0.01f , (sqrt(5.f) / 5.f) - 0.01f, 0.f, 0.f);
+		mMatIsoToWorld.v[1] = Vector4((-2.f * sqrt(5.f) / 5.f) + 0.01f, (sqrt(5.f) / 5.f) - 0.01f, 0.f, 0.f);
+		mMatIsoToWorld.v[2] = Vector4(0.f, 0.f, 1.f, 0.f);
+		mMatIsoToWorld.v[3] = Vector4(0.f, 0.f, 0.f, 1.f);
+
+		mMatWorldToIso = mMatIsoToWorld;
+		mMatWorldToIso.Inverse();
+
 		Vector3 pos;
-		Matrix matIsometric;
-		matIsometric.v[0] = Vector4(sqrt(3.f) / 2.f, -sqrt(3.f) / 2.f, 0.f, 0.f);
-		matIsometric.v[1] = Vector4(0.5f, 0.5f, 0.f, 0.f);
-		matIsometric.v[2] = Vector4(0.f, 0.f, 0.f, 0.f);
-		matIsometric.v[3] = Vector4(0.f, 0.f, 0.f, 1.f);
 
 		for (int i = 0; i < mCountY; ++i)
 		{
 			for (int j = 0; j < mCountX; ++j)
 			{
-				pos = Vector3((float)j, (float)i, 0).TransformCoord(matIsometric);
+				pos = Vector3((float)j * mTileDiagonal, (float)i * mTileDiagonal, 0).TransformCoord(mMatIsoToWorld);
 				int idx = i * mCountX + j;
 				mVecTile[idx]->SetPos(pos);
 			}
@@ -258,6 +397,29 @@ void CTileMapComponent::CreateTile(eTileShape eShape, const int countX, const in
 	mCBuffer->SetTileSize(Vector2(mTileSize.x, mTileSize.y));
 	mCount = mCountX * mCountY;
 	SetWorldInfo();
+
+	if (mTileMaterial)
+	{
+		Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+		Vector2 imageStart(0.f, 0.f);
+		mCBuffer->SetImageSize(imageSize);
+		mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+		mCBuffer->SetImageEnd(imageSize);
+		SetTileDefaultFrame(imageStart, imageSize);
+	}
+
+	mScene->GetNavigationManager()->SetNavData(this);
+}
+
+void CTileMapComponent::ClearTile()
+{
+	size_t size = mVecTile.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecTile[i]);
+	}
+	mVecTile.clear();
 }
 
 void CTileMapComponent::SetWorldInfo()
@@ -472,6 +634,124 @@ void CTileMapComponent::SetBackTexture(const int index, const int reg, const int
 	mBackMaterial->SetTexture(index, reg, shaderType, name, vecFileName, pathName);
 }
 
+void CTileMapComponent::AddTileTexture(const int reg, const int shaderType, const std::string& name, CTexture* texture)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	mTileMaterial->AddTexture(reg, shaderType, name, texture);
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageStart);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
+void CTileMapComponent::AddTileTexture(const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	mTileMaterial->AddTexture(reg, shaderType, name, fileName, pathName);
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageStart);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
+void CTileMapComponent::AddTileTextureFullPath(const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	mTileMaterial->AddTextureFullPath(reg, shaderType, name, fullPath);
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageStart);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
+void CTileMapComponent::AddTileTexture(const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	mTileMaterial->AddTexture(reg, shaderType, name, vecFileName);
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageStart);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
+void CTileMapComponent::SetTileTexture(const int index, const int reg, const int shaderType, const std::string& name, CTexture* texture)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	mTileMaterial->SetTexture(index, reg, shaderType, name, texture);
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageStart);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
+void CTileMapComponent::SetTileTexture(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	mTileMaterial->SetTexture(index, reg, shaderType, name, fileName, pathName);
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageSize);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
+void CTileMapComponent::SetTileTextureFullPath(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageSize);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
+void CTileMapComponent::SetTileTexture(const int index, const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageSize);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+	SetTileDefaultFrame(imageStart, imageSize);
+}
+
 void CTileMapComponent::Save(FILE* fp)
 {
 	std::string meshName = mBackMesh->GetName();
@@ -514,7 +794,10 @@ void CTileMapComponent::SetTileMaterial(CMaterial* material)
 
 	mTileMaterial->SetScene(mScene);
 	
-	mCBuffer->SetImageSize(Vector2((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight()));
+	if (!mTileMaterial->IsTextureEmpty())
+	{
+		mCBuffer->SetImageSize(Vector2((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight()));
+	}
 }
 
 int CTileMapComponent::getTileRenderIndexX(const Vector3& pos)
@@ -538,11 +821,20 @@ int CTileMapComponent::getTileRenderIndexX(const Vector3& pos)
 	}
 	else if (eTileShape::Rhombus == meTileShape)
 	{
+		Vector3 convertPos = pos - GetWorldPos();
+		convertPos = convertPos.TransformCoord(mMatWorldToIso);
 
-	}
-	else
-	{
-		return 0;
+		int idxX = (int)convertPos.x / mTileDiagonal;
+
+		if (idxX < 0)
+		{
+			return 0;
+		}
+		else if (idxX >= mCountX)
+		{
+			return mCountX - 1;
+		}
+		return idxX;
 	}
 	return 0;
 }
@@ -559,7 +851,7 @@ int CTileMapComponent::getTileRenderIndexY(const Vector3& pos)
 		{
 			return 0;
 		}
-		else if (idxY >= mCountX)
+		else if (idxY >= mCountY)
 		{
 			return mCountY - 1;
 		}
@@ -568,11 +860,20 @@ int CTileMapComponent::getTileRenderIndexY(const Vector3& pos)
 	}
 	else if (eTileShape::Rhombus == meTileShape)
 	{
+		Vector3 convertPos = pos - GetWorldPos();
+		convertPos = convertPos.TransformCoord(mMatWorldToIso);
 
-	}
-	else
-	{
-		return 0;
+		int idxY = (int)convertPos.y / mTileDiagonal;
+
+		if (idxY < 0)
+		{
+			return 0;
+		}
+		else if (idxY >= mCountY)
+		{
+			return mCountY - 1;
+		}
+		return idxY;
 	}
 	return 0;
 }

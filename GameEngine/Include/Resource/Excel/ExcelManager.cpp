@@ -39,6 +39,7 @@ bool CExcelManager::CreateCSV(const std::string& name)
 		return false;
 	}
 
+	data->SetName(name);
 	mMapExcelData.insert(std::make_pair(name, data));
 	return true;
 }
@@ -54,7 +55,7 @@ CExcelData* CExcelManager::FindCSV(const std::string& name)
 	return iter->second;
 }
 
-bool CExcelManager::DeleteData(const std::string& name)
+bool CExcelManager::DeleteCSV(const std::string& name)
 {
 	auto iter = mMapExcelData.find(name);
 

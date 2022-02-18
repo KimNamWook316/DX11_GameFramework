@@ -56,6 +56,11 @@ public:
 		return mValue[1];
 	}
 
+	Vector2 GetValue() const
+	{
+		return Vector2(mValue[0], mValue[1]);
+	}
+
 public:
 	template <typename T>
 	void SetCallBack(T* obj, void(T::* func)(float[2]))

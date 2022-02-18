@@ -161,12 +161,14 @@
     <ClInclude Include="Widget\ColliderControlWidget.h" />
     <ClInclude Include="WIdget\ComponentControlWidget.h" />
     <ClInclude Include="WIdget\SpriteControlWidget.h" />
+    <ClInclude Include="Widget\TileMapControlWidget.h" />
     <ClInclude Include="Widget\WidgetControlWidget.h" />
     <ClInclude Include="Window\CollisionProfileWindow.h" />
     <ClInclude Include="Window\DetailWindow.h" />
     <ClInclude Include="Window\EditorMenuWindow.h" />
     <ClInclude Include="Window\ObjectHierachyWindow.h" />
     <ClInclude Include="Window\SpriteWindow.h" />
+    <ClInclude Include="Window\TileSetEditWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp" />
@@ -179,12 +181,14 @@
     <ClCompile Include="Widget\ColliderControlWidget.cpp" />
     <ClCompile Include="WIdget\ComponentControlWidget.cpp" />
     <ClCompile Include="WIdget\SpriteControlWidget.cpp" />
+    <ClCompile Include="Widget\TileMapControlWidget.cpp" />
     <ClCompile Include="Widget\WidgetControlWidget.cpp" />
     <ClCompile Include="Window\CollisionProfileWindow.cpp" />
     <ClCompile Include="Window\DetailWindow.cpp" />
     <ClCompile Include="Window\EditorMenuWindow.cpp" />
     <ClCompile Include="Window\ObjectHierachyWindow.cpp" />
     <ClCompile Include="Window\SpriteWindow.cpp" />
+    <ClCompile Include="Window\TileSetEditWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc" />

@@ -21,6 +21,7 @@
 #include "Component/CameraComponent.h"
 #include "Component/WidgetComponent.h"
 #include "Component/ParticleComponent.h"
+#include "Component/TileMapComponent.h"
 #include "Engine.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
@@ -69,14 +70,11 @@ bool CEditorMenuWindow::Init()
     text->SetText("Create Components");
 
     mCreatableComponentsComboBox = AddWidget<CIMGUIComboBox>("Component List", 150.f, 0.f);
-    mCreatableComponentsComboBox->AddItem("SpriteComponent");
-    mCreatableComponentsComboBox->AddItem("StaticMeshComponent");
-    mCreatableComponentsComboBox->AddItem("ColliderBox2D");
-    mCreatableComponentsComboBox->AddItem("ColliderCircle");
-    mCreatableComponentsComboBox->AddItem("ColliderPixel");
-    mCreatableComponentsComboBox->AddItem("Camera");
-    mCreatableComponentsComboBox->AddItem("Widget");
-    mCreatableComponentsComboBox->AddItem("Particle");
+
+    for (int i = 0; i < (int)eSceneComponentType::Max; ++i)
+    {
+        mCreatableComponentsComboBox->AddItem(CUtil::SceneComponentTypeToString((eSceneComponentType)i));
+    }
 
     mComponentNameInput = AddWidget<CIMGUITextInput>("Component Name", 100.f, 0.f);
     
@@ -164,36 +162,39 @@ void CEditorMenuWindow::OnClickCreateComponent()
 
     CSceneComponent* comp = nullptr;
 
-    switch ((eCreateSceneComponentType)selectIdx)
+    // 엔진 내장 컴포넌트들
+    switch ((eSceneComponentType)selectIdx)
     {
-    case eCreateSceneComponentType::Sprite:
+    case eSceneComponentType::Sprite:
         comp = obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eCreateSceneComponentType::StaticMesh:
+    case eSceneComponentType::StaticMesh:
         comp = obj->CreateComponentAddChild<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eCreateSceneComponentType::ColliderBox2D:
+    case eSceneComponentType::ColliderBox2D:
         comp = obj->CreateComponentAddChild<CColliderBox2D>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eCreateSceneComponentType::ColliderCircle:
+    case eSceneComponentType::ColliderCircle:
         comp = obj->CreateComponentAddChild<CColliderCircle>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eCreateSceneComponentType::ColliderPixel:
+    case eSceneComponentType::ColliderPixel:
         comp = obj->CreateComponentAddChild<CColliderPixel>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eCreateSceneComponentType::Camera:
+    case eSceneComponentType::Camera:
         comp = obj->CreateComponentAddChild<CCameraComponent>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eCreateSceneComponentType::Widget:
+    case eSceneComponentType::Widget:
         comp = obj->CreateComponentAddChild<CWidgetComponent>(mComponentNameInput->GetTextMultiByte());
         break;
-    case eCreateSceneComponentType::Particle:
+    case eSceneComponentType::Particle:
         comp = obj->CreateComponentAddChild<CParticleComponent>(mComponentNameInput->GetTextMultiByte());
         break;
-    default:
-        assert(false);
+    case eSceneComponentType::TileMap:
+        comp = obj->CreateComponentAddChild<CTileMapComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     }
+    
+    // TODO : 사용자 정의 컴포넌트에도 없으면 assert 하도록
     
     comp->Start();
 
