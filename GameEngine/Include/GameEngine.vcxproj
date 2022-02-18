@@ -148,6 +148,8 @@
     <ClInclude Include="Resource\Texture\DirectXTex.h" />
     <ClInclude Include="Resource\Texture\Texture.h" />
     <ClInclude Include="Resource\Texture\TextureManager.h" />
+    <ClInclude Include="Resource\TileSet\TileSet.h" />
+    <ClInclude Include="Resource\TileSet\TileSetManager.h" />
     <ClInclude Include="Scene\CameraManager.h" />
     <ClInclude Include="Scene\CollisionSection.h" />
     <ClInclude Include="Scene\Navigation.h" />
@@ -291,6 +293,8 @@
     <ClCompile Include="Resource\Sound\SoundManager.cpp" />
     <ClCompile Include="Resource\Texture\Texture.cpp" />
     <ClCompile Include="Resource\Texture\TextureManager.cpp" />
+    <ClCompile Include="Resource\TileSet\TileSet.cpp" />
+    <ClCompile Include="Resource\TileSet\TileSetManager.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
     <ClCompile Include="Scene\CollisionSection.cpp" />
     <ClCompile Include="Scene\Navigation.cpp" />

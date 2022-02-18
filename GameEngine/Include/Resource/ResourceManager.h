@@ -9,6 +9,7 @@
 #include "Font/FontManager.h"
 #include "Particle/ParticleManager.h"
 #include "Excel/ExcelManager.h"
+#include "TileSet/TileSetManager.h"
 
 // 다양한 리소스들을 모두 관리할 매니저 (메쉬, 오디오 등등 모든 리소스는 이 객체에서만 관리한다.)
 // CResource라는 클래스를 만들어, 모든 리소스가 상속받게 하여, 맵 하나로 관리하는 법도 있다.
@@ -141,6 +142,17 @@ public: // ===================== Excel =====================
 	bool LoadCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool LoadCSVFullPath(const char* fullPath);
 
+public: // ===================== Excel =====================
+	bool CreateTileSet(const std::string& name);
+	CTileSet* FindTileSet(const std::string& name);
+	void ReleaseTileSet(const std::string& name);
+	bool SaveTileSet(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool SaveTileSetFullPath(const std::string& name, const char* fullPath);
+	bool LoadTileSet(const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool LoadTileSet(std::string& outName, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool LoadTileSetFullPath(const char* fullPath);
+	bool LoadTileSetFullPath(std::string& outName, const char* fullPath);
+
 	DECLARE_SINGLE(CResourceManager)
 
 private:
@@ -153,5 +165,6 @@ private:
 	CFontManager* mFontManager;
 	CParticleManager* mParticleManager;
 	CExcelManager* mExcelManager;
+	CTileSetManager* mTileSetManager;
 };
 

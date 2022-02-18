@@ -11,7 +11,8 @@ CResourceManager::CResourceManager() :
 	mSoundManager(nullptr),
 	mFontManager(nullptr),
 	mParticleManager(nullptr),
-	mExcelManager(nullptr)
+	mExcelManager(nullptr),
+	mTileSetManager(nullptr)
 {
 }
 
@@ -26,6 +27,7 @@ CResourceManager::~CResourceManager()
 	SAFE_DELETE(mFontManager);
 	SAFE_DELETE(mParticleManager);
 	SAFE_DELETE(mExcelManager);
+	SAFE_DELETE(mTileSetManager);
 }
 
 bool CResourceManager::Init()
@@ -88,6 +90,13 @@ bool CResourceManager::Init()
 
 	mExcelManager = new CExcelManager;
 	if (!mExcelManager->Init())
+	{
+		assert(false);
+		return false;
+	}
+
+	mTileSetManager = new CTileSetManager;
+	if (!mTileSetManager->Init())
 	{
 		assert(false);
 		return false;
@@ -431,6 +440,51 @@ bool CResourceManager::LoadCSV(const char* fileName, const std::string& pathName
 bool CResourceManager::LoadCSVFullPath(const char* fullPath)
 {
 	return mExcelManager->LoadCSVFullPath(fullPath);
+}
+
+bool CResourceManager::CreateTileSet(const std::string& name)
+{
+	return mTileSetManager->CreateTileSet(name);
+}
+
+CTileSet* CResourceManager::FindTileSet(const std::string& name)
+{
+	return mTileSetManager->FindTileSet(name);
+}
+
+void CResourceManager::ReleaseTileSet(const std::string& name)
+{
+	mTileSetManager->ReleaseTileSet(name);
+}
+
+bool CResourceManager::SaveTileSet(const std::string& name, const char* fileName, const std::string& pathName)
+{
+	return mTileSetManager->SaveTileSet(name, fileName, pathName);
+}
+
+bool CResourceManager::SaveTileSetFullPath(const std::string& name, const char* fullPath)
+{
+	return mTileSetManager->SaveTileSetFullPath(name, fullPath);
+}
+
+bool CResourceManager::LoadTileSet(const char* fileName, const std::string& pathName)
+{
+	return mTileSetManager->LoadTileSet(fileName, pathName);
+}
+
+bool CResourceManager::LoadTileSet(std::string& outName, const char* fileName, const std::string& pathName)
+{
+	return mTileSetManager->LoadTileSet(outName, fileName, pathName);
+}
+
+bool CResourceManager::LoadTileSetFullPath(const char* fullPath)
+{
+	return mTileSetManager->LoadTileSetFullPath(fullPath);
+}
+
+bool CResourceManager::LoadTileSetFullPath(std::string& outName, const char* fullPath)
+{
+	return mTileSetManager->LoadTileSetFullPath(outName, fullPath);
 }
 
 

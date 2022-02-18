@@ -107,6 +107,20 @@ CSceneResource::~CSceneResource()
 			CResourceManager::GetInst()->ReleaseParticle(name);
 		}
 	}
+	
+	{
+		auto iter = mMapTileSet.begin();
+		auto iterEnd = mMapTileSet.end();
+
+		for (; iter != iterEnd;)
+		{
+			std::string name = iter->first;
+
+			iter = mMapTileSet.erase(iter);
+
+			CResourceManager::GetInst()->ReleaseTileSet(name);
+		}
+	}
 }
 
 CMesh* CSceneResource::FindMesh(const std::string& name)
@@ -555,4 +569,109 @@ CParticle* CSceneResource::FindParticle(const std::string& name)
 		return findNotInScene;
 	}
 	return iter->second;
+}
+
+bool CSceneResource::CreateTileSet(const std::string& name)
+{
+	CTileSet* tileSet = FindTileSet(name);
+
+	if (tileSet)
+	{
+		return true;
+	}
+
+	if (!CResourceManager::GetInst()->CreateTileSet(name))
+	{
+		return false;
+	}
+
+	tileSet = CResourceManager::GetInst()->FindTileSet(name);
+	tileSet->SetScene(mScene);
+	mMapTileSet.insert(std::make_pair(name, tileSet));
+
+	return true;
+}
+
+CTileSet* CSceneResource::FindTileSet(const std::string& name)
+{
+	auto iter = mMapTileSet.find(name);
+
+	if (iter == mMapTileSet.end())
+	{
+		CTileSet* tileSet = CResourceManager::GetInst()->FindTileSet(name);
+
+		if (!tileSet)
+		{
+			return nullptr;
+		}
+
+		return tileSet;
+	}
+	return iter->second;
+}
+
+void CSceneResource::ReleaseTileSet(const std::string& name)
+{
+	auto iter = mMapTileSet.find(name);
+
+	if (iter != mMapTileSet.end())
+	{
+		if (iter->second->GetRefCount() == 2)
+		{
+			mMapTileSet.erase(name);
+			CResourceManager::GetInst()->ReleaseTileSet(name);
+		}
+	}
+}
+
+bool CSceneResource::SaveTileSet(const std::string& name, const char* fileName, const std::string& pathName)
+{
+	return CResourceManager::GetInst()->SaveTileSet(name, fileName, pathName);
+}
+
+bool CSceneResource::SaveTileSetFullPath(const std::string& name, const char* fullPath)
+{
+	return CResourceManager::GetInst()->SaveTileSetFullPath(name, fullPath);
+}
+
+bool CSceneResource::LoadTileSet(const char* fileName, const std::string& pathName)
+{
+	std::string outName;
+
+	if (!CResourceManager::GetInst()->LoadTileSet(outName, fileName, pathName))
+	{
+		return false;
+	}
+	
+	CTileSet* tileSet = CResourceManager::GetInst()->FindTileSet(outName);
+
+	if (!tileSet)
+	{
+		return false;
+	}
+	
+	tileSet->SetScene(mScene);
+	mMapTileSet.insert(std::make_pair(outName, tileSet));
+	return true;
+}
+
+bool CSceneResource::LoadTileSetFullPath(const char* fullPath)
+{
+	std::string outName;
+
+	if (!CResourceManager::GetInst()->LoadTileSetFullPath(outName, fullPath))
+	{
+		return false;
+	}
+	
+	CTileSet* tileSet = CResourceManager::GetInst()->FindTileSet(outName);
+
+	if (!tileSet)
+	{
+		return false;
+	}
+	
+	tileSet->SetScene(mScene);
+	mMapTileSet.insert(std::make_pair(outName, tileSet));
+	return true;
 }

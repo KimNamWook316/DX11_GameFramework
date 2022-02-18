@@ -43,9 +43,6 @@ public:
 	}
 
 	void GetRowNames(std::vector<std::string>& outNames) const;
-	{
-		
-	}
 
 	size_t GetDataSize() const
 	{

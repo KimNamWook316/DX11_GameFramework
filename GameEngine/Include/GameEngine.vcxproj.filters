@@ -213,6 +213,9 @@
     <Filter Include="03. Scene\06. Navigation">
       <UniqueIdentifier>{79a8f23f-d16c-4fad-8d1c-1cf03dfe9284}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\10. TileSet">
+      <UniqueIdentifier>{e7da4d76-f619-4140-ba63-1c72e65bbeb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -686,6 +689,12 @@
     <ClInclude Include="Scene\Navigation.h">
       <Filter>03. Scene\06. Navigation</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\TileSet\TileSet.h">
+      <Filter>02. Resource\10. TileSet</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\TileSet\TileSetManager.h">
+      <Filter>02. Resource\10. TileSet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1107,6 +1116,12 @@
     </ClCompile>
     <ClCompile Include="Scene\Navigation.cpp">
       <Filter>03. Scene\06. Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\TileSet\TileSet.cpp">
+      <Filter>02. Resource\10. TileSet</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\TileSet\TileSetManager.cpp">
+      <Filter>02. Resource\10. TileSet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

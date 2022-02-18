@@ -224,7 +224,7 @@ bool CTileSet::SaveCSVFullPath(const char* fullPath)
 	for (; iter != iterEnd; ++iter)
 	{
 		row.clear();
-		row.push_back(",");
+		row.push_back("");
 		row.push_back(CUtil::TileShapeToString(iter->second->Shape));
 		row.push_back(CUtil::TileTypeToString(iter->second->Type));
 		row.push_back(std::to_string(iter->second->ImageStart.x));
@@ -261,6 +261,8 @@ bool CTileSet::LoadCSVFullPath(const char* fullPath)
 	CExcelData* csv = CResourceManager::GetInst()->FindCSV(mName);
 
 	csv->LoadCSVFullPath(fullPath);
+
+	mName = csv->GetName();
 
 	std::string textureFullPath = csv->FindData("TextureInfo", "TextureFullPath");
 
