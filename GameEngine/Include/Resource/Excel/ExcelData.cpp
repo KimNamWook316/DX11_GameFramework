@@ -88,26 +88,26 @@ void CExcelData::SetData(const std::string& name, const std::vector<std::string>
 		// Ordered Data 에는 Row의 Name도 들어간다.
 		std::vector<std::string>* orderedData = new std::vector<std::string>;
 		orderedData->push_back(name);
-
-		size_t size = found->size();
-		for (size_t i = 0; i < size; ++i)
-		{
-			orderedData->push_back((*found)[i]);
-		}
 		
 		mInfo.PushOrderedData.push_back(orderedData);
 	}
 
-	size_t size = found->size();
+	found->clear();
+
+	size_t size = data.size();
 	for (size_t i = 0; i < size; ++i)
 	{
-		(*found)[i] = data[i];
+		found->push_back(data[i]);
 	}
 
 	std::vector<std::string>* orderedData = findOrderedData(name);
-		
-	size = orderedData->size();
-	for (size_t i = 1; i < size; ++i)
+
+	if (orderedData->size() < size + 1)
+	{
+		orderedData->resize(size + 1);
+	}
+
+	for (size_t i = 1; i < size + 1; ++i)
 	{
 		(*orderedData)[i] = data[i - 1];
 	}
@@ -145,6 +145,12 @@ void CExcelData::SetData(const std::string& name, const std::string& label, cons
 
 	std::vector<std::string>* orderedData = findOrderedData(name);
 	(*orderedData)[labelIdx + 1] = data;
+}
+
+void CExcelData::SetData(const std::string& name, const std::string& label, const char* data)
+{
+	std::string str = data;
+	SetData(name, label, str);
 }
 
 void CExcelData::SetData(const std::string& name, const std::string& label, int data)
@@ -375,7 +381,7 @@ bool CExcelData::LoadCSVFullPath(const char* fullPath)
 	char name[64] = {};
 	fgets(name, 64, fp);
 	int len = strlen(name);
-	name[len - 2] = '\0'; // , 제거
+	name[len - 1] = '\0'; // , 제거
 	mInfo.Name = name;
 
 	// label
@@ -383,33 +389,65 @@ bool CExcelData::LoadCSVFullPath(const char* fullPath)
 	fgets(buf, 1024, fp);
 	char* context = nullptr;
 	char* element = strtok_s(buf, ",", &context);
-	while (!element)
+	while (NULL != element)
 	{
-		// 처음 잘린 문자는 무시한다. 맨 앞이 ,이기 때문에
-		element = strtok_s(NULL, ",", &context);
 		mInfo.Labels.push_back(element);
+		element = strtok_s(NULL, ",", &context);
 	}
+	// 공백 제거
+	size_t labelSize = mInfo.Labels.size();
+	mInfo.Labels[labelSize - 1].erase(std::remove(mInfo.Labels[labelSize - 1].begin(), mInfo.Labels[labelSize - 1].end(), '\n'),
+		mInfo.Labels[labelSize-1].end());
 
 	// data
 	std::string dataName;
 	std::vector<std::string>* row = nullptr;
+	std::vector<std::string>* rowOrdered = nullptr;
 	while (0 == feof(fp))
 	{
 		row = new std::vector<std::string>;
+		rowOrdered = new std::vector<std::string>;
+
 		fgets(buf, 1024, fp);
 		element = strtok_s(buf, ",", &context);
 		dataName = element;
+		rowOrdered->push_back(element);
 		
-		while (!element)
+		while (NULL != element)
 		{
+			if (strcmp("\n", element) == 0)
+			{
+				break;
+			}
+
 			element = strtok_s(NULL, ",", &context);
+
+			if (!element)
+			{
+				break;
+			}
 			row->push_back(element);
+			rowOrdered->push_back(element);
 		}
 
-		mInfo.Data.insert(std::make_pair(dataName, row));
-	}
+		if (row->size() == 0)
+		{
+			SAFE_DELETE(row);
+			SAFE_DELETE(rowOrdered);
+			break;
+		}
 
-	// TODO : Ordered Data
+		// 공백 제거
+		size_t labelSize = row->size();
+		(*row)[labelSize - 1].erase(std::remove((*row)[labelSize - 1].begin(), (*row)[labelSize - 1].end(), '\n'),
+		(*row)[labelSize-1].end());
+		labelSize = rowOrdered->size();
+		(*rowOrdered)[labelSize - 1].erase(std::remove((*rowOrdered)[labelSize - 1].begin(), (*rowOrdered)[labelSize - 1].end(), '\n'),
+		(*rowOrdered)[labelSize-1].end());
+
+		mInfo.Data.insert(std::make_pair(dataName, row));
+		mInfo.PushOrderedData.push_back(rowOrdered);
+	}
 	
 	fclose(fp);
 	return true;

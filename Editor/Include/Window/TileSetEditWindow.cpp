@@ -1,6 +1,9 @@
 #include "TileSetEditWindow.h"
 #include "Engine.h"
 #include "PathManager.h"
+#include "Scene/SceneManager.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneResource.h"
 #include "Resource/ResourceManager.h"
 #include "IMGUISeperator.h"
 #include "IMGUISameLine.h"
@@ -10,6 +13,7 @@
 #include "IMGUIInputInt2.h"
 #include "IMGUIComboBox.h"
 #include "IMGUITextInput.h"
+#include "IMGUITree.h"
 #include "IMGUIPopUpModal.h"
 
 CTileSetEditWindow::CTileSetEditWindow()	:
@@ -18,6 +22,7 @@ CTileSetEditWindow::CTileSetEditWindow()	:
 	mCropImage(nullptr),
 	mAtlasSizeXText(nullptr),
 	mAtlasSizeYText(nullptr),
+	mTileShapeList(nullptr),
 	mSplitSizeInput(nullptr),
 	mSplitButton(nullptr),
 	mTileNameList(nullptr),
@@ -31,23 +36,12 @@ CTileSetEditWindow::CTileSetEditWindow()	:
 	mTileImageEndInput(nullptr),
 	mSaveCSVButton(nullptr),
 	mLoadCSVButton(nullptr),
-	mCreateTilePopUp(nullptr),
-	mTextureFullPath{},
-	mCSV(nullptr)
+	mCreateTilePopUp(nullptr)
 {
 }
 
 CTileSetEditWindow::~CTileSetEditWindow()
 {
-	auto iter = mMapTileSet.begin();
-	auto iterEnd = mMapTileSet.end();
-
-	for (; iter != iterEnd; ++iter)
-	{
-		SAFE_DELETE(iter->second);
-	}
-
-	mMapTileSet.clear();
 }
 
 bool CTileSetEditWindow::Init()
@@ -56,27 +50,36 @@ bool CTileSetEditWindow::Init()
 	CIMGUIText* text = AddWidget<CIMGUIText>("text");
 	text->SetText("TileSet Editor");
 
-	mLoadImageButton = AddWidget<CIMGUIButton>("Load Tile Atlas", 0.f, 0.f);
-
-	mAtlasImage = AddWidget<CIMGUIImage>("Tile Atlas");
+	mSaveCSVButton = AddWidget<CIMGUIButton>("Save TileSet", 0.f, 0.f);
 	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("line");
-	mCropImage = AddWidget<CIMGUIImage>("Crop Image");
+	mLoadCSVButton = AddWidget<CIMGUIButton>("Load TileSet", 0.f, 0.f);
 
-	text = AddWidget<CIMGUIText>("text");
+	CIMGUITree* tree = AddWidget<CIMGUITree>("Make TileSet");
+
+	mLoadImageButton = tree->AddWidget<CIMGUIButton>("Load Tile Atlas", 0.f, 0.f);
+
+	mAtlasImage = tree->AddWidget<CIMGUIImage>("Tile Atlas");
+	line = tree->AddWidget<CIMGUISameLine>("line");
+	mCropImage = tree->AddWidget<CIMGUIImage>("Crop Image");
+
+	text = tree->AddWidget<CIMGUIText>("text");
 	text->SetText("Atlas Size X : ");
-	line = AddWidget<CIMGUISameLine>("line");
-	mAtlasSizeXText = AddWidget<CIMGUIText>("AtlasSizeX");
+	line = tree->AddWidget<CIMGUISameLine>("line");
+	mAtlasSizeXText = tree->AddWidget<CIMGUIText>("AtlasSizeX");
 	mAtlasSizeXText->SetText("0");
-	line = AddWidget<CIMGUISameLine>("line");
-	text = AddWidget<CIMGUIText>("text");
+	line = tree->AddWidget<CIMGUISameLine>("line");
+	text = tree->AddWidget<CIMGUIText>("text");
 	text->SetText(" Atlas Size Y : ");
-	line = AddWidget<CIMGUISameLine>("line");
-	mAtlasSizeYText = AddWidget<CIMGUIText>("AtlasSizeY");
+	line = tree->AddWidget<CIMGUISameLine>("line");
+	mAtlasSizeYText = tree->AddWidget<CIMGUIText>("AtlasSizeY");
 	mAtlasSizeYText->SetText("0");
 
-	mSplitSizeInput = AddWidget<CIMGUIInputInt2>("Split Size");
-	mSplitButton = AddWidget<CIMGUIButton>("Split", 0.f, 0.f);
+	mTileShapeList = tree->AddWidget<CIMGUIComboBox>("Tile Shape");
+	mSplitSizeInput = tree->AddWidget<CIMGUIInputInt2>("Split Size");
+	mSplitButton = tree->AddWidget<CIMGUIButton>("Split", 0.f, 0.f);
 
+	text = AddWidget<CIMGUIText>("text");
+	text->SetText("Tile Info");
 	mTileNameList = AddWidget<CIMGUIComboBox>("Tiles");
 	line = AddWidget<CIMGUISameLine>("line");
 	mOpenCreateTileButton = AddWidget<CIMGUIButton>("Create Tile", 0.f, 0.f);
@@ -90,11 +93,13 @@ bool CTileSetEditWindow::Init()
 	mTileImageStartInput = AddWidget<CIMGUIInputInt2>("Tile Image Start");
 	mTileImageEndInput = AddWidget<CIMGUIInputInt2>("Tile Image End");
 
-	mSaveCSVButton = AddWidget<CIMGUIButton>("Save TileSet", 0.f, 0.f);
-	mLoadCSVButton = AddWidget<CIMGUIButton>("Load TileSet", 0.f, 0.f);
-
 	// Initial Value	
 	mCropImage->SetImageStart(0.f, 0.f);
+
+	for (int i = 0; i < 2; ++i)
+	{
+		mTileShapeList->AddItem(CUtil::TileShapeToString((eTileShape)i));
+	}
 
 	for (int i = 0; i < (int)eTileType::Max; ++i)
 	{
@@ -113,37 +118,30 @@ bool CTileSetEditWindow::Init()
 	mSaveCSVButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickSaveCSV);
 	mLoadCSVButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickLoadCSV);
 
-	// CSVData
-	CResourceManager::GetInst()->CreateCSV("TileSet");
-	mCSV = CResourceManager::GetInst()->FindCSV("TileSet");
-	mCSV->AddLabel("TextureFullPath");
-	mCSV->AddLabel("TileType");
-	mCSV->AddLabel("StartUVX");
-	mCSV->AddLabel("StartUVY");
-	mCSV->AddLabel("EndUVX");
-	mCSV->AddLabel("EndUVY");
+	CSceneResource* resource = CSceneManager::GetInst()->GetScene()->GetResource();
+	resource->CreateTileSet("EditorTileSet");
+	mTileSet = resource->FindTileSet("EditorTileSet");
+	if (!resource->CreateMaterial<CMaterial>("EditorTileSetMaterial"))
+	{
+		assert(false);
+		return false;
+	}
+	CMaterial* tileMat = resource->FindMaterial("EditorTileSetMaterial");
+	tileMat->SetShader("TileMapShader");
+	tileMat->SetRenderState("AlphaBlend");
+	mTileSet->SetMaterial(tileMat);
 
 	return true;
 }
 
 void CTileSetEditWindow::Clear()
 {
-	auto iter = mMapTileSet.begin();
-	auto iterEnd = mMapTileSet.end();
-
-	for (; iter != iterEnd; ++iter)
-	{
-		SAFE_DELETE(iter->second);
-	}
-
-	mMapTileSet.clear();
-
+	mTileSet->ClearTileInfo();
+	mTileSet->ClearTexture();
 	mTileNameList->Clear();
 	mTileNameInput->SetText("");
 	mTileImageStartInput->SetVal(0, 0);
 	mTileImageEndInput->SetVal(0, 0);
-
-	mCSV->ClearData();
 }
 
 void CTileSetEditWindow::OnClickLoadImage()
@@ -169,32 +167,26 @@ void CTileSetEditWindow::OnClickLoadImage()
 		int length = WideCharToMultiByte(CP_ACP, 0, fileName, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, fileName, -1, convertFileName, length, 0, 0);
 
-		if (!CResourceManager::GetInst()->LoadTextureFullPath(convertFileName, filePath))
-		{
-			MessageBox(nullptr, TEXT("Failed To Load Texture"), TEXT("Error"), MB_OK);
-		}
+		Clear();
+
+		mTileSet->AddTileTextureFullPath(0, 0, convertFileName, filePath);
+
+		mAtlasImage->SetTexture(mTileSet->GetTexture());
+
+		unsigned int texWidth = mTileSet->GetTexture()->GetWidth();
+		unsigned int texHeight = mTileSet->GetTexture()->GetHeight();
 		
-		mTextureAtlas = CResourceManager::GetInst()->FindTexture(convertFileName);
-		mAtlasImage->SetTexture(mTextureAtlas);
-
 		char buf[64] = {};
-		sprintf_s(buf, "%d", mTextureAtlas->GetWidth());
+		sprintf_s(buf, "%d", texWidth);
 		mAtlasSizeXText->SetText(buf);
-		sprintf_s(buf, "%d", mTextureAtlas->GetHeight());
+		sprintf_s(buf, "%d", texHeight);
 		mAtlasSizeYText->SetText(buf);
-
-		// Texture Path 저장
-		char convertFullPath[MAX_PATH] = {};
-		length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, nullptr, 0, nullptr, nullptr);
-		WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, nullptr, nullptr);
-		std::string fullPath = convertFullPath;
-		mCSV->SetData("TextureInfo", "TextureFullPath", fullPath);
 	}
 }
 
 void CTileSetEditWindow::OnChangeSplitSize(int val[2])
 {
-	if (!mTextureAtlas)
+	if (!mTileSet->GetTexture())
 	{
 		return;
 	}
@@ -204,15 +196,21 @@ void CTileSetEditWindow::OnChangeSplitSize(int val[2])
 		return;
 	}
 
-	mCropImage->SetTexture(mTextureAtlas);
+	mCropImage->SetTexture(mTileSet->GetTexture());
 	mCropImage->SetImageEnd((float)val[0], (float)val[1]);
 }
 
 void CTileSetEditWindow::OnClickSplit()
 {
 	// 예외처리
-	if (!mTextureAtlas)
+	if (!mTileSet->GetTexture())
 	{
+		return;
+	}
+
+	if (-1 == mTileShapeList->GetSelectIndex())
+	{
+		MessageBox(nullptr, TEXT("타일 모양을 선택해야 합니다."), TEXT("Error"), MB_OK);
 		return;
 	}
 
@@ -223,56 +221,39 @@ void CTileSetEditWindow::OnClickSplit()
 		return;
 	}
 
-	if (!mMapTileSet.empty())
-	{
-		Clear();
-	}
+	mTileSet->ClearTileInfo();
 
-	unsigned int atlW = mTextureAtlas->GetWidth();
-	unsigned int atlH = mTextureAtlas->GetHeight();
+	unsigned int atlW = mTileSet->GetTexture()->GetWidth();
+	unsigned int atlH = mTileSet->GetTexture()->GetHeight();
 
 	unsigned int countX = atlW / (unsigned int)splitSize.x;
 	unsigned int countY = atlH / (unsigned int)splitSize.y;
-
-	TileSetInfo* info = nullptr;
 
 	for (unsigned int y = 0; y < countY; ++y)
 	{
 		for (unsigned int x = 0; x < countX; ++x)
 		{
-			info = new TileSetInfo;
-			info->Name = std::to_string(y * countX + x);
-			info->Type = eTileType::Normal;
-			info->ImageStart = Vector2(x * splitSize.x, y * splitSize.y);
-			info->ImageEnd = info->ImageStart + splitSize;
+			std::string name = std::to_string(y * countX + x);
+			eTileShape shape = CUtil::StringToTileShape(mTileShapeList->GetSelectItem());
+			Vector2 imageStart = Vector2(x * splitSize.x, y * splitSize.y);
+			Vector2 imageEnd = imageStart + splitSize;
 
-			mMapTileSet.insert(std::make_pair(info->Name, info));
-
-			mCSV->AddRow(info->Name);
-			std::vector<std::string> rowBuf;
-			rowBuf.push_back("");									// TexturePath
-			rowBuf.push_back(CUtil::TileTypeToString(info->Type));	// Type
-			rowBuf.push_back(std::to_string(info->ImageStart.x));	// StartUVX
-			rowBuf.push_back(std::to_string(info->ImageStart.y));	// StartUVY
-			rowBuf.push_back(std::to_string(info->ImageEnd.x));		// EndUVX
-			rowBuf.push_back(std::to_string(info->ImageEnd.y));		// EndUVY
-			mCSV->SetData(info->Name, rowBuf);
-
-			mTileNameList->AddItem(info->Name);
+			mTileSet->AddTileSetInfo(name, shape, eTileType::Normal, imageStart, imageEnd);
+			mTileNameList->AddItem(name);
 		}
 	}
 }
 
 void CTileSetEditWindow::OnSelectTileName(int idx, const char* label)
 {
-	TileSetInfo* info = FindInfo(label);
+	TileSetInfo* info = mTileSet->FindInfo(label);
 
 	if (!info)
 	{
 		return;
 	}
 
-	mTileImage->SetTexture(mTextureAtlas);
+	mTileImage->SetTexture(mTileSet->GetTexture());
 	mTileImage->SetImageStart(info->ImageStart.x, info->ImageStart.y);
 	mTileImage->SetImageEnd(info->ImageEnd.x, info->ImageEnd.y);
 
@@ -295,7 +276,8 @@ void CTileSetEditWindow::OnClickDeleteTile()
 	}
 
 	int idx = mTileNameList->GetSelectIndex();
-	if (DeleteInfo(mTileNameList->GetSelectItem()))
+
+	if (mTileSet->DeleteInfo(mTileNameList->GetSelectItem()))
 	{
 		mTileNameList->DeleteItem(idx);
 		mTileNameInput->SetText("");
@@ -319,7 +301,7 @@ void CTileSetEditWindow::OnClickRename()
 	std::string prevName = mTileNameList->GetSelectItem();
 	std::string curName = mTileNameInput->GetTextMultiByte();
 
-	TileSetInfo* info = FindInfo(curName);
+	TileSetInfo* info = mTileSet->FindInfo(curName);
 
 	// 중복 이름 있는 경우
 	if (info)
@@ -328,24 +310,7 @@ void CTileSetEditWindow::OnClickRename()
 		return;
 	}
 
-	info = FindInfo(prevName);
-
-	auto iter = mMapTileSet.begin();
-	auto iterEnd = mMapTileSet.end();
-
-	for (; iter != iterEnd; ++iter)
-	{
-		if (iter->first == info->Name)
-		{
-			mMapTileSet.erase(iter);
-			break;
-		}
-	}
-	
-	info->Name = curName;
-	mMapTileSet.insert(std::make_pair(curName, info));
-
-	mCSV->RenameRow(prevName, curName);
+	mTileSet->RenameTileSetInfo(prevName, curName);
 
 	mTileNameList->DeleteItem(mTileNameList->GetSelectIndex());
 	mTileNameList->AddItem(curName);
@@ -359,19 +324,12 @@ void CTileSetEditWindow::OnSelectTileType(int idx, const char* label)
 		return;
 	}
 
-	TileSetInfo* info = FindInfo(mTileNameList->GetSelectItem());
+	TileSetInfo* info = mTileSet->FindInfo(mTileNameList->GetSelectItem());
 	info->Type = CUtil::StringToTileType(label);
-
-	mCSV->SetData(mTileNameList->GetSelectItem(), "TileType", std::string(label));
 }
 
 void CTileSetEditWindow::OnClickSaveCSV()
 {
-	if (mMapTileSet.empty())
-	{
-		return;
-	}
-
     TCHAR filePath[MAX_PATH] = {};
 
     OPENFILENAME openFile = {};
@@ -390,17 +348,10 @@ void CTileSetEditWindow::OnClickSaveCSV()
         int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
         WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
 
-		TCHAR fileName[MAX_PATH] = {};
-		_wsplitpath_s(filePath, 0, 0, 0, 0, fileName, MAX_PATH, 0, 0);
-		char convertFileName[MAX_PATH] = {};
-		length = WideCharToMultiByte(CP_ACP, 0, fileName, -1, 0, 0, 0, 0);
-		WideCharToMultiByte(CP_ACP, 0, fileName, -1, convertFileName, length, 0, 0);
-
-		if (!mCSV->SaveCSVFullPath(convertFullPath))
+		if (!mTileSet->SaveCSVFullPath(convertFullPath))
 		{
 			MessageBox(nullptr, TEXT("타일셋 저장 실패"), TEXT("Failed"), MB_OK);
 		}
-
 		MessageBox(nullptr, TEXT("타일셋 저장 성공"), TEXT("Success"), MB_OK);
     }
 }
@@ -420,41 +371,39 @@ void CTileSetEditWindow::OnClickLoadCSV()
 
 	if (GetOpenFileName(&openFile) != 0)
 	{
-		TCHAR fileName[MAX_PATH] = {};
-		_wsplitpath_s(filePath, 0, 0, 0, 0, fileName, MAX_PATH, 0, 0);
-		char convertFileName[MAX_PATH] = {};
-		int length = WideCharToMultiByte(CP_ACP, 0, fileName, -1, 0, 0, 0, 0);
-		WideCharToMultiByte(CP_ACP, 0, fileName, -1, convertFileName, length, 0, 0);
+        char convertFullPath[MAX_PATH] = {};
+        int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
+        WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
+
+		Clear();
+
+		if (!mTileSet->LoadCSVFullPath(convertFullPath))
+		{
+			MessageBox(nullptr, TEXT("타일셋 로드 실패"), TEXT("Failed"), MB_OK);
+		}
+
+		std::vector<std::string> mTileNames;
+		mTileSet->GetTileNames(mTileNames);
+
+		TileSetInfo* info = nullptr;
+		size_t size = mTileNames.size();
+		for (size_t i = 0; i < size; ++i)
+		{
+			info = mTileSet->FindInfo(mTileNames[i]);
+			mTileNameList->AddItem(info->Name);
+		}
+
+		mAtlasImage->SetTexture(mTileSet->GetTexture());
+
+		unsigned int texWidth = mTileSet->GetTexture()->GetWidth();
+		unsigned int texHeight = mTileSet->GetTexture()->GetHeight();
+		
+		char buf[64] = {};
+		sprintf_s(buf, "%d", (unsigned int)texWidth);
+		mAtlasSizeXText->SetText(buf);
+		sprintf_s(buf, "%d", (unsigned int)texHeight);
+		mAtlasSizeYText->SetText(buf);
 
 		MessageBox(nullptr, TEXT("타일셋 로드 완료"), TEXT("Success"), MB_OK);
 	}
-}
-
-TileSetInfo* CTileSetEditWindow::FindInfo(const std::string& name)
-{
-	auto find = mMapTileSet.find(name);
-
-	if (find == mMapTileSet.end())
-	{
-		return nullptr;
-	}
-
-	return find->second;
-}
-
-bool CTileSetEditWindow::DeleteInfo(const std::string& name)
-{
-	auto iter = mMapTileSet.begin();
-	auto iterEnd = mMapTileSet.end();
-
-	for (; iter != iterEnd; ++iter)
-	{
-		if (iter->first == name)
-		{
-			SAFE_DELETE(iter->second);
-			mMapTileSet.erase(iter);
-			return true;
-		}
-	}
-	return false;
 }

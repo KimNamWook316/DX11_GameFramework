@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IMGUIWindow.h"
-#include "Resource/Texture/Texture.h"
+#include "Resource/TileSet/TileSet.h"
 
 class CTileSetEditWindow :
     public CIMGUIWindow
@@ -29,15 +29,12 @@ public:
     void OnClickLoadCSV();
 
 private:
-    TileSetInfo* FindInfo(const std::string& name);
-    bool DeleteInfo(const std::string& name);
-
-private:
     class CIMGUIButton* mLoadImageButton;
     class CIMGUIImage* mAtlasImage;
     class CIMGUIImage* mCropImage;
     class CIMGUIText* mAtlasSizeXText;
     class CIMGUIText* mAtlasSizeYText;
+    class CIMGUIComboBox* mTileShapeList;
     class CIMGUIInputInt2* mSplitSizeInput;
     class CIMGUIButton* mSplitButton;
 
@@ -57,9 +54,6 @@ private:
     class CIMGUIPopUpModal* mCreateTilePopUp;
 
 private:
-    CSharedPtr<CTexture> mTextureAtlas;
-    char mTextureFullPath[MAX_PATH];
-    std::unordered_map<std::string, TileSetInfo*> mMapTileSet;
-    class CExcelData* mCSV;
+    CSharedPtr<CTileSet> mTileSet;
 };
 

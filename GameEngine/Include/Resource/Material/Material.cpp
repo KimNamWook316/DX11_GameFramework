@@ -478,3 +478,8 @@ void CMaterial::SetTextureFullPath(const int index, const int reg, const int sha
 void CMaterial::SetTexture(const int index, const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
 {
 }
+
+void CMaterial::ClearTexture()
+{
+	mVecTextureInfo.clear();
+}

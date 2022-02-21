@@ -8,6 +8,7 @@
 #include "../Resource/Particle/Particle.h"
 #include "../Resource/Animation/AnimationSequence2D.h"
 #include "../Resource/ResourceManager.h"
+#include "../Resource/TileSet/TileSet.h"
 
 // 纠喊 府家胶 包府 按眉
 class CSceneResource
@@ -114,6 +115,15 @@ public: // ===================== Particle =====================
 	bool CreateParticle(const std::string& name);
 	CParticle* FindParticle(const std::string& name);
 
+public: // ===================== TileSet =====================
+	bool CreateTileSet(const std::string& name);
+	CTileSet* FindTileSet(const std::string& name);
+	void ReleaseTileSet(const std::string& name);
+	bool SaveTileSet(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool SaveTileSetFullPath(const std::string& name, const char* fullPath);
+	bool LoadTileSet(const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool LoadTileSetFullPath(const char* fullPath);
+
 private:
 	class CScene* mScene;
 	std::unordered_map <std::string, CSharedPtr<CMesh>> mMapMesh;
@@ -123,5 +133,6 @@ private:
 	std::unordered_map <std::string, CSharedPtr<CAnimationSequence2D>> mMapSequence2D;
 	std::unordered_map <std::string, CSharedPtr<CSound>> mMapSound;
 	std::unordered_map <std::string, CSharedPtr<CParticle>> mMapParticle;
+	std::unordered_map <std::string, CSharedPtr<CTileSet>> mMapTileSet;
 };
 

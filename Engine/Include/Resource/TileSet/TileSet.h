@@ -17,7 +17,6 @@ private:
 public:
     bool Init();
     void Render();
-    void Reset();
 
 public:
     TileSetInfo* FindInfo(const std::string& name);

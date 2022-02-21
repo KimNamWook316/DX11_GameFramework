@@ -5,7 +5,9 @@
 #include "../../PathManager.h"
 
 CTileSet::CTileSet()	:
-	mCSVFullPath{}
+	mScene(nullptr),
+	mCSVFullPath{},
+	mTextureFullPath{}
 {
 	SetTypeID<CTileSet>();
 }
@@ -13,7 +15,8 @@ CTileSet::CTileSet()	:
 CTileSet::CTileSet(const CTileSet& tileSet)	:
 	CRef(tileSet)
 {
-	mTextureAtlas = tileSet.mTextureAtlas;
+	mTileMaterial = tileSet.mTileMaterial->Clone();
+	mScene = nullptr;
 	strcpy_s(mCSVFullPath, tileSet.mCSVFullPath);
 
 	auto iter = mMapTileInfo.begin();
@@ -30,19 +33,28 @@ CTileSet::CTileSet(const CTileSet& tileSet)	:
 
 CTileSet::~CTileSet()
 {
-	auto iter = mMapTileInfo.begin();
-	auto iterEnd = mMapTileInfo.end();
-
-	for (; iter != iterEnd; ++iter)
-	{
-		SAFE_DELETE(iter->second);
-	}
-	mMapTileInfo.clear();
+	ClearTileInfo();
 }
 
 bool CTileSet::Init()
 {
 	return true;
+}
+
+void CTileSet::Render()
+{
+	if (mTileMaterial)
+	{
+		mTileMaterial->Render();
+	}
+}
+
+void CTileSet::Reset()
+{
+	if (mTileMaterial)
+	{
+		mTileMaterial->Reset();
+	}
 }
 
 TileSetInfo* CTileSet::FindInfo(const std::string& name)
@@ -74,6 +86,26 @@ bool CTileSet::DeleteInfo(const std::string& name)
 	return false;
 }
 
+void CTileSet::ClearTileInfo()
+{
+	auto iter = mMapTileInfo.begin();
+	auto iterEnd = mMapTileInfo.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE(iter->second);
+	}
+	mMapTileInfo.clear();
+}
+
+void CTileSet::ClearTexture()
+{
+	if (mTileMaterial)
+	{
+		mTileMaterial->ClearTexture();
+	}
+}
+
 void CTileSet::AddTileSetInfo(const std::string& name, const eTileShape& shape, const eTileType& type, const Vector2& start, const Vector2& end)
 {
 	TileSetInfo* info = FindInfo(name);
@@ -84,6 +116,7 @@ void CTileSet::AddTileSetInfo(const std::string& name, const eTileShape& shape, 
 	}
 
 	info = new TileSetInfo;
+	info->Name = name;
 	info->Shape = shape;
 	info->Type = type;
 	info->ImageStart = start;
@@ -102,6 +135,7 @@ bool CTileSet::RenameTileSetInfo(const std::string& name, const std::string& cha
 	}
 	
 	TileSetInfo* newInfo = new TileSetInfo;
+	newInfo->Name = changeName;
 	newInfo->Type = info->Type;
 	newInfo->Shape = info->Shape;
 	newInfo->ImageStart = info->ImageStart;
@@ -165,6 +199,79 @@ bool CTileSet::ChangeImageEnd(const std::string& name, const Vector2& end)
 	return true;
 }
 
+void CTileSet::AddTileTexture(const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	TCHAR fullPath[MAX_PATH] = {};
+
+	if (info)
+	{
+		lstrcpy(fullPath, info->Path);
+	}
+	lstrcat(fullPath, fileName);
+	
+	int length = WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, 0, nullptr, nullptr);
+	WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, length, nullptr, nullptr);
+
+	mTileMaterial->AddTexture(reg, shaderType,name, fileName, pathName);
+}
+
+void CTileSet::AddTileTextureFullPath(const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+
+	int length = WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, 0, nullptr, nullptr);
+	WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, length, nullptr, nullptr);
+
+	mTileMaterial->AddTextureFullPath(reg, shaderType, name, fullPath);
+}
+
+
+void CTileSet::SetTileTexture(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	TCHAR fullPath[MAX_PATH] = {};
+
+	if (info)
+	{
+		lstrcpy(fullPath, info->Path);
+	}
+	lstrcat(fullPath, fileName);
+	
+	int length = WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, 0, nullptr, nullptr);
+	WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, length, nullptr, nullptr);
+
+	mTileMaterial->SetTexture(index, reg, shaderType, name, fileName, pathName);
+}
+
+void CTileSet::SetTileTextureFullPath(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
+{
+	if (!mTileMaterial)
+	{
+		return;
+	}
+
+	int length = WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, 0, nullptr, nullptr);
+	WideCharToMultiByte(CP_ACP, 0, fullPath, -1, mTextureFullPath, length, nullptr, nullptr);
+
+	mTileMaterial->SetTextureFullPath(index, reg, shaderType, name, fullPath);
+}
+
 void CTileSet::Save(FILE* fp)
 {
 	CRef::Save(fp);
@@ -207,6 +314,7 @@ bool CTileSet::SaveCSVFullPath(const char* fullPath)
 	CExcelData* csv = CResourceManager::GetInst()->FindCSV(mName);
 
 	csv->AddLabel("TextureFullPath");
+	csv->AddLabel("Name");
 	csv->AddLabel("TileShape");
 	csv->AddLabel("TileType");
 	csv->AddLabel("StartUVX");
@@ -214,8 +322,7 @@ bool CTileSet::SaveCSVFullPath(const char* fullPath)
 	csv->AddLabel("EndUVX");
 	csv->AddLabel("EndUVY");
 
-	std::string fullPath = fullPath;
-	csv->SetData("TextureInfo", "TextureFullPath", fullPath);
+	csv->SetData("TextureInfo", "TextureFullPath", mTextureFullPath);
 
 	std::vector<std::string> row;
 	auto iter = mMapTileInfo.begin();
@@ -224,7 +331,8 @@ bool CTileSet::SaveCSVFullPath(const char* fullPath)
 	for (; iter != iterEnd; ++iter)
 	{
 		row.clear();
-		row.push_back("");
+		row.push_back(" ");
+		row.push_back(iter->second->Name);
 		row.push_back(CUtil::TileShapeToString(iter->second->Shape));
 		row.push_back(CUtil::TileTypeToString(iter->second->Type));
 		row.push_back(std::to_string(iter->second->ImageStart.x));
@@ -266,32 +374,52 @@ bool CTileSet::LoadCSVFullPath(const char* fullPath)
 
 	std::string textureFullPath = csv->FindData("TextureInfo", "TextureFullPath");
 
+	strcpy_s(mTextureFullPath, textureFullPath.c_str());
+
 	TCHAR convertTextureFullPath[MAX_PATH] = {};
-	int length = MultiByteToWideChar(CP_ACP, 0, textureFullPath.c_str(), -1, nullptr, 0);
-	MultiByteToWideChar(CP_ACP, 0, textureFullPath.c_str(), length, convertTextureFullPath, 0);
+	int length = MultiByteToWideChar(CP_ACP, 0, mTextureFullPath, -1, nullptr, 0);
+	MultiByteToWideChar(CP_ACP, 0, mTextureFullPath, length, convertTextureFullPath, length);
 
 	if (mScene)
 	{
-		if (!mScene->GetResource()->LoadTextureFullPath(mName, convertTextureFullPath))
+		if (!mTileMaterial)
 		{
-			CResourceManager::GetInst()->DeleteCSV(mName);
-			assert(false);
-			return false;
+			if (!mScene->GetResource()->CreateMaterial<CMaterial>(mName))
+			{
+				CResourceManager::GetInst()->DeleteCSV(mName);
+				assert(false);
+				return false;
+			}
+
+			CMaterial* tileMat = nullptr;
+			tileMat = mScene->GetResource()->FindMaterial(mName);
+			tileMat->SetShader("TileMapShader");
+			tileMat->SetRenderState("AlphaBlend");
+			mTileMaterial = tileMat->Clone();
 		}
+		mTileMaterial->AddTextureFullPath(0, (int)eBufferShaderTypeFlags::Pixel, mName, convertTextureFullPath);
 	}
 	else
 	{
-		if (!CResourceManager::GetInst()->LoadTextureFullPath(mName, convertTextureFullPath))
+		if (!mTileMaterial)
 		{
-			CResourceManager::GetInst()->DeleteCSV(mName);
-			assert(false);
-			return false;
+			if (!CResourceManager::GetInst()->CreateMaterial<CMaterial>(mName))
+			{
+				CResourceManager::GetInst()->DeleteCSV(mName);
+				assert(false);
+				return false;
+			}
+
+			CMaterial* tileMat = nullptr;
+			tileMat = CResourceManager::GetInst()->FindMaterial(mName);
+			tileMat->SetShader("TileMapShader");
+			tileMat->SetRenderState("AlphaBlend");
+			mTileMaterial = tileMat->Clone();
 		}
+		mTileMaterial->AddTextureFullPath(0, (int)eBufferShaderTypeFlags::Pixel, mName, convertTextureFullPath);
 	}
 
 	csv->DeleteRow("TextureInfo");
-	
-	mTextureAtlas = CResourceManager::GetInst()->FindTexture(mName);
 
 	std::unordered_map<std::string, std::vector<std::string>*> table = csv->GetTable();
 
@@ -301,11 +429,14 @@ bool CTileSet::LoadCSVFullPath(const char* fullPath)
 
 	for (; iter != iterEnd; ++iter)
 	{
-		info->Shape = CUtil::StringToTileShape((*iter->second)[1]);
-		info->Type = CUtil::StringToTileType((*iter->second)[2]);
+		info = new TileSetInfo;
 
-		Vector2 start(std::stof((*iter->second)[3]), std::stof((*iter->second)[4]));
-		Vector2 end(std::stof((*iter->second)[5]), std::stof((*iter->second)[6]));
+		info->Name = (*iter->second)[1];
+		info->Shape = CUtil::StringToTileShape((*iter->second)[2]);
+		info->Type = CUtil::StringToTileType((*iter->second)[3]);
+
+		Vector2 start(std::stof((*iter->second)[4]), std::stof((*iter->second)[5]));
+		Vector2 end(std::stof((*iter->second)[6]), std::stof((*iter->second)[7]));
 
 		info->ImageStart = start;
 		info->ImageEnd = end;
@@ -328,5 +459,11 @@ void CTileSet::GetTileNames(std::vector<std::string>& outNames)
 	{
 		outNames.push_back(iter->first);
 	}
+}
+
+void CTileSet::SetMaterial(CMaterial* material)
+{	
+	mTileMaterial = material->Clone();
+	mTileMaterial->SetScene(mScene);
 }
 

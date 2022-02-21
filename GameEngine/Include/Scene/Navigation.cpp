@@ -258,8 +258,8 @@ NavNode* CNavigation::getNodeRightTop(NavNode* node, NavNode* endNode, const Vec
 			}
 		}
 	
-		int cornerX = idxX;
-		int cornerY = idxY - 1;
+		cornerX = idxX;
+		cornerY = idxY - 1;
 
 		if (cornerY >= 0)
 		{
@@ -389,8 +389,8 @@ NavNode* CNavigation::getNodeRightBottom(NavNode* node, NavNode* endNode, const 
 			}
 		}
 	
-		int cornerX = idxX - 1;
-		int cornerY = idxY;
+		cornerX = idxX - 1;
+		cornerY = idxY;
 
 		if (cornerX >= 0)
 		{
@@ -520,8 +520,8 @@ NavNode* CNavigation::getNodeLeftBottom(NavNode* node, NavNode* endNode, const V
 			}
 		}
 	
-		int cornerX = idxX + 1;
-		int cornerY = idxY;
+		cornerX = idxX + 1;
+		cornerY = idxY;
 
 		if (cornerX < mCountX)
 		{
@@ -651,8 +651,8 @@ NavNode* CNavigation::getNodeLeftTop(NavNode* node, NavNode* endNode, const Vect
 			}
 		}
 	
-		int cornerX = idxX;
-		int cornerY = idxY - 1;
+		cornerX = idxX;
+		cornerY = idxY - 1;
 
 		if (cornerY >= 0)
 		{

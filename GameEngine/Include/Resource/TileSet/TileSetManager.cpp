@@ -30,6 +30,7 @@ bool CTileSetManager::CreateTileSet(const std::string& name)
 	}
 
 	found->mName = name;
+	mMapTileSet.insert(std::make_pair(name, found));
 
 	return true;
 }

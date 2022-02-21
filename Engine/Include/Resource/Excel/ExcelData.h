@@ -19,6 +19,7 @@ public:
 	bool RenameRow(const std::string& prevName, const std::string& changeName);
 	void SetData(const std::string& name, const std::vector<std::string>& data);
 	void SetData(const std::string& name, const std::string& label, const std::string& data);
+	void SetData(const std::string& name, const std::string& label, const char* data);
 	void SetData(const std::string& name, const std::string& label, int data);
 	void SetData(const std::string& name, const std::string& label, float data);
 	void SetData(const std::string& name, const std::string& label, bool data);
@@ -42,6 +43,8 @@ public:
 		return mInfo.Labels;
 	}
 
+	void GetRowNames(std::vector<std::string>& outNames) const;
+
 	size_t GetDataSize() const
 	{
 		return mInfo.Data.size();
@@ -52,10 +55,9 @@ public:
 		return mInfo.Data;
 	}
 
-	const std::unordered_map<std::string, std::vector<std::string>*> GetRow(const int idx);
-	const std::string& GetDataName(const int idx);
-	std::vector<std::string>* FindData(const int idx);
-	std::vector<std::string>* FindData(const std::string& name);
+	const std::unordered_map<std::string, std::vector<std::string>*> GetRowWithName(const int idx);
+	std::vector<std::string>* GetRow(const std::string& name);
+	const std::string& FindData(const std::string& name, const std::string& label);
 
 public:
 	void SetName(const std::string& name)

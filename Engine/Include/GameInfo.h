@@ -428,3 +428,12 @@ struct NavResultData
 	std::function<void(const std::vector<Vector3>&)> CallBack;
 	std::vector<Vector3> vecPath;
 };
+
+struct TileSetInfo
+{
+	std::string Name;
+	eTileShape Shape;
+    eTileType Type;
+    Vector2 ImageStart;
+    Vector2 ImageEnd;
+};

@@ -431,6 +431,7 @@ struct NavResultData
 
 struct TileSetInfo
 {
+	std::string Name;
 	eTileShape Shape;
     eTileType Type;
     Vector2 ImageStart;

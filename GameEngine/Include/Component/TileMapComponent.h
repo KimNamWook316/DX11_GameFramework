@@ -3,6 +3,7 @@
 #include "SceneComponent.h"
 #include "../Resource/Mesh/SpriteMesh.h"
 #include "../Resource/Material/Material.h"
+#include "../Resource/TileSet/TileSet.h"
 #include "Tile.h"
 
 class CTileMapComponent :
@@ -78,24 +79,24 @@ public:
 		const std::string& name, const std::vector<TCHAR*>& vecFileName,
 		const std::string& pathName = TEXTURE_PATH);
 
-	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
-		class CTexture* texture);
+ //	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
+ //		class CTexture* texture);
 	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
 		const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
 	void AddTileTextureFullPath(const int reg, const int shaderType, const std::string& name,
 		const TCHAR* fullPath);
-	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
-		const std::vector<TCHAR*>& vecFileName, const std::string& pathName = TEXTURE_PATH);
+ //	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
+ //		const std::vector<TCHAR*>& vecFileName, const std::string& pathName = TEXTURE_PATH);
 
-	void SetTileTexture(const int index, const int reg, const int shaderType,
-		const std::string& name, class CTexture* texture);
+ //	void SetTileTexture(const int index, const int reg, const int shaderType,
+ //		const std::string& name, class CTexture* texture);
 	void SetTileTexture(const int index, const int reg, const int shaderType,
 		const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
 	void SetTileTextureFullPath(const int index, const int reg, const int shaderType,
 		const std::string& name, const TCHAR* fullPath);
-	void SetTileTexture(const int index, const int reg, const int shaderType,
-		const std::string& name, const std::vector<TCHAR*>& vecFileName,
-		const std::string& pathName = TEXTURE_PATH);
+ //	void SetTileTexture(const int index, const int reg, const int shaderType,
+ //		const std::string& name, const std::vector<TCHAR*>& vecFileName,
+ //		const std::string& pathName = TEXTURE_PATH);
 
 public:
 	virtual void Save(FILE* fp) override;
@@ -112,11 +113,6 @@ public:
     {
         return mBackMaterial;
     }
-
-	CMaterial* GetTileMaterial() const
-	{
-		return mTileMaterial;
-	}
 
 	eTileShape GetTileShape() const
 	{
@@ -140,7 +136,7 @@ public:
 
 public:
     void SetBackMaterial(CMaterial* material);
-	void SetTileMaterial(CMaterial* material);
+	void SetTileSet(CTileSet* tileSet);
 
 private:
 	int getTileRenderIndexX(const Vector3& pos);
@@ -149,7 +145,7 @@ private:
 protected:
     CSharedPtr<CSpriteMesh> mBackMesh;
     CSharedPtr<CMaterial> mBackMaterial;
-	CSharedPtr<CMaterial> mTileMaterial;
+	CSharedPtr<CTileSet> mTileSet;
     std::vector<CTile*> mVecTile;
 	std::vector<TileInfo> mVecTileInfo;
 	class CTileMapConstantBuffer* mCBuffer;
