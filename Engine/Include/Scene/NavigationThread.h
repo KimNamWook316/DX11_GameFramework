@@ -26,7 +26,7 @@ public:
 
 public:
     template <typename T>
-    void AddWork(T* obj, void(T::* func)(const std::vector<Vector3>&),
+    void AddWork(T* obj, void(T::* func)(const std::list<Vector3>&),
         const Vector3& start, const Vector3& end)
     {
         NavWorkData data;
@@ -41,5 +41,6 @@ private:
     class CNavigationManager* mNavManager;
     CThreadQueue<NavWorkData> mWorkQueue;
     class CNavigation* mNavigation;
+    HANDLE mExitEvent;
 };
 

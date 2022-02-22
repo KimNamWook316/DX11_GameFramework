@@ -48,7 +48,7 @@ void CThread::Pause()
 	{
 		// 서스펜드 카운트가 0보다 클 때까지 증가시킴
 		count = SuspendThread(mThread);
-	} while (count <= 0);
+	} while (count < 0);
 }
 
 void CThread::Resume()
@@ -59,7 +59,7 @@ void CThread::Resume()
 	{
 		// 서스펜드 카운트가 0이 될떄까지 감소시킴
 		count = ResumeThread(mThread);
-	} while (count >= 0);
+	} while (count > 0);
 }
 
 void CThread::waitForStartEvent()

@@ -3,6 +3,7 @@
 #include "SceneComponent.h"
 #include "../Resource/Mesh/SpriteMesh.h"
 #include "../Resource/Material/Material.h"
+#include "../Resource/TileSet/TileSet.h"
 #include "Tile.h"
 
 class CTileMapComponent :
@@ -34,15 +35,14 @@ public:
 	CTile* GetTile(const int idx);
 
 public:
-	void CreateTile(eTileShape eShape, const int countX, const int countY, const Vector2& size);
+	void CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size);
 	void ClearTile();
 
 	void SetWorldInfo();
-	void SetTileDefaultFrame(const Vector2& start, const Vector2& end);
-	void SetTileDefaultFrame(const float startX, const float startY, const float endX, const float endY);
-	void SetTileFrame(const int idxX, const int idxY, const float startX, const float startY, const float endX, const float endY);
-	void SetTileFrame(const int idx, const float startX, const float startY, const float endX, const float endY);
-	void SetTileFrame(const Vector3& pos, const float startX, const float startY, const float endX, const float endY);
+	void SetTileDefaultInfo(const std::string& tileName);
+	void SetTileInfo(const int idxX, const int idxY, const std::string& tileName);
+	void SetTileInfo(const int idx, const std::string& tileName);
+	void SetTileInfo(const Vector3& pos, const std::string& tileName);
 	void SetTileOpacity(const int idxX, const int idxY, const float opacity);
 	void SetTileOpacity(const int idx, const float opacity);
 	void SetTileOpacity(const Vector3& pos, const float opacity);
@@ -78,25 +78,6 @@ public:
 		const std::string& name, const std::vector<TCHAR*>& vecFileName,
 		const std::string& pathName = TEXTURE_PATH);
 
-	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
-		class CTexture* texture);
-	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
-		const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
-	void AddTileTextureFullPath(const int reg, const int shaderType, const std::string& name,
-		const TCHAR* fullPath);
-	void AddTileTexture(const int reg, const int shaderType, const std::string& name,
-		const std::vector<TCHAR*>& vecFileName, const std::string& pathName = TEXTURE_PATH);
-
-	void SetTileTexture(const int index, const int reg, const int shaderType,
-		const std::string& name, class CTexture* texture);
-	void SetTileTexture(const int index, const int reg, const int shaderType,
-		const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
-	void SetTileTextureFullPath(const int index, const int reg, const int shaderType,
-		const std::string& name, const TCHAR* fullPath);
-	void SetTileTexture(const int index, const int reg, const int shaderType,
-		const std::string& name, const std::vector<TCHAR*>& vecFileName,
-		const std::string& pathName = TEXTURE_PATH);
-
 public:
 	virtual void Save(FILE* fp) override;
 	virtual void Load(FILE* fp) override;
@@ -112,11 +93,6 @@ public:
     {
         return mBackMaterial;
     }
-
-	CMaterial* GetTileMaterial() const
-	{
-		return mTileMaterial;
-	}
 
 	eTileShape GetTileShape() const
 	{
@@ -140,7 +116,7 @@ public:
 
 public:
     void SetBackMaterial(CMaterial* material);
-	void SetTileMaterial(CMaterial* material);
+	void SetTileSet(CTileSet* tileSet);
 
 private:
 	int getTileRenderIndexX(const Vector3& pos);
@@ -149,7 +125,7 @@ private:
 protected:
     CSharedPtr<CSpriteMesh> mBackMesh;
     CSharedPtr<CMaterial> mBackMaterial;
-	CSharedPtr<CMaterial> mTileMaterial;
+	CSharedPtr<CTileSet> mTileSet;
     std::vector<CTile*> mVecTile;
 	std::vector<TileInfo> mVecTileInfo;
 	class CTileMapConstantBuffer* mCBuffer;

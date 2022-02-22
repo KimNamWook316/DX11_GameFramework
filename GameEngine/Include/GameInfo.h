@@ -418,15 +418,15 @@ struct ExcelInfo
 
 struct NavWorkData
 {
-	std::function<void(const std::vector<Vector3>&)> CallBack;
+	std::function<void(const std::list<Vector3>&)> CallBack;
 	Vector3 Start;
 	Vector3 End;
 };
 
 struct NavResultData
 {
-	std::function<void(const std::vector<Vector3>&)> CallBack;
-	std::vector<Vector3> vecPath;
+	std::function<void(const std::list<Vector3>&)> CallBack;
+	std::list<Vector3> listPath;
 };
 
 struct TileSetInfo

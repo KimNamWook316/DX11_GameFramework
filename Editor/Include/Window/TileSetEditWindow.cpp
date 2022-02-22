@@ -8,6 +8,7 @@
 #include "IMGUISeperator.h"
 #include "IMGUISameLine.h"
 #include "IMGUIText.h"
+#include "IMGUITextInput.h"
 #include "IMGUIButton.h"
 #include "IMGUIImage.h"
 #include "IMGUIInputInt2.h"
@@ -30,6 +31,7 @@ CTileSetEditWindow::CTileSetEditWindow()	:
 	mDeleteTileButton(nullptr),
 	mTileImage(nullptr),
 	mTileNameInput(nullptr),
+	mTileShapeWidget(nullptr),
 	mRenameButton(nullptr),
 	mTileTypeList(nullptr),
 	mTileImageStartInput(nullptr),
@@ -89,6 +91,7 @@ bool CTileSetEditWindow::Init()
 	mTileImage = AddWidget<CIMGUIImage>("Tile Image");
 	mTileNameInput = AddWidget<CIMGUITextInput>("Tile Name");
 	mRenameButton = AddWidget<CIMGUIButton>("Rename", 0.f, 0.f);
+	mTileShapeWidget = AddWidget<CIMGUITextInput>("Tile Shape");
 	mTileTypeList = AddWidget<CIMGUIComboBox>("Tile Type");
 	mTileImageStartInput = AddWidget<CIMGUIInputInt2>("Tile Image Start");
 	mTileImageEndInput = AddWidget<CIMGUIInputInt2>("Tile Image End");
@@ -105,6 +108,8 @@ bool CTileSetEditWindow::Init()
 	{
 		mTileTypeList->AddItem(CUtil::TileTypeToString((eTileType)i));
 	}
+
+	mTileShapeWidget->ReadOnly(true);
 
 	// CallBack
 	mLoadImageButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickLoadImage);
@@ -223,6 +228,8 @@ void CTileSetEditWindow::OnClickSplit()
 
 	mTileSet->ClearTileInfo();
 
+	mTileSet->SetTileShape(CUtil::StringToTileShape(mTileShapeList->GetSelectItem()));
+
 	unsigned int atlW = mTileSet->GetTexture()->GetWidth();
 	unsigned int atlH = mTileSet->GetTexture()->GetHeight();
 
@@ -234,11 +241,10 @@ void CTileSetEditWindow::OnClickSplit()
 		for (unsigned int x = 0; x < countX; ++x)
 		{
 			std::string name = std::to_string(y * countX + x);
-			eTileShape shape = CUtil::StringToTileShape(mTileShapeList->GetSelectItem());
 			Vector2 imageStart = Vector2(x * splitSize.x, y * splitSize.y);
 			Vector2 imageEnd = imageStart + splitSize;
 
-			mTileSet->AddTileSetInfo(name, shape, eTileType::Normal, imageStart, imageEnd);
+			mTileSet->AddTileSetInfo(name, eTileType::Normal, imageStart, imageEnd);
 			mTileNameList->AddItem(name);
 		}
 	}
@@ -262,6 +268,8 @@ void CTileSetEditWindow::OnSelectTileName(int idx, const char* label)
 
 	mTileNameInput->SetText(info->Name.c_str());
 	mTileTypeList->SetCurrentItem(CUtil::TileTypeToString(info->Type));
+	
+	mTileShapeWidget->SetText(CUtil::TileShapeToString(info->Shape).c_str());
 }
 
 void CTileSetEditWindow::OnClickOpenCreateTile()

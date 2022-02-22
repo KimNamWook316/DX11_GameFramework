@@ -7,7 +7,8 @@
 CTileSet::CTileSet()	:
 	mScene(nullptr),
 	mCSVFullPath{},
-	mTextureFullPath{}
+	mTextureFullPath{},
+	meTileShape(eTileShape::Rect)
 {
 	SetTypeID<CTileSet>();
 }
@@ -106,7 +107,7 @@ void CTileSet::ClearTexture()
 	}
 }
 
-void CTileSet::AddTileSetInfo(const std::string& name, const eTileShape& shape, const eTileType& type, const Vector2& start, const Vector2& end)
+void CTileSet::AddTileSetInfo(const std::string& name, const eTileType& type, const Vector2& start, const Vector2& end)
 {
 	TileSetInfo* info = FindInfo(name);
 
@@ -117,7 +118,7 @@ void CTileSet::AddTileSetInfo(const std::string& name, const eTileShape& shape, 
 
 	info = new TileSetInfo;
 	info->Name = name;
-	info->Shape = shape;
+	info->Shape = meTileShape;
 	info->Type = type;
 	info->ImageStart = start;
 	info->ImageEnd = end;

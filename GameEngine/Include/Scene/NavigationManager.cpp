@@ -32,7 +32,7 @@ void CNavigationManager::Update(float deltaTime)
 		NavResultData result = mResultQueue.Front();
 		mResultQueue.Pop();
 
-		result.CallBack(result.vecPath);
+		result.CallBack(result.listPath);
 	}
 }
 

@@ -24,7 +24,7 @@ public:
     bool DeleteInfo(const std::string& name);
     void ClearTileInfo();
     void ClearTexture();
-    void AddTileSetInfo(const std::string& name, const eTileShape& shape, const eTileType& type,
+    void AddTileSetInfo(const std::string& name, const eTileType& type,
         const Vector2& start, const Vector2& end);
     bool RenameTileSetInfo(const std::string& name, const std::string& changeName);
     bool ChangeType(const std::string& name, eTileType& type);
@@ -57,6 +57,11 @@ public:
         return mTileMaterial->GetTexture();
     }
 
+    eTileShape GetTileShape() const
+    {
+        return meTileShape;
+    }
+
     void GetTileNames(std::vector<std::string>& outNames);
 
 public:
@@ -65,11 +70,17 @@ public:
         mScene = scene;
     }
 
+    void SetTileShape(eTileShape eShape)
+    {
+        meTileShape = eShape;
+    }
+
     void SetMaterial(CMaterial* material);
 
 private:
     class CScene* mScene;
     CSharedPtr<CMaterial> mTileMaterial;
+    eTileShape meTileShape;
     char mCSVFullPath[MAX_PATH];
     char mTextureFullPath[MAX_PATH];
     std::unordered_map<std::string, TileSetInfo*> mMapTileInfo;

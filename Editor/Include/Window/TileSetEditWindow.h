@@ -29,6 +29,7 @@ public:
     void OnClickLoadCSV();
 
 private:
+    // TileMap Creation Widget
     class CIMGUIButton* mLoadImageButton;
     class CIMGUIImage* mAtlasImage;
     class CIMGUIImage* mCropImage;
@@ -38,12 +39,14 @@ private:
     class CIMGUIInputInt2* mSplitSizeInput;
     class CIMGUIButton* mSplitButton;
 
+    // Tile Info Widget
     class CIMGUIComboBox* mTileNameList;
     class CIMGUIButton* mOpenCreateTileButton;
     class CIMGUIButton* mDeleteTileButton;
     class CIMGUIImage* mTileImage;
     class CIMGUITextInput* mTileNameInput;
     class CIMGUIButton* mRenameButton;
+    class CIMGUITextInput* mTileShapeWidget;
     class CIMGUIComboBox* mTileTypeList;
     class CIMGUIInputInt2* mTileImageStartInput;
     class CIMGUIInputInt2* mTileImageEndInput;

@@ -309,11 +309,12 @@ CTile* CTileMapComponent::GetTile(const int idx)
 	return mVecTile[idx];
 }
 
-void CTileMapComponent::CreateTile(eTileShape eShape, const int countX, const int countY, const Vector2& size)
+void CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size)
 {
 	ClearTile();
 
-	meTileShape = eShape;
+	mTileSet = tileSet;
+	meTileShape = tileSet->GetTileShape();
 	mCountX = countX;
 	mCountY = countY;
 	mTileSize = size;
@@ -393,14 +394,17 @@ void CTileMapComponent::CreateTile(eTileShape eShape, const int countX, const in
 	mCount = mCountX * mCountY;
 	SetWorldInfo();
 
-	if (mTileSet)
+	Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageSize);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+
+	for (int i = 0; i < mCount; ++i)
 	{
-		Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
-		Vector2 imageStart(0.f, 0.f);
-		mCBuffer->SetImageSize(imageSize);
-		mCBuffer->SetImageStart(Vector2(0.f, 0.f));
-		mCBuffer->SetImageEnd(imageSize);
-		SetTileDefaultFrame(imageStart, imageSize);
+		mVecTile[i]->SetFrameStart(imageStart);
+		mVecTile[i]->SetFrameEnd(imageSize);
+		mVecTile[i]->SetTileType(eTileType::Normal);
 	}
 
 	mScene->GetNavigationManager()->SetNavData(this);
@@ -435,38 +439,77 @@ void CTileMapComponent::SetWorldInfo()
 	}
 }
 
-void CTileMapComponent::SetTileDefaultFrame(const Vector2& start, const Vector2& end)
+void CTileMapComponent::SetTileDefaultInfo(const std::string& tileName)
 {
-	for (int i = 0; i < mCount; ++i)
+	if (mTileSet)
 	{
-		mVecTile[i]->SetFrameStart(start);
-		mVecTile[i]->SetFrameEnd(end);
+		TileSetInfo* info = mTileSet->FindInfo(tileName);
+
+		if (!info)
+		{
+			assert(false);
+			return;
+		}
+		
+		for (int i = 0; i < mCount; ++i)
+		{
+			mVecTile[i]->SetFrameStart(info->ImageStart);
+			mVecTile[i]->SetFrameEnd(info->ImageEnd);
+			mVecTile[i]->SetTileType(info->Type);
+		}
 	}
 }
 
-void CTileMapComponent::SetTileDefaultFrame(const float startX, const float startY, const float endX, const float endY)
-{
-	for (int i = 0; i < mCount; ++i)
+void CTileMapComponent::SetTileInfo(const int idxX, const int idxY, const std::string& tileName)
+{	
+	TileSetInfo* info = mTileSet->FindInfo(tileName);
+
+	if (!info)
 	{
-		mVecTile[i]->SetFrameStart(Vector2(startX, startY));
-		mVecTile[i]->SetFrameEnd(Vector2(endX, endY));
+		assert(false);
+		return;
 	}
+	
+	mVecTile[idxY * mCountX + idxX]->SetFrameStart(info->ImageStart);
+	mVecTile[idxY * mCountX + idxX]->SetFrameEnd(info->ImageEnd);
+	mVecTile[idxY * mCountX + idxX]->SetTileType(info->Type);
 }
 
-void CTileMapComponent::SetTileFrame(const int idxX, const int idxY, const float startX, const float startY, const float endX, const float endY)
+void CTileMapComponent::SetTileInfo(const int idx, const std::string& tileName)
 {
-	mVecTile[idxY * mCountX + idxX]->SetFrameStart(Vector2(startX, startY));
-	mVecTile[idxY * mCountX + idxX]->SetFrameEnd(Vector2(endX, endY));
+	TileSetInfo* info = mTileSet->FindInfo(tileName);
+
+	if (!info)
+	{
+		assert(false);
+		return;
+	}
+	
+	mVecTile[idx]->SetFrameStart(info->ImageStart);
+	mVecTile[idx]->SetFrameEnd(info->ImageEnd);
+	mVecTile[idx]->SetTileType(info->Type);
 }
 
-void CTileMapComponent::SetTileFrame(const int idx, const float startX, const float startY, const float endX, const float endY)
+void CTileMapComponent::SetTileInfo(const Vector3& pos, const std::string& tileName)
 {
-	mVecTile[idx]->SetFrameStart(Vector2(startX, startY));
-	mVecTile[idx]->SetFrameEnd(Vector2(endX, endY));
-}
+	TileSetInfo* info = mTileSet->FindInfo(tileName);
 
-void CTileMapComponent::SetTileFrame(const Vector3& pos, const float startX, const float startY, const float endX, const float endY)
-{
+	if (!info)
+	{
+		assert(false);
+		return;
+	}
+	
+	int idx = GetTileIndex(pos);
+
+	if (-1 == idx)
+	{
+		return;
+	}
+
+	mVecTile[idx]->SetFrameStart(info->ImageStart);
+	mVecTile[idx]->SetFrameEnd(info->ImageEnd);
+	mVecTile[idx]->SetTileType(info->Type);
 }
 
 void CTileMapComponent::SetTileOpacity(const int idxX, const int idxY, const float opacity)
@@ -481,6 +524,12 @@ void CTileMapComponent::SetTileOpacity(const int idx, const float opacity)
 
 void CTileMapComponent::SetTileOpacity(const Vector3& pos, const float opacity)
 {
+	int idx = GetTileIndex(pos);
+	if (-1 == idx)
+	{
+		return;
+	}
+	SetTileOpacity(idx, opacity);
 }
 
 void CTileMapComponent::SetTileColor(eTileType type, const float r, const float g, const float b, const float a)
@@ -629,128 +678,6 @@ void CTileMapComponent::SetBackTexture(const int index, const int reg, const int
 	mBackMaterial->SetTexture(index, reg, shaderType, name, vecFileName, pathName);
 }
 
- //void CTileMapComponent::AddTileTexture(const int reg, const int shaderType, const std::string& name, CTexture* texture)
- //{
- //	if (!mTileSet)
- //	{
- //		return;
- //	}
- //	mTileSet->AddTexture(reg, shaderType, name, texture);
- //	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
- //	Vector2 imageStart(0.f, 0.f);
- //	mCBuffer->SetImageSize(imageStart);
- //	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
- //	mCBuffer->SetImageEnd(imageSize);
- //	SetTileDefaultFrame(imageStart, imageSize);
- //}
-
-void CTileMapComponent::AddTileTexture(const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
-{
-	if (!mTileSet)
-	{
-		return;
-	}
-	mTileSet->AddTileTexture(reg, shaderType, name, fileName, pathName);
-	Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
-	Vector2 imageStart(0.f, 0.f);
-	mCBuffer->SetImageSize(imageStart);
-	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
-	mCBuffer->SetImageEnd(imageSize);
-	SetTileDefaultFrame(imageStart, imageSize);
-	mTileSet->AddTileSetInfo("Default", meTileShape, eTileType::Normal, imageStart, imageSize);
-}
-
-void CTileMapComponent::AddTileTextureFullPath(const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
-{
-	if (!mTileSet)
-	{
-		return;
-	}
-	mTileSet->AddTileTextureFullPath(reg, shaderType, name, fullPath);
-	Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
-	Vector2 imageStart(0.f, 0.f);
-	mCBuffer->SetImageSize(imageStart);
-	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
-	mCBuffer->SetImageEnd(imageSize);
-	SetTileDefaultFrame(imageStart, imageSize);
-	mTileSet->AddTileSetInfo("Default", meTileShape, eTileType::Normal, imageStart, imageSize);
-}
-
- //void CTileMapComponent::AddTileTexture(const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
- //{
- //	if (!mTileSet)
- //	{
- //		return;
- //	}
- //	mTileSet->AddTileTextureFullPath(reg, shaderType, name, vecFileName);
- //	Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
- //	Vector2 imageStart(0.f, 0.f);
- //	mCBuffer->SetImageSize(imageStart);
- //	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
- //	mCBuffer->SetImageEnd(imageSize);
- //	SetTileDefaultFrame(imageStart, imageSize);
- //}
-
- //void CTileMapComponent::SetTileTexture(const int index, const int reg, const int shaderType, const std::string& name, CTexture* texture)
- //{
- //	if (!mTileSet)
- //	{
- //		return;
- //	}
- //	mTileSet->SetTileTexture(index, reg, shaderType, name, texture);
- //	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
- //	Vector2 imageStart(0.f, 0.f);
- //	mCBuffer->SetImageSize(imageStart);
- //	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
- //	mCBuffer->SetImageEnd(imageSize);
- //	SetTileDefaultFrame(imageStart, imageSize);
- //}
-
-void CTileMapComponent::SetTileTexture(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fileName, const std::string& pathName)
-{
-	if (!mTileSet)
-	{
-		return;
-	}
-	mTileSet->SetTileTexture(index, reg, shaderType, name, fileName, pathName);
-	Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
-	Vector2 imageStart(0.f, 0.f);
-	mCBuffer->SetImageSize(imageSize);
-	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
-	mCBuffer->SetImageEnd(imageSize);
-	SetTileDefaultFrame(imageStart, imageSize);
-	mTileSet->AddTileSetInfo("Default", meTileShape, eTileType::Normal, imageStart, imageSize);
-}
-
-void CTileMapComponent::SetTileTextureFullPath(const int index, const int reg, const int shaderType, const std::string& name, const TCHAR* fullPath)
-{
-	if (!mTileSet)
-	{
-		return;
-	}
-	mTileSet->SetTileTextureFullPath(index, reg, shaderType, name, fullPath);
-	Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
-	Vector2 imageStart(0.f, 0.f);
-	mCBuffer->SetImageSize(imageSize);
-	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
-	mCBuffer->SetImageEnd(imageSize);
-	SetTileDefaultFrame(imageStart, imageSize);
-}
- //
- //void CTileMapComponent::SetTileTexture(const int index, const int reg, const int shaderType, const std::string& name, const std::vector<TCHAR*>& vecFileName, const std::string& pathName)
- //{
- //	if (!mTileMaterial)
- //	{
- //		return;
- //	}
- //	Vector2 imageSize((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight());
- //	Vector2 imageStart(0.f, 0.f);
- //	mCBuffer->SetImageSize(imageSize);
- //	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
- //	mCBuffer->SetImageEnd(imageSize);
- //	SetTileDefaultFrame(imageStart, imageSize);
- //}
-
 void CTileMapComponent::Save(FILE* fp)
 {
 	std::string meshName = mBackMesh->GetName();
@@ -795,21 +722,9 @@ void CTileMapComponent::SetTileSet(CTileSet* tileSet)
 
 	if (mTileSet->GetTexture())
 	{
-		mCBuffer->SetImageSize(Vector2((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
+		mCBuffer->SetImageSize(Vector2((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight()));
 	}
 }
-
- //void CTileMapComponent::SetTileMaterial(CMaterial* material)
- //{
- //	mTileMaterial = material->Clone();
- //
- //	mTileMaterial->SetScene(mScene);
- //	
- //	if (!mTileMaterial->IsTextureEmpty())
- //	{
- //		mCBuffer->SetImageSize(Vector2((float)mTileMaterial->GetTextureWidth(), (float)mTileMaterial->GetTextureHeight()));
- //	}
- //}
 
 int CTileMapComponent::getTileRenderIndexX(const Vector3& pos)
 {

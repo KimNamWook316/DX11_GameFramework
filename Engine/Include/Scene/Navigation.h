@@ -54,22 +54,22 @@ private:
 
 public:
 	void CreateNavigationNodes(class CTileMapComponent* tileMap);
-	bool FindPath(const Vector3& start, const Vector3& end, std::vector<Vector3>& outVecPath);
+	bool FindPath(const Vector3& start, const Vector3& end, std::list<Vector3>& outListPath);
 
 private:
-	void findNode(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getCorner(eNodeDir dir, NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	static bool sortNode(NavNode* src, NavNode* dst);
+	bool findNode(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getCorner(eNodeDir dir, NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	static int sortNode(const void* src, const void* dst);
 
 private:
-	NavNode* getNodeTop(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getNodeRightTop(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getNodeRight(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getNodeRightBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getNodeBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getNodeLeftBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getNodeLeft(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
-	NavNode* getNodeLeftTop(NavNode* node, NavNode* endNode, const Vector3& end, std::vector<Vector3>& outVecPath);
+	NavNode* getNodeTop(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getNodeRightTop(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getNodeRight(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getNodeRightBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getNodeBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getNodeLeftBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getNodeLeft(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
+	NavNode* getNodeLeftTop(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
 
 private:
 	eTileShape meNodeShape;

@@ -11,19 +11,17 @@
 #include "IMGUIComboBox.h"
 #include "IMGUIInputInt2.h"
 #include "IMGUIText.h"
+#include "IMGUITextInput.h"
 #include "IMGUISameLine.h"
 #include "IMGUISeperator.h"
 
 CTileMapControlWidget::CTileMapControlWidget()	:
 	mTileImageWidget(nullptr),
-	mLoadImageButton(nullptr),
 	mTileShapeWidget(nullptr),
 	mTileCountWidget(nullptr),
 	mTileSizeWidget(nullptr),
 	mCreateMapButton(nullptr),
 	mTileTypeWidget(nullptr),
-	mFrameStartWidget(nullptr),
-	mFrameEndWidget(nullptr),
 	mDefaultFrameButon(nullptr),
 	mOpenTileSetEditButton(nullptr)
 {
@@ -44,7 +42,6 @@ bool CTileMapControlWidget::Init()
 	text = AddWidget<CIMGUIText>("text");
 	text->SetText("Tile Image");
 	mTileImageWidget = AddWidget<CIMGUIImage>("TileImage");
-	mLoadImageButton = AddWidget<CIMGUIButton>("Load Image", 0.f, 0.f);
 
 	text = AddWidget<CIMGUIText>("text");
 	text->SetText("Create");
@@ -56,8 +53,6 @@ bool CTileMapControlWidget::Init()
 	text = AddWidget<CIMGUIText>("text");
 	text->SetText("Tile Info");
 	mTileTypeWidget = AddWidget<CIMGUIComboBox>("Tile Type");
-	mFrameStartWidget = AddWidget<CIMGUIInputInt2>("Frame Start");
-	mFrameEndWidget = AddWidget<CIMGUIInputInt2>("Frame End");
 	mDefaultFrameButon = AddWidget<CIMGUIButton>("Set", 0.f, 0.f);
 	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("line");
 	text = AddWidget<CIMGUIText>("text");
@@ -65,24 +60,10 @@ bool CTileMapControlWidget::Init()
 
 	AddWidget<CIMGUISeperator>("sperator");
 	
-	// Initial Value
-	for (int i = 0; i < 2; ++i)
-	{
-		mTileShapeWidget->AddItem(CUtil::TileShapeToString((eTileShape)i));
-	}
-
-	for (int i = 0; i < (int)eTileType::Max; ++i)
-	{
-		mTileTypeWidget->AddItem(CUtil::TileTypeToString((eTileType)i));
-	}
 
 	// CallBack
 	mOpenTileSetEditButton->SetClickCallBack(this, &CTileMapControlWidget::OnClickOpenTileSetEdit);
-	mLoadImageButton->SetClickCallBack(this, &CTileMapControlWidget::OnClickLoadImage);
 	mCreateMapButton->SetClickCallBack(this, &CTileMapControlWidget::OnClickCreateMap);
-	mTileTypeWidget->SetSelectCallBack(this, &CTileMapControlWidget::OnSelectType);
-	mFrameStartWidget->SetCallBack(this, &CTileMapControlWidget::OnChangeFrameStart);
-	mFrameEndWidget->SetCallBack(this, &CTileMapControlWidget::OnChangeFrameEnd);
 	mDefaultFrameButon->SetClickCallBack(this, &CTileMapControlWidget::OnClickDefaultFrame);
 
 	return true;
@@ -154,6 +135,7 @@ void CTileMapControlWidget::OnClickCreateMap()
 		MessageBox(nullptr, TEXT("타일 모양을 선택해야 합니다."), TEXT("Creation Failed"), MB_OK);
 		return;
 	}
+
 	eTileShape shape = CUtil::StringToTileShape(mTileShapeWidget->GetSelectItem());
 
 	int countX = mTileCountWidget->GetX();
