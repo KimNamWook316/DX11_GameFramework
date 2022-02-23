@@ -108,6 +108,42 @@ std::string CUtil::TileTypeToString(eTileType eTileType)
 	case eTileType::Wall:
 		out = "Wall";
 		break;
+	case eTileType::CornerTop:
+		out = "CornerTop";
+		break;
+	case eTileType::CornerRight:
+		out = "CornerRight";
+		break;
+	case eTileType::CornerBottom:
+		out = "CornerBottom";
+		break;
+	case eTileType::CornerLeft:
+		out = "CornerLeft";
+		break;
+	case eTileType::WallTopRight:
+		out = "WallTopRight";
+		break;
+	case eTileType::WallBottomRight:
+		out = "WallBottomRight";
+		break;
+	case eTileType::WallLeftBottom:
+		out = "WallLeftBottom";
+		break;
+	case eTileType::WallLeftTop:
+		out = "WallLeftTop";
+		break;
+	case eTileType::EntryRightTop:
+		out = "EntryRightTop";
+		break;
+	case eTileType::EntryRightBottom:
+		out = "EntryRightBottom";
+		break;
+	case eTileType::EntryLeftBottom:
+		out = "EntryLeftBottom";
+		break;
+	case eTileType::EntryLeftTop:
+		out = "EntryLeftTop";
+		break;
 	default:
 		assert(false);
 		break;
@@ -124,6 +160,54 @@ eTileType CUtil::StringToTileType(const std::string& str)
 	else if (str == "Wall")
 	{
 		return eTileType::Wall;
+	}
+	else if (str == "CornerTop")
+	{
+		return eTileType::CornerTop;
+	}
+	else if (str == "CornerRight")
+	{
+		return eTileType::CornerRight;
+	}
+	else if (str == "CornerBottom")
+	{
+		return eTileType::CornerBottom;
+	}
+	else if (str == "CornerLeft")
+	{
+		return eTileType::CornerLeft;
+	}
+	else if (str == "WallTopRight")
+	{
+		return eTileType::WallTopRight;
+	}
+	else if (str == "WallBottomRight")
+	{
+		return eTileType::WallBottomRight;
+	}
+	else if (str == "WallLeftBottom")
+	{
+		return eTileType::WallLeftBottom;
+	}
+	else if (str == "WallLeftTop")
+	{
+		return eTileType::WallLeftTop;
+	}
+	else if (str == "EntryRightTop")
+	{
+		return eTileType::EntryRightTop;
+	}
+	else if (str == "EntryRightBottom")
+	{
+		return eTileType::EntryRightBottom;
+	}
+	else if (str == "EntryLeftBottom")
+	{
+		return eTileType::EntryLeftBottom;
+	}
+	else if (str == "EntryLeftTop")
+	{
+		return eTileType::EntryLeftTop;
 	}
 	
 	assert(false);

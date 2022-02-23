@@ -5,6 +5,7 @@
 
 CDissolveComponent::CDissolveComponent()
 {
+	SetTypeID<CDissolveComponent>();
 	mCBuffer = new CDissolveConstantBuffer;
 	mCBuffer->Init();
 

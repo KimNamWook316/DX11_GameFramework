@@ -11,29 +11,35 @@ CNavigation::CNavigation()	:
 
 CNavigation::~CNavigation()
 {
+	size_t size = mVecNode.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecNode[i]);
+	}
 }
 
 void CNavigation::CreateNavigationNodes(CTileMapComponent* tileMap)
 {
+	// 4분할 된 타일 개수만큼 노드 생성
 	mTileMap = tileMap;
 
 	meNodeShape = tileMap->GetTileShape();
-	mCountX = tileMap->GetTileCountX();
-	mCountY = tileMap->GetTileCountY();
-	mTileSize = tileMap->GetTileSize();
+	mCountX = tileMap->GetPathFindTileCountX();
+	mCountY = tileMap->GetPathFindTileCountY();
+	mTileSize = tileMap->GetPathFindTileSize();
 
 	int count = mCountX * mCountY;
 
 	for (int i = 0; i < count; ++i)
 	{
 		NavNode* node = new NavNode;
-		node->eTileType = tileMap->GetTile(i)->GetTileType();
-		node->Pos = tileMap->GetTile(i)->GetPos();
+		node->eTileType = tileMap->GetPathFindTile(i)->Type;
+		node->Pos = tileMap->GetPathFindTile(i)->Pos;
 		node->Size = mTileSize;
-		node->Center = node->Pos + Vector3(node->Size.x, node->Size.y, 0.f) * 0.5f;
-		node->indexX = tileMap->GetTile(i)->GetIndexX();
-		node->indexY = tileMap->GetTile(i)->GetIndexY();
-		node->index = tileMap->GetTile(i)->GetIndex();
+		node->Center = tileMap->GetPathFindTile(i)->Center;
+		node->indexX = tileMap->GetPathFindTile(i)->IndexX;
+		node->indexY = tileMap->GetPathFindTile(i)->IndexY;
+		node->index = tileMap->GetPathFindTile(i)->Index;
 
 		mVecNode.push_back(node);
 	}
@@ -68,6 +74,8 @@ bool CNavigation::FindPath(const Vector3& start, const Vector3& end, std::list<V
 		mVecUseNode[i]->Total = FLT_MAX;
 		mVecUseNode[i]->Parent = nullptr;
 	}
+
+	mVecUseNode.clear();
 
 	NavNode* startNode = mVecNode[startIndex];
 	NavNode* endNode = mVecNode[endIndex];
@@ -114,6 +122,8 @@ bool CNavigation::FindPath(const Vector3& start, const Vector3& end, std::list<V
 		}
 	}
 
+	mVecOpen.clear();
+
 	bool bFound = mVecOpen.empty() ? false : true;
 
 	return bFound;
@@ -133,6 +143,7 @@ bool CNavigation::findNode(NavNode* node, NavNode* endNode, const Vector3& end, 
 		// 찾은 노드가 도착 노드라면 경로 생성
 		if (endNode == corner)
 		{
+			mVecUseNode.push_back(corner);
 			outListPath.push_front(end);
 			
 			NavNode* pathNode = node;

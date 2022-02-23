@@ -6,6 +6,7 @@ enum class eEditMode
 {
 	Scene,
 	Sprite,
+	TileMap,
 };
 
 class CEditorManager
@@ -49,6 +50,11 @@ public:
 		return mDragObj;
 	}
 
+	bool GetLButtonPush() const
+	{
+		return mbMousePush;
+	}
+
 	void SetEditMode(eEditMode mode);
 
 	DECLARE_SINGLE(CEditorManager)
@@ -63,5 +69,7 @@ private:
 
 	class CDragObject* mDragObj;
 	class CCameraObject* mCameraObj;
+	
+	bool mbMousePush;
 };
 

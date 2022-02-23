@@ -25,7 +25,8 @@ DEFINITION_SINGLE(CEditorManager)
 CEditorManager::CEditorManager()	:
 	meEditMode(eEditMode::Scene),
 	mDragObj(nullptr),
-	mSpriteWindow(nullptr)
+	mSpriteWindow(nullptr),
+	mbMousePush(false)
 {
 }
 
@@ -198,6 +199,8 @@ void CEditorManager::OnMouseLButtonDown(float deltaTime)
 
 void CEditorManager::OnMouseLButtonPush(float deltaTime)
 {
+	mbMousePush = true;
+
 	if (eEditMode::Sprite == meEditMode)
 	{
 		mDragObj->SetEndPos(CInput::GetInst()->GetMouseWorld2DPos());
@@ -206,6 +209,8 @@ void CEditorManager::OnMouseLButtonPush(float deltaTime)
 
 void CEditorManager::OnMouseLButtonUp(float deltaTime)
 {
+	mbMousePush = false;
+
 	if (eEditMode::Sprite == meEditMode)
 	{
 		mSpriteWindow->SetCropEndPos(CInput::GetInst()->GetMouseWorld2DPos());
@@ -316,4 +321,22 @@ void CEditorManager::OnScrollRight(float deltaTime)
 void CEditorManager::SetEditMode(eEditMode mode)
 {
 	meEditMode = mode;
+
+	switch (meEditMode)
+	{
+	case eEditMode::Scene:
+		break;
+	case eEditMode::Sprite:
+		break;
+	case eEditMode::TileMap:
+		if (mDragObj)
+		{
+			mDragObj->Destroy();
+			mDragObj = nullptr;
+		}
+		break;
+	default:
+		assert(false);
+		break;
+	}
 }

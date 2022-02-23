@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComponentControlWidget.h"
+#include "Resource/TileSet/TileSet.h"
 
 class CTileMapControlWidget :
     public CComponentControlWidget
@@ -14,17 +15,24 @@ protected:
 
 public:
     virtual bool Init() override;
+    virtual void Render() override;
 
 public:
-    void OnClickLoadImage();
-    void OnClickCreateMap();
-    void OnSelectType(int idx, const char* label);
-    void OnClickDefaultFrame();
     void OnClickOpenTileSetEdit();
+    void OnClickLoadTileSet();
+    void OnClickCreateMap();
+    void OnSelectTileList(int idx, const char* label);
+    void OnClickDefaultFrame();
 
 private:
+    void clearWidget();
+
+private:
+    class CIMGUIButton* mOpenTileSetEditButton;
+
     class CIMGUITextInput* mTileSetNameWidget;
     class CIMGUIButton* mTileSetLoadButton;
+    class CIMGUIImage* mTileSetPreviewImage;
     class CIMGUIInputInt2* mTileCountWidget;
     class CIMGUIInputInt2* mTileSizeWidget;
     class CIMGUIButton* mCreateMapButton;
@@ -35,6 +43,7 @@ private:
     class CIMGUITextInput* mTileTypeWidget;
     class CIMGUIButton* mDefaultFrameButon;
 
-    class CIMGUIButton* mOpenTileSetEditButton;
+    TileSetInfo* mSelectInfo;
+    bool mbIsTileMapCreate;
 };
 

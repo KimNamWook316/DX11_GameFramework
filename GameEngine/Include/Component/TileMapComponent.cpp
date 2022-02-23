@@ -13,11 +13,14 @@ CTileMapComponent::CTileMapComponent()
 
 	mCountX = 0;
 	mCountY = 0;
+	mPathFindTileCountX = 0;
+	mPathFindTileCountY = 0;
 	mRenderCount = 0;
 	mTileDiagonal = 0.f;
 	meTileShape = eTileShape::Rect;
 	mLayerName = "Back";
 	mTileInfoBuffer = nullptr;
+	mDetlaTime = 0.f;
 
 	for (int i = 0; i < (int)eTileType::Max; ++i)
 	{
@@ -68,6 +71,12 @@ CTileMapComponent::~CTileMapComponent()
 		SAFE_DELETE(mVecTile[i]);
 	}
 
+	size = mVecPathFindTile.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecPathFindTile[i]);
+	}
+
 	mVecTile.clear();
 }
 
@@ -95,6 +104,14 @@ void CTileMapComponent::Update(float DeltaTime)
 void CTileMapComponent::PostUpdate(float DeltaTime)
 {
 	CSceneComponent::PostUpdate(DeltaTime);
+
+	mDetlaTime = DeltaTime;
+
+}
+
+void CTileMapComponent::PrevRender()
+{
+	CSceneComponent::PrevRender();
 
 	if (!mVecTile.empty())
 	{
@@ -134,7 +151,7 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 			for (int j = startX; j <= endX; ++j)
 			{
 				int index = i * mCountX + j;
-				mVecTile[index]->Update(DeltaTime);
+				mVecTile[index]->Update(mDetlaTime);
 
 				if (mVecTile[index]->GetIsRender())
 				{
@@ -155,11 +172,6 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 
 		mTileInfoBuffer->UpdateBuffer(&mVecTileInfo[0], mRenderCount);
 	}
-}
-
-void CTileMapComponent::PrevRender()
-{
-	CSceneComponent::PrevRender();
 }
 
 void CTileMapComponent::Render()
@@ -215,7 +227,7 @@ int CTileMapComponent::GetTileIndexX(const Vector3& pos)
 	{
 		Vector3 convertPos = Vector3(pos - GetWorldPos()).TransformCoord(mMatWorldToIso);
 		
-		int idxX = (int)(convertPos.x / mTileDiagonal);
+		int idxX = (int)((convertPos.x - mTileDiagonal / 2.f) / mTileDiagonal);
 
 		if (idxX < 0 || idxX >= mCountX)
 		{
@@ -250,7 +262,7 @@ int CTileMapComponent::GetTileIndexY(const Vector3& pos)
 	{
 		Vector3 convertPos = Vector3(pos - GetWorldPos()).TransformCoord(mMatWorldToIso);
 		
-		int idxY = (int)(convertPos.y / mTileDiagonal);
+		int idxY = (int)((convertPos.y + mTileDiagonal / 2.f) / mTileDiagonal);
 
 		if (idxY < 0 || idxY >= mCountY)
 		{
@@ -309,7 +321,122 @@ CTile* CTileMapComponent::GetTile(const int idx)
 	return mVecTile[idx];
 }
 
-void CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size)
+int CTileMapComponent::GetPathFindTileIndexX(const Vector3& pos)
+{
+	if (eTileShape::Rect == meTileShape)
+	{
+		float convertX = pos.x - GetWorldPos().x;
+
+		int idxX = (int)(convertX / mPathFindTileSize.x);
+
+		if (idxX < 0 || idxX >= mPathFindTileCountX)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxX;
+		}
+	}
+	else if (eTileShape::Rhombus == meTileShape)
+	{
+		Vector3 convertPos = Vector3(pos - GetWorldPos()).TransformCoord(mMatWorldToIso);
+		
+		int idxX = (int)((convertPos.x - mPathFindTileDiagonal / 2.f) / mPathFindTileDiagonal);
+
+		if (idxX < 0 || idxX >= mPathFindTileSize.x)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxX;
+		}
+	}
+	return -1;
+}
+
+int CTileMapComponent::GetPathFindTileIndexY(const Vector3& pos)
+{
+	if (eTileShape::Rect == meTileShape)
+	{
+		float convertY = pos.y - GetWorldPos().y;
+
+		int idxY = (int)(convertY / mPathFindTileSize.y);
+
+		if (idxY < 0 || idxY >= mPathFindTileCountY)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxY;
+		}
+	}
+	else if (eTileShape::Rhombus == meTileShape)
+	{
+		Vector3 convertPos = Vector3(pos - GetWorldPos()).TransformCoord(mMatWorldToIso);
+		
+		int idxY = (int)((convertPos.y + mPathFindTileDiagonal / 2.f) / mPathFindTileDiagonal);
+
+		if (idxY < 0 || idxY >= mPathFindTileCountY)
+		{
+			return -1;
+		}
+		else
+		{
+			return idxY;
+		}
+	}
+	return -1;
+}
+
+int CTileMapComponent::GetPathFindTileIndex(const Vector3& pos)
+{
+	int idxX = GetPathFindTileIndexX(pos);
+	int idxY = GetPathFindTileIndexY(pos);
+
+	if (-1 == idxX || -1 == idxY)
+	{
+		return -1;
+	}
+
+	return idxY * mPathFindTileCountX + idxX;
+}
+
+PathFindTileInfo* CTileMapComponent::GetPathFindTile(const Vector3& pos)
+{
+	int idx = GetPathFindTileIndex(pos);
+
+	if (-1 == idx)
+	{
+		return nullptr;
+	}
+	
+	return mVecPathFindTile[idx];
+}
+
+PathFindTileInfo* CTileMapComponent::GetPathFindTile(const int x, const int y)
+{
+	if (x < 0 || x >= mPathFindTileCountX || y < 0 || y >= mPathFindTileCountY)
+	{
+		return nullptr;
+	}
+
+	return mVecPathFindTile[y * mPathFindTileCountX + x];
+}
+
+PathFindTileInfo* CTileMapComponent::GetPathFindTile(const int idx)
+{
+	if (idx < 0 || idx > mPathFindTileCount)
+	{
+		return nullptr;
+	}
+
+	return mVecPathFindTile[idx];
+}
+
+bool CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size)
 {
 	ClearTile();
 
@@ -387,7 +514,7 @@ void CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const in
 		break;
 	default:
 		assert(false);
-		break;
+		return false;
 	}
 
 	mCBuffer->SetTileSize(Vector2(mTileSize.x, mTileSize.y));
@@ -402,12 +529,196 @@ void CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const in
 
 	for (int i = 0; i < mCount; ++i)
 	{
+		mVecTile[i]->Start();
 		mVecTile[i]->SetFrameStart(imageStart);
 		mVecTile[i]->SetFrameEnd(imageSize);
 		mVecTile[i]->SetTileType(eTileType::Normal);
 	}
 
+	// Navigation용 분할 타일 정보 생성
+	mPathFindTileCountX = mCountX * 2;
+	mPathFindTileCountY = mCountY * 2;
+	mPathFindTileCount = mPathFindTileCountX * mPathFindTileCountY;
+
+	mPathFindTileSize = size / 2.f;
+	mPathFindTileDiagonal = mTileDiagonal / 2.f;
+	
+	mVecPathFindTile.resize(mPathFindTileCount);
+
+	for (size_t i = 0; i < mCountY; ++i)
+	{
+		for (size_t j = 0; j < mCountX; ++j)
+		{
+			int originIdx = mCountX * i + j;
+
+			int idx1 = i * (mPathFindTileCountX * 2) + (j * 2);
+			int idx2 = i * (mPathFindTileCountX * 2) + (j * 2) + 1;
+			int idx3 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2);
+			int idx4 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2) + 1;
+
+			/*
+				분할 타일 배치
+				3 4
+				1 2
+			*/
+
+			PathFindTileInfo* info1 = new PathFindTileInfo;
+			PathFindTileInfo* info2 = new PathFindTileInfo;
+			PathFindTileInfo* info3 = new PathFindTileInfo;
+			PathFindTileInfo* info4 = new PathFindTileInfo;
+
+			mVecPathFindTile[idx1] = info1;
+			mVecPathFindTile[idx2] = info2;
+			mVecPathFindTile[idx3] = info3;
+			mVecPathFindTile[idx4] = info4;
+
+			info1->Index = i * 2;
+			info2->Index = (i * 2) + 1;
+			info3->Index = (i * 2) + (mCountX * 2);
+			info4->Index = (i * 2) + (mCountX * 2) + 1;
+
+			info1->IndexX = (i * 2) % mCountX;
+			info2->IndexX = info1->IndexX + 1;
+			info3->IndexX = info1->IndexX;
+			info4->IndexX = info1->IndexX + 1;
+
+			info1->IndexY = (i * 2) / mCountX;
+			info2->IndexY = (i * 2) / mCountX;
+			info3->IndexY = (i * 2) / mCountX + 1;
+			info4->IndexY = (i * 2) / mCountX + 1;
+
+			info1->Size = mVecTile[i]->mSize / 2.f;
+			info2->Size = mVecTile[i]->mSize / 2.f;
+			info3->Size = mVecTile[i]->mSize / 2.f;
+			info4->Size = mVecTile[i]->mSize / 2.f;
+
+			switch (meTileShape)
+			{
+			case eTileShape::Rect:
+				info1->Pos = mVecTile[i]->mPos;
+				info2->Pos = mVecTile[i]->mPos + Vector3(mPathFindTileSize.x, 0.f, 0.f);
+				info3->Pos = mVecTile[i]->mPos + Vector3(0.f, mPathFindTileSize.y, 0.f);
+				info4->Pos = mVecTile[i]->mPos + Vector3(mPathFindTileSize.x / 2.f, mPathFindTileSize.y / 2.f, 0.f);
+
+				break;
+			case eTileShape::Rhombus:
+				info1->Pos = mVecTile[i]->mPos;
+				info2->Pos = mVecTile[i]->mPos + (Vector3(mPathFindTileDiagonal, 0.f, 0.f).TransformCoord(mMatIsoToWorld));
+				info3->Pos = mVecTile[i]->mPos + (Vector3(0.f, mPathFindTileDiagonal, 0.f).TransformCoord(mMatIsoToWorld));
+				info4->Pos = mVecTile[i]->mPos + (Vector3(mPathFindTileDiagonal, mPathFindTileDiagonal, 0.f).TransformCoord(mMatIsoToWorld));
+				break;
+			}
+
+			info1->Center = info1->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+			info2->Center = info2->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+			info3->Center = info3->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+			info4->Center = info4->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+
+			eTileType tileType = mVecTile[i]->GetTileType();
+			switch (tileType)
+			{
+			case eTileType::Normal:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::Wall:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::CornerTop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::CornerRight:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::CornerBottom:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::CornerLeft:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallTopRight:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallBottomRight:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::WallLeftBottom:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::WallLeftTop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::EntryRightTop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::EntryRightBottom:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::EntryLeftBottom:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::EntryLeftTop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			default:
+				assert(false);
+				return false;
+			}
+		}
+	}
+
 	mScene->GetNavigationManager()->SetNavData(this);
+	return true;
+}
+
+bool CTileMapComponent::CreateTile(const int countX, const int countY, const Vector2& size)
+{
+	if (!mTileSet)
+	{
+		return false;
+	}
+	return CreateTile(mTileSet, countX, countY, size);
 }
 
 void CTileMapComponent::ClearTile()
@@ -456,6 +767,7 @@ void CTileMapComponent::SetTileDefaultInfo(const std::string& tileName)
 			mVecTile[i]->SetFrameStart(info->ImageStart);
 			mVecTile[i]->SetFrameEnd(info->ImageEnd);
 			mVecTile[i]->SetTileType(info->Type);
+			setPathFindTileType(i);
 		}
 	}
 }
@@ -473,6 +785,7 @@ void CTileMapComponent::SetTileInfo(const int idxX, const int idxY, const std::s
 	mVecTile[idxY * mCountX + idxX]->SetFrameStart(info->ImageStart);
 	mVecTile[idxY * mCountX + idxX]->SetFrameEnd(info->ImageEnd);
 	mVecTile[idxY * mCountX + idxX]->SetTileType(info->Type);
+	setPathFindTileType(idxY * mCountX + idxX);
 }
 
 void CTileMapComponent::SetTileInfo(const int idx, const std::string& tileName)
@@ -488,6 +801,7 @@ void CTileMapComponent::SetTileInfo(const int idx, const std::string& tileName)
 	mVecTile[idx]->SetFrameStart(info->ImageStart);
 	mVecTile[idx]->SetFrameEnd(info->ImageEnd);
 	mVecTile[idx]->SetTileType(info->Type);
+	setPathFindTileType(idx);
 }
 
 void CTileMapComponent::SetTileInfo(const Vector3& pos, const std::string& tileName)
@@ -510,6 +824,7 @@ void CTileMapComponent::SetTileInfo(const Vector3& pos, const std::string& tileN
 	mVecTile[idx]->SetFrameStart(info->ImageStart);
 	mVecTile[idx]->SetFrameEnd(info->ImageEnd);
 	mVecTile[idx]->SetTileType(info->Type);
+	setPathFindTileType(idx);
 }
 
 void CTileMapComponent::SetTileOpacity(const int idxX, const int idxY, const float opacity)
@@ -802,4 +1117,42 @@ int CTileMapComponent::getTileRenderIndexY(const Vector3& pos)
 		return idxY;
 	}
 	return 0;
+}
+
+// TODO : 렌더되는 실제 타일 인덱스 받아서, 해당 타입별로 교체
+void CTileMapComponent::setPathFindTileType(const int renderTileIdx)
+{
+	eTileType type = mVecTile[renderTileIdx]->GetTileType();
+
+	switch (type)
+	{
+	case eTileType::Normal:
+		break;
+	case eTileType::Wall:
+		break;
+	case eTileType::CornerTop:
+		break;
+	case eTileType::CornerRight:
+		break;
+	case eTileType::CornerBottom:
+		break;
+	case eTileType::CornerLeft:
+		break;
+	case eTileType::WallTopRight:
+		break;
+	case eTileType::WallBottomRight:
+		break;
+	case eTileType::WallLeftBottom:
+		break;
+	case eTileType::WallLeftTop:
+		break;
+	case eTileType::EntryRightTop:
+		break;
+	case eTileType::EntryRightBottom:
+		break;
+	case eTileType::EntryLeftBottom:
+		break;
+	case eTileType::EntryLeftTop:
+		break;	
+	}
 }

@@ -51,6 +51,7 @@ private:
     class CIMGUIInputInt2* mTileImageStartInput;
     class CIMGUIInputInt2* mTileImageEndInput;
 
+    class CIMGUITextInput* mTileSetNameInput;
     class CIMGUIButton* mSaveCSVButton;
     class CIMGUIButton* mLoadCSVButton;
 

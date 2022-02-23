@@ -38,7 +38,8 @@ CTileSetEditWindow::CTileSetEditWindow()	:
 	mTileImageEndInput(nullptr),
 	mSaveCSVButton(nullptr),
 	mLoadCSVButton(nullptr),
-	mCreateTilePopUp(nullptr)
+	mCreateTilePopUp(nullptr),
+	mTileSetNameInput(nullptr)
 {
 }
 
@@ -52,6 +53,7 @@ bool CTileSetEditWindow::Init()
 	CIMGUIText* text = AddWidget<CIMGUIText>("text");
 	text->SetText("TileSet Editor");
 
+	mTileSetNameInput = AddWidget<CIMGUITextInput>("TileSet Name");
 	mSaveCSVButton = AddWidget<CIMGUIButton>("Save TileSet", 0.f, 0.f);
 	CIMGUISameLine* line = AddWidget<CIMGUISameLine>("line");
 	mLoadCSVButton = AddWidget<CIMGUIButton>("Load TileSet", 0.f, 0.f);
@@ -97,6 +99,8 @@ bool CTileSetEditWindow::Init()
 	mTileImageEndInput = AddWidget<CIMGUIInputInt2>("Tile Image End");
 
 	// Initial Value	
+	mTileSetNameInput->SetHintText("TileSetName");
+
 	mCropImage->SetImageStart(0.f, 0.f);
 
 	for (int i = 0; i < 2; ++i)
@@ -338,6 +342,11 @@ void CTileSetEditWindow::OnSelectTileType(int idx, const char* label)
 
 void CTileSetEditWindow::OnClickSaveCSV()
 {
+	if (mTileSetNameInput->IsEmpty())
+	{
+		MessageBox(nullptr, TEXT("타일셋 이름을 지정해야 합니다."), TEXT("Failed"), MB_OK);
+	}
+
     TCHAR filePath[MAX_PATH] = {};
 
     OPENFILENAME openFile = {};
@@ -356,6 +365,7 @@ void CTileSetEditWindow::OnClickSaveCSV()
         int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
         WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
 
+		mTileSet->SetName(mTileSetNameInput->GetTextMultiByte());
 		if (!mTileSet->SaveCSVFullPath(convertFullPath))
 		{
 			MessageBox(nullptr, TEXT("타일셋 저장 실패"), TEXT("Failed"), MB_OK);
@@ -411,6 +421,8 @@ void CTileSetEditWindow::OnClickLoadCSV()
 		mAtlasSizeXText->SetText(buf);
 		sprintf_s(buf, "%d", (unsigned int)texHeight);
 		mAtlasSizeYText->SetText(buf);
+
+		mTileSetNameInput->SetText(mTileSet->GetName().c_str());
 
 		MessageBox(nullptr, TEXT("타일셋 로드 완료"), TEXT("Success"), MB_OK);
 	}

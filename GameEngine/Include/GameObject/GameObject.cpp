@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "../Scene/SceneManager.h"
+#include "../Component/NavAgentComponent.h"
 
 CGameObject::CGameObject()	:
 	mScene(nullptr),
@@ -189,6 +190,19 @@ void CGameObject::AddChildGameObject(CGameObject* obj)
 	if (obj->GetRootSceneComponent())
 	{
 		mRootSceneComponent->AddChild(obj->GetRootSceneComponent());
+	}
+}
+
+void CGameObject::Move(const Vector3& endPos)
+{
+	size_t size = mVecObjectComponent.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (mVecObjectComponent[i]->CheckType<CNavAgentComponent>())
+		{
+			((CNavAgentComponent*)mVecObjectComponent[i].Get())->Move(endPos);
+			break;
+		}
 	}
 }
 

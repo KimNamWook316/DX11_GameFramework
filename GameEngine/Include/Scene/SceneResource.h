@@ -122,7 +122,9 @@ public: // ===================== TileSet =====================
 	bool SaveTileSet(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool SaveTileSetFullPath(const std::string& name, const char* fullPath);
 	bool LoadTileSet(const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool LoadTileSet(std::string& outName, const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool LoadTileSetFullPath(const char* fullPath);
+	bool LoadTileSetFullPath(std::string& outName, const char* fullPath);
 
 private:
 	class CScene* mScene;

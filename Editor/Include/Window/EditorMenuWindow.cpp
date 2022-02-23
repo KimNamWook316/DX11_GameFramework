@@ -1,4 +1,5 @@
 #include "EditorMenuWindow.h"
+#include "../EditorManager.h"
 #include "DetailWindow.h"
 #include "IMGUIButton.h"
 #include "IMGUITextInput.h"
@@ -190,8 +191,12 @@ void CEditorMenuWindow::OnClickCreateComponent()
         comp = obj->CreateComponentAddChild<CParticleComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::TileMap:
+    {
         comp = obj->CreateComponentAddChild<CTileMapComponent>(mComponentNameInput->GetTextMultiByte());
+        
+        CEditorManager::GetInst()->SetEditMode(eEditMode::TileMap);
         break;
+    }
     }
     
     // TODO : 사용자 정의 컴포넌트에도 없으면 assert 하도록

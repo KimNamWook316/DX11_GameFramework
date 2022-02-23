@@ -214,6 +214,18 @@ enum class eTileType
 {
 	Normal,
 	Wall,
+	CornerTop,
+	CornerRight,
+	CornerBottom,
+	CornerLeft,
+	WallTopRight,
+	WallBottomRight,
+	WallLeftBottom,
+	WallLeftTop,
+	EntryRightTop,
+	EntryRightBottom,
+	EntryLeftBottom,
+	EntryLeftTop,
 	Max
 };
 

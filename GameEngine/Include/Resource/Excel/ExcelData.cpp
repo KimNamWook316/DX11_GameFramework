@@ -97,7 +97,15 @@ void CExcelData::SetData(const std::string& name, const std::vector<std::string>
 	size_t size = data.size();
 	for (size_t i = 0; i < size; ++i)
 	{
-		found->push_back(data[i]);
+		// 빈 셀일 경우 공백을 넣어준다.
+		if (0 == data[i].length())
+		{
+			found->push_back(" ");
+		}
+		else
+		{
+			found->push_back(data[i]);
+		}
 	}
 
 	std::vector<std::string>* orderedData = findOrderedData(name);
@@ -121,12 +129,19 @@ void CExcelData::SetData(const std::string& name, const std::string& label, cons
 	{
 		found = new std::vector<std::string>;
 		found->resize(mInfo.Labels.size());
+
+		// 공백을 넣어 빈 셀로 만든다.
+		size_t size = found->size();
+		for (size_t i = 0; i < size; ++i)
+		{
+			(*found)[i] = std::string(" ");
+		}
 		mInfo.Data.insert(std::make_pair(name, found));
 
 		std::vector<std::string>* orderedData = new std::vector<std::string>;
 		orderedData->push_back(name);
 
-		size_t size = found->size();
+		size = found->size();
 		for (size_t i = 0; i < size; ++i)
 		{
 			orderedData->push_back((*found)[i]);

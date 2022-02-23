@@ -6,6 +6,17 @@
 #include "../Resource/TileSet/TileSet.h"
 #include "Tile.h"
 
+struct PathFindTileInfo
+{
+	eTileType Type;
+	Vector3 Pos;
+	Vector2 Size;
+	Vector3 Center;
+	int IndexX;
+	int IndexY;
+	int Index;
+};
+
 class CTileMapComponent :
     public CSceneComponent
 {
@@ -35,7 +46,16 @@ public:
 	CTile* GetTile(const int idx);
 
 public:
-	void CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size);
+	int GetPathFindTileIndexX(const Vector3& pos);
+	int GetPathFindTileIndexY(const Vector3& pos);
+	int GetPathFindTileIndex(const Vector3& pos);
+	PathFindTileInfo* GetPathFindTile(const Vector3& pos);
+	PathFindTileInfo* GetPathFindTile(const int x, const int y);
+	PathFindTileInfo* GetPathFindTile(const int idx);
+
+public:
+	bool CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size);
+	bool CreateTile(const int countX, const int countY, const Vector2& size);
 	void ClearTile();
 
 	void SetWorldInfo();
@@ -94,6 +114,11 @@ public:
         return mBackMaterial;
     }
 
+	CTileSet* GetTileSet() const
+	{
+		return mTileSet;
+	}
+
 	eTileShape GetTileShape() const
 	{
 		return meTileShape;
@@ -109,9 +134,24 @@ public:
 		return mCountY;
 	}
 
+	int GetPathFindTileCountX() const
+	{
+		return mPathFindTileCountX;
+	}
+
+	int GetPathFindTileCountY() const
+	{
+		return mPathFindTileCountY;
+	}
+
 	const Vector2& GetTileSize() const
 	{
 		return mTileSize;
+	}
+
+	const Vector2& GetPathFindTileSize() const
+	{
+		return mPathFindTileSize;
 	}
 
 public:
@@ -127,6 +167,7 @@ protected:
     CSharedPtr<CMaterial> mBackMaterial;
 	CSharedPtr<CTileSet> mTileSet;
     std::vector<CTile*> mVecTile;
+	std::vector<PathFindTileInfo*> mVecPathFindTile;
 	std::vector<TileInfo> mVecTileInfo;
 	class CTileMapConstantBuffer* mCBuffer;
 	class CStructuredBuffer* mTileInfoBuffer;
@@ -134,12 +175,18 @@ protected:
 	int mCountX;
 	int mCountY;
 	int mCount;
+	int mPathFindTileCountX;
+	int mPathFindTileCountY;
+	int mPathFindTileCount;
 	int mRenderCount;
 	Vector2 mTileSize;
+	Vector2 mPathFindTileSize;
 	Vector4 mTileColor[(int)eTileType::Max];
 	bool mbEditMode;
 	float mTileDiagonal;
+	float mPathFindTileDiagonal;
 	Matrix mMatWorldToIso;
 	Matrix mMatIsoToWorld;
+
 };
 

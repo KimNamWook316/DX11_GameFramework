@@ -324,6 +324,7 @@ bool CTileSet::SaveCSVFullPath(const char* fullPath)
 	csv->AddLabel("EndUVY");
 
 	csv->SetData("TextureInfo", "TextureFullPath", mTextureFullPath);
+	csv->SetData("TileShapeInfo", "TileShape", CUtil::TileShapeToString(meTileShape));
 
 	std::vector<std::string> row;
 	auto iter = mMapTileInfo.begin();
@@ -421,6 +422,11 @@ bool CTileSet::LoadCSVFullPath(const char* fullPath)
 	}
 
 	csv->DeleteRow("TextureInfo");
+
+	std::string tileShape = csv->FindData("TileShapeInfo", "TileShape");
+	meTileShape = CUtil::StringToTileShape(tileShape);
+
+	csv->DeleteRow("TileShapeInfo");
 
 	std::unordered_map<std::string, std::vector<std::string>*> table = csv->GetTable();
 

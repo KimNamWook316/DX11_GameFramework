@@ -655,10 +655,48 @@ bool CSceneResource::LoadTileSet(const char* fileName, const std::string& pathNa
 	return true;
 }
 
+bool CSceneResource::LoadTileSet(std::string& outName, const char* fileName, const std::string& pathName)
+{
+	if (!CResourceManager::GetInst()->LoadTileSet(outName, fileName, pathName))
+	{
+		return false;
+	}
+	
+	CTileSet* tileSet = CResourceManager::GetInst()->FindTileSet(outName);
+
+	if (!tileSet)
+	{
+		return false;
+	}
+	
+	tileSet->SetScene(mScene);
+	mMapTileSet.insert(std::make_pair(outName, tileSet));
+	return true;
+}
+
 bool CSceneResource::LoadTileSetFullPath(const char* fullPath)
 {
 	std::string outName;
 
+	if (!CResourceManager::GetInst()->LoadTileSetFullPath(outName, fullPath))
+	{
+		return false;
+	}
+	
+	CTileSet* tileSet = CResourceManager::GetInst()->FindTileSet(outName);
+
+	if (!tileSet)
+	{
+		return false;
+	}
+	
+	tileSet->SetScene(mScene);
+	mMapTileSet.insert(std::make_pair(outName, tileSet));
+	return true;
+}
+
+bool CSceneResource::LoadTileSetFullPath(std::string& outName, const char* fullPath)
+{
 	if (!CResourceManager::GetInst()->LoadTileSetFullPath(outName, fullPath))
 	{
 		return false;
