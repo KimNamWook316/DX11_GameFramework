@@ -52,6 +52,7 @@ public:
 
 public:
 	void AddChildGameObject(CGameObject* obj);
+	void Move(const Vector3& endPos);	 // NavAgentComponent가 있을 경우 작동
 
 public:
 	virtual bool Init();

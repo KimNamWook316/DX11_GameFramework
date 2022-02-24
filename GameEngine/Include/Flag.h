@@ -222,11 +222,15 @@ enum class eTileType
 	WallBottomRight,
 	WallLeftBottom,
 	WallLeftTop,
-	EntryRightTop,
-	EntryRightBottom,
-	EntryLeftBottom,
-	EntryLeftTop,
-	Max
+	EntryRightTopLeft,
+	EntryRightTopRigt,
+	EntryLeftTopLeft,
+	EntryLeftTopRight,
+	EntryRightBottomLeft,
+	EntryRightBottomRight,
+	EntryLeftBottomLeft,
+	EntryLeftBottomRight,
+	Max,
 };
 
 enum class eNavNodeType

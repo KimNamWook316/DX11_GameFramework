@@ -132,16 +132,16 @@ std::string CUtil::TileTypeToString(eTileType eTileType)
 	case eTileType::WallLeftTop:
 		out = "WallLeftTop";
 		break;
-	case eTileType::EntryRightTop:
+	case eTileType::EntryRightTopLeft:
 		out = "EntryRightTop";
 		break;
-	case eTileType::EntryRightBottom:
+	case eTileType::EntryRightTopRigt:
 		out = "EntryRightBottom";
 		break;
-	case eTileType::EntryLeftBottom:
+	case eTileType::EntryLeftTopLeft:
 		out = "EntryLeftBottom";
 		break;
-	case eTileType::EntryLeftTop:
+	case eTileType::EntryLeftTopRight:
 		out = "EntryLeftTop";
 		break;
 	default:
@@ -195,19 +195,19 @@ eTileType CUtil::StringToTileType(const std::string& str)
 	}
 	else if (str == "EntryRightTop")
 	{
-		return eTileType::EntryRightTop;
+		return eTileType::EntryRightTopLeft;
 	}
 	else if (str == "EntryRightBottom")
 	{
-		return eTileType::EntryRightBottom;
+		return eTileType::EntryRightTopRigt;
 	}
 	else if (str == "EntryLeftBottom")
 	{
-		return eTileType::EntryLeftBottom;
+		return eTileType::EntryLeftTopLeft;
 	}
 	else if (str == "EntryLeftTop")
 	{
-		return eTileType::EntryLeftTop;
+		return eTileType::EntryLeftTopRight;
 	}
 	
 	assert(false);

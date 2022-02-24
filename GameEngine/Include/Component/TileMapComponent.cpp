@@ -166,6 +166,12 @@ void CTileMapComponent::PrevRender()
 					mVecTileInfo[mRenderCount].MatWVP = mVecTile[index]->GetWorldMatrix() * matView * matProj;
 					mVecTileInfo[mRenderCount].MatWVP.Transpose();
 					++mRenderCount;
+
+					// 벽도 같이 렌더해야 하는 경우
+					if (mWallComponent)
+					{
+						mVecTile[i]->SetRenderWall(true);
+					}
 				}
 			}
 		}
@@ -677,25 +683,25 @@ bool CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const in
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::EntryRightTop:
+			case eTileType::EntryRightTopLeft:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::EntryRightBottom:
+			case eTileType::EntryRightTopRigt:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::EntryLeftBottom:
+			case eTileType::EntryLeftTopLeft:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Normal;
 				break;
-			case eTileType::EntryLeftTop:
+			case eTileType::EntryLeftTopRight:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Wall;
@@ -730,6 +736,25 @@ void CTileMapComponent::ClearTile()
 		SAFE_DELETE(mVecTile[i]);
 	}
 	mVecTile.clear();
+}
+
+bool CTileMapComponent::CreateWallComponent()
+{
+	if (mWallComponent)
+	{
+		return false;
+	}
+
+	CWallComponent* wall = mObject->CreateComponent<CWallComponent>("Wall");
+
+	if (!wall)
+	{
+		return false;
+	}
+
+	AddChild(wall);
+
+	return true;
 }
 
 void CTileMapComponent::SetWorldInfo()
@@ -1146,13 +1171,13 @@ void CTileMapComponent::setPathFindTileType(const int renderTileIdx)
 		break;
 	case eTileType::WallLeftTop:
 		break;
-	case eTileType::EntryRightTop:
+	case eTileType::EntryRightTopLeft:
 		break;
-	case eTileType::EntryRightBottom:
+	case eTileType::EntryRightTopRigt:
 		break;
-	case eTileType::EntryLeftBottom:
+	case eTileType::EntryLeftTopLeft:
 		break;
-	case eTileType::EntryLeftTop:
+	case eTileType::EntryLeftTopRight:
 		break;	
 	}
 }

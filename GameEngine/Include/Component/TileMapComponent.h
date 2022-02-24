@@ -4,6 +4,7 @@
 #include "../Resource/Mesh/SpriteMesh.h"
 #include "../Resource/Material/Material.h"
 #include "../Resource/TileSet/TileSet.h"
+#include "WallComponent.h"
 #include "Tile.h"
 
 struct PathFindTileInfo
@@ -57,6 +58,7 @@ public:
 	bool CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size);
 	bool CreateTile(const int countX, const int countY, const Vector2& size);
 	void ClearTile();
+	bool CreateWallComponent();
 
 	void SetWorldInfo();
 	void SetTileDefaultInfo(const std::string& tileName);
@@ -189,5 +191,7 @@ protected:
 	Matrix mMatWorldToIso;
 	Matrix mMatIsoToWorld;
 	float mDetlaTime;
+	
+	CSharedPtr<CWallComponent> mWallComponent;
 };
 

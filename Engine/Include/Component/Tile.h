@@ -162,6 +162,9 @@ public:
 		mFrameEnd = Vector2(x, y);
 	}
 
+	void SetRenderWall(bool bRender);
+	void AddWall(class CWall* wall);
+
 private:
 	class CTileMapComponent* mOwner;
 	eTileShape meShape;
@@ -177,5 +180,6 @@ private:
 	Vector2 mFrameStart;
 	Vector2 mFrameEnd;
 	float mOpacity;
+	std::vector<class CWall*> mVecWall;
 };
 

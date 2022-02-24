@@ -216,6 +216,12 @@
     <Filter Include="02. Resource\10. TileSet">
       <UniqueIdentifier>{e7da4d76-f619-4140-ba63-1c72e65bbeb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component\02. ObjectComponent\02. NavAgent">
+      <UniqueIdentifier>{c8efc2b4-a509-4ba2-821f-066294ad6e08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\02. ObjectComponent\03. ProcedualMapGenerator">
+      <UniqueIdentifier>{a5de5226-66c0-464a-9520-bd463007ba42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -695,6 +701,21 @@
     <ClInclude Include="Resource\TileSet\TileSetManager.h">
       <Filter>02. Resource\10. TileSet</Filter>
     </ClInclude>
+    <ClInclude Include="Component\NavAgentComponent.h">
+      <Filter>05. Component\02. ObjectComponent\02. NavAgent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\WallComponent.h">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Wall.h">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Space.h">
+      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ProcedualMapGenerator.h">
+      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1122,6 +1143,21 @@
     </ClCompile>
     <ClCompile Include="Resource\TileSet\TileSetManager.cpp">
       <Filter>02. Resource\10. TileSet</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\NavAgentComponent.cpp">
+      <Filter>05. Component\02. ObjectComponent\02. NavAgent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\WallComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Wall.cpp">
+      <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Space.cpp">
+      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ProcedualMapGenerator.cpp">
+      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

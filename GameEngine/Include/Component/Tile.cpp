@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include "Wall.h"
 #include "TileMapComponent.h"
 #include "../Resource/Animation/AnimationSequence2D.h"
 
@@ -148,4 +149,18 @@ void CTile::Save(FILE* fp)
 
 void CTile::Load(FILE* fp)
 {
+}
+
+void CTile::SetRenderWall(bool bRender)
+{
+	size_t size = mVecWall.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecWall[i]->SetRender(bRender);
+	}
+}
+
+void CTile::AddWall(CWall* wall)
+{
+	mVecWall.push_back(wall);
 }

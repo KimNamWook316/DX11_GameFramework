@@ -29,6 +29,7 @@ struct NavNode
 	float Cost;
 	float Dist;
 	float Total;
+	std::list<eNodeDir> SearchDirList;
 
 	NavNode() :
 		eNodeType(eNavNodeType::None),
@@ -59,7 +60,8 @@ public:
 private:
 	bool findNode(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
 	NavNode* getCorner(eNodeDir dir, NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
-	static int sortNode(const void* src, const void* dst);
+	static bool sortNode(NavNode* src, NavNode* dst);
+	void addDir(eNodeDir dir, NavNode* node);
 
 private:
 	NavNode* getNodeTop(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath);
