@@ -45,6 +45,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	}
 
 	CEngine::GetInst()->SetPlay(true);
+	CEngine::GetInst()->SetDebugMode(true);
 	
 	mCameraObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CCameraObject>("CameraObj");
 

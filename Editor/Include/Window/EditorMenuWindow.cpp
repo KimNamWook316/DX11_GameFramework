@@ -23,6 +23,9 @@
 #include "Component/WidgetComponent.h"
 #include "Component/ParticleComponent.h"
 #include "Component/TileMapComponent.h"
+#include "Component/DissolveComponent.h"
+#include "Component/NavAgentComponent.h"
+#include "Component/ProcedualMapGenerator.h"
 #include "Engine.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
@@ -75,6 +78,10 @@ bool CEditorMenuWindow::Init()
     for (int i = 0; i < (int)eSceneComponentType::Max; ++i)
     {
         mCreatableComponentsComboBox->AddItem(CUtil::SceneComponentTypeToString((eSceneComponentType)i));
+    }
+    for (int i = 0; i < (int)eObjectComponentType::Max; ++i)
+    {
+        mCreatableComponentsComboBox->AddItem(CUtil::ObjectComponentTypeToString((eObjectComponentType)i));
     }
 
     mComponentNameInput = AddWidget<CIMGUITextInput>("Component Name", 100.f, 0.f);
@@ -161,47 +168,77 @@ void CEditorMenuWindow::OnClickCreateComponent()
         return;
     }
 
-    CSceneComponent* comp = nullptr;
+    CSceneComponent* sceneComp = nullptr;
 
     // 엔진 내장 컴포넌트들
     switch ((eSceneComponentType)selectIdx)
     {
     case eSceneComponentType::Sprite:
-        comp = obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::StaticMesh:
-        comp = obj->CreateComponentAddChild<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::ColliderBox2D:
-        comp = obj->CreateComponentAddChild<CColliderBox2D>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CColliderBox2D>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::ColliderCircle:
-        comp = obj->CreateComponentAddChild<CColliderCircle>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CColliderCircle>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::ColliderPixel:
-        comp = obj->CreateComponentAddChild<CColliderPixel>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CColliderPixel>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::Camera:
-        comp = obj->CreateComponentAddChild<CCameraComponent>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CCameraComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::Widget:
-        comp = obj->CreateComponentAddChild<CWidgetComponent>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CWidgetComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::Particle:
-        comp = obj->CreateComponentAddChild<CParticleComponent>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CParticleComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::TileMap:
     {
-        comp = obj->CreateComponentAddChild<CTileMapComponent>(mComponentNameInput->GetTextMultiByte());
-        
+        sceneComp = obj->CreateComponentAddChild<CTileMapComponent>(mComponentNameInput->GetTextMultiByte());
+
         CEditorManager::GetInst()->SetEditMode(eEditMode::TileMap);
         break;
     }
+    case eSceneComponentType::ProcedualMapGenerator:
+    {
+        sceneComp = obj->CreateComponent<CProcedualMapGenerator>(mComponentNameInput->GetTextMultiByte());
+        break;
+    }
+    }
+
+	CObjectComponent* objComp = nullptr;
+
+    if (!sceneComp)
+    {
+		selectIdx -= (int)(eSceneComponentType::Max);
+
+		switch ((eObjectComponentType)selectIdx)
+		{
+		case eObjectComponentType::Dissolve:
+			objComp = obj->CreateComponent<CDissolveComponent>(mComponentNameInput->GetTextMultiByte());
+			break;
+		case eObjectComponentType::NavAgent:
+			objComp = obj->CreateComponent<CNavAgentComponent>(mComponentNameInput->GetTextMultiByte());
+			break;
+		}
     }
     
+
     // TODO : 사용자 정의 컴포넌트에도 없으면 assert 하도록
     
-    comp->Start();
+    if (sceneComp)
+    {
+        sceneComp->Start();
+    }
+    else if (objComp)
+    {
+        objComp->Start();
+    }
 
     // hierachy component list에 추가
     if (hierachyWindow)

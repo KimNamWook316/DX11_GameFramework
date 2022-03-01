@@ -90,6 +90,9 @@
     <ClInclude Include="Window\TileSetEditWindow.h">
       <Filter>02. Window</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\MapGeneratorWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -145,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="Window\TileSetEditWindow.cpp">
       <Filter>02. Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\MapGeneratorWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

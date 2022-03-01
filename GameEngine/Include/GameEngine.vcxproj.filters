@@ -219,8 +219,14 @@
     <Filter Include="05. Component\02. ObjectComponent\02. NavAgent">
       <UniqueIdentifier>{c8efc2b4-a509-4ba2-821f-066294ad6e08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05. Component\02. ObjectComponent\03. ProcedualMapGenerator">
+    <Filter Include="05. Component\01. SceneComponent\07. ProcedualMapGenerator">
       <UniqueIdentifier>{a5de5226-66c0-464a-9520-bd463007ba42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\07. SpaceShader">
+      <UniqueIdentifier>{1ebfaa9c-93d0-4e40-9f73-4ffbb6367c82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\11. Space">
+      <UniqueIdentifier>{94527fe7-8d6c-49c9-b955-421b16e0d9a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -711,10 +717,19 @@
       <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
     </ClInclude>
     <ClInclude Include="Component\Space.h">
-      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
+      <Filter>05. Component\01. SceneComponent\07. ProcedualMapGenerator</Filter>
     </ClInclude>
     <ClInclude Include="Component\ProcedualMapGenerator.h">
-      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
+      <Filter>05. Component\01. SceneComponent\07. ProcedualMapGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\SpaceConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\11. Space</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\SpaceRectShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\07. SpaceShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\SpaceRhombusShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\07. SpaceShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1154,10 +1169,19 @@
       <Filter>05. Component\01. SceneComponent\06. TileMapComponent</Filter>
     </ClCompile>
     <ClCompile Include="Component\Space.cpp">
-      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
+      <Filter>05. Component\01. SceneComponent\07. ProcedualMapGenerator</Filter>
     </ClCompile>
     <ClCompile Include="Component\ProcedualMapGenerator.cpp">
-      <Filter>05. Component\02. ObjectComponent\03. ProcedualMapGenerator</Filter>
+      <Filter>05. Component\01. SceneComponent\07. ProcedualMapGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\SpaceConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\11. Space</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\SpaceRectShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\07. SpaceShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\SpaceRhombusShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\07. SpaceShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1198,6 +1222,9 @@
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\TileMap.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Space.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

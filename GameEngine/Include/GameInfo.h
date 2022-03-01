@@ -437,3 +437,18 @@ struct TileSetInfo
     Vector2 ImageStart;
     Vector2 ImageEnd;
 };
+
+struct SpaceCBuffer
+{
+	Vector3 RhombusLBPos;
+	float Dummy0;
+	Vector3 RhombusLTPos;
+	float Dummy1;
+	Vector3 RhombusRTPos;
+	float Dummy2;
+	Vector3 RhombusRBPos;
+	float Dummy3;
+	Vector4 Color;
+	Matrix MatVP;
+	Matrix MatWVP;
+};

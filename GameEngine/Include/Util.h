@@ -16,5 +16,6 @@ public:
 	static eTileType StringToTileType(const std::string& str);
 
 	static std::string SceneComponentTypeToString(eSceneComponentType eType);
+	static std::string ObjectComponentTypeToString(eObjectComponentType eType);
 };
 

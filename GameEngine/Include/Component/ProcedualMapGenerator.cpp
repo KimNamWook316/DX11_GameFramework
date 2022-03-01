@@ -1,19 +1,46 @@
 #include <time.h>
 #include "ProcedualMapGenerator.h"
+#include "Space.h"
+#include "../GameObject/GameObject.h"
+#include "../Engine.h"
 
 CProcedualMapGenerator::CProcedualMapGenerator()	:
 	mMapCountX(0),
 	mMapCountY(0),
 	mPartitionLevel(0),
-	mRoomSizeMin(5)
+	mRoomSizeMin(5),
+	meTileShape(eTileShape::Rhombus),
+	mTileSize(160.f, 80.f, 0.f),
+	mSpaceTree(nullptr),
+	mTileDiagonal(0.f)
 {
+	mbIsRender = true;
+
 	SetTypeID<CProcedualMapGenerator>();
+	
+	for (int i = 0; i < (int)eGenerationStep::Max; ++i)
+	{
+		mGenerationStep[i] = false;
+	}
+
+	mMatIsoToWorld.v[0] = Vector4((2.f * sqrt(5.f)/ 5.f) - 0.01f , (sqrt(5.f) / 5.f) - 0.01f, 0.f, 0.f);
+	mMatIsoToWorld.v[1] = Vector4((-2.f * sqrt(5.f) / 5.f) + 0.01f, (sqrt(5.f) / 5.f) - 0.01f, 0.f, 0.f);
+	mMatIsoToWorld.v[2] = Vector4(0.f, 0.f, 1.f, 0.f);
+	mMatIsoToWorld.v[3] = Vector4(0.f, 0.f, 0.f, 1.f);
+
+	mTileDiagonal = sqrt(((mTileSize.x / 2.f) * (mTileSize.x / 2.f)) + ((mTileSize.y / 2.f) * (mTileSize.y / 2.f)));
 }
 
 CProcedualMapGenerator::CProcedualMapGenerator(const CProcedualMapGenerator& com)	:
-	CObjectComponent(com)
+	CSceneComponent(com)
 {
+	*this = com;
 	mSpaceTree = nullptr;
+
+	for (int i = 0; i < (int)eGenerationStep::Max; ++i)
+	{
+		mGenerationStep[i] = com.mGenerationStep[i];
+	}
 }
 
 CProcedualMapGenerator::~CProcedualMapGenerator()
@@ -25,38 +52,44 @@ CProcedualMapGenerator::~CProcedualMapGenerator()
 
 bool CProcedualMapGenerator::Init()
 {
-	CObjectComponent::Init();
+	CSceneComponent::Init();
 	return true;
 }
 
 void CProcedualMapGenerator::Start()
 {
-	CObjectComponent::Start();
+	CSceneComponent::Start();
+	FindTileComponent();
 }
 
 void CProcedualMapGenerator::Update(float deltaTime)
 {
-	CObjectComponent::Update(deltaTime);
+	CSceneComponent::Update(deltaTime);
 }
 
 void CProcedualMapGenerator::PostUpdate(float deltaTime)
 {
-	CObjectComponent::PostUpdate(deltaTime);
+	CSceneComponent::PostUpdate(deltaTime);
 }
 
 void CProcedualMapGenerator::PrevRender()
 {
-	CObjectComponent::PrevRender();
+	CSceneComponent::PrevRender();
 }
 
 void CProcedualMapGenerator::Render()
 {
-	CObjectComponent::Render();
+	CSceneComponent::Render();
+
+	if (CEngine::GetInst()->IsDebugMode() && mSpaceTree)
+	{
+		mSpaceTree->Render();
+	}
 }
 
 void CProcedualMapGenerator::PostRender()
 {
-	CObjectComponent::PostRender();
+	CSceneComponent::PostRender();
 }
 
 CProcedualMapGenerator* CProcedualMapGenerator::Clone()
@@ -70,7 +103,7 @@ bool CProcedualMapGenerator::GenerateMap()
 	{
 		return false;
 	}
-	
+
 	if (!PartitionSpace())
 	{
 		return false;
@@ -89,6 +122,33 @@ bool CProcedualMapGenerator::GenerateMap()
 	return true;
 }
 
+void CProcedualMapGenerator::FindTileComponent()
+{
+	mTileMap = mObject->FindSceneComponentFromType<CTileMapComponent>();
+}
+
+bool CProcedualMapGenerator::DoStep(eGenerationStep step)
+{
+	if (mMapCountX == 0 || mMapCountY == 0 || mPartitionLevel == 1)
+	{
+		return false;
+	}
+
+	switch (step)
+	{
+	case eGenerationStep::PartitionSpace:
+		return PartitionSpace();
+	case eGenerationStep::MakeRoom:
+		return MakeRoom();
+	case eGenerationStep::ConnectRoom:
+		return ConnectRoom();
+		break;
+	default:
+		assert(false);
+		return false;
+	}
+}
+
 bool CProcedualMapGenerator::PartitionSpace()
 {
 	if (mMapCountX == 0 || mMapCountY == 0 || mPartitionLevel == 0)
@@ -99,11 +159,19 @@ bool CProcedualMapGenerator::PartitionSpace()
 	srand(unsigned int(time(NULL)));
 
 	mVecMapInfo.resize(mMapCountX * mMapCountY);
-	mVecSpaceByLevel.resize(mPartitionLevel);
+	
+	// 모두 Wall 로 초기화
+	resetMapInfo();
+
+	mVecSpaceByLevel.resize(mPartitionLevel + 1);
 	
 	mSpaceTree = new CSpace;
 	mSpaceTree->SetOwner(this);
+	mSpaceTree->Init();
+
 	mSpaceTree->StartPartitioning(mMapCountX, mMapCountY, mPartitionLevel);
+
+	mGenerationStep[(int)eGenerationStep::PartitionSpace] = true;
 
 	return true;
 }
@@ -133,58 +201,60 @@ bool CProcedualMapGenerator::MakeRoom()
 				// 아래 코너
 				if (mVecRoomInfo[i]->LBIdxX == x && mVecRoomInfo[i]->LBIdxY == y)
 				{
-					mVecMapInfo[idx] = eMapObject::TileCornerBottom;
+					mVecMapInfo[idx] = eTileType::CornerS;
 					continue;
 				}
 				// 위 코너
 				if (mVecRoomInfo[i]->RTIdxX == x && mVecRoomInfo[i]->RTIdxY == y)
 				{
-					mVecMapInfo[idx] = eMapObject::TileCornerTop;
+					mVecMapInfo[idx] = eTileType::CornerN;
 					continue;
 				}
 				// 왼쪽 코너
 				if (mVecRoomInfo[i]->LBIdxX == x && mVecRoomInfo[i]->RTIdxY == y)
 				{
-					mVecMapInfo[idx] = eMapObject::TileCornerLeft;
+					mVecMapInfo[idx] = eTileType::CornerW;
 					continue;
 				}
 				// 오른쪽 코너
 				if (mVecRoomInfo[i]->RTIdxX == x && mVecRoomInfo[i]->LBIdxY == y)
 				{
-					mVecMapInfo[idx] = eMapObject::TileCornerRight;
+					mVecMapInfo[idx] = eTileType::CornerE;
 					continue;
 				}
 
 				// 오른쪽 아래 벽
 				if (mVecRoomInfo[i]->LBIdxY == y)
 				{
-					mVecMapInfo[idx] = eMapObject::TileWallBottomRight;
+					mVecMapInfo[idx] = eTileType::WallSE;
 					continue;
 				}
 				// 왼쪽 위 벽
 				if (mVecRoomInfo[i]->RTIdxY == y)
 				{
-					mVecMapInfo[idx] = eMapObject::TileWallLeftTop;
+					mVecMapInfo[idx] = eTileType::WallNW;
 					continue;
 				}
 				// 왼쪽 아래 벽
 				if (mVecRoomInfo[i]->LBIdxX == x)
 				{
-					mVecMapInfo[idx] = eMapObject::TileWallLeftBottom;
+					mVecMapInfo[idx] = eTileType::WallSW;
 					continue;
 				}
 				// 오른쪽 위 벽
 				if (mVecRoomInfo[i]->RTIdxX == x)
 				{
-					mVecMapInfo[idx] = eMapObject::TileWallTopRight;
+					mVecMapInfo[idx] = eTileType::WallNE;
 					continue;
 				}
 
 				// 나머지 경우는 갈 수 있는 타일로 처리한다.
-				mVecMapInfo[idx] = eMapObject::TileNormal;
+				mVecMapInfo[idx] = eTileType::Normal;
 			}
 		}
 	}
+
+	mGenerationStep[(int)eGenerationStep::MakeRoom] = true;
 }
 
 bool CProcedualMapGenerator::ConnectRoom()
@@ -211,9 +281,58 @@ bool CProcedualMapGenerator::ConnectRoom()
 			(*iter)[i]->ConnectSpace();
 		}
 	}
+
+	mGenerationStep[(int)eGenerationStep::ConnectRoom] = true;
+	return true;
 }
 
 bool CProcedualMapGenerator::PassToTileMap()
 {
 	return true;
+}
+
+void CProcedualMapGenerator::SetTileType(const int idx, eTileType eMapObj)
+{
+	if (idx < 0 || idx >= mVecMapInfo.size())
+	{
+		return;
+	}
+	
+	mVecMapInfo[idx] = eMapObj;
+}
+
+void CProcedualMapGenerator::SetTileType(const int x, const int y, eTileType eMapObj)
+{
+	SetTileType(y * mMapCountX + x, eMapObj);
+}
+
+eGenerationStep CProcedualMapGenerator::GetCurrentGenerationStepToDo() const
+{
+	for (int i = 0; i < (int)eGenerationStep::Max; ++i)
+	{
+		if (!mGenerationStep[i])
+		{
+			return (eGenerationStep)i;
+		}
+	}
+}
+
+int CProcedualMapGenerator::GetCurrentGenerationStepDone() const
+{
+	eGenerationStep step = GetCurrentGenerationStepToDo();
+	if (eGenerationStep::PartitionSpace == step)
+	{
+		return -1;
+	}
+	return (int)step - 1;
+}
+
+void CProcedualMapGenerator::resetMapInfo()
+{
+	size_t size = mVecMapInfo.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecMapInfo[i] = eTileType::Wall;
+	}
 }

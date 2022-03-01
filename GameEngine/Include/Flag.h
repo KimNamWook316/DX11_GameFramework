@@ -94,6 +94,14 @@ enum class eSceneComponentType
 	Widget,
 	Particle,
 	TileMap,
+	ProcedualMapGenerator,
+	Max
+};
+
+enum class eObjectComponentType
+{
+	Dissolve,
+	NavAgent,
 	Max
 };
 
@@ -214,22 +222,34 @@ enum class eTileType
 {
 	Normal,
 	Wall,
-	CornerTop,
-	CornerRight,
-	CornerBottom,
-	CornerLeft,
-	WallTopRight,
-	WallBottomRight,
-	WallLeftBottom,
-	WallLeftTop,
-	EntryRightTopLeft,
-	EntryRightTopRigt,
-	EntryLeftTopLeft,
-	EntryLeftTopRight,
-	EntryRightBottomLeft,
-	EntryRightBottomRight,
-	EntryLeftBottomLeft,
-	EntryLeftBottomRight,
+	CornerN,
+	CornerE,
+	CornerS,
+	CornerW,
+	InnerCornerN,
+	InnerCornerE,
+	InnerCornerS,
+	InnerCornerW,
+	WallNE,
+	WallSE,
+	WallSW,
+	WallNW,
+	WallEndNETop,
+	WallEndNEBottom,
+	WallEndSETop,
+	WallEndSEBottom,
+	WallEndSWTop,
+	WallEndSWBottom,
+	WallEndNWTop,
+	WallEndNWBottom,
+	EntryNELeft,
+	EntryNERight,
+	EntrySELeft,
+	EntrySERight,
+	EntrySWLeft,
+	EntrySWRight,
+	EntryNWLeft,
+	EntryNWRight,
 	Max,
 };
 

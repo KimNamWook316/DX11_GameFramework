@@ -9,6 +9,8 @@
 #include "NumberShader.h"
 #include "ParticleUpdateShader.h"
 #include "ParticleRenderShader.h"
+#include "SpaceRectShader.h"
+#include "SpaceRhombusShader.h"
 #include "TileMapShader.h"
 #include "ConstantBuffer.h"
 
@@ -99,6 +101,19 @@ bool CShaderManager::Init()
 		return false;
 	}
 
+	// Space Shader
+	if (!CreateShader<CSpaceRectShader>("SpaceRectShader"))
+	{
+		assert(false);
+		return false;
+	}
+
+	if (!CreateShader<CSpaceRhombusShader>("SpaceRhombusShader"))
+	{
+		assert(false);
+		return false;
+	}
+
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,
 		(int)eBufferShaderTypeFlags::Graphic);
@@ -131,6 +146,9 @@ bool CShaderManager::Init()
 		(int)eBufferShaderTypeFlags::Pixel);
 
 	CreateConstantBuffer("TileMapCBuffer", sizeof(TileMapCBuffer), 11,
+		(int)eBufferShaderTypeFlags::Graphic);
+
+	CreateConstantBuffer("SpaceCBuffer", sizeof(SpaceCBuffer), 11,
 		(int)eBufferShaderTypeFlags::Graphic);
 
 	return true;

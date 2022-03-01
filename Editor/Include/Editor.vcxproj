@@ -160,6 +160,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Widget\ColliderControlWidget.h" />
     <ClInclude Include="WIdget\ComponentControlWidget.h" />
+    <ClInclude Include="Widget\MapGeneratorWidget.h" />
     <ClInclude Include="WIdget\SpriteControlWidget.h" />
     <ClInclude Include="Widget\TileMapControlWidget.h" />
     <ClInclude Include="Widget\WidgetControlWidget.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Scene\DefaultScene.cpp" />
     <ClCompile Include="Widget\ColliderControlWidget.cpp" />
     <ClCompile Include="WIdget\ComponentControlWidget.cpp" />
+    <ClCompile Include="Widget\MapGeneratorWidget.cpp" />
     <ClCompile Include="WIdget\SpriteControlWidget.cpp" />
     <ClCompile Include="Widget\TileMapControlWidget.cpp" />
     <ClCompile Include="Widget\WidgetControlWidget.cpp" />

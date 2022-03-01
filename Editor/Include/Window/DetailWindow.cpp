@@ -16,10 +16,12 @@
 #include "Component/ColliderBox2D.h"
 #include "Component/ColliderPixel.h"
 #include "Component/TileMapComponent.h"
+#include "Component/ProcedualMapGenerator.h"
 #include "../Widget/ComponentControlWidget.h"
 #include "../Widget/SpriteControlWidget.h"
 #include "../Widget/ColliderControlWidget.h"
 #include "../Widget/TileMapControlWidget.h"
+#include "../Widget/MapGeneratorWidget.h"
 
 CDetailWindow::CDetailWindow()
 {
@@ -89,6 +91,11 @@ CComponentControlWidget* CDetailWindow::CreateControlWidget(CComponent* comp)
     else if (comp->GetTypeID() == typeid(CTileMapComponent).hash_code())
     {
         CTileMapControlWidget* widget = new CTileMapControlWidget;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CProcedualMapGenerator).hash_code())
+    {
+        CMapGeneratorWidget* widget = new CMapGeneratorWidget;
         return widget;
     }
     else

@@ -635,73 +635,73 @@ bool CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const in
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::CornerTop:
+			case eTileType::CornerN:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::CornerRight:
+			case eTileType::CornerE:
 				info1->Type = eTileType::Wall;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::CornerBottom:
+			case eTileType::CornerS:
 				info1->Type = eTileType::Wall;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Normal;
 				break;
-			case eTileType::CornerLeft:
+			case eTileType::CornerW:
 				info1->Type = eTileType::Wall;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::WallTopRight:
+			case eTileType::WallNE:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::WallBottomRight:
+			case eTileType::WallSE:
 				info1->Type = eTileType::Wall;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Normal;
 				break;
-			case eTileType::WallLeftBottom:
+			case eTileType::WallSW:
 				info1->Type = eTileType::Wall;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Normal;
 				break;
-			case eTileType::WallLeftTop:
+			case eTileType::WallNW:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::EntryRightTopLeft:
+			case eTileType::EntryNELeft:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::EntryRightTopRigt:
+			case eTileType::EntryNERight:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Wall;
 				break;
-			case eTileType::EntryLeftTopLeft:
+			case eTileType::EntryNWLeft:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Normal;
 				break;
-			case eTileType::EntryLeftTopRight:
+			case eTileType::EntryNWRight:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Normal;
 				info3->Type = eTileType::Wall;
@@ -1155,29 +1155,29 @@ void CTileMapComponent::setPathFindTileType(const int renderTileIdx)
 		break;
 	case eTileType::Wall:
 		break;
-	case eTileType::CornerTop:
+	case eTileType::CornerN:
 		break;
-	case eTileType::CornerRight:
+	case eTileType::CornerE:
 		break;
-	case eTileType::CornerBottom:
+	case eTileType::CornerS:
 		break;
-	case eTileType::CornerLeft:
+	case eTileType::CornerW:
 		break;
-	case eTileType::WallTopRight:
+	case eTileType::WallNE:
 		break;
-	case eTileType::WallBottomRight:
+	case eTileType::WallSE:
 		break;
-	case eTileType::WallLeftBottom:
+	case eTileType::WallSW:
 		break;
-	case eTileType::WallLeftTop:
+	case eTileType::WallNW:
 		break;
-	case eTileType::EntryRightTopLeft:
+	case eTileType::EntryNELeft:
 		break;
-	case eTileType::EntryRightTopRigt:
+	case eTileType::EntryNERight:
 		break;
-	case eTileType::EntryLeftTopLeft:
+	case eTileType::EntryNWLeft:
 		break;
-	case eTileType::EntryLeftTopRight:
+	case eTileType::EntryNWRight:
 		break;	
 	}
 }

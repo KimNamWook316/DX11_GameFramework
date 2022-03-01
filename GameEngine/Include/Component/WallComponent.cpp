@@ -158,7 +158,7 @@ void CWallComponent::CreateWall(CTile* tile)
 	case eTileType::Normal:
 	case eTileType::Wall:
 		break;
-	case eTileType::CornerTop:
+	case eTileType::CornerN:
 	{
  //		// Left, Right º®
  //		TileSetInfo* info = mTileSet->FindInfo("WallLeft");
@@ -181,27 +181,27 @@ void CWallComponent::CreateWall(CTile* tile)
  //
 		break;
 	}
-	case eTileType::CornerRight:
+	case eTileType::CornerE:
 		break;
-	case eTileType::CornerBottom:
+	case eTileType::CornerS:
 		break;
-	case eTileType::CornerLeft:
+	case eTileType::CornerW:
 		break;
-	case eTileType::WallTopRight:
+	case eTileType::WallNE:
 		break;
-	case eTileType::WallBottomRight:
+	case eTileType::WallSE:
 		break;
-	case eTileType::WallLeftBottom:
+	case eTileType::WallSW:
 		break;
-	case eTileType::WallLeftTop:
+	case eTileType::WallNW:
 		break;
-	case eTileType::EntryRightTopLeft:
+	case eTileType::EntryNELeft:
 		break;
-	case eTileType::EntryRightTopRigt:
+	case eTileType::EntryNERight:
 		break;
-	case eTileType::EntryLeftTopLeft:
+	case eTileType::EntryNWLeft:
 		break;
-	case eTileType::EntryLeftTopRight:
+	case eTileType::EntryNWRight:
 		break;
 	default:
 		assert(false);

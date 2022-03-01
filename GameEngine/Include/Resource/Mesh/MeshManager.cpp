@@ -56,6 +56,21 @@ bool CMeshManager::Init()
 	box2DMesh->SetName("Box2DMesh");
 	box2DMesh->CreateMesh(box2DPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	mMapMesh.insert(std::make_pair("Box2DMesh", box2DMesh));
+
+	// ProcedualMapGenerator용 사각 메쉬
+	CMesh* rectSpaceMesh = new CStaticMesh;
+	Vector3 rectSpacePos[5] =
+	{
+		Vector3(0.f, 1.f, 0.f),
+		Vector3(1.f, 1.f, 0.f),
+		Vector3(1.f, 0.f, 0.f),
+		Vector3(0.f, 0.f, 0.f),
+		Vector3(0.f, 1.f, 0.f)
+	};
+	
+	rectSpaceMesh->SetName("RectSpaceMesh");
+	rectSpaceMesh->CreateMesh(rectSpacePos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	mMapMesh.insert(std::make_pair("RectSpaceMesh", rectSpaceMesh));
 	
 	// 원 메쉬
 	CMesh* circleMesh = new CStaticMesh;

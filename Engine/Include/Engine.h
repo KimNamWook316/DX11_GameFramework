@@ -60,6 +60,11 @@ public:
 		return mTimer->GetDeltaTIme();
 	}
 
+	bool  IsDebugMode() const
+	{
+		return mbDebugMode;
+	}
+
 public:
 	void SetMouseState(eMouseState state);
 
@@ -71,6 +76,11 @@ public:
 	void SetEngineSpace(eEngineSpace space)
 	{
 		meSpace = space;
+	}
+
+	void SetDebugMode(bool bDebug)
+	{
+		mbDebugMode = bDebug;
 	}
 
 public:
@@ -119,5 +129,6 @@ private:
 	class CGlobalConstantBuffer* mGlobalCBuffer;
 	float mGlobalAccTime; // 누적 시간
 	CSharedPtr<CTexture> mGlobalNoiseTexture; // GPU 랜덤 함수를 위한 노이즈 텍스처
+	bool mbDebugMode;
 };
 

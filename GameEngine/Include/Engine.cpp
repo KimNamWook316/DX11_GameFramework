@@ -24,7 +24,8 @@ CEngine::CEngine()
 	, meMouseState(eMouseState::Normal)
 	, mShowCursorCount(0)
 	, mGlobalCBuffer(nullptr)
-	, mGlobalAccTime(0.f)
+	, mGlobalAccTime(0.f),
+	mbDebugMode(false)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(271567);
