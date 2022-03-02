@@ -206,7 +206,7 @@ void CEditorMenuWindow::OnClickCreateComponent()
     }
     case eSceneComponentType::ProcedualMapGenerator:
     {
-        sceneComp = obj->CreateComponent<CProcedualMapGenerator>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CProcedualMapGenerator>(mComponentNameInput->GetTextMultiByte());
         break;
     }
     }

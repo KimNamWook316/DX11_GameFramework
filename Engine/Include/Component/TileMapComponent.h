@@ -57,6 +57,7 @@ public:
 public:
 	bool CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size);
 	bool CreateTile(const int countX, const int countY, const Vector2& size);
+	bool CreateTileProcedual(const ProcedualMapData& mapData);
 	void ClearTile();
 	bool CreateWallComponent();
 
@@ -164,6 +165,7 @@ private:
 	int getTileRenderIndexX(const Vector3& pos);
 	int getTileRenderIndexY(const Vector3& pos);
 	void setPathFindTileType(const int renderTileIdx);
+	bool createPathFindTileInfo();
 
 protected:
     CSharedPtr<CSpriteMesh> mBackMesh;
@@ -191,6 +193,9 @@ protected:
 	Matrix mMatWorldToIso;
 	Matrix mMatIsoToWorld;
 	float mDetlaTime;
+
+	// For Random Map
+	TileSetInfo* mArrTileSetInfo[(int)eTileType::Max];
 	
 	CSharedPtr<CWallComponent> mWallComponent;
 };

@@ -21,6 +21,7 @@ public:
 
 public:
     TileSetInfo* FindInfo(const std::string& name);
+    TileSetInfo* FindInfoByType(const eTileType& type);
     bool DeleteInfo(const std::string& name);
     void ClearTileInfo();
     void ClearTexture();

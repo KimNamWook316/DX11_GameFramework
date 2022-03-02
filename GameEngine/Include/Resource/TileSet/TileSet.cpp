@@ -70,6 +70,22 @@ TileSetInfo* CTileSet::FindInfo(const std::string& name)
 	return iter->second;
 }
 
+TileSetInfo* CTileSet::FindInfoByType(const eTileType& type)
+{
+	auto iter = mMapTileInfo.begin();
+	auto iterEnd = mMapTileInfo.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (iter->second->Type == type)
+		{
+			return iter->second;
+		}
+	}
+
+	return nullptr;
+}
+
 bool CTileSet::DeleteInfo(const std::string& name)
 {
 	auto iter = mMapTileInfo.begin();

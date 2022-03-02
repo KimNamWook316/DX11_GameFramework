@@ -452,3 +452,16 @@ struct SpaceCBuffer
 	Matrix MatVP;
 	Matrix MatWVP;
 };
+
+struct ProcedualMapData
+{
+	// Tile
+	std::vector<eTileType> TileInfo;
+	eTileShape TileShape;
+	int TileCountX;
+	int TileCountY;
+	Vector3 TileSize;
+
+	// Object
+	std::vector<eProcedualObjectType> ObjectInfo;
+};

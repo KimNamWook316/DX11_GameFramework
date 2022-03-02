@@ -27,7 +27,7 @@ CTileSetEditWindow::CTileSetEditWindow()	:
 	mSplitSizeInput(nullptr),
 	mSplitButton(nullptr),
 	mTileNameList(nullptr),
-	mOpenCreateTileButton(nullptr),
+	mCreateTileButton(nullptr),
 	mDeleteTileButton(nullptr),
 	mTileImage(nullptr),
 	mTileNameInput(nullptr),
@@ -86,7 +86,7 @@ bool CTileSetEditWindow::Init()
 	text->SetText("Tile Info");
 	mTileNameList = AddWidget<CIMGUIComboBox>("Tiles");
 	line = AddWidget<CIMGUISameLine>("line");
-	mOpenCreateTileButton = AddWidget<CIMGUIButton>("Create Tile", 0.f, 0.f);
+	mCreateTileButton = AddWidget<CIMGUIButton>("Create Tile", 0.f, 0.f);
 	line = AddWidget<CIMGUISameLine>("line");
 	mDeleteTileButton = AddWidget<CIMGUIButton>("Delete", 0.f, 0.f);
 
@@ -120,7 +120,7 @@ bool CTileSetEditWindow::Init()
 	mSplitSizeInput->SetCallBack(this, &CTileSetEditWindow::OnChangeSplitSize);
 	mSplitButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickSplit);
 	mTileNameList->SetSelectCallBack(this, &CTileSetEditWindow::OnSelectTileName);
-	mOpenCreateTileButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickOpenCreateTile);
+	mCreateTileButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickOpenCreateTile);
 	mDeleteTileButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickDeleteTile);
 	mRenameButton->SetClickCallBack(this, &CTileSetEditWindow::OnClickRename);
 	mTileTypeList->SetSelectCallBack(this, &CTileSetEditWindow::OnSelectTileType);
@@ -278,6 +278,25 @@ void CTileSetEditWindow::OnSelectTileName(int idx, const char* label)
 
 void CTileSetEditWindow::OnClickOpenCreateTile()
 {
+	if (mTileNameInput->IsEmpty())
+	{
+		return;
+	}
+
+	if (mTileNameList->GetSelectIndex() != -1)
+	{
+		TileSetInfo* info = mTileSet->FindInfo(mTileNameInput->GetTextMultiByte());
+		
+		if (info)
+		{
+			return;
+		}
+	}
+
+	mTileSet->AddTileSetInfo(mTileNameInput->GetTextMultiByte(), CUtil::StringToTileType(mTileTypeList->GetSelectItem()),
+		mTileImageStartInput->GetValue(), mTileImageEndInput->GetValue());
+
+	mTileNameList->AddItem(mTileNameInput->GetTextMultiByte());
 }
 
 void CTileSetEditWindow::OnClickDeleteTile()

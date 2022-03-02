@@ -41,7 +41,7 @@ private:
 
     // Tile Info Widget
     class CIMGUIComboBox* mTileNameList;
-    class CIMGUIButton* mOpenCreateTileButton;
+    class CIMGUIButton* mCreateTileButton;
     class CIMGUIButton* mDeleteTileButton;
     class CIMGUIImage* mTileImage;
     class CIMGUITextInput* mTileNameInput;

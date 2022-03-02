@@ -254,7 +254,14 @@ bool CProcedualMapGenerator::MakeRoom()
 		}
 	}
 
+	// 실제 타일맵 생성
+	if (!GenerateTile())
+	{
+		return false;
+	}
+
 	mGenerationStep[(int)eGenerationStep::MakeRoom] = true;
+	return true;
 }
 
 bool CProcedualMapGenerator::ConnectRoom()
@@ -286,8 +293,37 @@ bool CProcedualMapGenerator::ConnectRoom()
 	return true;
 }
 
-bool CProcedualMapGenerator::PassToTileMap()
+bool CProcedualMapGenerator::GenerateTile()
 {
+	if (!mTileMap)
+	{
+		FindTileComponent();
+	}
+
+	// 현재 오브젝트에 타일맵 컴포넌트가 없다면, 만들어준다.
+	if (!mTileMap)
+	{
+		mTileMap = mObject->CreateComponent<CTileMapComponent>("TileMap");
+		AddChild(mTileMap);
+	}
+
+	if (!mTileMap)
+	{
+		return false;
+	}
+
+	ProcedualMapData data;
+	data.TileCountX = mMapCountX;
+	data.TileCountY = mMapCountY;
+	data.TileInfo = mVecMapInfo;
+	data.TileShape = meTileShape;
+	data.TileSize = mTileSize;
+
+	if (!mTileMap->CreateTileProcedual(data))
+	{
+		return false;
+	}
+
 	return true;
 }
 

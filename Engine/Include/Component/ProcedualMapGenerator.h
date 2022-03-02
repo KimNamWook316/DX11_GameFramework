@@ -45,7 +45,7 @@ public:
 	bool PartitionSpace();
 	bool MakeRoom();
 	bool ConnectRoom();
-	bool PassToTileMap();
+	bool GenerateTile();
 
 public:
 	bool SetMapCount(const int x, const int y)

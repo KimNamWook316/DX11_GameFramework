@@ -27,6 +27,11 @@ CTileMapComponent::CTileMapComponent()
 		mTileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
 	}
 
+	for (int i = 0; i < (int)eTileType::Max; ++i)
+	{
+		mArrTileSetInfo[i] = nullptr;
+	}
+
 	mTileColor[(int)eTileType::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
 	mbEditMode = false;
 }
@@ -541,177 +546,10 @@ bool CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const in
 		mVecTile[i]->SetTileType(eTileType::Normal);
 	}
 
-	// Navigation용 분할 타일 정보 생성
-	mPathFindTileCountX = mCountX * 2;
-	mPathFindTileCountY = mCountY * 2;
-	mPathFindTileCount = mPathFindTileCountX * mPathFindTileCountY;
-
-	mPathFindTileSize = size / 2.f;
-	mPathFindTileDiagonal = mTileDiagonal / 2.f;
-	
-	mVecPathFindTile.resize(mPathFindTileCount);
-
-	for (size_t i = 0; i < mCountY; ++i)
+	// 길찾기를 위해 4등분한 타일 정보 생성
+	if (!createPathFindTileInfo())
 	{
-		for (size_t j = 0; j < mCountX; ++j)
-		{
-			int originIdx = mCountX * i + j;
-
-			int idx1 = i * (mPathFindTileCountX * 2) + (j * 2);
-			int idx2 = i * (mPathFindTileCountX * 2) + (j * 2) + 1;
-			int idx3 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2);
-			int idx4 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2) + 1;
-
-			/*
-				분할 타일 배치
-				3 4
-				1 2
-			*/
-
-			PathFindTileInfo* info1 = new PathFindTileInfo;
-			PathFindTileInfo* info2 = new PathFindTileInfo;
-			PathFindTileInfo* info3 = new PathFindTileInfo;
-			PathFindTileInfo* info4 = new PathFindTileInfo;
-
-			mVecPathFindTile[idx1] = info1;
-			mVecPathFindTile[idx2] = info2;
-			mVecPathFindTile[idx3] = info3;
-			mVecPathFindTile[idx4] = info4;
-
-			info1->Index = i * 2;
-			info2->Index = (i * 2) + 1;
-			info3->Index = (i * 2) + (mCountX * 2);
-			info4->Index = (i * 2) + (mCountX * 2) + 1;
-
-			info1->IndexX = (i * 2) % mCountX;
-			info2->IndexX = info1->IndexX + 1;
-			info3->IndexX = info1->IndexX;
-			info4->IndexX = info1->IndexX + 1;
-
-			info1->IndexY = (i * 2) / mCountX;
-			info2->IndexY = (i * 2) / mCountX;
-			info3->IndexY = (i * 2) / mCountX + 1;
-			info4->IndexY = (i * 2) / mCountX + 1;
-
-			info1->Size = mVecTile[i]->mSize / 2.f;
-			info2->Size = mVecTile[i]->mSize / 2.f;
-			info3->Size = mVecTile[i]->mSize / 2.f;
-			info4->Size = mVecTile[i]->mSize / 2.f;
-
-			switch (meTileShape)
-			{
-			case eTileShape::Rect:
-				info1->Pos = mVecTile[i]->mPos;
-				info2->Pos = mVecTile[i]->mPos + Vector3(mPathFindTileSize.x, 0.f, 0.f);
-				info3->Pos = mVecTile[i]->mPos + Vector3(0.f, mPathFindTileSize.y, 0.f);
-				info4->Pos = mVecTile[i]->mPos + Vector3(mPathFindTileSize.x / 2.f, mPathFindTileSize.y / 2.f, 0.f);
-
-				break;
-			case eTileShape::Rhombus:
-				info1->Pos = mVecTile[i]->mPos;
-				info2->Pos = mVecTile[i]->mPos + (Vector3(mPathFindTileDiagonal, 0.f, 0.f).TransformCoord(mMatIsoToWorld));
-				info3->Pos = mVecTile[i]->mPos + (Vector3(0.f, mPathFindTileDiagonal, 0.f).TransformCoord(mMatIsoToWorld));
-				info4->Pos = mVecTile[i]->mPos + (Vector3(mPathFindTileDiagonal, mPathFindTileDiagonal, 0.f).TransformCoord(mMatIsoToWorld));
-				break;
-			}
-
-			info1->Center = info1->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
-			info2->Center = info2->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
-			info3->Center = info3->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
-			info4->Center = info4->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
-
-			eTileType tileType = mVecTile[i]->GetTileType();
-			switch (tileType)
-			{
-			case eTileType::Normal:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Normal;
-				info3->Type = eTileType::Normal;
-				info4->Type = eTileType::Normal;
-				break;
-			case eTileType::Wall:
-				info1->Type = eTileType::Wall;
-				info2->Type = eTileType::Wall;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::CornerN:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Wall;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::CornerE:
-				info1->Type = eTileType::Wall;
-				info2->Type = eTileType::Wall;
-				info3->Type = eTileType::Normal;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::CornerS:
-				info1->Type = eTileType::Wall;
-				info2->Type = eTileType::Wall;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Normal;
-				break;
-			case eTileType::CornerW:
-				info1->Type = eTileType::Wall;
-				info2->Type = eTileType::Normal;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::WallNE:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Wall;
-				info3->Type = eTileType::Normal;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::WallSE:
-				info1->Type = eTileType::Wall;
-				info2->Type = eTileType::Wall;
-				info3->Type = eTileType::Normal;
-				info4->Type = eTileType::Normal;
-				break;
-			case eTileType::WallSW:
-				info1->Type = eTileType::Wall;
-				info2->Type = eTileType::Normal;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Normal;
-				break;
-			case eTileType::WallNW:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Normal;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::EntryNELeft:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Normal;
-				info3->Type = eTileType::Normal;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::EntryNERight:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Wall;
-				info3->Type = eTileType::Normal;
-				info4->Type = eTileType::Wall;
-				break;
-			case eTileType::EntryNWLeft:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Normal;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Normal;
-				break;
-			case eTileType::EntryNWRight:
-				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Normal;
-				info3->Type = eTileType::Wall;
-				info4->Type = eTileType::Wall;
-				break;
-			default:
-				assert(false);
-				return false;
-			}
-		}
+		return false;
 	}
 
 	mScene->GetNavigationManager()->SetNavData(this);
@@ -725,6 +563,132 @@ bool CTileMapComponent::CreateTile(const int countX, const int countY, const Vec
 		return false;
 	}
 	return CreateTile(mTileSet, countX, countY, size);
+}
+
+bool CTileMapComponent::CreateTileProcedual(const ProcedualMapData& mapData)
+{
+	if (!mTileSet)
+	{
+		return false;
+	}
+
+	// 모든 타일 타입을 가진 타일이어야 생성할 수 있다.
+	// 타입에 맞는 타일셋 정보 가지고 있게
+	for (int i = 0; i < (int)eTileType::Max; ++i)
+	{
+		mArrTileSetInfo[i] = mTileSet->FindInfoByType((eTileType)i);
+		if (!mArrTileSetInfo[i])
+		{
+			return false;
+		}
+	}
+
+	mCountX = mapData.TileCountX;
+	mCountY = mapData.TileCountY;
+	mCount = mCountX * mCountY;
+	mTileSize = Vector2(mapData.TileSize.x, mapData.TileSize.y);
+	meTileShape = mapData.TileShape;
+
+	mVecTile.resize((size_t)mCountX * (size_t)mCountY);
+
+	for (int i = 0; i < mCountY; ++i)
+	{
+		for (int j = 0; j < mCountX; ++j)
+		{
+			CTile* tile = new CTile;
+
+			tile->mOwner = this;
+			
+			int idx = i * mCountX + j;
+
+			tile->SetIndex(j, i, idx);
+			tile->SetSize(mTileSize);
+			tile->SetShape(meTileShape);
+
+			mVecTile[idx] = tile;
+		}
+	}
+
+	switch (meTileShape)
+	{
+	case eTileShape::Rect:
+	{
+		Vector3 pos;
+
+		for (int i = 0; i < mCountY; ++i)
+		{
+			pos.x = 0.f;
+			pos.y = i * mTileSize.y;
+
+			for (int j = 0; j < mCountX; ++j)
+			{
+				pos.x = j * mTileSize.x;
+				int idx = i * mCountX + j;
+				mVecTile[idx]->SetPos(pos);
+			}
+		}
+	}
+		break;
+	case eTileShape::Rhombus:
+	{
+		mTileDiagonal = sqrt((mTileSize.x / 2.f) * (mTileSize.x / 2.f) +
+			(mTileSize.y / 2.f) * (mTileSize.y / 2.f));
+
+		mMatIsoToWorld.v[0] = Vector4((2.f * sqrt(5.f)/ 5.f) - 0.01f , (sqrt(5.f) / 5.f) - 0.01f, 0.f, 0.f);
+		mMatIsoToWorld.v[1] = Vector4((-2.f * sqrt(5.f) / 5.f) + 0.01f, (sqrt(5.f) / 5.f) - 0.01f, 0.f, 0.f);
+		mMatIsoToWorld.v[2] = Vector4(0.f, 0.f, 1.f, 0.f);
+		mMatIsoToWorld.v[3] = Vector4(0.f, 0.f, 0.f, 1.f);
+
+		mMatWorldToIso = mMatIsoToWorld;
+		mMatWorldToIso.Inverse();
+
+		Vector3 pos;
+
+		for (int i = 0; i < mCountY; ++i)
+		{
+			for (int j = 0; j < mCountX; ++j)
+			{
+				pos = Vector3((float)j * mTileDiagonal, (float)i * mTileDiagonal, 0).TransformCoord(mMatIsoToWorld);
+				int idx = i * mCountX + j;
+				mVecTile[idx]->SetPos(pos);
+			}
+		}
+	}
+		break;
+	default:
+		assert(false);
+		return false;
+	}
+
+	mCBuffer->SetTileSize(Vector2(mTileSize.x, mTileSize.y));
+	mCount = mCountX * mCountY;
+	SetWorldInfo();
+
+	Vector2 imageSize((float)mTileSet->GetTexture()->GetWidth(), (float)mTileSet->GetTexture()->GetHeight());
+	Vector2 imageStart(0.f, 0.f);
+	mCBuffer->SetImageSize(imageSize);
+	mCBuffer->SetImageStart(Vector2(0.f, 0.f));
+	mCBuffer->SetImageEnd(imageSize);
+
+	for (int i = 0; i < mCount; ++i)
+	{
+		// 절차적 생성 맵 정보에서, 현재 인덱스의 타일 타입에 맞는 타일셋 정보를 가져온다.
+		TileSetInfo* info = mArrTileSetInfo[(int)mapData.TileInfo[i]];
+		mVecTile[i]->Start();
+		mVecTile[i]->SetFrameStart(info->ImageStart);
+		mVecTile[i]->SetFrameEnd(info->ImageEnd);
+		mVecTile[i]->SetTileType(info->Type);
+	}
+
+	// 길찾기를 위해 4등분한 타일 정보 생성
+	if (!createPathFindTileInfo())
+	{
+		return false;
+	}
+
+	// TODO : NavData
+	//mScene->GetNavigationManager()->SetNavData(this);
+	return true;
 }
 
 void CTileMapComponent::ClearTile()
@@ -1180,4 +1144,181 @@ void CTileMapComponent::setPathFindTileType(const int renderTileIdx)
 	case eTileType::EntryNWRight:
 		break;	
 	}
+}
+
+bool CTileMapComponent::createPathFindTileInfo()
+{
+	// Navigation용 분할 타일 정보 생성
+	mPathFindTileCountX = mCountX * 2;
+	mPathFindTileCountY = mCountY * 2;
+	mPathFindTileCount = mPathFindTileCountX * mPathFindTileCountY;
+
+	mPathFindTileSize = mTileSize / 2.f;
+	mPathFindTileDiagonal = mTileDiagonal / 2.f;
+	
+	mVecPathFindTile.resize(mPathFindTileCount);
+
+	for (size_t i = 0; i < mCountY; ++i)
+	{
+		for (size_t j = 0; j < mCountX; ++j)
+		{
+			int originIdx = mCountX * i + j;
+
+			int idx1 = i * (mPathFindTileCountX * 2) + (j * 2);
+			int idx2 = i * (mPathFindTileCountX * 2) + (j * 2) + 1;
+			int idx3 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2);
+			int idx4 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2) + 1;
+
+			/*
+				분할 타일 배치
+				3 4
+				1 2
+			*/
+
+			PathFindTileInfo* info1 = new PathFindTileInfo;
+			PathFindTileInfo* info2 = new PathFindTileInfo;
+			PathFindTileInfo* info3 = new PathFindTileInfo;
+			PathFindTileInfo* info4 = new PathFindTileInfo;
+
+			mVecPathFindTile[idx1] = info1;
+			mVecPathFindTile[idx2] = info2;
+			mVecPathFindTile[idx3] = info3;
+			mVecPathFindTile[idx4] = info4;
+
+			info1->Index = i * 2;
+			info2->Index = (i * 2) + 1;
+			info3->Index = (i * 2) + (mCountX * 2);
+			info4->Index = (i * 2) + (mCountX * 2) + 1;
+
+			info1->IndexX = (i * 2) % mCountX;
+			info2->IndexX = info1->IndexX + 1;
+			info3->IndexX = info1->IndexX;
+			info4->IndexX = info1->IndexX + 1;
+
+			info1->IndexY = (i * 2) / mCountX;
+			info2->IndexY = (i * 2) / mCountX;
+			info3->IndexY = (i * 2) / mCountX + 1;
+			info4->IndexY = (i * 2) / mCountX + 1;
+
+			info1->Size = mVecTile[i]->mSize / 2.f;
+			info2->Size = mVecTile[i]->mSize / 2.f;
+			info3->Size = mVecTile[i]->mSize / 2.f;
+			info4->Size = mVecTile[i]->mSize / 2.f;
+
+			switch (meTileShape)
+			{
+			case eTileShape::Rect:
+				info1->Pos = mVecTile[i]->mPos;
+				info2->Pos = mVecTile[i]->mPos + Vector3(mPathFindTileSize.x, 0.f, 0.f);
+				info3->Pos = mVecTile[i]->mPos + Vector3(0.f, mPathFindTileSize.y, 0.f);
+				info4->Pos = mVecTile[i]->mPos + Vector3(mPathFindTileSize.x / 2.f, mPathFindTileSize.y / 2.f, 0.f);
+
+				break;
+			case eTileShape::Rhombus:
+				info1->Pos = mVecTile[i]->mPos;
+				info2->Pos = mVecTile[i]->mPos + (Vector3(mPathFindTileDiagonal, 0.f, 0.f).TransformCoord(mMatIsoToWorld));
+				info3->Pos = mVecTile[i]->mPos + (Vector3(0.f, mPathFindTileDiagonal, 0.f).TransformCoord(mMatIsoToWorld));
+				info4->Pos = mVecTile[i]->mPos + (Vector3(mPathFindTileDiagonal, mPathFindTileDiagonal, 0.f).TransformCoord(mMatIsoToWorld));
+				break;
+			}
+
+			info1->Center = info1->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+			info2->Center = info2->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+			info3->Center = info3->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+			info4->Center = info4->Pos + Vector3(mPathFindTileSize.x, mPathFindTileSize.y, 0.f);
+
+			eTileType tileType = mVecTile[i]->GetTileType();
+			switch (tileType)
+			{
+			case eTileType::Normal:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::Wall:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::CornerN:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::CornerE:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::CornerS:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::CornerW:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallNE:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallSE:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::WallSW:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::WallNW:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::EntryNELeft:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::EntryNERight:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::EntryNWLeft:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::EntryNWRight:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			default:
+				assert(false);
+				return false;
+			}
+		}
+	}
+	return true;
 }

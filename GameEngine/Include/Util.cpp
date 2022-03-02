@@ -130,7 +130,7 @@ std::string CUtil::TileTypeToString(eTileType eTileType)
 		out = "InnerConnerS";
 		break;
 	case eTileType::InnerCornerW:
-		out = "InnerConnerS";
+		out = "InnerConnerW";
 		break;
 	case eTileType::WallNE:
 		out = "WallNE";
@@ -285,9 +285,9 @@ eTileType CUtil::StringToTileType(const std::string& str)
 	{
 		return eTileType::WallEndNWTop;
 	}
-	else if (str == "WallEndNWTop")
+	else if (str == "WallEndNWBottom")
 	{
-		return eTileType::WallEndNWTop;
+		return eTileType::WallEndNWBottom;
 	}
 	else if (str == "EntryNELeft")
 	{

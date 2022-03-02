@@ -259,3 +259,11 @@ enum class eNavNodeType
 	Open,
 	Closed,
 };
+
+enum class eProcedualObjectType
+{
+	Player,
+	Enemy,
+	Max
+};
+

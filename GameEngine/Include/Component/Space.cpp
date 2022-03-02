@@ -93,36 +93,19 @@ void CSpace::Render()
 		int lbY = mLBIdxY;
 		int rtX = mRTIdxX;
 		int rtY = mRTIdxY;
+		int offset = tileDiagonal * 0.5f;
 		
-		if (neighbor)
-		{
-			if (meSplitDir == eSplitDir::Horizontal)
-			{
-				if (neighbor->mCenterIdxY < mCenterIdxY)
-				{
-					--lbY;
-				}
-			}
-			else
-			{
-				if (neighbor->mCenterIdxX < mCenterIdxX)
-				{
-					--lbX;
-				}
-			}
-		}
-
 		// LB
-		Vector3 pos = Vector3(lbX * tileDiagonal, lbY * tileDiagonal, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
+		Vector3 pos = Vector3(lbX * tileDiagonal + offset, lbY * tileDiagonal+ offset, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
 		mCBuffer->SetRhombusLB(pos);
 		// LT
-		pos = Vector3(lbX * tileDiagonal, rtY * tileDiagonal, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
+		pos = Vector3(lbX * tileDiagonal+ offset, rtY * tileDiagonal+ offset, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
 		mCBuffer->SetRhombusLT(pos);
 		// RT
-		pos = Vector3(rtX * tileDiagonal, rtY * tileDiagonal, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
+		pos = Vector3(rtX * tileDiagonal+ offset, rtY * tileDiagonal+ offset, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
 		mCBuffer->SetRhombusRT(pos);
 		// RB
-		pos = Vector3(rtX * tileDiagonal, lbY * tileDiagonal, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
+		pos = Vector3(rtX * tileDiagonal+ offset, lbY * tileDiagonal+ offset, 0.f).TransformCoord(mOwner->GetMatIsoToWorld());
 		mCBuffer->SetRhombusRB(pos);
 	}
 
@@ -186,39 +169,52 @@ bool CSpace::MakeRoom()
 		int maxIdxX = mRTIdxX - 2;
 		int maxIdxY = mRTIdxY - 2;
 
-		int minSizeX = mOwner->GetRoomSizeMin();
-		int maxSizeX = maxIdxX - minIdxX + 1;
-		int minSizeY = mOwner->GetRoomSizeMin();
-		int maxSizeY = maxIdxY - minIdxY + 1;
-
-		// 최대 크기에서 75~100% 크기까지 랜덤 사이즈로 사이즈 설정
-		mRoomInfo->SizeX = ((75 + (rand() % 26)) / 100.f) * maxSizeX;
-		mRoomInfo->SizeY = ((75 + (rand() % 26)) / 100.f) * maxSizeY;
-
-		// 최소 크기보다 작게 나온다면, 최소 크기로 설정
-		if (mRoomInfo->SizeX < minSizeX)
+		if (maxIdxX - minIdxX + 1 <= mOwner->GetRoomSizeMin())
 		{
-			mRoomInfo->SizeX = minSizeX;
+			mRoomInfo->LBIdxX = minIdxX;
+			mRoomInfo->SizeX = mOwner->GetRoomSizeMin();
+			mRoomInfo->RTIdxX = minIdxX + mOwner->GetRoomSizeMin() - 1;
 		}
-		if (mRoomInfo->SizeY < minSizeY)
+		else
 		{
-			mRoomInfo->SizeY = minSizeY;
+			int maxLBX = maxIdxX - mOwner->GetRoomSizeMin();
+			int range = (maxLBX - minIdxX + 1) % 5 + 1;
+			mRoomInfo->LBIdxX = minIdxX + floor(rand() % range);
+
+			int minRTX = mRoomInfo->LBIdxX + mOwner->GetRoomSizeMin() - 1;
+			range = (maxIdxX - minRTX) % 5 + 1;
+			mRoomInfo->RTIdxX = maxIdxX - floor(rand() % range);
+
+			mRoomInfo->SizeX = mRoomInfo->RTIdxX - mRoomInfo->LBIdxX + 1;
 		}
 
-		// 왼쪽 아래 인덱스 설정
-		int range = maxIdxX - minIdxX + 1 - mRoomInfo->SizeX;
-		if (range == 0)
-			++range;
-		int random = rand() % range;
+		if (maxIdxY - minIdxY + 1 <= mOwner->GetRoomSizeMin())
+		{
+			mRoomInfo->LBIdxY = minIdxY;
+			mRoomInfo->SizeY = mOwner->GetRoomSizeMin();
+			mRoomInfo->RTIdxY = minIdxY + mOwner->GetRoomSizeMin() - 1;
+		}
+		else
+		{
+			int maxLBY = maxIdxY - mOwner->GetRoomSizeMin();
+			int range = (maxLBY - minIdxY + 1) % 5 + 1;
+			mRoomInfo->LBIdxY = minIdxY + floor(rand() % range);
 
-		mRoomInfo->LBIdxX = minIdxX + random;
-		mRoomInfo->LBIdxY = minIdxY + random;
-		mRoomInfo->LBIdx = mRoomInfo->LBIdxY * mOwner->GetMapCountX() + mRoomInfo->LBIdxX;
-		
-		// 오른쪽 인덱스
-		mRoomInfo->RTIdxX = mRoomInfo->LBIdxX + (mRoomInfo->SizeX - 1);
-		mRoomInfo->RTIdxY = mRoomInfo->LBIdxY + (mRoomInfo->SizeY - 1);
+			int minRTY = mRoomInfo->LBIdxY + mOwner->GetRoomSizeMin() - 1;
+			range = (maxIdxY - minRTY) % 5 + 1;
+			mRoomInfo->RTIdxY = maxIdxY - floor(rand() % range);
+
+			mRoomInfo->SizeY = mRoomInfo->RTIdxY - mRoomInfo->LBIdxY + 1;
+		}
+
 		mRoomInfo->RTIdx = mRoomInfo->RTIdxY * mOwner->GetMapCountX() + mRoomInfo->RTIdxX;
+		mRoomInfo->LBIdx = mRoomInfo->LBIdxY * mOwner->GetMapCountX() + mRoomInfo->LBIdxX;
+
+		if (mRoomInfo->RTIdxX >= mOwner->GetMapCountX() || mRoomInfo->RTIdxY >= mOwner->GetMapCountY() ||
+			mRoomInfo->LBIdxX >= mOwner->GetMapCountX() || mRoomInfo->LBIdxY >= mOwner->GetMapCountY())
+		{
+			assert(false);
+		}
 
 		// 중앙 인덱스
 		mRoomInfo->CenterIdxX = mRoomInfo->LBIdxX + (mRoomInfo->SizeX / 2);
@@ -570,7 +566,6 @@ void CSpace::ConnectSpace()
 		}
 	}
 	// 두 공간이 세로로 나뉘어진 공간에 속할 경우
-	// TODO : 여기서부터 2번 체크 안 함
 	else
 	{
 		// 이 공간이 아래쪽 공간인 경우
@@ -1017,8 +1012,11 @@ void CSpace::doPartitioning(const int maxLevel)
 		return;
 	}
 
-	// 생성 가능한 최소 공간 사이즈 ( 방 사이즈 + 2) 보다 작은 경우 분할 중단
-	if (mSizeX < mOwner->GetRoomSizeMin() + 2 || mSizeY < mOwner->GetRoomSizeMin() + 2)
+	// 최소한의 공간 사이즈 ( 최소 방 사이즈 + 2 )
+	int minSpaceSize = mOwner->GetRoomSizeMin() + 2;
+
+	// 이 공간에 최소 사이즈 공간 두개가 들어갈 수 없다면, 분할을 중단.
+	if (mSizeX < (( mOwner->GetRoomSizeMin() + 2) * 2) || mSizeY < ((mOwner->GetRoomSizeMin() + 2) * 2))
 	{
 		return;
 	}
@@ -1051,6 +1049,12 @@ void CSpace::doPartitioning(const int maxLevel)
 
 	// 4 : 6 ~ 6 : 4의 비율로 크기 분배
 	float ratio = (4.f + (float)(rand() % 3)) / 10.f;
+
+	// 4 : 6 으로 분할했을 때, 작은 사이즈 공간이 최소 공간 사이즈보다 작을 경우, 5 : 5로만 분할한다.
+	if (((mSizeX / 2) * 0.4f <= minSpaceSize) || ((mSizeY / 2 * 0.4f) <= minSpaceSize))
+	{
+		ratio = 0.5f;
+	}
 	
 	// 분할
 	if (eSplitDir::Horizontal == dir)
@@ -1060,10 +1064,10 @@ void CSpace::doPartitioning(const int maxLevel)
 		mChild1->mLBIdxY = mLBIdxY;
 
 		mChild1->mRTIdxX = mRTIdxX;
-		mChild1->mRTIdxY = mLBIdxY + (mSizeY * ratio);
+		mChild1->mRTIdxY = mLBIdxY + (mSizeY * ratio) - 1;
 
 		mChild2->mLBIdxX = mLBIdxX;
-		mChild2->mLBIdxY = mLBIdxY + (mSizeY * ratio) + 1;
+		mChild2->mLBIdxY = mLBIdxY + (mSizeY * ratio);
 
 		mChild2->mRTIdxX = mRTIdxX;
 		mChild2->mRTIdxY = mRTIdxY;
@@ -1074,10 +1078,10 @@ void CSpace::doPartitioning(const int maxLevel)
 		mChild1->mLBIdxX = mLBIdxX;
 		mChild1->mLBIdxY = mLBIdxY;
 
-		mChild1->mRTIdxX = mLBIdxX + (mSizeX * ratio);
+		mChild1->mRTIdxX = mLBIdxX + (mSizeX * ratio) - 1;
 		mChild1->mRTIdxY = mRTIdxY;
 
-		mChild2->mLBIdxX = mLBIdxX + (mSizeX * ratio) + 1;
+		mChild2->mLBIdxX = mLBIdxX + (mSizeX * ratio);
 		mChild2->mLBIdxY = mLBIdxY;
 
 		mChild2->mRTIdxX = mRTIdxX;
