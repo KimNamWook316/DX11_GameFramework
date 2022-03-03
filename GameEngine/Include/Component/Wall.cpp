@@ -1,9 +1,13 @@
 #include "Wall.h"
+#include "Tile.h"
 #include "WallComponent.h"
 
 CWall::CWall()	:
 	meTileShape(eTileShape::Rect),
-	mOpacity(1.f)
+	mOpacity(1.f),
+	mOwner(nullptr),
+	mParentTile(nullptr),
+	mbRender(false)
 {
 }
 
@@ -28,6 +32,17 @@ void CWall::Save(FILE* fp)
 
 void CWall::Load(FILE* fp)
 {
+}
+
+void CWall::SetInfo(class CWallComponent* owner, CTile* parent, eTileShape shape, const Vector3& renderPos, const Vector2& size)
+{
+	mOwner = owner;
+	mParentTile = parent;
+	SetShape(shape);
+	SetRenderPos(renderPos);
+	SetSortY(renderPos.y);
+	SetSize(size);
+	parent->AddWall(this);
 }
 
 void CWall::SetRenderPos(const Vector3& pos)

@@ -59,7 +59,9 @@ public:
 	bool CreateTile(const int countX, const int countY, const Vector2& size);
 	bool CreateTileProcedual(const ProcedualMapData& mapData);
 	void ClearTile();
+	bool CreateWall();
 	bool CreateWallComponent();
+	void SetNavigationData();
 
 	void SetWorldInfo();
 	void SetTileDefaultInfo(const std::string& tileName);
@@ -122,6 +124,11 @@ public:
 		return mTileSet;
 	}
 
+	CWallComponent* GetWallComponent() const
+	{
+		return mWallComponent;
+	}
+
 	eTileShape GetTileShape() const
 	{
 		return meTileShape;
@@ -135,6 +142,11 @@ public:
 	int GetTileCountY() const
 	{
 		return mCountY;
+	}
+
+	float GetTileDiagonal() const
+	{
+		return mTileDiagonal;
 	}
 
 	int GetPathFindTileCountX() const
@@ -157,9 +169,20 @@ public:
 		return mPathFindTileSize;
 	}
 
+	const Matrix& GetMatIsoToWorld() const
+	{
+		return mMatIsoToWorld;
+	}
+
+	const Matrix& GetMatWorldToIso() const
+	{
+		return mMatWorldToIso;
+	}
+
 public:
     void SetBackMaterial(CMaterial* material);
 	void SetTileSet(CTileSet* tileSet);
+	void SetWallTileSet(CTileSet* tileSet);
 
 private:
 	int getTileRenderIndexX(const Vector3& pos);

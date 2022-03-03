@@ -145,6 +145,23 @@ void CTileMapComponent::PrevRender()
 			endY = getTileRenderIndexY(LT);
 		}
 
+		if (startX >= 1)
+		{
+			--startX;
+		}
+		if (endX < mCountX - 1)
+		{
+			++endX;
+		}
+		if (startY >= 1)
+		{
+			--startY;
+		}
+		if (endY < mCountX - 1)
+		{
+			++endY;
+		}
+
 		Matrix matView, matProj;
 		matView = camera->GetViewMatrix();
 		matProj = camera->GetProjMatrix();
@@ -175,7 +192,7 @@ void CTileMapComponent::PrevRender()
 					// 벽도 같이 렌더해야 하는 경우
 					if (mWallComponent)
 					{
-						mVecTile[i]->SetRenderWall(true);
+						mVecTile[index]->SetRenderWall(true);
 					}
 				}
 			}
@@ -686,8 +703,6 @@ bool CTileMapComponent::CreateTileProcedual(const ProcedualMapData& mapData)
 		return false;
 	}
 
-	// TODO : NavData
-	//mScene->GetNavigationManager()->SetNavData(this);
 	return true;
 }
 
@@ -700,25 +715,43 @@ void CTileMapComponent::ClearTile()
 		SAFE_DELETE(mVecTile[i]);
 	}
 	mVecTile.clear();
+
+	size = mVecPathFindTile.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecPathFindTile[i]);
+	}
+	mVecPathFindTile.clear();
+}
+
+bool CTileMapComponent::CreateWall()
+{
+	return mWallComponent->CreateWall(mVecTile);
 }
 
 bool CTileMapComponent::CreateWallComponent()
 {
 	if (mWallComponent)
 	{
-		return false;
+		return true;
 	}
 
-	CWallComponent* wall = mObject->CreateComponent<CWallComponent>("Wall");
+	mWallComponent = mObject->CreateComponent<CWallComponent>("Wall");
 
-	if (!wall)
+	if (!mWallComponent)
 	{
 		return false;
 	}
 
-	AddChild(wall);
+	AddChild(mWallComponent);
 
 	return true;
+}
+
+void CTileMapComponent::SetNavigationData()
+{
+	mScene->GetNavigationManager()->SetNavData(this);
 }
 
 void CTileMapComponent::SetWorldInfo()
@@ -1030,6 +1063,11 @@ void CTileMapComponent::SetTileSet(CTileSet* tileSet)
 	}
 }
 
+void CTileMapComponent::SetWallTileSet(CTileSet* tileSet)
+{
+	mWallComponent->SetTileSet(tileSet);
+}
+
 int CTileMapComponent::getTileRenderIndexX(const Vector3& pos)
 {
 	if (eTileShape::Rect == meTileShape)
@@ -1148,6 +1186,13 @@ void CTileMapComponent::setPathFindTileType(const int renderTileIdx)
 
 bool CTileMapComponent::createPathFindTileInfo()
 {
+	size_t size = mVecPathFindTile.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecPathFindTile[i]);
+	}
+	mVecPathFindTile.clear();
+
 	// Navigation용 분할 타일 정보 생성
 	mPathFindTileCountX = mCountX * 2;
 	mPathFindTileCountY = mCountY * 2;
@@ -1266,6 +1311,30 @@ bool CTileMapComponent::createPathFindTileInfo()
 				info3->Type = eTileType::Wall;
 				info4->Type = eTileType::Wall;
 				break;
+			case eTileType::InnerCornerN:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::InnerCornerE:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::InnerCornerS:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::InnerCornerW:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
 			case eTileType::WallNE:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Wall;
@@ -1292,15 +1361,87 @@ bool CTileMapComponent::createPathFindTileInfo()
 				break;
 			case eTileType::EntryNELeft:
 				info1->Type = eTileType::Normal;
-				info2->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Normal;
 				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallEndNETop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallEndNEBottom:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::WallEndSETop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallEndSEBottom:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::WallEndSWTop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallEndSWBottom:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::WallEndNWTop:
+				info1->Type = eTileType::Normal;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Wall;
+				break;
+			case eTileType::WallEndNWBottom:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
 				break;
 			case eTileType::EntryNERight:
 				info1->Type = eTileType::Normal;
 				info2->Type = eTileType::Wall;
 				info3->Type = eTileType::Normal;
-				info4->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::EntrySELeft:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::EntrySERight:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Wall;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::EntrySWLeft:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Wall;
+				info4->Type = eTileType::Normal;
+				break;
+			case eTileType::EntrySWRight:
+				info1->Type = eTileType::Wall;
+				info2->Type = eTileType::Normal;
+				info3->Type = eTileType::Normal;
+				info4->Type = eTileType::Normal;
 				break;
 			case eTileType::EntryNWLeft:
 				info1->Type = eTileType::Normal;

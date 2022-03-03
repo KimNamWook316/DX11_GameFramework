@@ -2,6 +2,15 @@
 
 #include "ComponentControlWidget.h"
 
+enum eGenerationStep
+{
+    SplitArea,
+    MakeRoom,
+    MakePath,
+    MakeWall,
+    Max
+};
+
 class CMapGeneratorWidget :
     public CComponentControlWidget
 {
@@ -18,13 +27,24 @@ public:
 public:
     void OnClickNextStep();
     void OnClickCreateMap();
-    void OnClickFindTileComponent();
+    void OnClickLoadTileSet();
+    void OnClickLoadWallTileSet();
 
 private:
+    class CIMGUITextInput* mTileSetName;
+    class CIMGUIButton* mLoadTileSetButton;
+    class CIMGUIImage* mTileSetImage;
+    class CIMGUITextInput* mWallTileSetName;
+    class CIMGUIButton* mLoadWallTileSetButton;
+    class CIMGUIImage* mWallTileSetImage;
     class CIMGUIInputInt2* mTileCountInput;
     class CIMGUIInputInt* mPartitionLevelInput;
-    class CIMGUIButton* mFindTileComponentButton;
     class CIMGUIButton* mNextStepButton;
     class CIMGUIButton* mCreateMapButton;
+
+    CSharedPtr<class CTileSet> mTileSet;
+    CSharedPtr<class CTileSet> mWallTileSet;
+
+    bool mbGenerationStep[(int)eGenerationStep::Max];
 };
 

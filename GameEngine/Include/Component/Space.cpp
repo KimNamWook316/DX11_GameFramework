@@ -238,8 +238,8 @@ void CSpace::ConnectSpace()
 	mbConnect = true;
 	neighbor->mbConnect = true;
 
-	// 두 공간이 가로로 나뉘어진 공간에 속할 경우
-	if (eSplitDir::Horizontal == meSplitDir)
+	// 두 공간이 세로로 나뉘어진 공간에 속할 경우
+	if (eSplitDir::Vertical == meSplitDir)
 	{
 		// 이 공간이 왼쪽 공간인 경우
 		if (mCenterIdxX < neighbor->mCenterIdxX)
@@ -248,118 +248,11 @@ void CSpace::ConnectSpace()
 			RoomInfo* mostRight = GetRightMostRoomInfo();
 			RoomInfo* closeRoom = neighbor->GetMostCloseRoomInfo(mostRight->CenterIdx);
 
-			// 통로를 꺾어서 이어야 하는 경우
-			// 1. 이 공간의 방이 이어야 할 방보다 낮게 있는 경우
-			if (mostRight->RTIdxY - closeRoom->LBIdxY < 3)
+			// 직선으로 이어도 되는 경우
+			if (mostRight->RTIdxY - 2 >= closeRoom->LBIdxY + 1 && mostRight->LBIdxY + 2 <= closeRoom->RTIdxY - 1)
 			{
-				// 통로 생성
-				for (int y = mostRight->RTIdxY - 1; y <= closeRoom->LBIdxY + 1; ++y)
-				{
-					mOwner->SetTileType(mRTIdxX, y, eTileType::WallSW);
-					mOwner->SetTileType(neighbor->mLBIdxX, y, eTileType::WallNE);
-				}
-
-				// 코너 배치
-				mOwner->SetTileType(mRTIdxX, closeRoom->LBIdxY - 2, eTileType::CornerW);
-				mOwner->SetTileType(neighbor->mLBIdxX, mostRight->RTIdxY - 2, eTileType::CornerE);
-
-				// 진입점 생성
-				mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 2, eTileType::EntryNERight);
-				mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 1, eTileType::EntryNELeft);
-				mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->LBIdxY + 2, eTileType::EntrySWLeft);
-				mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->LBIdxY + 1, eTileType::EntrySWRight);
-
-				// 방에서 바로 이어지는 통로
-				for (int x = mostRight->RTIdxX + 1; x <= mRTIdxX; ++x)
-				{
-					mOwner->SetTileType(x, mostRight->RTIdxY - 2, eTileType::WallSE);
-				}
-				for (int x = mostRight->RTIdxX + 1; x < mRTIdxX - 1; ++x)
-				{
-					mOwner->SetTileType(x, mostRight->RTIdxY - 1, eTileType::WallNW);
-				}
-				for (int x = closeRoom->LBIdxX - 1; x >= neighbor->mLBIdxX; --x)
-				{
-					mOwner->SetTileType(x, closeRoom->LBIdxY + 2, eTileType::WallNW);
-				}
-				for (int x = closeRoom->LBIdxX - 1; x > neighbor->mLBIdxX + 1; --x)
-				{
-					mOwner->SetTileType(x, closeRoom->LBIdxY + 1, eTileType::WallSE);
-				}
-
-				// 통로 교차점
-				mOwner->SetTileType(mRTIdxX - 1, mostRight->RTIdxY - 1, eTileType::WallEndNWTop);
-				mOwner->SetTileType(neighbor->mLBIdxX + 1, closeRoom->LBIdxY + 1, eTileType::WallEndSEBottom);
-
-				// 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 2, eTileType::WallEndSWTop);
-				mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 1, eTileType::WallEndSWBottom);
-				mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->LBIdxY + 2, eTileType::WallEndNETop);
-				mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->LBIdxY + 1, eTileType::WallEndNEBottom);
-
-				// 안쪽 코너
-				mOwner->SetTileType(mRTIdxX, mostRight->RTIdxX - 1, eTileType::InnerCornerW);
-				mOwner->SetTileType(neighbor->mLBIdxX, closeRoom->LBIdxY + 1, eTileType::InnerCornerE);
-			}
-			// 2. 이 공간의 방이 이어야 할 방보다 높게 있는 경우
-			else if (closeRoom->LBIdxY - mostRight->RTIdxY < 3)
-			{
-				// 1. 통로 생성
-				for (int y = mostRight->LBIdxY + 1; y >= closeRoom->RTIdxY - 1; --y)
-				{
-					mOwner->SetTileType(mRTIdxX, y, eTileType::WallSW);
-					mOwner->SetTileType(neighbor->mLBIdxX, y, eTileType::WallNE);
-				}
-
-				// 2 통로 코너 배치
-				mOwner->SetTileType(neighbor->mLBIdxX, mostRight->LBIdxY + 2, eTileType::CornerN);
-				mOwner->SetTileType(mRTIdxX, closeRoom->RTIdxY - 2, eTileType::CornerS);
-
-				// 3. 진입점 생성
-				mOwner->SetTileType(mostRight->RTIdxX, mostRight->LBIdxY - 2, eTileType::EntryNELeft);
-				mOwner->SetTileType(mostRight->RTIdxX, mostRight->LBIdxY - 1, eTileType::EntryNERight);
-				mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->RTIdxY - 2, eTileType::EntrySWRight);
-				mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->RTIdxY - 1, eTileType::EntrySWLeft);
-
-				// 4. 방에서 바로 이어지는 통로
-				for (int x = mostRight->RTIdxX + 1; x <= mRTIdxX; ++x)
-				{
-					mOwner->SetTileType(x, mostRight->LBIdxY - 2, eTileType::WallNW);
-				}
-				for (int x = mostRight->RTIdxX + 1; x < mRTIdxX - 1; ++x)
-				{
-					mOwner->SetTileType(x, mostRight->LBIdxY - 1, eTileType::WallSE);
-				}
-				for (int x = closeRoom->LBIdxX - 1; x >= neighbor->mLBIdxX; --x)
-				{
-					mOwner->SetTileType(x, closeRoom->RTIdxY - 2, eTileType::WallSE);
-				}
-				for (int x = closeRoom->LBIdxX - 1; x > neighbor->mLBIdxX; --x)
-				{
-					mOwner->SetTileType(x, closeRoom->RTIdxY - 1, eTileType::WallNW);
-				}
-				
-				// 5. 통로 교차점
-				mOwner->SetTileType(mRTIdxX - 1, mostRight->LBIdxY + 1, eTileType::WallEndNEBottom);
-				mOwner->SetTileType(neighbor->mLBIdxX - 1, closeRoom->RTIdxY - 1, eTileType::WallEndSWTop);
-
-				// 6. 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->LBIdxY + 2, eTileType::WallEndSWTop);
-				mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->LBIdxY + 1, eTileType::WallEndSWBottom);
-				mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->RTIdxY - 2, eTileType::WallEndNEBottom);
-				mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->RTIdxY - 1, eTileType::WallEndNETop);
-
-				// 7. 안쪽 코너
-				mOwner->SetTileType(mRTIdxX, mostRight->LBIdxY + 1, eTileType::InnerCornerS);
-				mOwner->SetTileType(neighbor->mLBIdxX, closeRoom->RTIdxY - 1, eTileType::InnerCornerN);
-			}
-			// 직선 통로로 이어도 되는 경우
-			else
-			{
-				bool bTopEntry = rand() > RAND_MAX / 2;
-
-				// 이 공간의 위쪽에서 통로를 생성한다.
-				if (bTopEntry)
+				// 이 방의 오른쪽 위에서 통로 생성
+				if (mostRight->RTIdxY - 2 <= closeRoom->RTIdxY - 2)
 				{
 					// 통로 생성
 					for (int x = mostRight->RTIdxX + 1; x <= closeRoom->LBIdxX - 1; ++x)
@@ -369,37 +262,146 @@ void CSpace::ConnectSpace()
 					}
 					
 					// 진입점 배치
-					mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 2, eTileType::EntryNELeft);
-					mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 1, eTileType::EntryNERight);
-					mOwner->SetTileType(closeRoom->LBIdxX, mostRight->RTIdxY - 2, eTileType::EntrySWLeft);
-					mOwner->SetTileType(closeRoom->LBIdxX, mostRight->RTIdxY - 1, eTileType::EntrySWRight);
+					mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 1, eTileType::EntryNELeft);
+					mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 2, eTileType::EntryNERight);
+					mOwner->SetTileType(closeRoom->LBIdxX, mostRight->RTIdxY - 1, eTileType::EntrySWLeft);
+					mOwner->SetTileType(closeRoom->LBIdxX, mostRight->RTIdxY - 2, eTileType::EntrySWRight);
 
 					// 통로가 진입점과 만나는 부분
-					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 2, eTileType::WallEndSWTop);
-					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 1, eTileType::WallEndSWBottom);
-					mOwner->SetTileType(closeRoom->LBIdxX - 1, mostRight->RTIdxY - 2, eTileType::WallEndNETop);
-					mOwner->SetTileType(closeRoom->LBIdxX - 1, mostRight->RTIdxY - 1, eTileType::WallEndNEBottom);
+					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 2, eTileType::WallEndSWBottom);
+					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 1, eTileType::WallEndSWTop);
+					mOwner->SetTileType(closeRoom->LBIdxX - 1, mostRight->RTIdxY - 2, eTileType::WallEndNEBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX - 1, mostRight->RTIdxY - 1, eTileType::WallEndNETop);
 				}
-				// 이 공간의 아래쪽에서 통로를 생성한다.
+				// 이 방의 오른쪽 아래에서 통로 생성
 				else
-				{
+				{	
+					// 통로 생성
 					for (int x = mostRight->RTIdxX + 1; x <= closeRoom->LBIdxX - 1; ++x)
 					{
-						mOwner->SetTileType(x, mostRight->LBIdxY + 1, eTileType::WallSE);
 						mOwner->SetTileType(x, mostRight->LBIdxY + 2, eTileType::WallNW);
+						mOwner->SetTileType(x, mostRight->LBIdxY + 1, eTileType::WallSE);
 					}
-
+					
 					// 진입점 배치
-					mOwner->SetTileType(mostRight->RTIdxX, mostRight->LBIdxY + 1, eTileType::EntryNERight);
 					mOwner->SetTileType(mostRight->RTIdxX, mostRight->LBIdxY + 2, eTileType::EntryNELeft);
-					mOwner->SetTileType(closeRoom->LBIdxX, mostRight->LBIdxY + 1, eTileType::EntrySWRight);
+					mOwner->SetTileType(mostRight->RTIdxX, mostRight->LBIdxY + 1, eTileType::EntryNERight);
 					mOwner->SetTileType(closeRoom->LBIdxX, mostRight->LBIdxY + 2, eTileType::EntrySWLeft);
+					mOwner->SetTileType(closeRoom->LBIdxX, mostRight->LBIdxY + 1, eTileType::EntrySWRight);
 
 					// 통로가 진입점과 만나는 부분
 					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->LBIdxY + 1, eTileType::WallEndSWBottom);
 					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->LBIdxY + 2, eTileType::WallEndSWTop);
 					mOwner->SetTileType(closeRoom->LBIdxX - 1, mostRight->LBIdxY + 1, eTileType::WallEndNEBottom);
 					mOwner->SetTileType(closeRoom->LBIdxX - 1, mostRight->LBIdxY + 2, eTileType::WallEndNETop);
+				}
+			}
+			// 통로를 꺾어서 이어야 하는 경우
+			else
+			{
+				// 1. 이 공간의 방이 이어야 할 방보다 낮게 있는 경우
+				if (mostRight->RTIdxY - closeRoom->LBIdxY < 3)
+				{
+					// 통로 생성
+					for (int y = mostRight->RTIdxY - 1; y <= closeRoom->LBIdxY + 1; ++y)
+					{
+						mOwner->SetTileType(mRTIdxX, y, eTileType::WallSW);
+						mOwner->SetTileType(neighbor->mLBIdxX, y, eTileType::WallNE);
+					}
+
+					// 코너 배치
+					mOwner->SetTileType(mRTIdxX, closeRoom->LBIdxY - 2, eTileType::CornerW);
+					mOwner->SetTileType(neighbor->mLBIdxX, mostRight->RTIdxY - 2, eTileType::CornerE);
+
+					// 진입점 생성
+					mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 2, eTileType::EntryNERight);
+					mOwner->SetTileType(mostRight->RTIdxX, mostRight->RTIdxY - 1, eTileType::EntryNELeft);
+					mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->LBIdxY + 2, eTileType::EntrySWLeft);
+					mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->LBIdxY + 1, eTileType::EntrySWRight);
+
+					// 방에서 바로 이어지는 통로
+					for (int x = mostRight->RTIdxX + 1; x <= mRTIdxX; ++x)
+					{
+						mOwner->SetTileType(x, mostRight->RTIdxY - 2, eTileType::WallSE);
+					}
+					for (int x = mostRight->RTIdxX + 1; x < mRTIdxX - 1; ++x)
+					{
+						mOwner->SetTileType(x, mostRight->RTIdxY - 1, eTileType::WallNW);
+					}
+					for (int x = closeRoom->LBIdxX - 1; x >= neighbor->mLBIdxX; --x)
+					{
+						mOwner->SetTileType(x, closeRoom->LBIdxY + 2, eTileType::WallNW);
+					}
+					for (int x = closeRoom->LBIdxX - 1; x > neighbor->mLBIdxX + 1; --x)
+					{
+						mOwner->SetTileType(x, closeRoom->LBIdxY + 1, eTileType::WallSE);
+					}
+
+					// 통로 교차점
+					mOwner->SetTileType(mRTIdxX - 1, mostRight->RTIdxY - 1, eTileType::WallEndNWTop);
+					mOwner->SetTileType(neighbor->mLBIdxX + 1, closeRoom->LBIdxY + 1, eTileType::WallEndSEBottom);
+
+					// 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 2, eTileType::WallEndSWTop);
+					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->RTIdxY - 1, eTileType::WallEndSWBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->LBIdxY + 2, eTileType::WallEndNETop);
+					mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->LBIdxY + 1, eTileType::WallEndNEBottom);
+
+					// 안쪽 코너
+					mOwner->SetTileType(mRTIdxX, mostRight->RTIdxX - 1, eTileType::InnerCornerW);
+					mOwner->SetTileType(neighbor->mLBIdxX, closeRoom->LBIdxY + 1, eTileType::InnerCornerE);
+				}
+				// 2. 이 공간의 방이 이어야 할 방보다 높게 있는 경우
+				else if (closeRoom->RTIdxY - mostRight->LBIdxY < 3)
+				{
+					// 1. 통로 생성
+					for (int y = mostRight->LBIdxY + 1; y >= closeRoom->RTIdxY - 1; --y)
+					{
+						mOwner->SetTileType(mRTIdxX, y, eTileType::WallSW);
+						mOwner->SetTileType(neighbor->mLBIdxX, y, eTileType::WallNE);
+					}
+
+					// 2 통로 코너 배치
+					mOwner->SetTileType(neighbor->mLBIdxX, mostRight->LBIdxY + 2, eTileType::CornerN);
+					mOwner->SetTileType(mRTIdxX, closeRoom->RTIdxY - 2, eTileType::CornerS);
+
+					// 3. 진입점 생성
+					mOwner->SetTileType(mostRight->RTIdxX, mostRight->LBIdxY - 2, eTileType::EntryNELeft);
+					mOwner->SetTileType(mostRight->RTIdxX, mostRight->LBIdxY - 1, eTileType::EntryNERight);
+					mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->RTIdxY - 2, eTileType::EntrySWRight);
+					mOwner->SetTileType(closeRoom->LBIdxX, closeRoom->RTIdxY - 1, eTileType::EntrySWLeft);
+
+					// 4. 방에서 바로 이어지는 통로
+					for (int x = mostRight->RTIdxX + 1; x <= mRTIdxX; ++x)
+					{
+						mOwner->SetTileType(x, mostRight->LBIdxY - 2, eTileType::WallNW);
+					}
+					for (int x = mostRight->RTIdxX + 1; x < mRTIdxX - 1; ++x)
+					{
+						mOwner->SetTileType(x, mostRight->LBIdxY - 1, eTileType::WallSE);
+					}
+					for (int x = closeRoom->LBIdxX - 1; x >= neighbor->mLBIdxX; --x)
+					{
+						mOwner->SetTileType(x, closeRoom->RTIdxY - 2, eTileType::WallSE);
+					}
+					for (int x = closeRoom->LBIdxX - 1; x > neighbor->mLBIdxX; --x)
+					{
+						mOwner->SetTileType(x, closeRoom->RTIdxY - 1, eTileType::WallNW);
+					}
+					
+					// 5. 통로 교차점
+					mOwner->SetTileType(mRTIdxX - 1, mostRight->LBIdxY + 1, eTileType::WallEndNEBottom);
+					mOwner->SetTileType(neighbor->mLBIdxX - 1, closeRoom->RTIdxY - 1, eTileType::WallEndSWTop);
+
+					// 6. 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->LBIdxY + 2, eTileType::WallEndSWTop);
+					mOwner->SetTileType(mostRight->RTIdxX + 1, mostRight->LBIdxY + 1, eTileType::WallEndSWBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->RTIdxY - 2, eTileType::WallEndNEBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->RTIdxY - 1, eTileType::WallEndNETop);
+
+					// 7. 안쪽 코너
+					mOwner->SetTileType(mRTIdxX, mostRight->LBIdxY + 1, eTileType::InnerCornerS);
+					mOwner->SetTileType(neighbor->mLBIdxX, closeRoom->RTIdxY - 1, eTileType::InnerCornerN);
 				}
 			}
 		}
@@ -409,118 +411,11 @@ void CSpace::ConnectSpace()
 			RoomInfo* mostLeft = GetLeftMostRoomInfo();
 			RoomInfo* closeRoom = neighbor->GetMostCloseRoomInfo(mostLeft->CenterIdx);
 
-			// 통로를 꺾어서 이어야 하는 경우
-			// 1. 이 공간의 방이 이어야 할 방보다 낮게 있는 경우
-			if (mostLeft->RTIdxY - closeRoom->LBIdxY < 3)
+			// 직선으로 이어도 되는 경우
+			if (mostLeft->LBIdxY - 2 <= closeRoom->RTIdxY - 1 && mostLeft->RTIdxY - 2 >= closeRoom->LBIdxY + 1)
 			{
-				// 통로 생성
-				for (int y = mostLeft->RTIdxY - 1; y <= closeRoom->LBIdxY + 1; ++y)
-				{
-					mOwner->SetTileType(mLBIdxX, y, eTileType::WallNE);
-					mOwner->SetTileType(neighbor->mRTIdxX, y, eTileType::WallSW);
-				}
-
-				// 통로 코너 배치
-				mOwner->SetTileType(neighbor->mRTIdxX, mostLeft->RTIdxY - 2, eTileType::CornerS);
-				mOwner->SetTileType(mLBIdxX, closeRoom->LBIdxY + 2, eTileType::CornerN);
-
-				// 진입점 생성
-				mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->RTIdxY - 1, eTileType::EntrySWLeft);
-				mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->RTIdxY - 2, eTileType::EntrySWRight);
-				mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->LBIdxY + 1, eTileType::EntryNERight);
-				mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->LBIdxY + 2, eTileType::EntryNELeft);
-
-				// 방에서 바로 이어지는 통로
-				for (int x = mostLeft->LBIdxX - 1; x >= mLBIdxX; --x)
-				{
-					mOwner->SetTileType(x, mostLeft->RTIdxY - 2, eTileType::WallSE);
-				}
-				for (int x = mostLeft->LBIdxX - 1; x > mLBIdxX + 1; --x)
-				{
-					mOwner->SetTileType(x, mostLeft->RTIdxY - 1, eTileType::WallNW);
-				}
-				for (int x = closeRoom->RTIdxX + 1; x <= neighbor->mRTIdxX; ++x)
-				{
-					mOwner->SetTileType(x, closeRoom->LBIdxY + 2, eTileType::WallNW);
-				}
-				for (int x = closeRoom->RTIdxX + 1; x < neighbor->mRTIdxX - 1; ++x)
-				{
-					mOwner->SetTileType(x, closeRoom->LBIdxY + 1, eTileType::WallSE);
-				}
-				
-				// 통로 교차점
-				mOwner->SetTileType(mLBIdxX + 1, mostLeft->RTIdxY - 1, eTileType::WallEndSWTop);
-				mOwner->SetTileType(neighbor->mRTIdxX - 1, closeRoom->LBIdxX + 1, eTileType::WallEndNEBottom);
-
-				// 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->RTIdxY - 1, eTileType::WallEndNETop);
-				mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->RTIdxY - 2, eTileType::WallEndNEBottom);
-				mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->LBIdxY + 1, eTileType::WallEndSWBottom);
-				mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->LBIdxY + 2, eTileType::WallEndSWTop);
-				
-				// 안쪽 코너
-				mOwner->SetTileType(mLBIdxX, mostLeft->RTIdxY - 1, eTileType::InnerCornerN);
-				mOwner->SetTileType(neighbor->mRTIdxX, closeRoom->LBIdxX + 1, eTileType::InnerCornerS);
-			}
-			// 2. 이 공간의 방이 이어야 할 방보다 높게 있는 경우
-			else if (closeRoom->RTIdxY - mostLeft->LBIdxY < 3)
-			{
-				// 통로 생성
-				for (int y = mostLeft->LBIdxY + 1; y >= closeRoom->RTIdxY - 1; --y)
-				{
-					mOwner->SetTileType(mLBIdxX, y, eTileType::WallNE);
-					mOwner->SetTileType(neighbor->mRTIdxX, eTileType::WallSW);
-				}
-
-				// 통로 코너 배치
-				mOwner->SetTileType(mLBIdxX, closeRoom->RTIdxY - 2, eTileType::CornerE);
-				mOwner->SetTileType(neighbor->mRTIdxX, mostLeft->LBIdxY + 2, eTileType::CornerW);
-
-				// 진입점 생성
-				mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->LBIdxX + 1, eTileType::EntrySWRight);
-				mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->LBIdxX + 2, eTileType::EntrySWLeft);
-				mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->RTIdxY - 1, eTileType::EntryNELeft);
-				mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->RTIdxY - 2, eTileType::EntryNERight);
-
-				// 방에서 바로 이어지는 통로
-				for (int x = mostLeft->LBIdxX - 1; x >= mLBIdxX; --x)
-				{
-					mOwner->SetTileType(x, mostLeft->LBIdxY + 2, eTileType::WallNW);
-				}
-				for (int x = mostLeft->LBIdxX - 1; x > mLBIdxX - 1; --x)
-				{
-					mOwner->SetTileType(x, mostLeft->LBIdxY + 1, eTileType::WallSE);
-				}
-				for (int x = closeRoom->RTIdxX + 1; x <= neighbor->mRTIdxX; ++x)
-				{
-					mOwner->SetTileType(x, closeRoom->RTIdxY - 2, eTileType::WallSE);
-				}
-				for (int x = closeRoom->RTIdxX + 1; x < neighbor->mRTIdxX - 1; ++x)
-				{
-					mOwner->SetTileType(x, closeRoom->RTIdxY - 1, eTileType::WallNW);
-				}
-				
-				// 통로 교차점
-				mOwner->SetTileType(mLBIdxX + 1, mostLeft->LBIdxY + 1, eTileType::WallEndSWBottom);
-				mOwner->SetTileType(neighbor->mRTIdxX - 1, closeRoom->RTIdxY - 1, eTileType::WallEndNETop);
-
-				// 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->LBIdxY + 2, eTileType::WallEndNETop);
-				mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->LBIdxY + 1, eTileType::WallEndNEBottom);
-				mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->RTIdxY - 1, eTileType::WallEndSWTop);
-				mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->RTIdxY - 2, eTileType::WallEndSWBottom);
-
-				// 안쪽 코너
-				mOwner->SetTileType(mLBIdxX, mostLeft->LBIdxY + 1, eTileType::InnerCornerE);
-				mOwner->SetTileType(neighbor->mRTIdxX, closeRoom->RTIdxY - 1, eTileType::InnerCornerW);
-			}
-			// 직선 통로로 이어도 되는 경우
-			else
-			{
-				bool bTopEntry = rand() > RAND_MAX / 2;
-
-				// 이 공간의 위쪽에서 통로를 생성
-				if (bTopEntry)
+				// 이 방의 왼쪽 위에서 통로 생성
+				if (mostLeft->RTIdxY - 2 <= closeRoom->RTIdxY - 2)
 				{
 					// 통로 생성
 					for (int x = mostLeft->LBIdxX - 1; x >= closeRoom->RTIdxX + 1; --x)
@@ -541,15 +436,15 @@ void CSpace::ConnectSpace()
 					mOwner->SetTileType(closeRoom->RTIdxX + 1, mostLeft->RTIdxY - 1, eTileType::WallEndSWTop);
 					mOwner->SetTileType(closeRoom->RTIdxX + 1, mostLeft->RTIdxY - 2, eTileType::WallEndSWBottom);
 				}
-				// 이 공간의 아래쪽에서 통로를 생성
 				else
 				{
-					for (int x = mostLeft->LBIdxX; x >= closeRoom->RTIdxX + 1; --x)
+					// 통로 생성
+					for (int x = mostLeft->LBIdxX - 1; x >= closeRoom->RTIdxX + 1; --x)
 					{
 						mOwner->SetTileType(x, mostLeft->LBIdxY + 2, eTileType::WallNW);
 						mOwner->SetTileType(x, mostLeft->LBIdxY + 1, eTileType::WallSE);
 					}
-
+					
 					// 진입점 배치
 					mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->LBIdxY + 2, eTileType::EntrySWLeft);
 					mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->LBIdxY + 1, eTileType::EntrySWRight);
@@ -563,9 +458,117 @@ void CSpace::ConnectSpace()
 					mOwner->SetTileType(closeRoom->RTIdxX + 1, mostLeft->LBIdxY + 1, eTileType::WallEndSWBottom);
 				}
 			}
+			// 통로를 꺾어서 이어야 하는 경우
+			else
+			{
+				// 1. 이 공간의 방이 이어야 할 방보다 낮게 있는 경우
+				if (mostLeft->RTIdxY - closeRoom->LBIdxY < 3)
+				{
+					// 통로 생성
+					for (int y = mostLeft->RTIdxY - 1; y <= closeRoom->LBIdxY + 1; ++y)
+					{
+						mOwner->SetTileType(mLBIdxX, y, eTileType::WallNE);
+						mOwner->SetTileType(neighbor->mRTIdxX, y, eTileType::WallSW);
+					}
+
+					// 통로 코너 배치
+					mOwner->SetTileType(neighbor->mRTIdxX, mostLeft->RTIdxY - 2, eTileType::CornerS);
+					mOwner->SetTileType(mLBIdxX, closeRoom->LBIdxY + 2, eTileType::CornerN);
+
+					// 진입점 생성
+					mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->RTIdxY - 1, eTileType::EntrySWLeft);
+					mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->RTIdxY - 2, eTileType::EntrySWRight);
+					mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->LBIdxY + 1, eTileType::EntryNERight);
+					mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->LBIdxY + 2, eTileType::EntryNELeft);
+
+					// 방에서 바로 이어지는 통로
+					for (int x = mostLeft->LBIdxX - 1; x >= mLBIdxX; --x)
+					{
+						mOwner->SetTileType(x, mostLeft->RTIdxY - 2, eTileType::WallSE);
+					}
+					for (int x = mostLeft->LBIdxX - 1; x > mLBIdxX + 1; --x)
+					{
+						mOwner->SetTileType(x, mostLeft->RTIdxY - 1, eTileType::WallNW);
+					}
+					for (int x = closeRoom->RTIdxX + 1; x <= neighbor->mRTIdxX; ++x)
+					{
+						mOwner->SetTileType(x, closeRoom->LBIdxY + 2, eTileType::WallNW);
+					}
+					for (int x = closeRoom->RTIdxX + 1; x < neighbor->mRTIdxX - 1; ++x)
+					{
+						mOwner->SetTileType(x, closeRoom->LBIdxY + 1, eTileType::WallSE);
+					}
+					
+					// 통로 교차점
+					mOwner->SetTileType(mLBIdxX + 1, mostLeft->RTIdxY - 1, eTileType::WallEndSWTop);
+					mOwner->SetTileType(neighbor->mRTIdxX - 1, closeRoom->LBIdxX + 1, eTileType::WallEndNEBottom);
+
+					// 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->RTIdxY - 1, eTileType::WallEndNETop);
+					mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->RTIdxY - 2, eTileType::WallEndNEBottom);
+					mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->LBIdxY + 1, eTileType::WallEndSWBottom);
+					mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->LBIdxY + 2, eTileType::WallEndSWTop);
+					
+					// 안쪽 코너
+					mOwner->SetTileType(mLBIdxX, mostLeft->RTIdxY - 1, eTileType::InnerCornerN);
+					mOwner->SetTileType(neighbor->mRTIdxX, closeRoom->LBIdxX + 1, eTileType::InnerCornerS);
+				}
+				// 2. 이 공간의 방이 이어야 할 방보다 높게 있는 경우
+				else if (closeRoom->RTIdxY - mostLeft->LBIdxY < 3)
+				{
+					// 통로 생성
+					for (int y = mostLeft->LBIdxY + 1; y >= closeRoom->RTIdxY - 1; --y)
+					{
+						mOwner->SetTileType(mLBIdxX, y, eTileType::WallNE);
+						mOwner->SetTileType(neighbor->mRTIdxX, eTileType::WallSW);
+					}
+
+					// 통로 코너 배치
+					mOwner->SetTileType(mLBIdxX, closeRoom->RTIdxY - 2, eTileType::CornerE);
+					mOwner->SetTileType(neighbor->mRTIdxX, mostLeft->LBIdxY + 2, eTileType::CornerW);
+
+					// 진입점 생성
+					mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->LBIdxX + 1, eTileType::EntrySWRight);
+					mOwner->SetTileType(mostLeft->LBIdxX, mostLeft->LBIdxX + 2, eTileType::EntrySWLeft);
+					mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->RTIdxY - 1, eTileType::EntryNELeft);
+					mOwner->SetTileType(closeRoom->RTIdxX, closeRoom->RTIdxY - 2, eTileType::EntryNERight);
+
+					// 방에서 바로 이어지는 통로
+					for (int x = mostLeft->LBIdxX - 1; x >= mLBIdxX; --x)
+					{
+						mOwner->SetTileType(x, mostLeft->LBIdxY + 2, eTileType::WallNW);
+					}
+					for (int x = mostLeft->LBIdxX - 1; x > mLBIdxX - 1; --x)
+					{
+						mOwner->SetTileType(x, mostLeft->LBIdxY + 1, eTileType::WallSE);
+					}
+					for (int x = closeRoom->RTIdxX + 1; x <= neighbor->mRTIdxX; ++x)
+					{
+						mOwner->SetTileType(x, closeRoom->RTIdxY - 2, eTileType::WallSE);
+					}
+					for (int x = closeRoom->RTIdxX + 1; x < neighbor->mRTIdxX - 1; ++x)
+					{
+						mOwner->SetTileType(x, closeRoom->RTIdxY - 1, eTileType::WallNW);
+					}
+					
+					// 통로 교차점
+					mOwner->SetTileType(mLBIdxX + 1, mostLeft->LBIdxY + 1, eTileType::WallEndSWBottom);
+					mOwner->SetTileType(neighbor->mRTIdxX - 1, closeRoom->RTIdxY - 1, eTileType::WallEndNETop);
+
+					// 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->LBIdxY + 2, eTileType::WallEndNETop);
+					mOwner->SetTileType(mostLeft->LBIdxX - 1, mostLeft->LBIdxY + 1, eTileType::WallEndNEBottom);
+					mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->RTIdxY - 1, eTileType::WallEndSWTop);
+					mOwner->SetTileType(closeRoom->RTIdxX + 1, closeRoom->RTIdxY - 2, eTileType::WallEndSWBottom);
+
+					// 안쪽 코너
+					mOwner->SetTileType(mLBIdxX, mostLeft->LBIdxY + 1, eTileType::InnerCornerE);
+					mOwner->SetTileType(neighbor->mRTIdxX, closeRoom->RTIdxY - 1, eTileType::InnerCornerW);
+				}
+			}
 		}
 	}
-	// 두 공간이 세로로 나뉘어진 공간에 속할 경우
+	// 두 공간이 가로로 나뉘어진 공간에 속할 경우
 	else
 	{
 		// 이 공간이 아래쪽 공간인 경우
@@ -574,121 +577,34 @@ void CSpace::ConnectSpace()
 			RoomInfo* mostTop = GetTopMostRoomInfo();
 			RoomInfo* closeRoom = neighbor->GetMostCloseRoomInfo(mostTop->CenterIdx);
 
-			// 통로를 꺾어서 이어야 할 경우
-			// 1. 이 공간의 방이 이웃 공간의 방보다 왼쪽에 있는 경우
-			if (mostTop->RTIdxX - closeRoom->LBIdxX < 3)
+			// 직선으로 이어도 되는 경우
+			if (mostTop->LBIdxX + 2 <= closeRoom->RTIdxX - 1 && mostTop->RTIdxX - 2 >= closeRoom->LBIdxX + 1)
 			{
-				// 통로 생성
-				for (int x = mostTop->RTIdxX - 1; x <= closeRoom->LBIdxX - 1; ++x)
-				{
-					mOwner->SetTileType(x, mRTIdxY, eTileType::WallSE);
-					mOwner->SetTileType(x, neighbor->mLBIdxY, eTileType::WallNW);
-				}
-
-				// 통로 코너 배치
-				mOwner->SetTileType(mostTop->RTIdxX - 2, neighbor->mLBIdxX, eTileType::CornerW);
-				mOwner->SetTileType(closeRoom->LBIdxX + 2, mRTIdxY, eTileType::CornerE);
-
-				// 진입점 생성
-				mOwner->SetTileType(mostTop->RTIdxX - 2, mostTop->RTIdxY, eTileType::EntryNWLeft);
-				mOwner->SetTileType(mostTop->RTIdxX - 1, mostTop->RTIdxY, eTileType::EntryNWRight);
-				mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->LBIdxY, eTileType::EntrySELeft);
-				mOwner->SetTileType(closeRoom->LBIdxX - 2, closeRoom->LBIdxY, eTileType::EntrySERight);
-
-				// 방에서 바로 이어지는 통로
-				for (int y = mostTop->RTIdxY + 1; y <= mRTIdxY; ++y)
-				{
-					mOwner->SetTileType(mostTop->RTIdxX - 2, y, eTileType::WallSW);
-				}
-				for (int y = mostTop->RTIdxY + 1; y < mRTIdxY - 1; ++y)
-				{
-					mOwner->SetTileType(mostTop->RTIdxX - 1, y, eTileType::WallNE);
-				}
-				for (int y = closeRoom->LBIdxY - 1; y >= neighbor->mLBIdxY; --y)
-				{
-					mOwner->SetTileType(closeRoom->LBIdxX + 2, eTileType::WallNE);
-				}
-				for (int y = closeRoom->LBIdxY - 1; y > neighbor->mLBIdxY + 1; --y)
-				{
-					mOwner->SetTileType(closeRoom->LBIdxX + 1, eTileType::WallSW);
-				}
-				
-				// 통로 교차점
-				mOwner->SetTileType(mostTop->RTIdxX - 1, mRTIdxY - 1, eTileType::WallEndNETop);
-				mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mLBIdxY - 1, eTileType::WallEndSEBottom);
-
-				// 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostTop->RTIdxX - 1, mostTop->RTIdxY + 1, eTileType::WallEndSETop);
-				mOwner->SetTileType(mostTop->RTIdxX - 2, mostTop->RTIdxY + 1, eTileType::WallEndSEBottom);
-				mOwner->SetTileType(closeRoom->LBIdxX + 1, closeRoom->LBIdxY - 1, eTileType::WallEndNWBottom);
-				mOwner->SetTileType(closeRoom->LBIdxX + 2, closeRoom->LBIdxY - 1, eTileType::WallEndNWTop);
-
-				// 내부 코너
-				mOwner->SetTileType(mostTop->RTIdxX - 1, mRTIdxY, eTileType::InnerCornerE);
-				mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mLBIdxY, eTileType::InnerCornerW);
-			}
-
-			// 2. 이 공간의 바이 이웃 공간의 방보다 오른쪽에 있는 경우
-			if (closeRoom->RTIdxX - mostTop->LBIdxX < 3)
-			{	
-				// 통로 생성
-				for (int x = closeRoom->RTIdxX - 1; x <= mostTop->LBIdxX + 1; ++x)
-				{
-					mOwner->SetTileType(x, neighbor->mLBIdxY, eTileType::WallNW);
-					mOwner->SetTileType(x, mRTIdxY, eTileType::WallSE);
-				}
-
-				// 통로 코너 배치
-				mOwner->SetTileType(mostTop->LBIdxX + 2, neighbor->mLBIdxY, eTileType::CornerN);
-				mOwner->SetTileType(closeRoom->RTIdxX - 2, mLBIdxY, eTileType::CornerS);
-
-				// 진입점 생성
-				mOwner->SetTileType(mostTop->LBIdxX + 1, mostTop->RTIdxY, eTileType::EntryNWLeft);
-				mOwner->SetTileType(mostTop->LBIdxX + 2, mostTop->RTIdxY, eTileType::EntryNWRight);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->LBIdxY, eTileType::EntrySERight);
-				mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->LBIdxY, eTileType::EntrySELeft);
-
-				// 방에서 바로 이어지는 통로
-				for (int y = mostTop->RTIdxY + 1; y <= mRTIdxY; ++y)
-				{
-					mOwner->SetTileType(mostTop->LBIdxX + 2, y, eTileType::WallNE);
-				}
-				for (int y = mostTop->RTIdxY + 1; y < mRTIdxY - 1; ++y)
-				{
-					mOwner->SetTileType(mostTop->LBIdxX + 1, y, eTileType::WallSW);
-				}
-				for (int y = closeRoom->LBIdxY - 1; y >= neighbor->mLBIdxY; --y)
-				{
-					mOwner->SetTileType(closeRoom->RTIdxX - 2, y, eTileType::WallSW);
-				}
-				for (int y = closeRoom->LBIdxY - 1; y > neighbor->mLBIdxY + 1; --y)
-				{
-					mOwner->SetTileType(closeRoom->RTIdxX - 1, y, eTileType::WallNE);
-				}
-				
-				// 통로 교차점
-				mOwner->SetTileType(mostTop->LBIdxX + 1, mRTIdxY - 1, eTileType::WallEndSWBottom);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mLBIdxY + 1, eTileType::WallEndNETop);
-
-				// 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostTop->LBIdxX + 2, mostTop->RTIdxY + 1, eTileType::WallEndSETop);
-				mOwner->SetTileType(mostTop->LBIdxX + 1, mostTop->RTIdxY + 1, eTileType::WallEndSEBottom);
-				mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->LBIdxY - 1, eTileType::WallEndNWBottom);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->LBIdxY - 1, eTileType::WallEndNWTop);
-
-				// 내부 코너
-				mOwner->SetTileType(mostTop->LBIdxX + 1, mRTIdxY, eTileType::InnerCornerS);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mLBIdxY, eTileType::InnerCornerN);
-			}
-			// 3. 직선 통로로 이어도 되는 경우
-			else
-			{
-				bool bLeftEntry = rand() > RAND_MAX / 2;
-				
-				// 이 공간 방의 왼쪽에서 통로 생성
-				if (bLeftEntry)
+				// 이 방의 오른쪽 위에서 통로 생성
+				if (mostTop->RTIdxX - 2 <= closeRoom->RTIdxX - 2)
 				{
 					// 통로 생성
+					for (int y = mostTop->RTIdxY + 1; y <= closeRoom->LBIdxY - 1; ++y)
+					{
+						mOwner->SetTileType(mostTop->RTIdxX - 2, y, eTileType::WallSW);
+						mOwner->SetTileType(mostTop->RTIdxX - 1, y, eTileType::WallNE);
+					}
+					
+					// 진입점 배치
+					mOwner->SetTileType(mostTop->RTIdxX - 2, mostTop->RTIdxY, eTileType::EntryNWLeft);
+					mOwner->SetTileType(mostTop->RTIdxX - 1, mostTop->RTIdxY, eTileType::EntryNWRight);
+					mOwner->SetTileType(mostTop->RTIdxX - 2, closeRoom->LBIdxY, eTileType::EntrySELeft);
+					mOwner->SetTileType(mostTop->RTIdxX - 1, closeRoom->LBIdxY, eTileType::EntrySERight);
+
+					// 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostTop->RTIdxX - 1, mostTop->RTIdxY + 1, eTileType::WallEndSETop);
+					mOwner->SetTileType(mostTop->RTIdxX - 2, mostTop->RTIdxY + 1, eTileType::WallEndSEBottom);
+					mOwner->SetTileType(mostTop->RTIdxX - 1, closeRoom->LBIdxY - 1, eTileType::WallEndNWTop);
+					mOwner->SetTileType(mostTop->RTIdxX - 2, closeRoom->LBIdxY - 1, eTileType::WallEndNWBottom);
+				}
+				// 이 방의 왼쪽 위에서 통로 생성
+				else
+				{
 					for (int y = mostTop->RTIdxY + 1; y <= closeRoom->LBIdxY - 1; ++y)
 					{
 						mOwner->SetTileType(mostTop->LBIdxX + 1, y, eTileType::WallSW);
@@ -707,27 +623,114 @@ void CSpace::ConnectSpace()
 					mOwner->SetTileType(mostTop->LBIdxX + 2, closeRoom->LBIdxY - 1, eTileType::WallEndNWTop);
 					mOwner->SetTileType(mostTop->LBIdxX + 1, closeRoom->LBIdxY - 1, eTileType::WallEndNWBottom);
 				}
-				// 이 공간 방의 오른쪽에서 통로 생성
-				else
+			}
+			// 통로를 꺾어서 이어야 할 경우
+			else
+			{
+				// 1. 이 공간의 방이 이웃 공간의 방보다 왼쪽에 있는 경우
+				if (mostTop->RTIdxX - closeRoom->LBIdxX < 3)
 				{
 					// 통로 생성
-					for (int y = mostTop->RTIdxY + 1; y <= closeRoom->LBIdxY - 1; ++y)
+					for (int x = mostTop->RTIdxX - 1; x <= closeRoom->LBIdxX - 1; ++x)
 					{
-						mOwner->SetTileType(mostTop->RTIdxX - 1, y, eTileType::WallNE);
-						mOwner->SetTileType(mostTop->RTIdxX - 2, y, eTileType::WallNE);
+						mOwner->SetTileType(x, mRTIdxY, eTileType::WallSE);
+						mOwner->SetTileType(x, neighbor->mLBIdxY, eTileType::WallNW);
 					}
 
-					// 진입점 배치
+					// 통로 코너 배치
+					mOwner->SetTileType(mostTop->RTIdxX - 2, neighbor->mLBIdxX, eTileType::CornerW);
+					mOwner->SetTileType(closeRoom->LBIdxX + 2, mRTIdxY, eTileType::CornerE);
+
+					// 진입점 생성
 					mOwner->SetTileType(mostTop->RTIdxX - 2, mostTop->RTIdxY, eTileType::EntryNWLeft);
 					mOwner->SetTileType(mostTop->RTIdxX - 1, mostTop->RTIdxY, eTileType::EntryNWRight);
-					mOwner->SetTileType(mostTop->RTIdxX - 2, closeRoom->LBIdxY, eTileType::EntrySELeft);
-					mOwner->SetTileType(mostTop->RTIdxX - 1, closeRoom->LBIdxY, eTileType::EntrySERight);
+					mOwner->SetTileType(closeRoom->LBIdxX - 1, closeRoom->LBIdxY, eTileType::EntrySELeft);
+					mOwner->SetTileType(closeRoom->LBIdxX - 2, closeRoom->LBIdxY, eTileType::EntrySERight);
+
+					// 방에서 바로 이어지는 통로
+					for (int y = mostTop->RTIdxY + 1; y <= mRTIdxY; ++y)
+					{
+						mOwner->SetTileType(mostTop->RTIdxX - 2, y, eTileType::WallSW);
+					}
+					for (int y = mostTop->RTIdxY + 1; y < mRTIdxY - 1; ++y)
+					{
+						mOwner->SetTileType(mostTop->RTIdxX - 1, y, eTileType::WallNE);
+					}
+					for (int y = closeRoom->LBIdxY - 1; y >= neighbor->mLBIdxY; --y)
+					{
+						mOwner->SetTileType(closeRoom->LBIdxX + 2, eTileType::WallNE);
+					}
+					for (int y = closeRoom->LBIdxY - 1; y > neighbor->mLBIdxY + 1; --y)
+					{
+						mOwner->SetTileType(closeRoom->LBIdxX + 1, eTileType::WallSW);
+					}
+					
+					// 통로 교차점
+					mOwner->SetTileType(mostTop->RTIdxX - 1, mRTIdxY - 1, eTileType::WallEndNETop);
+					mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mLBIdxY - 1, eTileType::WallEndSEBottom);
 
 					// 통로가 진입점과 만나는 부분
 					mOwner->SetTileType(mostTop->RTIdxX - 1, mostTop->RTIdxY + 1, eTileType::WallEndSETop);
 					mOwner->SetTileType(mostTop->RTIdxX - 2, mostTop->RTIdxY + 1, eTileType::WallEndSEBottom);
-					mOwner->SetTileType(mostTop->RTIdxX - 1, closeRoom->LBIdxY - 1, eTileType::WallEndNWTop);
-					mOwner->SetTileType(mostTop->RTIdxX - 2, closeRoom->LBIdxY - 1, eTileType::WallEndNWBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX + 1, closeRoom->LBIdxY - 1, eTileType::WallEndNWBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX + 2, closeRoom->LBIdxY - 1, eTileType::WallEndNWTop);
+
+					// 내부 코너
+					mOwner->SetTileType(mostTop->RTIdxX - 1, mRTIdxY, eTileType::InnerCornerE);
+					mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mLBIdxY, eTileType::InnerCornerW);
+				}
+
+				// 2. 이 공간의 바이 이웃 공간의 방보다 오른쪽에 있는 경우
+				if (closeRoom->RTIdxX - mostTop->LBIdxX < 3)
+				{	
+					// 통로 생성
+					for (int x = closeRoom->RTIdxX - 1; x <= mostTop->LBIdxX + 1; ++x)
+					{
+						mOwner->SetTileType(x, neighbor->mLBIdxY, eTileType::WallNW);
+						mOwner->SetTileType(x, mRTIdxY, eTileType::WallSE);
+					}
+
+					// 통로 코너 배치
+					mOwner->SetTileType(mostTop->LBIdxX + 2, neighbor->mLBIdxY, eTileType::CornerN);
+					mOwner->SetTileType(closeRoom->RTIdxX - 2, mLBIdxY, eTileType::CornerS);
+
+					// 진입점 생성
+					mOwner->SetTileType(mostTop->LBIdxX + 1, mostTop->RTIdxY, eTileType::EntryNWLeft);
+					mOwner->SetTileType(mostTop->LBIdxX + 2, mostTop->RTIdxY, eTileType::EntryNWRight);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->LBIdxY, eTileType::EntrySERight);
+					mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->LBIdxY, eTileType::EntrySELeft);
+
+					// 방에서 바로 이어지는 통로
+					for (int y = mostTop->RTIdxY + 1; y <= mRTIdxY; ++y)
+					{
+						mOwner->SetTileType(mostTop->LBIdxX + 2, y, eTileType::WallNE);
+					}
+					for (int y = mostTop->RTIdxY + 1; y < mRTIdxY - 1; ++y)
+					{
+						mOwner->SetTileType(mostTop->LBIdxX + 1, y, eTileType::WallSW);
+					}
+					for (int y = closeRoom->LBIdxY - 1; y >= neighbor->mLBIdxY; --y)
+					{
+						mOwner->SetTileType(closeRoom->RTIdxX - 2, y, eTileType::WallSW);
+					}
+					for (int y = closeRoom->LBIdxY - 1; y > neighbor->mLBIdxY + 1; --y)
+					{
+						mOwner->SetTileType(closeRoom->RTIdxX - 1, y, eTileType::WallNE);
+					}
+					
+					// 통로 교차점
+					mOwner->SetTileType(mostTop->LBIdxX + 1, mRTIdxY - 1, eTileType::WallEndSWBottom);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mLBIdxY + 1, eTileType::WallEndNETop);
+
+					// 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostTop->LBIdxX + 2, mostTop->RTIdxY + 1, eTileType::WallEndSETop);
+					mOwner->SetTileType(mostTop->LBIdxX + 1, mostTop->RTIdxY + 1, eTileType::WallEndSEBottom);
+					mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->LBIdxY - 1, eTileType::WallEndNWBottom);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->LBIdxY - 1, eTileType::WallEndNWTop);
+
+					// 내부 코너
+					mOwner->SetTileType(mostTop->LBIdxX + 1, mRTIdxY, eTileType::InnerCornerS);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mLBIdxY, eTileType::InnerCornerN);
 				}
 			}
 		}
@@ -737,118 +740,33 @@ void CSpace::ConnectSpace()
 			RoomInfo* mostBottom = GetBottomMostRoomInfo();
 			RoomInfo* closeRoom = neighbor->GetMostCloseRoomInfo(mostBottom->CenterIdx);
 
-			// 이 공간의 방이 이웃 공간의 방보다 왼쪽에 있는 경우
-			if (mostBottom->RTIdxX - closeRoom->LBIdxX < 3)
+			// 직선으로 이어도 되는 경우
+			if (mostBottom->LBIdxX + 1 <= closeRoom->RTIdxX - 2 && mostBottom->RTIdxX - 2 >= closeRoom->LBIdxX + 1)
 			{
-				// 통로 생성
-				for (int x = mostBottom->RTIdxX - 1; x <= closeRoom->LBIdxX + 1; ++x)
+				// 이 방의 오른쪽 아래에서 통로 생성
+				if (mostBottom->RTIdxX - 2 <= closeRoom->RTIdxX - 2)
 				{
-					mOwner->SetTileType(x, mLBIdxY, eTileType::WallNW);
-					mOwner->SetTileType(x, neighbor->mRTIdxY, eTileType::WallSE);
+					// 통로 생성
+					for (int y = mostBottom->LBIdxY - 1; y >= closeRoom->RTIdxY + 1; --y)
+					{
+						mOwner->SetTileType(mostBottom->RTIdxX - 2, y, eTileType::WallSW);
+						mOwner->SetTileType(mostBottom->RTIdxX - 1, y, eTileType::WallNE);
+					}
+					
+					// 진입점 배치
+					mOwner->SetTileType(mostBottom->RTIdxX - 2, mostBottom->LBIdxY, eTileType::EntrySELeft);
+					mOwner->SetTileType(mostBottom->RTIdxX - 1, mostBottom->LBIdxY, eTileType::EntrySERight);
+					mOwner->SetTileType(mostBottom->RTIdxX - 2, closeRoom->RTIdxY, eTileType::EntryNWLeft);
+					mOwner->SetTileType(mostBottom->RTIdxX - 1, closeRoom->RTIdxY, eTileType::EntryNWRight);
+
+					// 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostBottom->RTIdxX - 2, mostBottom->LBIdxY - 1, eTileType::WallEndNWBottom);
+					mOwner->SetTileType(mostBottom->RTIdxX - 1, mostBottom->LBIdxY - 1, eTileType::WallEndNWTop);
+					mOwner->SetTileType(mostBottom->RTIdxX - 2, closeRoom->RTIdxY + 1, eTileType::WallEndSEBottom);
+					mOwner->SetTileType(mostBottom->RTIdxX - 1, closeRoom->RTIdxY + 1, eTileType::WallEndSETop);
 				}
-
-				// 통로 코너 배치
-				mOwner->SetTileType(mostBottom->RTIdxX - 2, neighbor->mRTIdxY, eTileType::CornerS);
-				mOwner->SetTileType(closeRoom->LBIdxX + 2, mLBIdxY, eTileType::CornerN);
-
-				// 진입점 생성
-				mOwner->SetTileType(mostBottom->RTIdxX - 1, mostBottom->LBIdxY, eTileType::EntrySERight);
-				mOwner->SetTileType(mostBottom->RTIdxX - 2, mostBottom->LBIdxY, eTileType::EntrySELeft);
-				mOwner->SetTileType(closeRoom->LBIdxX + 1, closeRoom->RTIdxY, eTileType::EntryNELeft);
-				mOwner->SetTileType(closeRoom->LBIdxX + 2, closeRoom->RTIdxY, eTileType::EntryNERight);
-
-				// 방에서 바로 이어지는 통로
-				for (int y = mostBottom->LBIdxY - 1; y >= mLBIdxY; --y)
-				{
-					mOwner->SetTileType(mostBottom->RTIdxX - 2, y, eTileType::WallSW);
-				}
-				for (int y = mostBottom->LBIdxY - 1; y > mLBIdxY + 1; --y)
-				{
-					mOwner->SetTileType(mostBottom->RTIdxX - 1, y, eTileType::WallNE);
-				}
-				for (int y = closeRoom->RTIdxY + 1; y <= neighbor->mRTIdxY; ++y)
-				{
-					mOwner->SetTileType(closeRoom->LBIdxX + 2, y, eTileType::WallNE);
-				}
-				for (int y = closeRoom->RTIdxY + 1; y < neighbor->mRTIdxY - 1; ++y)
-				{
-					mOwner->SetTileType(closeRoom->LBIdxX + 1, y, eTileType::WallSW);
-				}
-				
-				// 통로 교차점
-				mOwner->SetTileType(mostBottom->RTIdxX - 1, mLBIdxY + 1, eTileType::WallEndNETop);
-				mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mRTIdxY - 1, eTileType::WallEndNWBottom);
-
-				// 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostBottom->RTIdxX - 1, mostBottom->LBIdxY - 1, eTileType::WallEndNWTop);
-				mOwner->SetTileType(mostBottom->RTIdxX - 2, mostBottom->LBIdxY - 1, eTileType::WallEndNWBottom);
-				mOwner->SetTileType(closeRoom->LBIdxX + 1, closeRoom->RTIdxY + 1, eTileType::WallEndSEBottom);
-				mOwner->SetTileType(closeRoom->LBIdxX + 2, closeRoom->RTIdxY + 1, eTileType::WallEndSETop);
-
-				// 내부 코너
-				mOwner->SetTileType(mostBottom->RTIdxX - 1, mLBIdxY, eTileType::InnerCornerE);
-				mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mRTIdxY, eTileType::InnerCornerW);
-			}
-
-			// 2. 이 공간의 방이 이웃 공간의 방보다 오른쪽에 있는 경우
-			if (closeRoom->RTIdxX - mostBottom->LBIdxX < 3)
-			{	
-				// 통로 생성
-				for (int x = mostBottom->LBIdxX + 1; x >= closeRoom->RTIdxX - 1; --x)
-				{
-					mOwner->SetTileType(x, mLBIdxY, eTileType::WallNW);
-					mOwner->SetTileType(x, neighbor->mRTIdxY, eTileType::WallSE);
-				}
-
-				// 통로 코너 배치
-				mOwner->SetTileType(mostBottom->LBIdxX + 2, neighbor->mRTIdxY, eTileType::CornerE);
-				mOwner->SetTileType(closeRoom->RTIdxX - 2, mLBIdxY, eTileType::CornerW);
-
-				// 진입점 생성
-				mOwner->SetTileType(mostBottom->LBIdxX + 1, mostBottom->LBIdxY, eTileType::EntrySELeft);
-				mOwner->SetTileType(mostBottom->LBIdxX + 2, mostBottom->LBIdxY, eTileType::EntrySERight);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->RTIdxY, eTileType::EntryNWRight);
-				mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->RTIdxY, eTileType::EntryNWLeft);
-
-				// 방에서 바로 이어지는 통로
-				for (int y = mostBottom->LBIdxY - 1; y >= mLBIdxY; --y)
-				{
-					mOwner->SetTileType(mostBottom->LBIdxX + 2, y, eTileType::WallNE);
-				}
-				for (int y = mostBottom->LBIdxY - 1; y > mLBIdxY - 1; --y)
-				{
-					mOwner->SetTileType(mostBottom->LBIdxX + 1, y, eTileType::WallSW);
-				}
-				for (int y = closeRoom->RTIdxY + 1; y <= neighbor->mRTIdxY; ++y)
-				{
-					mOwner->SetTileType(closeRoom->RTIdxX - 2, y, eTileType::WallSW);
-				}
-				for (int y = closeRoom->RTIdxY + 1; y < neighbor->mRTIdxY + 1; ++y)
-				{
-					mOwner->SetTileType(closeRoom->RTIdxX - 1, y, eTileType::WallNE);
-				}
-				
-				// 통로 교차점
-				mOwner->SetTileType(mostBottom->LBIdxX + 1, mLBIdxY + 1, eTileType::WallEndSEBottom);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mRTIdxY - 1, eTileType::WallEndNWTop);
-
-				// 통로가 진입점과 만나는 부분
-				mOwner->SetTileType(mostBottom->LBIdxX + 1, mostBottom->LBIdxY - 1, eTileType::WallEndNWBottom);
-				mOwner->SetTileType(mostBottom->LBIdxX + 2, mostBottom->LBIdxY - 1, eTileType::WallEndNWTop);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->RTIdxY + 1, eTileType::WallEndSETop);
-				mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->RTIdxY + 1, eTileType::WallEndSEBottom);
-
-				// 내부 코너
-				mOwner->SetTileType(mostBottom->LBIdxX + 1, mLBIdxY, eTileType::InnerCornerW);
-				mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mRTIdxY, eTileType::InnerCornerE);
-			}
-			// 3. 직선 통로로 이어도 되는 경우
-			else
-			{
-				bool bLeftEntry = rand() > RAND_MAX / 2;
-				
-				// 이 공간 방의 왼쪽에서 통로 생성
-				if (bLeftEntry)
+				// 이 방의 왼쪽 아래에서 통로 생성
+				else
 				{
 					// 통로 생성
 					for (int y = mostBottom->LBIdxY - 1; y >= closeRoom->RTIdxY + 1; --y)
@@ -869,27 +787,113 @@ void CSpace::ConnectSpace()
 					mOwner->SetTileType(mostBottom->LBIdxX + 1, closeRoom->RTIdxY + 1, eTileType::WallEndSEBottom);
 					mOwner->SetTileType(mostBottom->LBIdxX + 2, closeRoom->RTIdxY + 1, eTileType::WallEndSETop);
 				}
-				// 이 공간 방의 오른쪽에서 통로 생성
-				else
+			}
+			else
+			{
+				// 이 공간의 방이 이웃 공간의 방보다 왼쪽에 있는 경우
+				if (mostBottom->RTIdxX - closeRoom->LBIdxX < 3)
 				{
 					// 통로 생성
-					for (int y = mostBottom->LBIdxY - 1; y >= closeRoom->RTIdxY + 1; --y)
+					for (int x = mostBottom->RTIdxX - 1; x <= closeRoom->LBIdxX + 1; ++x)
 					{
-						mOwner->SetTileType(mostBottom->RTIdxX - 1, y, eTileType::WallNE);
-						mOwner->SetTileType(mostBottom->RTIdxX - 2, y, eTileType::WallSW);
+						mOwner->SetTileType(x, mLBIdxY, eTileType::WallNW);
+						mOwner->SetTileType(x, neighbor->mRTIdxY, eTileType::WallSE);
 					}
 
-					// 진입점 배치
+					// 통로 코너 배치
+					mOwner->SetTileType(mostBottom->RTIdxX - 2, neighbor->mRTIdxY, eTileType::CornerS);
+					mOwner->SetTileType(closeRoom->LBIdxX + 2, mLBIdxY, eTileType::CornerN);
+
+					// 진입점 생성
 					mOwner->SetTileType(mostBottom->RTIdxX - 1, mostBottom->LBIdxY, eTileType::EntrySERight);
 					mOwner->SetTileType(mostBottom->RTIdxX - 2, mostBottom->LBIdxY, eTileType::EntrySELeft);
-					mOwner->SetTileType(mostBottom->RTIdxX - 1, closeRoom->RTIdxY, eTileType::EntryNWRight);
-					mOwner->SetTileType(mostBottom->RTIdxX - 2, closeRoom->RTIdxY, eTileType::EntryNWLeft);
+					mOwner->SetTileType(closeRoom->LBIdxX + 1, closeRoom->RTIdxY, eTileType::EntryNELeft);
+					mOwner->SetTileType(closeRoom->LBIdxX + 2, closeRoom->RTIdxY, eTileType::EntryNERight);
+
+					// 방에서 바로 이어지는 통로
+					for (int y = mostBottom->LBIdxY - 1; y >= mLBIdxY; --y)
+					{
+						mOwner->SetTileType(mostBottom->RTIdxX - 2, y, eTileType::WallSW);
+					}
+					for (int y = mostBottom->LBIdxY - 1; y > mLBIdxY + 1; --y)
+					{
+						mOwner->SetTileType(mostBottom->RTIdxX - 1, y, eTileType::WallNE);
+					}
+					for (int y = closeRoom->RTIdxY + 1; y <= neighbor->mRTIdxY; ++y)
+					{
+						mOwner->SetTileType(closeRoom->LBIdxX + 2, y, eTileType::WallNE);
+					}
+					for (int y = closeRoom->RTIdxY + 1; y < neighbor->mRTIdxY - 1; ++y)
+					{
+						mOwner->SetTileType(closeRoom->LBIdxX + 1, y, eTileType::WallSW);
+					}
+					
+					// 통로 교차점
+					mOwner->SetTileType(mostBottom->RTIdxX - 1, mLBIdxY + 1, eTileType::WallEndNETop);
+					mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mRTIdxY - 1, eTileType::WallEndNWBottom);
 
 					// 통로가 진입점과 만나는 부분
 					mOwner->SetTileType(mostBottom->RTIdxX - 1, mostBottom->LBIdxY - 1, eTileType::WallEndNWTop);
 					mOwner->SetTileType(mostBottom->RTIdxX - 2, mostBottom->LBIdxY - 1, eTileType::WallEndNWBottom);
-					mOwner->SetTileType(mostBottom->RTIdxX - 1, closeRoom->RTIdxY + 1, eTileType::WallEndSETop);
-					mOwner->SetTileType(mostBottom->RTIdxX - 2, closeRoom->RTIdxY + 1, eTileType::WallEndSEBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX + 1, closeRoom->RTIdxY + 1, eTileType::WallEndSEBottom);
+					mOwner->SetTileType(closeRoom->LBIdxX + 2, closeRoom->RTIdxY + 1, eTileType::WallEndSETop);
+
+					// 내부 코너
+					mOwner->SetTileType(mostBottom->RTIdxX - 1, mLBIdxY, eTileType::InnerCornerE);
+					mOwner->SetTileType(closeRoom->LBIdxX + 1, neighbor->mRTIdxY, eTileType::InnerCornerW);
+				}
+
+				// 2. 이 공간의 방이 이웃 공간의 방보다 오른쪽에 있는 경우
+				if (closeRoom->RTIdxX - mostBottom->LBIdxX < 3)
+				{	
+					// 통로 생성
+					for (int x = mostBottom->LBIdxX + 1; x >= closeRoom->RTIdxX - 1; --x)
+					{
+						mOwner->SetTileType(x, mLBIdxY, eTileType::WallNW);
+						mOwner->SetTileType(x, neighbor->mRTIdxY, eTileType::WallSE);
+					}
+
+					// 통로 코너 배치
+					mOwner->SetTileType(mostBottom->LBIdxX + 2, neighbor->mRTIdxY, eTileType::CornerE);
+					mOwner->SetTileType(closeRoom->RTIdxX - 2, mLBIdxY, eTileType::CornerW);
+
+					// 진입점 생성
+					mOwner->SetTileType(mostBottom->LBIdxX + 1, mostBottom->LBIdxY, eTileType::EntrySELeft);
+					mOwner->SetTileType(mostBottom->LBIdxX + 2, mostBottom->LBIdxY, eTileType::EntrySERight);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->RTIdxY, eTileType::EntryNWRight);
+					mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->RTIdxY, eTileType::EntryNWLeft);
+
+					// 방에서 바로 이어지는 통로
+					for (int y = mostBottom->LBIdxY - 1; y >= mLBIdxY; --y)
+					{
+						mOwner->SetTileType(mostBottom->LBIdxX + 2, y, eTileType::WallNE);
+					}
+					for (int y = mostBottom->LBIdxY - 1; y > mLBIdxY - 1; --y)
+					{
+						mOwner->SetTileType(mostBottom->LBIdxX + 1, y, eTileType::WallSW);
+					}
+					for (int y = closeRoom->RTIdxY + 1; y <= neighbor->mRTIdxY; ++y)
+					{
+						mOwner->SetTileType(closeRoom->RTIdxX - 2, y, eTileType::WallSW);
+					}
+					for (int y = closeRoom->RTIdxY + 1; y < neighbor->mRTIdxY + 1; ++y)
+					{
+						mOwner->SetTileType(closeRoom->RTIdxX - 1, y, eTileType::WallNE);
+					}
+					
+					// 통로 교차점
+					mOwner->SetTileType(mostBottom->LBIdxX + 1, mLBIdxY + 1, eTileType::WallEndSEBottom);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mRTIdxY - 1, eTileType::WallEndNWTop);
+
+					// 통로가 진입점과 만나는 부분
+					mOwner->SetTileType(mostBottom->LBIdxX + 1, mostBottom->LBIdxY - 1, eTileType::WallEndNWBottom);
+					mOwner->SetTileType(mostBottom->LBIdxX + 2, mostBottom->LBIdxY - 1, eTileType::WallEndNWTop);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, closeRoom->RTIdxY + 1, eTileType::WallEndSETop);
+					mOwner->SetTileType(closeRoom->RTIdxX - 2, closeRoom->RTIdxY + 1, eTileType::WallEndSEBottom);
+
+					// 내부 코너
+					mOwner->SetTileType(mostBottom->LBIdxX + 1, mLBIdxY, eTileType::InnerCornerW);
+					mOwner->SetTileType(closeRoom->RTIdxX - 1, neighbor->mRTIdxY, eTileType::InnerCornerE);
 				}
 			}
 		}
@@ -921,8 +925,8 @@ RoomInfo* CSpace::GetRightMostRoomInfo()
 		return mRoomInfo;
 	}
 
-	RoomInfo* room1 = mChild1->GetLeftMostRoomInfo();
-	RoomInfo* room2 = mChild2->GetLeftMostRoomInfo();
+	RoomInfo* room1 = mChild1->GetRightMostRoomInfo();
+	RoomInfo* room2 = mChild2->GetRightMostRoomInfo();
 
 	if (room1->RTIdxX > room2->RTIdxX)
 	{
@@ -939,8 +943,8 @@ RoomInfo* CSpace::GetTopMostRoomInfo()
 		return mRoomInfo;
 	}
 
-	RoomInfo* room1 = mChild1->GetLeftMostRoomInfo();
-	RoomInfo* room2 = mChild2->GetLeftMostRoomInfo();
+	RoomInfo* room1 = mChild1->GetTopMostRoomInfo();
+	RoomInfo* room2 = mChild2->GetTopMostRoomInfo();
 
 	if (room1->RTIdxY > room2->RTIdxY)
 	{
@@ -957,8 +961,8 @@ RoomInfo* CSpace::GetBottomMostRoomInfo()
 		return mRoomInfo;
 	}
 
-	RoomInfo* room1 = mChild1->GetLeftMostRoomInfo();
-	RoomInfo* room2 = mChild2->GetLeftMostRoomInfo();
+	RoomInfo* room1 = mChild1->GetBottomMostRoomInfo();
+	RoomInfo* room2 = mChild2->GetBottomMostRoomInfo();
 
 	if (room1->LBIdxY < room2->LBIdxY)
 	{

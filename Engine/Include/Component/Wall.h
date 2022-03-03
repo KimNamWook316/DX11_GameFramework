@@ -19,6 +19,7 @@ public:
 	void Load(FILE* fp);
 
 public:
+	void SetInfo(class CWallComponent* owner, class CTile* parent, eTileShape shape, const Vector3& renderPos, const Vector2& size);
 	void SetShape(eTileShape eShape)
 	{
 		meTileShape = eShape;
@@ -59,6 +60,21 @@ public:
 		mbRender = bRender;
 	}
 
+	void SetSortY(const float y)
+	{
+		mSortY = y;
+	}
+
+	void AddSortY(const float y)
+	{
+		mSortY += y;
+	}
+
+	void SubSortY(const float y)
+	{
+		mSortY -= y;
+	}
+
 public:
 	eTileShape GetTileShape() const
 	{
@@ -95,6 +111,11 @@ public:
 		return mOpacity;
 	}
 
+	float GetSortY() const
+	{
+		return mSortY;
+	}
+
 private:
 	void makeWorldMatrix();
 
@@ -105,6 +126,7 @@ private:
 	eTileShape meTileShape;
 	Vector2 mSize;
 	Vector3 mRenderPos;
+	float mSortY;
 	Matrix mMatWorld;
 	Vector2 mFrameStart;
 	Vector2 mFrameEnd;

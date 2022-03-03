@@ -20,6 +20,15 @@ CNavigation::~CNavigation()
 
 void CNavigation::CreateNavigationNodes(CTileMapComponent* tileMap)
 {
+	size_t size = mVecNode.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecNode[i]);
+	}
+
+	mVecNode.clear();
+
 	// 4분할 된 타일 개수만큼 노드 생성
 	mTileMap = tileMap;
 

@@ -405,7 +405,8 @@ struct TileInfo
 	Vector2 TileEnd;
 	Vector4 TileColor;
 	float Opacity;
-	Vector3 Dummy;
+	float SortY;
+	Vector2 Dummy;
 };
 
 struct ExcelInfo

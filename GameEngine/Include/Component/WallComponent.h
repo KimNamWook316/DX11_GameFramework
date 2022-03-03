@@ -30,8 +30,7 @@ public:
 	virtual void Load(FILE* fp) override;
 
 public:
-    void CreateWall(CTile* tile);
-    void ChangeWall(CTile* tile);
+    bool CreateWall(const std::vector<class CTile*>& vecTile);
     void SetWorldInfo(const int mTileCount);
 
 public:
@@ -43,10 +42,14 @@ public:
     }
 
 private:
+    bool createWallFromTile(CTile* tile);
+    static bool sortWall(const TileInfo& src, const TileInfo& dst);
+
+private:
     CSharedPtr<CSpriteMesh> mMesh;
     CSharedPtr<CTileSet> mTileSet;
     std::vector<CWall*> mVecWall;
-    std::vector<TileInfo*> mVecWallInfo;
+    std::vector<TileInfo> mVecWallInfo;
     class CTileMapConstantBuffer* mCBuffer;
     class CStructuredBuffer* mWallInfoBuffer;
     eTileShape meTileShape;

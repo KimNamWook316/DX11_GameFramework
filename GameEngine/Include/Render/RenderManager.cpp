@@ -106,12 +106,12 @@ bool CRenderManager::Init()
 	mStandard2DBuffer = new CStandard2DConstantBuffer;
 	mStandard2DBuffer->Init();
 
-	// Defulat Layer
 	RenderLayer* layer = new RenderLayer;
 	layer->Name = "Back";
 	layer->LayerPriority = 0;
 	mRenderLayerList.push_back(layer);
 
+	// Defulat Layer
 	layer = new RenderLayer;
 	layer->Name = "Default";
 	layer->LayerPriority = 1;

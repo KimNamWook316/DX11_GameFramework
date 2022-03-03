@@ -10,14 +10,6 @@ enum class eSplitDir
     Horizontal
 };
 
-enum class eGenerationStep
-{
-	PartitionSpace,
-	MakeRoom,
-	ConnectRoom,
-	Max
-};
-
 class CProcedualMapGenerator :
     public CSceneComponent
 {
@@ -40,12 +32,13 @@ public:
 
 public:
 	bool GenerateMap();
-	void FindTileComponent();
-	bool DoStep(eGenerationStep step);
+	bool CreateTileComponent();
+	bool CreateWallComponent();
 	bool PartitionSpace();
 	bool MakeRoom();
 	bool ConnectRoom();
 	bool GenerateTile();
+	bool GenerateWall();
 
 public:
 	bool SetMapCount(const int x, const int y)
@@ -88,6 +81,16 @@ public:
 	{
 		mTileSize = size;
 		mTileDiagonal = sqrt(((mTileSize.x / 2.f) * (mTileSize.x / 2.f)) + ((mTileSize.y / 2.f) * (mTileSize.y / 2.f)));
+	}
+
+	void SetTileSet(class CTileSet* tileSet)
+	{
+		mTileSet = tileSet;
+	}
+
+	void SetWallTileSet(class CTileSet* tileSet)
+	{
+		mWallTileSet = tileSet;
 	}
 
 	void SetTileType(const int idx, eTileType eMapObj);
@@ -143,8 +146,15 @@ public:
 		return mTileDiagonal;
 	}
 
-	eGenerationStep GetCurrentGenerationStepToDo() const;
-	int GetCurrentGenerationStepDone() const;
+	CTileMapComponent* GetTileMapComponent() const
+	{
+		return mTileMap;
+	}
+
+	CWallComponent* GetWallComponent() const
+	{
+		return mTileMap->GetWallComponent();
+	}
 
 private:
 	void resetMapInfo();
@@ -163,6 +173,8 @@ private:
 	int mMapCountX;
 	int mMapCountY;
 	int mPartitionLevel;
-	bool mGenerationStep[(int)eGenerationStep::Max];
+
+	CSharedPtr<class CTileSet> mTileSet;
+	CSharedPtr<class CTileSet> mWallTileSet;
 };
 
