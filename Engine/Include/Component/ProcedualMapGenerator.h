@@ -29,6 +29,8 @@ public:
 	virtual void Render() override;
 	virtual void PostRender() override;
 	virtual CProcedualMapGenerator* Clone() override;
+	virtual void Save(FILE* fp) override;
+	virtual void Load(FILE* fp) override;
 
 public:
 	bool GenerateMap();
@@ -93,6 +95,11 @@ public:
 		mWallTileSet = tileSet;
 	}
 
+	void SetRoomSizeMin(const int roomSize)
+	{
+		mRoomSizeMin = roomSize;
+	}
+
 	void SetTileType(const int idx, eTileType eMapObj);
 	void SetTileType(const int x, const int y, eTileType eMapObj);
 
@@ -154,6 +161,21 @@ public:
 	CWallComponent* GetWallComponent() const
 	{
 		return mTileMap->GetWallComponent();
+	}
+
+	CTileSet* GetTileSet() const
+	{
+		return mTileSet;
+	}
+
+	CTileSet* GetWallTileSet() const
+	{
+		return mWallTileSet;
+	}
+
+	int GetPartitionLevel() const
+	{
+		return mPartitionLevel;
 	}
 
 private:

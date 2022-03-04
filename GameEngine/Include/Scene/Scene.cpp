@@ -240,3 +240,52 @@ bool CScene::LoadFullPath(const char* fullPath)
 	fclose(fp);
 	return true;
 }
+
+bool CScene::SaveGameObject(const std::string& objName, const char* fileName, const std::string& pathName)
+{	
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	char fullPath[MAX_PATH] = {};
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+
+	strcat_s(fullPath, fileName);
+
+	return SaveGameObjectFullPath(objName, fullPath);
+}
+
+bool CScene::SaveGameObjectFullPath(const std::string& objName, const char* fullPath)
+{
+	CGameObject* saveObj = FindObject(objName);
+
+	if (!saveObj)
+	{
+		return false;
+	}
+
+	saveObj->SaveFullPath(fullPath);
+}
+
+void CScene::LoadGameObject(std::string& outName, const char* fileName, const std::string& pathName)
+{
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	char fullPath[MAX_PATH] = {};
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+
+	strcat_s(fullPath, fileName);
+
+	return LoadGameObjectFullPath(outName, fullPath);
+}
+
+void CScene::LoadGameObjectFullPath(std::string& outName, const char* fullPath)
+{
+	CGameObject* obj = CreateGameObject<CGameObject>("temp");
+	obj->LoadFullPath(fullPath);
+	outName = obj->GetName();
+}

@@ -67,7 +67,11 @@ public:
 
 public:
 	virtual void Save(FILE* fp);
+	virtual void Save(const char* fileName, const std::string& pathName = OBJECT_PATH);
+	virtual void SaveFullPath(const char* fullPath);
 	virtual void Load(FILE* fp);
+	virtual void Load(const char* fileName, const std::string& pathName = OBJECT_PATH);
+	virtual void LoadFullPath(const char* fullPath);
 
 public:
 	template <typename T>
@@ -242,7 +246,7 @@ public:
 			mSceneComponentList.push_back((class CSceneComponent*)component);
 			if (!mRootSceneComponent)
 			{
-				mRootSceneComponent = component;
+				mRootSceneComponent = (class CSceneComponent*)component;
 			}
 		}
 

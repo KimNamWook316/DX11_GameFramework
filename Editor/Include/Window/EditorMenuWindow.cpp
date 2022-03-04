@@ -29,6 +29,7 @@
 #include "Engine.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
+#include "../EditorInfo.h"
 
 CEditorMenuWindow::CEditorMenuWindow()  :
     mCreateObjectButton(nullptr),
@@ -101,6 +102,16 @@ bool CEditorMenuWindow::Init()
 
     button = AddWidget<CIMGUIButton>("Load Scene", 0.f, 0.f);
     button->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadScene);
+
+    AddWidget<CIMGUISeperator>("seperator");
+    text = AddWidget<CIMGUIText>("text");
+    text->SetText("Object Save/Load");
+    mSaveObjectButton = AddWidget<CIMGUIButton>("Save GameObject", 0.f, 0.f);
+    mSaveObjectButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveObject);
+    AddWidget<CIMGUISameLine>("Line");
+    mLoadObjectButton = AddWidget<CIMGUIButton>("Load GameObject", 0.f, 0.f);
+    mLoadObjectButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadObject);
+
     return true;
 }
 
@@ -325,5 +336,71 @@ void CEditorMenuWindow::OnClickPlay()
     else
     {
         CEngine::GetInst()->SetPlay(false);
+    }
+}
+
+void CEditorMenuWindow::OnClickSaveObject()
+{
+    CObjectHierachyWindow* hierachy = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow(HIERACHY_WINDOW_NAME);
+
+    if (-1 == hierachy->GetObjectListBox()->GetSelectIndex())
+    {
+        return;
+    }
+
+    std::string objName = hierachy->GetObjectListBox()->GetSelectItem();
+
+    TCHAR filePath[MAX_PATH] = {};
+
+    OPENFILENAME openFile = {};
+
+    openFile.lStructSize = sizeof(OPENFILENAME);
+    openFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+    openFile.lpstrFilter = TEXT("GameObject File\0*.gobj\0All Files\0*.*");
+    openFile.lpstrFile = filePath;
+    openFile.nMaxFile = MAX_PATH;
+    openFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(OBJECT_PATH)->Path;
+
+    if (GetSaveFileName(&openFile) != 0)
+    {
+        char convertFullPath[MAX_PATH] = {};
+
+        int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
+        WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
+
+        if (!CSceneManager::GetInst()->GetScene()->SaveGameObjectFullPath(objName, convertFullPath))
+        {
+			MessageBox(nullptr, TEXT("게임오브젝트 저장 실패"), TEXT("Failed"), MB_OK);
+        }
+
+        MessageBox(nullptr, TEXT("게임오브젝트 저장 완료"), TEXT("Succes"), MB_OK);
+    }
+}
+
+void CEditorMenuWindow::OnClickLoadObject()
+{ 
+    TCHAR filePath[MAX_PATH] = {};
+
+    OPENFILENAME openFile = {};
+
+    openFile.lStructSize = sizeof(OPENFILENAME);
+    openFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+    openFile.lpstrFilter = TEXT("GameObject File\0*.gobj\0All Files\0*.*");
+    openFile.lpstrFile = filePath;
+    openFile.nMaxFile = MAX_PATH;
+    openFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(OBJECT_PATH)->Path;
+
+    if (GetOpenFileName(&openFile) != 0)
+    {
+        char convertFullPath[MAX_PATH] = {};
+
+        int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
+        WideCharToMultiByte(CP_ACP, 0, filePath, -1, convertFullPath, length, 0, 0);
+
+        std::string outName;
+        CSceneManager::GetInst()->GetScene()->LoadGameObjectFullPath(outName, convertFullPath);
+
+		CObjectHierachyWindow* hierachy = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow(HIERACHY_WINDOW_NAME);
+        hierachy->GetObjectListBox()->AddItem(outName);
     }
 }

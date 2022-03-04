@@ -38,8 +38,11 @@ CProcedualMapGenerator::CProcedualMapGenerator(const CProcedualMapGenerator& com
 
 CProcedualMapGenerator::~CProcedualMapGenerator()
 {
-	mSpaceTree->Empty();
-	SAFE_DELETE(mSpaceTree);
+	if (mSpaceTree)
+	{
+		mSpaceTree->Empty();
+		SAFE_DELETE(mSpaceTree);
+	}
 	mVecMapInfo.clear();
 }
 
@@ -52,7 +55,6 @@ bool CProcedualMapGenerator::Init()
 void CProcedualMapGenerator::Start()
 {
 	CSceneComponent::Start();
-	CreateTileComponent();
 }
 
 void CProcedualMapGenerator::Update(float deltaTime)
@@ -88,6 +90,99 @@ void CProcedualMapGenerator::PostRender()
 CProcedualMapGenerator* CProcedualMapGenerator::Clone()
 {
 	return new CProcedualMapGenerator(*this);
+}
+
+void CProcedualMapGenerator::Save(FILE* fp)
+{
+	fwrite(&meTileShape, sizeof(eTileShape), 1, fp);
+	fwrite(&mTileSize, sizeof(Vector3), 1, fp);
+	fwrite(&mTileDiagonal, sizeof(float), 1, fp);
+	fwrite(&mMatIsoToWorld, sizeof(Matrix), 1, fp);
+	fwrite(&mRoomSizeMin, sizeof(int), 1, fp);
+	fwrite(&mMapCountX, sizeof(int), 1, fp);
+	fwrite(&mMapCountY, sizeof(int), 1, fp);
+	fwrite(&mPartitionLevel, sizeof(int), 1, fp);
+
+	bool tileSetExist = false;
+	if (mTileSet)
+	{
+		tileSetExist = true;
+	}
+	fwrite(&tileSetExist, sizeof(bool), 1, fp);
+
+	if (tileSetExist)
+	{
+		std::string tileSetFullPath = mTileSet->GetCSVFullPath();
+		int length = (int)tileSetFullPath.length();
+		fwrite(&length, sizeof(int), 1, fp);
+		fwrite(tileSetFullPath.c_str(), sizeof(char), length, fp);
+	}
+
+	bool wallTileSetExist = false;
+	if (mWallTileSet)
+	{
+		wallTileSetExist = true;
+	}
+	fwrite(&wallTileSetExist, sizeof(bool), 1, fp);
+
+	if (wallTileSetExist)
+	{
+		std::string wallTileSetFullPath = mWallTileSet->GetCSVFullPath();
+		int length = (int)wallTileSetFullPath.length();
+		fwrite(&length, sizeof(int), 1, fp);
+		fwrite(wallTileSetFullPath.c_str(), sizeof(char), length, fp);
+	}
+
+	// 타일맵은 자동 생성할 것이기 떄문에 삭제한다. 
+	// 부모 Save 먼저 호출되면 안 됨!! ( child 우선으로 저장하기 떄문에 )
+	if (mTileMap)
+	{
+		mTileMap->DeleteChild(mTileMap->GetWallComponent());
+		mObject->DeleteComponent(mTileMap);
+	}
+
+	CSceneComponent::Save(fp);
+}
+
+void CProcedualMapGenerator::Load(FILE* fp)
+{
+	fread(&meTileShape, sizeof(eTileShape), 1, fp);
+	fread(&mTileSize, sizeof(Vector3), 1, fp);
+	fread(&mTileDiagonal, sizeof(float), 1, fp);
+	fread(&mMatIsoToWorld, sizeof(Matrix), 1, fp);
+	fread(&mRoomSizeMin, sizeof(int), 1, fp);
+	fread(&mMapCountX, sizeof(int), 1, fp);
+	fread(&mMapCountY, sizeof(int), 1, fp);
+	fread(&mPartitionLevel, sizeof(int), 1, fp);
+
+	bool tileSetExist = false;
+	fread(&tileSetExist, sizeof(bool), 1, fp);
+
+	if (tileSetExist)
+	{
+		int length = 0;
+		fread(&length, sizeof(int), 1, fp);
+		char tileSetFullPath[MAX_PATH] = {};
+		fread(tileSetFullPath, sizeof(char), length, fp);
+		std::string tileSetName;
+		mObject->GetScene()->GetResource()->LoadTileSetFullPath(tileSetName, tileSetFullPath);
+		mTileSet = mObject->GetScene()->GetResource()->FindTileSet(tileSetName);
+	}
+
+	bool wallTileSetExist = false;
+	fread(&wallTileSetExist, sizeof(bool), 1, fp);
+	if (wallTileSetExist)
+	{
+		int length = 0;
+		fread(&length, sizeof(int), 1, fp);
+		char wallTileSetFullPath[MAX_PATH] = {};
+		fread(wallTileSetFullPath, sizeof(char), length, fp);
+		std::string wallTileSetName;
+		mObject->GetScene()->GetResource()->LoadTileSetFullPath(wallTileSetName, wallTileSetFullPath);
+		mWallTileSet = mObject->GetScene()->GetResource()->FindTileSet(wallTileSetName);
+	}
+
+	CSceneComponent::Load(fp);
 }
 
 bool CProcedualMapGenerator::GenerateMap()

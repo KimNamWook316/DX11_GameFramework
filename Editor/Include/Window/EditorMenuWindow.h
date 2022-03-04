@@ -19,6 +19,8 @@ public:
     void OnClickSaveScene();
     void OnClickLoadScene();
     void OnClickPlay();
+    void OnClickSaveObject();
+    void OnClickLoadObject();
 
 private:
     class CIMGUIButton* mCreateObjectButton;
@@ -29,5 +31,8 @@ private:
 
     class CIMGUIComboBox* mCreatableObjectsComboBox;
     class CIMGUIComboBox* mCreatableComponentsComboBox;
+    
+    class CIMGUIButton* mSaveObjectButton;
+    class CIMGUIButton* mLoadObjectButton;
 };
 

@@ -2,6 +2,16 @@
 #include "Animation/AnimationSequence2DInstance.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"
+#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
+#include "Component/ColliderPixel.h"
+#include "Component/CameraComponent.h"
+#include "Component/WidgetComponent.h"
+#include "Component/ParticleComponent.h"
+#include "Component/TileMapComponent.h"
+#include "Component/ProcedualMapGenerator.h"
+#include "Component/DissolveComponent.h"
+#include "Component/NavAgentComponent.h"
 #include "Engine.h"
 #include "Resource.h"
 #include "Scene/SceneManager.h"
@@ -130,22 +140,22 @@ class CGameObject* CEditorManager::OnCreateObject(CScene* scene, size_t type)
 {
 	if (type == typeid(CGameObject).hash_code())
 	{
-		CGameObject* obj = scene->LoadGameObject<CGameObject>();
+		CGameObject* obj = scene->LoadGameObjectByType<CGameObject>();
 		return obj;
 	}
 	else if (type == typeid(CDragObject).hash_code())
 	{
-		CDragObject* obj = scene->LoadGameObject<CDragObject>();
+		CDragObject* obj = scene->LoadGameObjectByType<CDragObject>();
 		return obj;
 	}
 	else if (type == typeid(CSpriteEditObject).hash_code())
 	{
-		CSpriteEditObject* obj = scene->LoadGameObject<CSpriteEditObject>();
+		CSpriteEditObject* obj = scene->LoadGameObjectByType<CSpriteEditObject>();
 		return obj;
 	}
 	else if (type == typeid(CPlayer2D).hash_code())
 	{
-		CPlayer2D* obj = scene->LoadGameObject<CPlayer2D>();
+		CPlayer2D* obj = scene->LoadGameObjectByType<CPlayer2D>();
 		return obj;
 	}
 	else
@@ -157,12 +167,7 @@ class CGameObject* CEditorManager::OnCreateObject(CScene* scene, size_t type)
 
 CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 {
-	if(type == typeid(CSceneComponent).hash_code())
-	{
-		CComponent* component = obj->LoadComponent<CSceneComponent>();
-		return component;
-	}
-	else if(type == typeid(CSpriteComponent).hash_code())
+	if (type == typeid(CSpriteComponent).hash_code())
 	{
 		CComponent* component = obj->LoadComponent<CSpriteComponent>();
 		return component;
@@ -170,6 +175,56 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 	else if(type == typeid(CStaticMeshComponent).hash_code())
 	{
 		CComponent* component = obj->LoadComponent<CStaticMeshComponent>();
+		return component;
+	}
+	else if(type == typeid(CColliderBox2D).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CColliderBox2D>();
+		return component;
+	}
+	else if(type == typeid(CColliderCircle).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CColliderCircle>();
+		return component;
+	}
+	else if(type == typeid(CColliderPixel).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CColliderPixel>();
+		return component;
+	}
+	else if(type == typeid(CCameraComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CCameraComponent>();
+		return component;
+	}
+	else if(type == typeid(CWidgetComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CWidgetComponent>();
+		return component;
+	}
+	else if(type == typeid(CParticleComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CParticleComponent>();
+		return component;
+	}
+	else if(type == typeid(CTileMapComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CTileMapComponent>();
+		return component;
+	}
+	else if(type == typeid(CProcedualMapGenerator).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CProcedualMapGenerator>();
+		return component;
+	}
+	else if(type == typeid(CDissolveComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CDissolveComponent>();
+		return component;
+	}
+	else if(type == typeid(CNavAgentComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CNavAgentComponent>();
 		return component;
 	}
 	else

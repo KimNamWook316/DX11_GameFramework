@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "../Scene/SceneManager.h"
 #include "../Component/NavAgentComponent.h"
+#include "../PathManager.h"
 
 CGameObject::CGameObject()	:
 	mScene(nullptr),
@@ -357,6 +358,35 @@ void CGameObject::Save(FILE* fp)
 	}
 }
 
+void CGameObject::Save(const char* fileName, const std::string& pathName)
+{
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	char fullPath[MAX_PATH] = {};
+
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+	strcat_s(fullPath, fileName);
+
+	SaveFullPath(fullPath);
+}
+
+void CGameObject::SaveFullPath(const char* fullPath)
+{
+	FILE* fp = nullptr;
+	fopen_s(&fp, fullPath, "wb");
+
+	if (!fp)
+	{
+		return;
+	}
+
+	Save(fp);
+	fclose(fp);
+}
+
 void CGameObject::Load(FILE* fp)
 {
 	CRef::Load(fp);
@@ -386,4 +416,33 @@ void CGameObject::Load(FILE* fp)
 		CComponent* component = CSceneManager::GetInst()->CallCreateComponentFunction(this, typeID);
 		component->Load(fp);
 	}
- } 
+ }
+
+void CGameObject::Load(const char* fileName, const std::string& pathName)
+{
+	char fullPath[MAX_PATH] = {};
+	
+	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
+
+	if (info)
+	{
+		strcpy_s(fullPath, info->PathMultibyte);
+	}
+	strcat_s(fullPath, fileName);
+
+	LoadFullPath(fullPath);
+}
+
+void CGameObject::LoadFullPath(const char* fullPath)
+{
+	FILE* fp = nullptr;
+	fopen_s(&fp, fullPath, "rb");
+
+	if (!fp)
+	{
+		return;
+	}
+
+	Load(fp);
+	fclose(fp);
+}

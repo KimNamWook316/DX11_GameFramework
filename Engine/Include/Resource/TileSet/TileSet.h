@@ -63,6 +63,9 @@ public:
         return meTileShape;
     }
 
+    std::string GetCSVFullPath();
+    std::string GetTextureFullPath();
+
     void GetTileNames(std::vector<std::string>& outNames);
 
 public:

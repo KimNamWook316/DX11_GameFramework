@@ -28,6 +28,12 @@ public:
 	bool LoadFullPath(const char* fullPath);
 
 public:
+	bool SaveGameObject(const std::string& objName, const char* fileName, const std::string& pathName = OBJECT_PATH);
+	bool SaveGameObjectFullPath(const std::string& objName, const char* fullPath);
+	void LoadGameObject(std::string& outName, const char* fileName, const std::string& pathName = OBJECT_PATH);
+	void LoadGameObjectFullPath(std::string& outName, const char* fullPath);
+
+public:
 	CGameObject* FindObject(const std::string& name)
 	{
 		auto iter = mObjList.begin();
@@ -151,7 +157,7 @@ public:
 	}
 
 	template <typename T>
-	T* LoadGameObject()
+	T* LoadGameObjectByType()
 	{
 		T* obj = new T;
 		obj->SetScene(this);

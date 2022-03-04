@@ -473,6 +473,25 @@ bool CTileSet::LoadCSVFullPath(const char* fullPath)
 	return true;
 }
 
+
+std::string CTileSet::GetCSVFullPath()
+{
+	if (strlen(mCSVFullPath) == 0)
+	{
+		return "";
+	}
+	return std::string(mCSVFullPath);
+}
+
+std::string CTileSet::GetTextureFullPath()
+{
+	if (strlen(mTextureFullPath) == 0)
+	{
+		return "";
+	}
+	return std::string(mTextureFullPath);
+}
+
 void CTileSet::GetTileNames(std::vector<std::string>& outNames)
 {
 	auto iter = mMapTileInfo.begin();

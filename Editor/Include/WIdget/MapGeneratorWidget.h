@@ -29,8 +29,16 @@ public:
     void OnClickCreateMap();
     void OnClickLoadTileSet();
     void OnClickLoadWallTileSet();
+    void OnChangeTileSize(int val[2]);
+    void OnChangeTileShape(int idx, const char* label);
+    void OnChangeRoomSizeMin(int val);
+    void OnChangeTileCount(int val[2]);
+    void OnChangePartitionLevel(int val);
 
 private:
+    class CIMGUIInputInt2* mTileSizeInput;
+    class CIMGUIComboBox* mTileShapeComboBox;
+    class CIMGUIInputInt* mRoomSizeMinInput;
     class CIMGUITextInput* mTileSetName;
     class CIMGUIButton* mLoadTileSetButton;
     class CIMGUIImage* mTileSetImage;
@@ -41,9 +49,6 @@ private:
     class CIMGUIInputInt* mPartitionLevelInput;
     class CIMGUIButton* mNextStepButton;
     class CIMGUIButton* mCreateMapButton;
-
-    CSharedPtr<class CTileSet> mTileSet;
-    CSharedPtr<class CTileSet> mWallTileSet;
 
     bool mbGenerationStep[(int)eGenerationStep::Max];
 };
