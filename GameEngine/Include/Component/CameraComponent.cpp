@@ -1,5 +1,7 @@
 #include "CameraComponent.h"
 #include "../Device.h"
+#include "../Scene/Scene.h"
+#include "../Scene/CameraManager.h"
 
 CCameraComponent::CCameraComponent()
 {
@@ -8,6 +10,7 @@ CCameraComponent::CCameraComponent()
 	meCameraType = eCameraType::Camera2D;
 	mViewAngle = 90.f;
 	mDistance = 1000.f;
+	mScale = Vector3(1.f, 1.f, 1.f);
 }
 
 CCameraComponent::CCameraComponent(const CCameraComponent& com)
@@ -36,6 +39,7 @@ bool CCameraComponent::Init()
 void CCameraComponent::Start()
 {
 	CSceneComponent::Start();
+	mRS = CDevice::GetInst()->GetResolution();
 	CreateProjectionMatrix();
 }
 
@@ -119,6 +123,10 @@ void CCameraComponent::PostUpdate(float deltaTime)
 		// Update() 주석 참조 
 		mMatView[3][i] = pos.Dot(axis);
 	}
+
+	mMatView[1][1] *= mScale.x;
+	mMatView[2][2] *= mScale.y;
+	mMatView[3][3] *= mScale.z;
 }
 
 void CCameraComponent::PrevRender()
@@ -151,6 +159,14 @@ void CCameraComponent::Save(FILE* fp)
 	fwrite(&mViewAngle, sizeof(float), 1, fp);
 	fwrite(&mDistance, sizeof(float), 1, fp);
 	fwrite(&mRS, sizeof(Resolution), 1, fp);
+
+	bool bIsPlayerCamera = false;
+	if (mObject == mObject->GetScene()->GetPlayerObj())
+	{
+		bIsPlayerCamera = true;
+	}
+
+	fwrite(&bIsPlayerCamera, sizeof(bool), 1, fp);
 }
 
 void CCameraComponent::Load(FILE* fp)
@@ -163,6 +179,15 @@ void CCameraComponent::Load(FILE* fp)
 	fread(&mViewAngle, sizeof(float), 1, fp);
 	fread(&mDistance, sizeof(float), 1, fp);
 	fread(&mRS, sizeof(Resolution), 1, fp);
+
+	bool bIsPlayerCamera = false;
+	fread(&bIsPlayerCamera, sizeof(bool), 1, fp);
+
+	if (bIsPlayerCamera)
+	{
+		mObject->GetScene()->GetCameraManager()->KeepCamera();
+		mObject->GetScene()->GetCameraManager()->SetCurrentCamera(this);
+	}
 }
 
 void CCameraComponent::CreateProjectionMatrix()

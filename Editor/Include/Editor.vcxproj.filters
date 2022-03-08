@@ -25,6 +25,30 @@
     <Filter Include="02. Window">
       <UniqueIdentifier>{faaeb3f7-880c-4cd3-abc3-7b0c23824ab2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99. Util">
+      <UniqueIdentifier>{2c29852a-08b5-4d9a-9558-d03967382d30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2">
+      <UniqueIdentifier>{47803ce0-6039-4317-be70-84b6802faf64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\00. State">
+      <UniqueIdentifier>{96a1277b-94f3-4aec-8ef1-7b283c5158a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\99. Header">
+      <UniqueIdentifier>{78668f63-396a-4b8e-aaff-3935a913b558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component">
+      <UniqueIdentifier>{5a5629a1-358d-46a2-9817-80c16bb14715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\00. SceneComponent">
+      <UniqueIdentifier>{ac6587ac-fa6c-449d-80aa-dad4d1fd5ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent">
+      <UniqueIdentifier>{558a634d-d700-4daa-a23b-796491691f76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\98. Util">
+      <UniqueIdentifier>{e74f8f6b-5410-43fb-a4b4-bc4e5bf178b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -93,6 +117,63 @@
     <ClInclude Include="Widget\MapGeneratorWidget.h">
       <Filter>04. IMGUIWidget</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\NavAgentControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\StateControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorUtil.h">
+      <Filter>99. Util</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\PlayerIdleState.h">
+      <Filter>98. Diablo2\00. State</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\D2Info.h">
+      <Filter>98. Diablo2\99. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\D2Flag.h">
+      <Filter>98. Diablo2\99. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2CharacterInfoComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\D2Util.h">
+      <Filter>98. Diablo2\98. Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2DataManagerComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2DataManager.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\PlayerRunState.h">
+      <Filter>98. Diablo2\00. State</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\CameraControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\D2DataManagerControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\D2CharInfoWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\PlayerWalkState.h">
+      <Filter>98. Diablo2\00. State</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2PlayerSkillComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ProjectTile.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\D2ProjectileWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -150,6 +231,54 @@
       <Filter>02. Window</Filter>
     </ClCompile>
     <ClCompile Include="Widget\MapGeneratorWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\NavAgentControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\StateControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorUtil.cpp">
+      <Filter>99. Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\PlayerIdleState.cpp">
+      <Filter>98. Diablo2\00. State</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2CharacterInfoComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\D2Util.cpp">
+      <Filter>98. Diablo2\98. Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2DataManagerComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2DataManager.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\PlayerRunState.cpp">
+      <Filter>98. Diablo2\00. State</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\CameraControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\D2DataManagerControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\D2CharInfoWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\PlayerWalkState.cpp">
+      <Filter>98. Diablo2\00. State</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2PlayerSkillComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ProjectTile.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\D2ProjectileWidget.cpp">
       <Filter>04. IMGUIWidget</Filter>
     </ClCompile>
   </ItemGroup>

@@ -67,7 +67,7 @@ bool CPathManager::Init()
     AddPath(SCENE_PATH, TEXT("Scene\\"));
     AddPath(SOUND_PATH, TEXT("Sound\\"));
     AddPath(EXCEL_PATH, TEXT("Excel\\"));
-    AddPath(EXCEL_PATH, TEXT("Object\\"));
+    AddPath(OBJECT_PATH, TEXT("Object\\"));
 
     return true;
 }

@@ -43,6 +43,8 @@
     <ClInclude Include="Component\SceneComponent.h" />
     <ClInclude Include="Component\Space.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
+    <ClInclude Include="Component\State.h" />
+    <ClInclude Include="Component\StateComponent.h" />
     <ClInclude Include="Component\StaticMeshComponent.h" />
     <ClInclude Include="Component\Tile.h" />
     <ClInclude Include="Component\TileMapComponent.h" />
@@ -64,6 +66,7 @@
     <ClInclude Include="fmod_output.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="IMGUIBeginMenu.h" />
     <ClInclude Include="IMGUIButton.h" />
     <ClInclude Include="IMGUICheckBox.h" />
     <ClInclude Include="IMGUIChild.h" />
@@ -80,7 +83,9 @@
     <ClInclude Include="IMGUIInputInt2.h" />
     <ClInclude Include="IMGUILabel.h" />
     <ClInclude Include="IMGUIListBox.h" />
+    <ClInclude Include="IMGUIMainMenuBar.h" />
     <ClInclude Include="IMGUIManager.h" />
+    <ClInclude Include="IMGUIMenuItem.h" />
     <ClInclude Include="IMGUIPopUpModal.h" />
     <ClInclude Include="IMGUIRadioButton.h" />
     <ClInclude Include="IMGUISameLine.h" />
@@ -135,6 +140,7 @@
     <ClInclude Include="Resource\Shader\ParticleConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ParticleRenderShader.h" />
     <ClInclude Include="Resource\Shader\ParticleUpdateShader.h" />
+    <ClInclude Include="Resource\Shader\PathFindTileShader.h" />
     <ClInclude Include="Resource\Shader\PosMeshShader.h" />
     <ClInclude Include="Resource\Shader\ProgressBarConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ProgressBarShader.h" />
@@ -207,12 +213,15 @@
     <ClCompile Include="Component\ParticleComponent.cpp" />
     <ClCompile Include="Component\ProcedualMapGenerator.cpp" />
     <ClCompile Include="Component\Space.cpp" />
+    <ClCompile Include="Component\State.cpp" />
+    <ClCompile Include="Component\StateComponent.cpp" />
     <ClCompile Include="Component\StaticMeshComponent.cpp" />
     <ClCompile Include="Component\Tile.cpp" />
     <ClCompile Include="Component\TileMapComponent.cpp" />
     <ClCompile Include="Component\Wall.cpp" />
     <ClCompile Include="Component\WallComponent.cpp" />
     <ClCompile Include="Component\WidgetComponent.cpp" />
+    <ClCompile Include="IMGUIBeginMenu.cpp" />
     <ClCompile Include="IMGUIButton.cpp" />
     <ClCompile Include="IMGUICheckBox.cpp" />
     <ClCompile Include="IMGUIChild.cpp" />
@@ -228,6 +237,8 @@
     <ClCompile Include="IMGUIInputInt2.cpp" />
     <ClCompile Include="IMGUILabel.cpp" />
     <ClCompile Include="IMGUIListBox.cpp" />
+    <ClCompile Include="IMGUIMainMenuBar.cpp" />
+    <ClCompile Include="IMGUIMenuItem.cpp" />
     <ClCompile Include="IMGUIPopUpModal.cpp" />
     <ClCompile Include="IMGUIRadioButton.cpp" />
     <ClCompile Include="IMGUISameLine.cpp" />
@@ -289,6 +300,7 @@
     <ClCompile Include="Resource\Shader\ParticleConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ParticleRenderShader.cpp" />
     <ClCompile Include="Resource\Shader\ParticleUpdateShader.cpp" />
+    <ClCompile Include="Resource\Shader\PathFindTileShader.cpp" />
     <ClCompile Include="Resource\Shader\PosMeshShader.cpp" />
     <ClCompile Include="Resource\Shader\ProgressBarConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ProgressBarShader.cpp" />
@@ -392,6 +404,11 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ParticleVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\PathFind.fx">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PathFindTileVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

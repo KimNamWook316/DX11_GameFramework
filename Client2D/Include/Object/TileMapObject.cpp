@@ -5,13 +5,13 @@
 
 CTileMapObject::CTileMapObject()
 {
-	SetTypeID<CTileMapObject>();
+ //	SetTypeID<CTileMapObject>();
 }
 
 CTileMapObject::CTileMapObject(const CTileMapObject& obj)	:
 	CGameObject(obj)
 {
-	mTileMap = (CTileMapComponent*)FindComponent("TileMap");
+ //	mTileMap = (CTileMapComponent*)FindComponent("TileMap");
 }
 
 CTileMapObject::~CTileMapObject()
@@ -20,15 +20,15 @@ CTileMapObject::~CTileMapObject()
 
 bool CTileMapObject::Init()
 {
-	mTileMap = CreateComponent<CTileMapComponent>("TileMap");
-	SetRootSceneComponent(mTileMap);
-
-	mTileMap->CreateTile(eTileShape::Rhombus, 100, 100, Vector2(160.f, 80.f));
-
-	CMaterial* mat = mScene->GetResource()->FindMaterial("TileMap");
-	mTileMap->SetTileMaterial(mat);
-	mTileMap->SetTileDefaultFrame(0.f, 0.f, 160.f, 80.f);
-	return true;
+ //	mTileMap = CreateComponent<CTileMapComponent>("TileMap");
+ //	SetRootSceneComponent(mTileMap);
+ //
+ //	mTileMap->CreateTile(eTileShape::Rhombus, 100, 100, Vector2(160.f, 80.f));
+ //
+ //	CMaterial* mat = mScene->GetResource()->FindMaterial("TileMap");
+ //	mTileMap->SetTileMaterial(mat);
+ //	mTileMap->SetTileDefaultFrame(0.f, 0.f, 160.f, 80.f);
+ 	return true;
 }
 
 void CTileMapObject::Start()

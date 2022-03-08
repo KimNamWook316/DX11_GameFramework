@@ -17,5 +17,8 @@ public:
 
 	static std::string SceneComponentTypeToString(eSceneComponentType eType);
 	static std::string ObjectComponentTypeToString(eObjectComponentType eType);
+
+	static std::string CameraTypeToString(eCameraType eType);
+	static eCameraType StringToCameraType(const std::string& str);
 };
 

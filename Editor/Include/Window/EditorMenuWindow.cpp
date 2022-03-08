@@ -7,7 +7,11 @@
 #include "IMGUIText.h"
 #include "IMGUISeperator.h"
 #include "IMGUIListBox.h"
+#include "IMGUITree.h"
 #include "IMGUISameLine.h"
+#include "IMGUIMainMenuBar.h"
+#include "IMGUIBeginMenu.h"
+#include "IMGUIMenuItem.h"
 #include "../EditorInfo.h"
 #include "Scene/SceneManager.h"
 #include "ObjectHierachyWindow.h"
@@ -26,10 +30,19 @@
 #include "Component/DissolveComponent.h"
 #include "Component/NavAgentComponent.h"
 #include "Component/ProcedualMapGenerator.h"
+#include "Component/StateComponent.h"
+#include "../Diablo2/Component/D2CharacterInfoComponent.h"
+#include "../Diablo2/Component/D2DataManagerComponent.h"
+#include "../Diablo2/Component/D2ProjectTile.h"
 #include "Engine.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
 #include "../EditorInfo.h"
+#include "../EditorUtil.h"
+
+// D2
+#include "../Diablo2/D2Info.h"
+#include "../Diablo2/D2Util.h"
 
 CEditorMenuWindow::CEditorMenuWindow()  :
     mCreateObjectButton(nullptr),
@@ -37,7 +50,8 @@ CEditorMenuWindow::CEditorMenuWindow()  :
     mObjectNameInput(nullptr),
     mComponentNameInput(nullptr),
     mCreatableObjectsComboBox(nullptr),
-    mCreatableComponentsComboBox(nullptr)
+    mCreatableComponentsComboBox(nullptr),
+    mMainMenuBar(nullptr)
 {
 }
 
@@ -49,6 +63,17 @@ bool CEditorMenuWindow::Init()
 {
     CIMGUIWindow::Init();
 
+    mMainMenuBar = AddWidget<CIMGUIMainMenuBar>("Main Menu");
+    CIMGUIBeginMenu* beginMenu = mMainMenuBar->AddWidget<CIMGUIBeginMenu>("File");
+    CIMGUIMenuItem* item = beginMenu->AddWidget<CIMGUIMenuItem>("Save Scene");
+    item->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveScene);
+    item = beginMenu->AddWidget<CIMGUIMenuItem>("Load Scene");
+    item->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadScene);
+    item = beginMenu->AddWidget<CIMGUIMenuItem>("Save Object");
+    item->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveObject);
+    item = beginMenu->AddWidget<CIMGUIMenuItem>("Load Object");
+    item->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadObject);
+
     CIMGUIText* text = AddWidget<CIMGUIText>("text");
     text->SetText("Play/Stop");
 
@@ -57,24 +82,19 @@ bool CEditorMenuWindow::Init()
 
     AddWidget<CIMGUISeperator>("seperator");
 
-    text = AddWidget<CIMGUIText>("text");
-    text->SetText("Create Object");
-
-    mCreatableObjectsComboBox = AddWidget<CIMGUIComboBox>("Object List", 150.f, 0.f);
+    // Create Object Tree
+    CIMGUITree* tree = AddWidget<CIMGUITree>("Create Object");
+    mCreatableObjectsComboBox = tree->AddWidget<CIMGUIComboBox>("Object List", 150.f, 0.f);
     mCreatableObjectsComboBox->AddItem("GameObject");
     mCreatableObjectsComboBox->AddItem("Player");
-
-    mObjectNameInput = AddWidget<CIMGUITextInput>("Object Name", 100.f, 0.f);
-    
-    mCreateObjectButton = AddWidget<CIMGUIButton>("Create Object", 0.f, 0.f);
+    mObjectNameInput = tree->AddWidget<CIMGUITextInput>("Object Name", 100.f, 0.f);
+    mCreateObjectButton = tree->AddWidget<CIMGUIButton>("Create Object", 0.f, 0.f);
     mCreateObjectButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickCreateObject);
-
     AddWidget<CIMGUISeperator>("seperator");
 
-    text = AddWidget<CIMGUIText>("text");
-    text->SetText("Create Components");
-
-    mCreatableComponentsComboBox = AddWidget<CIMGUIComboBox>("Component List", 150.f, 0.f);
+    // Create Component Tree
+    tree = AddWidget<CIMGUITree>("Create Component");
+    mCreatableComponentsComboBox = tree->AddWidget<CIMGUIComboBox>("Component List", 150.f, 0.f);
 
     for (int i = 0; i < (int)eSceneComponentType::Max; ++i)
     {
@@ -84,33 +104,30 @@ bool CEditorMenuWindow::Init()
     {
         mCreatableComponentsComboBox->AddItem(CUtil::ObjectComponentTypeToString((eObjectComponentType)i));
     }
-
-    mComponentNameInput = AddWidget<CIMGUITextInput>("Component Name", 100.f, 0.f);
-    
-    mCreateComponentButton = AddWidget<CIMGUIButton>("Create Component", 0.f, 0.f);
+    for (int i = 0; i < (int)eD2SceneComponentType::Max; ++i)
+    {
+        mCreatableComponentsComboBox->AddItem(CD2Util::D2SceneComponentTypeToString((eD2SceneComponentType)i));
+    }
+    for (int i = 0; i < (int)eD2ObjectComponentType::Max; ++i)
+    {
+        mCreatableComponentsComboBox->AddItem(CD2Util::D2ObjectComponentTypeToString((eD2ObjectComponentType)i));
+    }
+    mComponentNameInput = tree->AddWidget<CIMGUITextInput>("Component Name", 100.f, 0.f);
+    mCreateComponentButton = tree->AddWidget<CIMGUIButton>("Create Component", 0.f, 0.f);
     mCreateComponentButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickCreateComponent);
-    
     AddWidget<CIMGUISeperator>("seperator");
 
-    text = AddWidget<CIMGUIText>("text");
-    text->SetText("Scene Save/Load");
-
-    button = AddWidget<CIMGUIButton>("Save Scene", 0.f, 0.f);
-    button->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveScene);
-
-    AddWidget<CIMGUISameLine>("Line");
-
-    button = AddWidget<CIMGUIButton>("Load Scene", 0.f, 0.f);
-    button->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadScene);
-
-    AddWidget<CIMGUISeperator>("seperator");
-    text = AddWidget<CIMGUIText>("text");
-    text->SetText("Object Save/Load");
-    mSaveObjectButton = AddWidget<CIMGUIButton>("Save GameObject", 0.f, 0.f);
-    mSaveObjectButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveObject);
-    AddWidget<CIMGUISameLine>("Line");
-    mLoadObjectButton = AddWidget<CIMGUIButton>("Load GameObject", 0.f, 0.f);
-    mLoadObjectButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadObject);
+    // Prefab Tree
+    tree = AddWidget<CIMGUITree>("Prefab");
+    text = tree->AddWidget<CIMGUIText>("text");
+    text->SetText("Prefab List");
+    mCreatablePrefabsListBox = tree->AddWidget<CIMGUIListBox>("Prefabs");
+    mCreatablePrefabsListBox->SetHideName(true);
+    mCreatablePrefabsListBox->SetSize(200.f, 100.f);
+    mCreatablePrefabsListBox->SetPageItemCount(10);
+    mInstanciatePrefabButton = tree->AddWidget<CIMGUIButton>("Instantiate", 0.f, 0.f);
+    mInstanciatePrefabButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickInstanciate);
+    refreshPrefabList();
 
     return true;
 }
@@ -236,11 +253,47 @@ void CEditorMenuWindow::OnClickCreateComponent()
 		case eObjectComponentType::NavAgent:
 			objComp = obj->CreateComponent<CNavAgentComponent>(mComponentNameInput->GetTextMultiByte());
 			break;
+        case eObjectComponentType::State:
+            objComp = obj->CreateComponent<CStateComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
 		}
+
     }
     
+    // 사용자 정의 컴포넌트
+    if (!objComp)
+    {
+        selectIdx -= (int)(eObjectComponentType::Max);
 
-    // TODO : 사용자 정의 컴포넌트에도 없으면 assert 하도록
+        switch ((eD2SceneComponentType)selectIdx)
+        {
+        }
+    }
+
+    if (!sceneComp && !objComp)
+    {
+        selectIdx -= (int)(eD2SceneComponentType::Max);
+
+        switch ((eD2ObjectComponentType)selectIdx)
+        {
+        case eD2ObjectComponentType::D2CharacterInfo:
+            objComp = obj->CreateComponent<CD2CharacterInfoComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2DataManager:
+            objComp = obj->CreateComponent<CD2DataManagerComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2Projectile:
+            objComp = obj->CreateComponent<CD2Projectile>(mComponentNameInput->GetTextMultiByte());
+            break;
+        }
+    }
+
+    // 예외처리
+    if (!sceneComp && !objComp)
+    {
+        assert(false);
+        return;
+    }
     
     if (sceneComp)
     {
@@ -316,13 +369,17 @@ void CEditorMenuWindow::OnClickLoadScene()
             std::vector<std::string> objNames;
             CSceneManager::GetInst()->GetScene()->GetObjNames(objNames);
 
-            CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Object Hierachy");
+            CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow(HIERACHY_WINDOW_NAME);
             
             size_t size = objNames.size();
             for (size_t i = 0; i < size; ++i)
             {
                 hierachyWindow->AddObjectList(objNames[i].c_str());
             }
+
+            CEditorManager::GetInst()->RecreateEditorCameraDragObj();
+
+            MessageBox(nullptr, TEXT("씬 로드 성공"), TEXT("Failed"), MB_OK);
         }
     }
 }
@@ -374,6 +431,7 @@ void CEditorMenuWindow::OnClickSaveObject()
         }
 
         MessageBox(nullptr, TEXT("게임오브젝트 저장 완료"), TEXT("Succes"), MB_OK);
+        refreshPrefabList();
     }
 }
 
@@ -402,5 +460,33 @@ void CEditorMenuWindow::OnClickLoadObject()
 
 		CObjectHierachyWindow* hierachy = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow(HIERACHY_WINDOW_NAME);
         hierachy->GetObjectListBox()->AddItem(outName);
+    }
+}
+
+void CEditorMenuWindow::OnClickInstanciate()
+{
+    if (-1 == mCreatablePrefabsListBox->GetSelectIndex())
+    {
+        return;
+    }
+
+    std::string outName;
+    std::string fileName = mCreatablePrefabsListBox->GetSelectItem();
+    CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, fileName.c_str());
+
+	CObjectHierachyWindow* hierachy = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow(HIERACHY_WINDOW_NAME);
+	hierachy->GetObjectListBox()->AddItem(outName);
+}
+
+void CEditorMenuWindow::refreshPrefabList()
+{
+    mCreatablePrefabsListBox->Clear();
+
+    const PathInfo* path = CPathManager::GetInst()->FindPath(OBJECT_PATH);
+    std::vector<std::string> prefabNames = CEditorUtil::GetFilesInDirectory(path->PathMultibyte, "*.gobj");
+    size_t size = prefabNames.size();
+    for (size_t i = 0; i < size; ++i)
+    {
+        mCreatablePrefabsListBox->AddItem(prefabNames[i]);
     }
 }

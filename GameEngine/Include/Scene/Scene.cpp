@@ -172,17 +172,34 @@ bool CScene::SaveFullPath(const char* fullPath)
 	fwrite(&sceneModeType, sizeof(size_t), 1, fp);
 
 	size_t objCount = mObjList.size();
-	fwrite(&objCount, sizeof(size_t), 1, fp);
+	size_t excludeCount = 0;
 
+	// 저장에서 제외되어야 하는 오브젝트들은 제외한다.
 	auto iter = mObjList.begin();
 	auto iterEnd = mObjList.end();
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->IsExcludeFromSave())
+		{
+			++excludeCount;
+		}
+	}
+	objCount -= excludeCount;
+
+	fwrite(&objCount, sizeof(size_t), 1, fp);
+
+	iter = mObjList.begin();
+	iterEnd = mObjList.end();
 
 	for (; iter != iterEnd; ++iter)
 	{
-		size_t objType = (*iter)->GetTypeID();
-		fwrite(&objType, sizeof(size_t), 1, fp);
+		if (!(*iter)->IsExcludeFromSave())
+		{
+			size_t objType = (*iter)->GetTypeID();
+			fwrite(&objType, sizeof(size_t), 1, fp);
 
-		(*iter)->Save(fp);
+			(*iter)->Save(fp);
+		}
 	}
 
 	fclose(fp);
@@ -237,6 +254,13 @@ bool CScene::LoadFullPath(const char* fullPath)
 		obj->Load(fp);
 	}
 
+	auto iter = mObjList.begin();
+	auto iterEnd = mObjList.end();
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->Start();
+	}
+
 	fclose(fp);
 	return true;
 }
@@ -268,7 +292,7 @@ bool CScene::SaveGameObjectFullPath(const std::string& objName, const char* full
 	saveObj->SaveFullPath(fullPath);
 }
 
-void CScene::LoadGameObject(std::string& outName, const char* fileName, const std::string& pathName)
+CGameObject* CScene::LoadGameObject(std::string& outName, const char* fileName, const std::string& pathName)
 {
 	const PathInfo* info = CPathManager::GetInst()->FindPath(pathName);
 
@@ -283,9 +307,14 @@ void CScene::LoadGameObject(std::string& outName, const char* fileName, const st
 	return LoadGameObjectFullPath(outName, fullPath);
 }
 
-void CScene::LoadGameObjectFullPath(std::string& outName, const char* fullPath)
+CGameObject* CScene::LoadGameObjectFullPath(std::string& outName, const char* fullPath)
 {
 	CGameObject* obj = CreateGameObject<CGameObject>("temp");
 	obj->LoadFullPath(fullPath);
 	outName = obj->GetName();
+	if (mbIsStart)
+	{
+		obj->Start();
+	}
+	return obj;
 }

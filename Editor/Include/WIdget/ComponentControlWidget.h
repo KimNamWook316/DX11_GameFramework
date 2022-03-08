@@ -10,7 +10,7 @@ class CComponentControlWidget :
 
 protected:
     CComponentControlWidget();
-    virtual ~CComponentControlWidget() = 0;
+    virtual ~CComponentControlWidget();
 
 public:
     virtual bool Init() override;

@@ -228,6 +228,12 @@
     <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\11. Space">
       <UniqueIdentifier>{94527fe7-8d6c-49c9-b955-421b16e0d9a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component\02. ObjectComponent\03. State">
+      <UniqueIdentifier>{9981062d-991c-4768-813b-34a7331be6d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\08. PathFindShader">
+      <UniqueIdentifier>{5a1c5ac9-398f-44ca-8677-95181f9cf16d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -731,6 +737,24 @@
     <ClInclude Include="Resource\Shader\SpaceRhombusShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\07. SpaceShader</Filter>
     </ClInclude>
+    <ClInclude Include="Component\StateComponent.h">
+      <Filter>05. Component\02. ObjectComponent\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\State.h">
+      <Filter>05. Component\02. ObjectComponent\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\PathFindTileShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\08. PathFindShader</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIMainMenuBar.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIBeginMenu.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="IMGUIMenuItem.h">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1183,6 +1207,24 @@
     <ClCompile Include="Resource\Shader\SpaceRhombusShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\07. SpaceShader</Filter>
     </ClCompile>
+    <ClCompile Include="Component\StateComponent.cpp">
+      <Filter>05. Component\02. ObjectComponent\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\State.cpp">
+      <Filter>05. Component\02. ObjectComponent\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\PathFindTileShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\08. PathFindShader</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIMainMenuBar.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIBeginMenu.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="IMGUIMenuItem.cpp">
+      <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat" />
@@ -1225,6 +1267,9 @@
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Space.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\PathFind.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

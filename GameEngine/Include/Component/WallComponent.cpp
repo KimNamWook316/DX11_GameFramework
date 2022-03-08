@@ -95,12 +95,12 @@ void CWallComponent::PrevRender()
 			// TileComponent에서 mbRender true처리함
 			if (mVecWall[i]->mbRender)
 			{
+				mVecWall[i]->Update();
 				mVecWallInfo[mRenderCount].TileStart = mVecWall[i]->GetFrameStart();
 				mVecWallInfo[mRenderCount].TileEnd = mVecWall[i]->GetFrameEnd();
 				mVecWallInfo[mRenderCount].Opacity = mVecWall[i]->GetOpacity();
 				mVecWallInfo[mRenderCount].MatWVP = mVecWall[i]->GetWorldMatrix() * matView * matProj;
 				mVecWallInfo[mRenderCount].MatWVP.Transpose();
-				mVecWallInfo[mRenderCount].SortY = mVecWall[i]->GetSortY();
 
 				++mRenderCount;
 
@@ -108,7 +108,6 @@ void CWallComponent::PrevRender()
 				mVecWall[i]->SetRender(false);
 			}
 		}
-		std::sort(mVecWallInfo.begin(), mVecWallInfo.begin() + mRenderCount, &CWallComponent::sortWall);
 		mWallInfoBuffer->UpdateBuffer(&mVecWallInfo[0], mRenderCount);
 	}
 
@@ -566,11 +565,6 @@ bool CWallComponent::createWallFromTile(CTile* tile)
 		return false;
 	}
 	return true;
-}
-
-bool CWallComponent::sortWall(const TileInfo& src, const TileInfo& dst)
-{
-	return src.SortY > dst.SortY;
 }
 
 bool CWallComponent::CreateWall(const std::vector<class CTile*>& vecTile)

@@ -5,13 +5,13 @@
 
 struct CharacterInfo
 {
-	eSpriteDir SpriteDir;
+	eD2SpriteDir SpriteDir;
 	Vector2 Dir;
 	float CurMoveSpeed;
 	float MaxMoveSpeed;
 
 	CharacterInfo()	:
-		SpriteDir(eSpriteDir::S),
+		SpriteDir(eD2SpriteDir::S),
 		Dir(0.f, -1.f),
 		CurMoveSpeed(0.f),
 		MaxMoveSpeed(0.f)

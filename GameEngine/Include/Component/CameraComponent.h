@@ -56,6 +56,16 @@ public:
 		return LB;
 	}
 
+	const Vector3& GetScale() const
+	{
+		return mScale;
+	}
+
+	const Vector2& GetRatio() const
+	{
+		return mRatio;
+	}
+
 public:
 	void SetCameraType(eCameraType type)
 	{
@@ -85,10 +95,10 @@ public:
 		if (eCameraType::Camera2D == meCameraType)
 		{
 			float z = GetRelativePos().z;
-			SetRelativePos(mRS.Width / -2.f, mRS.Height / -2.f, z);
+			SetWorldPos(mRS.Width / -2.f, mRS.Height / -2.f, z);
 
-			mRatio.x = 0.5f;
-			mRatio.y = 0.5f;
+			mRatio.x = 5.f;
+			mRatio.y = 5.f;
 		}
 	}
 
@@ -98,11 +108,21 @@ public:
 		if (eCameraType::Camera2D == meCameraType)
 		{
 			float z = GetRelativePos().z;
-			SetRelativePos(mRS.Width / -x, mRS.Height / -y, z);
+			SetWorldPos(mRS.Width / -x, mRS.Height / -y, z);
 
 			mRatio.x = x;
-			mRatio.y = y;
+ 			mRatio.y = y;
 		}
+	}
+
+	void SetScale(const Vector3& scale)
+	{
+		mScale = scale;
+	}
+
+	void SetScale(const float x, const float y, const float z)
+	{
+		mScale = Vector3(x, y, z);
 	}
 
 private:
@@ -110,6 +130,7 @@ private:
 
 protected:
     eCameraType meCameraType;
+	Vector3 mScale;
     Matrix mMatView;
     Matrix mMatProj;
     float mViewAngle;

@@ -46,9 +46,16 @@ void CTile::Update(float deltaTime)
 	Vector3 ownerPos = mOwner->GetWorldPos();
 	Vector3 pos = ownerPos + mPos;
 
+	Vector3 worldPos = pos;
+
+	if (eEngineSpace::Space2D == CEngine::GetInst()->GetEngineSpace())
+	{
+		worldPos.z = 999.9999f;
+	}
+
 	Matrix matScale, matTranslate;
 	matScale.Scaling(mSize.x, mSize.y, 1.f);
-	matTranslate.Translation(mPos);
+	matTranslate.Translation(worldPos);
 
 	mMatWorld = matScale * matTranslate;
 }

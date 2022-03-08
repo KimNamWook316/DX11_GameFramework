@@ -8,6 +8,7 @@
 #include "CameraComponent.h"
 #include "ColliderCircle.h"
 #include "ColliderPixel.h"
+#include "../Engine.h"
 
 CColliderBox2D::CColliderBox2D()
 {
@@ -56,6 +57,14 @@ bool CColliderBox2D::Init()
 void CColliderBox2D::Start()
 {
 	CColliderComponent::Start();
+
+	SetBoolInheritRotZ(true);
+	SetWorldScale(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
+
+	if (!mMesh)
+	{
+		mMesh = mScene->GetResource()->FindMesh("Box2DMesh");
+	}
 }
 
 void CColliderBox2D::Update(float deltaTime)
@@ -129,42 +138,45 @@ void CColliderBox2D::Render()
 {
 	CColliderComponent::Render();
 
-	CCameraComponent* cam = mScene->GetCameraManager()->GetCurrentCamera();
-
-	Matrix matWorld, matView, matProj, matWVP;
-	matView = cam->GetViewMatrix();
-	matProj = cam->GetProjMatrix();
-
-	Matrix matScale, matRot, matTrans;
-	matScale.Scaling(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
-	matRot.Rotation(GetWorldRot());
-	matTrans.Translation(mInfo.Center);
-	
-	matWorld = matScale * matRot * matTrans;
-
-	matWVP = matWorld * matView * matProj;
-
-	matWVP.Transpose();
-
-	mCBuffer->SetColliderWVP(matWVP);
-
-	if (mPrevCollisionList.empty())
+	if (CEngine::GetInst()->IsDebugMode())
 	{
-		mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
-	}
-	else
-	{
-		mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
-	}
+		CCameraComponent* cam = mScene->GetCameraManager()->GetCurrentCamera();
 
-	if (mbMouseCollision)
-	{
-		mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
-	}
+		Matrix matWorld, matView, matProj, matWVP;
+		matView = cam->GetViewMatrix();
+		matProj = cam->GetProjMatrix();
 
-	mCBuffer->UpdateCBuffer();
-	mShader->SetShader();
-	mMesh->Render();
+		Matrix matScale, matRot, matTrans;
+		matScale.Scaling(mInfo.Length.x * 2.f, mInfo.Length.y * 2.f, 1.f);
+		matRot.Rotation(GetWorldRot());
+		matTrans.Translation(mInfo.Center);
+		
+		matWorld = matScale * matRot * matTrans;
+
+		matWVP = matWorld * matView * matProj;
+
+		matWVP.Transpose();
+
+		mCBuffer->SetColliderWVP(matWVP);
+
+		if (mPrevCollisionList.empty())
+		{
+			mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
+		}
+		else
+		{
+			mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
+		}
+
+		if (mbMouseCollision)
+		{
+			mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
+		}
+
+		mCBuffer->UpdateCBuffer();
+		mShader->SetShader();
+		mMesh->Render();
+	}
 }
 
 void CColliderBox2D::PostRender()

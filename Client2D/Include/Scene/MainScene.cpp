@@ -46,7 +46,7 @@ bool CMainScene::Init()
 
 	SetPlayerObj(player);
 
-	CTileMapObject* tileMap = mScene->CreateGameObject<CTileMapObject>("TileMap");
+	// CTileMapObject* tileMap = mScene->CreateGameObject<CTileMapObject>("TileMap");
 
 	if (mLoadingFunction)
 	{

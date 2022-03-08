@@ -141,7 +141,6 @@ void CRenderManager::Render()
 	// 2D에서는 Depth 사용하지 않는 State적용
 	if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)
 	{
-		mDepthDisableState->SetState();
 	}
 
 	{
@@ -192,6 +191,8 @@ void CRenderManager::Render()
 		}
 	}
 	
+	mDepthDisableState->SetState();
+
 	// UI 렌더
 	mAlphaBlendState->SetState();
 	
@@ -204,14 +205,9 @@ void CRenderManager::Render()
 	{
 		mouseWidget->Render();
 	}
-
 	mAlphaBlendState->ResetState();
 
-	if (CEngine::GetInst()->GetEngineSpace() == eEngineSpace::Space2D)
-	{
-		mDepthDisableState->ResetState();
-	}
-
+	mDepthDisableState->ResetState();
 }
 
 CRenderState* CRenderManager::FindRenderState(const std::string& name)

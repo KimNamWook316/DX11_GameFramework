@@ -113,6 +113,8 @@ public:
 		mVecNotify.push_back(notify);
 	}
 
+	void DeleteNotify(const std::string& name);
+
 private:
 	std::string mName;										// 이 애니메이션의 이름
 	std::string mSequenceName;

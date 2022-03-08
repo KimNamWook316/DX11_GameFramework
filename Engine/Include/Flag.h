@@ -102,6 +102,7 @@ enum class eObjectComponentType
 {
 	Dissolve,
 	NavAgent,
+	State,
 	Max
 };
 
@@ -150,6 +151,7 @@ enum class eCameraType
 	Camera2D,
 	Camera3D,
 	UI,
+	Max
 };
 
 enum class ePixelCollisionType

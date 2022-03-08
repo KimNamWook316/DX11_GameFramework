@@ -12,6 +12,7 @@
 #include "SpaceRectShader.h"
 #include "SpaceRhombusShader.h"
 #include "TileMapShader.h"
+#include "PathFindTileShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -109,6 +110,13 @@ bool CShaderManager::Init()
 	}
 
 	if (!CreateShader<CSpaceRhombusShader>("SpaceRhombusShader"))
+	{
+		assert(false);
+		return false;
+	}
+
+	// 길찾기 쉐이더
+	if (!CreateShader<CPathFindTileShader>("PathFindTileMapShader"))
 	{
 		assert(false);
 		return false;

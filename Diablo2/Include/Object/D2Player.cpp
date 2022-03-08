@@ -115,88 +115,88 @@ void CD2Player::SetSpriteDir(const Vector2& dir)
 	// dir.x > 0 == 오른쪽을 보는 경우
 	if (dirAngle <= 11.25f)
 	{
-		mCharInfo.SpriteDir = eSpriteDir::S;
+		mCharInfo.SpriteDir = eD2SpriteDir::S;
 	}
 	else if (dirAngle <= 33.75f)
 	{
 		if (mCharInfo.Dir.x > 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::SSE;
+			mCharInfo.SpriteDir = eD2SpriteDir::SSE;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::SSW;
+			mCharInfo.SpriteDir = eD2SpriteDir::SSW;
 		}
 	}
 	else if (dirAngle <= 56.25f)
 	{
 		if (mCharInfo.Dir.x > 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::ES;
+			mCharInfo.SpriteDir = eD2SpriteDir::ES;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::SW;
+			mCharInfo.SpriteDir = eD2SpriteDir::SW;
 		}
 	}
 	else if (dirAngle <= 78.75f)
 	{
 		if (mCharInfo.Dir.x > 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::EES;
+			mCharInfo.SpriteDir = eD2SpriteDir::EES;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::WWS;
+			mCharInfo.SpriteDir = eD2SpriteDir::WWS;
 		}
 	}
 	else if (dirAngle <= 101.25f)
 	{
 		if (mCharInfo.Dir.x > 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::E;
+			mCharInfo.SpriteDir = eD2SpriteDir::E;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::W;
+			mCharInfo.SpriteDir = eD2SpriteDir::W;
 		}
 	}
 	else if (dirAngle <= 123.75f)
 	{
 		if (mCharInfo.Dir.x > 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::EEN;
+			mCharInfo.SpriteDir = eD2SpriteDir::EEN;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::WWN;
+			mCharInfo.SpriteDir = eD2SpriteDir::WWN;
 		}
 	}
 	else if (dirAngle <= 146.25f)
 	{
 		if (mCharInfo.Dir.x > 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::NE;
+			mCharInfo.SpriteDir = eD2SpriteDir::NE;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::NW;
+			mCharInfo.SpriteDir = eD2SpriteDir::NW;
 		}
 	}
 	else if (dirAngle <= 168.75f)
 	{
 		if (mCharInfo.Dir.x > 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::NNE;
+			mCharInfo.SpriteDir = eD2SpriteDir::NNE;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::NNW;
+			mCharInfo.SpriteDir = eD2SpriteDir::NNW;
 		}
 	}
 	else if (dirAngle <= 191.25f)
 	{
-		mCharInfo.SpriteDir = eSpriteDir::N;
+		mCharInfo.SpriteDir = eD2SpriteDir::N;
 	}
 	else
 	{

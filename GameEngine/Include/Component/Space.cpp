@@ -1055,7 +1055,7 @@ void CSpace::doPartitioning(const int maxLevel)
 	float ratio = (4.f + (float)(rand() % 3)) / 10.f;
 
 	// 4 : 6 으로 분할했을 때, 작은 사이즈 공간이 최소 공간 사이즈보다 작을 경우, 5 : 5로만 분할한다.
-	if (((mSizeX / 2) * 0.4f <= minSpaceSize) || ((mSizeY / 2 * 0.4f) <= minSpaceSize))
+	if (((mSizeX / 2 * 0.4f) <= minSpaceSize) || ((mSizeY / 2 * 0.4f) <= minSpaceSize))
 	{
 		ratio = 0.5f;
 	}

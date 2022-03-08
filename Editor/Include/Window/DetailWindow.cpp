@@ -17,11 +17,20 @@
 #include "Component/ColliderPixel.h"
 #include "Component/TileMapComponent.h"
 #include "Component/ProcedualMapGenerator.h"
+#include "Component/NavAgentComponent.h"
+#include "Component/StateComponent.h"
+#include "Component/CameraComponent.h"
+#include "../Diablo2/Component/D2CharacterInfoComponent.h"
+#include "../Diablo2/Component/D2ProjectTile.h"
 #include "../Widget/ComponentControlWidget.h"
 #include "../Widget/SpriteControlWidget.h"
 #include "../Widget/ColliderControlWidget.h"
 #include "../Widget/TileMapControlWidget.h"
 #include "../Widget/MapGeneratorWidget.h"
+#include "../Widget/StateControlWidget.h"
+#include "../Widget/CameraControlWidget.h"
+#include "../Widget/D2CharInfoWidget.h"
+#include "../Widget/D2ProjectileWidget.h"
 
 CDetailWindow::CDetailWindow()
 {
@@ -98,9 +107,29 @@ CComponentControlWidget* CDetailWindow::CreateControlWidget(CComponent* comp)
         CMapGeneratorWidget* widget = new CMapGeneratorWidget;
         return widget;
     }
+    else if (comp->GetTypeID() == typeid(CStateComponent).hash_code())
+    {
+        CStateControlWidget* widget = new CStateControlWidget;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CCameraComponent).hash_code())
+    {
+        CCameraControlWidget* widget = new CCameraControlWidget;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CD2CharacterInfoComponent).hash_code())
+    {
+        CD2CharInfoWidget* widget = new CD2CharInfoWidget;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CD2Projectile).hash_code())
+    {
+        CD2ProjectileWidget* widget = new CD2ProjectileWidget;
+        return widget;
+    }
     else
     {
-        assert(false);
-        return nullptr;
+        CComponentControlWidget* widget = new CComponentControlWidget;
+        return widget;
     }
 }

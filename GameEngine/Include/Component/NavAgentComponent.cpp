@@ -29,7 +29,7 @@ void CNavAgentComponent::Start()
 {
     if (!mUpdateComponent)
     {
-        mObject->GetRootSceneComponent();
+        mUpdateComponent = mObject->GetRootSceneComponent();
     }
 }
 
@@ -56,6 +56,22 @@ void CNavAgentComponent::Update(float deltaTime)
             }
             
             mUpdateComponent->AddWorldPos(dir * dist);
+
+            if (mPathList.empty())
+            {
+                if (mEndCallBack)
+                {
+                    mEndCallBack();
+                    mEndCallBack = nullptr;
+                }
+            }
+            else
+            {
+				if (mFrameCallBack)
+				{
+					mFrameCallBack();
+				}
+            }
         }
     }
 }
@@ -92,6 +108,15 @@ bool CNavAgentComponent::Move(const Vector3& endPos)
     {
         return false;
     }
+
+    int endIdx = mScene->GetNavigationManager()->GetIndex(endPos);
+
+    if (mPrevEndIdx == endIdx)
+    {
+        return false;
+    }
+
+    mPrevEndIdx = endIdx;
 
     return mScene->GetNavigationManager()->FindPath<CNavAgentComponent>(this, &CNavAgentComponent::onFindPathResult,
         mUpdateComponent->GetWorldPos(), endPos);

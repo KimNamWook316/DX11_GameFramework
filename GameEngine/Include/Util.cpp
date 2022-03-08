@@ -378,9 +378,48 @@ std::string CUtil::ObjectComponentTypeToString(eObjectComponentType eType)
 	case eObjectComponentType::NavAgent:
 		out = "NavAgent";
 		break;
+	case eObjectComponentType::State:
+		out = "State";
+		break;
 	default:
 		assert(false);
 		break;
 	}
 	return out;
+}
+
+std::string CUtil::CameraTypeToString(eCameraType eType)
+{
+	std::string out;
+
+	switch (eType)
+	{
+	case eCameraType::Camera2D:
+		out = "Camera2D";
+		return out;
+	case eCameraType::Camera3D:
+		out = "Camera3D";
+		return out;
+	case eCameraType::UI:
+		out = "UI";
+		return out;
+	}
+	return out;
+}
+
+eCameraType CUtil::StringToCameraType(const std::string& str)
+{
+	if ("Camera2D" == str)
+	{
+		return eCameraType::Camera2D;
+	}
+	else if ("Camera3D" == str)
+	{
+		return eCameraType::Camera3D;
+	}
+	else if ("UI" == str)
+	{
+		return eCameraType::UI;
+	}
+	return (eCameraType)(-1);
 }

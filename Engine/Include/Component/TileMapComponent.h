@@ -189,6 +189,7 @@ private:
 	int getTileRenderIndexY(const Vector3& pos);
 	void setPathFindTileType(const int renderTileIdx);
 	bool createPathFindTileInfo();
+	void setPathFindRenderInfo();
 
 protected:
     CSharedPtr<CSpriteMesh> mBackMesh;
@@ -216,6 +217,14 @@ protected:
 	Matrix mMatWorldToIso;
 	Matrix mMatIsoToWorld;
 	float mDetlaTime;
+
+	// Debug
+	CSharedPtr<class CStaticMesh> mPathFindTileMesh;
+	CSharedPtr<class CShader> mPathFindTileShader;
+	std::vector<PathFindTileRenderInfo> mVecPathFindTileRenderInfo;
+	class CStructuredBuffer* mPathFindTileRenderInfoBuffer;
+	int mPathFindTileRenderCount;
+	int mSelectPathTileIdx;
 
 	// For Random Map
 	TileSetInfo* mArrTileSetInfo[(int)eTileType::Max];

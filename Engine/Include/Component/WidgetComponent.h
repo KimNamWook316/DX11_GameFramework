@@ -2,7 +2,6 @@
 
 #include "SceneComponent.h"
 #include "../Widget/WidgetWindow.h"
-#include "../Scene/Scene.h"
 
 class CWidgetComponent :
     public CSceneComponent
@@ -78,7 +77,6 @@ public:
         T* window = new T;
         window->SetName(name);
         window->mOwnerComponent = this;
-        window->mViewport = mScene->GetViewport();
 
         if (!window->Init())
         {

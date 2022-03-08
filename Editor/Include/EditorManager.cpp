@@ -12,6 +12,12 @@
 #include "Component/ProcedualMapGenerator.h"
 #include "Component/DissolveComponent.h"
 #include "Component/NavAgentComponent.h"
+#include "Component/StateComponent.h"
+#include "Diablo2/Component/D2CharacterInfoComponent.h"
+#include "Diablo2/Component/D2DataManagerComponent.h"
+#include "Diablo2/Component/D2ProjectTile.h"
+#include "Diablo2/State/PlayerIdleState.h"
+#include "Diablo2/State/PlayerRunState.h"
 #include "Engine.h"
 #include "Resource.h"
 #include "Scene/SceneManager.h"
@@ -58,12 +64,14 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CEngine::GetInst()->SetDebugMode(true);
 	
 	mCameraObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CCameraObject>("CameraObj");
+	mCameraObj->ExcludeFromSave(true);
 
 	// SceneManager CallBack
 	CSceneManager::GetInst()->SetCreateSceneModeCallBack<CEditorManager>(this, &CEditorManager::OnCreateSceneMode);
 	CSceneManager::GetInst()->SetCreateObjectCallBack<CEditorManager>(this, &CEditorManager::OnCreateObject);
 	CSceneManager::GetInst()->SetCreateComponentCallBack<CEditorManager>(this, &CEditorManager::OnCreateComponent);
 	CSceneManager::GetInst()->SetCreateAnimInstanceCallBack<CEditorManager>(this, &CEditorManager::OnCreateAnimInstance);
+	CSceneManager::GetInst()->SetCreateStateCallBack<CEditorManager>(this, &CEditorManager::OnCreateState);
 
 	// GUI
 	mSpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("Editor");
@@ -75,6 +83,15 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CRenderManager::GetInst()->CreateLayer("DragLayer", INT_MAX);
 
 	// Key
+	CInput::GetInst()->CreateKey("F2", VK_F2);
+	CInput::GetInst()->CreateKey("MouseL", VK_LBUTTON);
+	CInput::GetInst()->CreateKey("MouseR", VK_RBUTTON);
+	CInput::GetInst()->CreateKey("LCtrl", VK_LCONTROL);
+	CInput::GetInst()->SetCtrlKey("LCtrl", true);
+	CInput::GetInst()->CreateKey("MouseLCtrl", VK_LBUTTON);
+	CInput::GetInst()->SetCtrlKey("MouseLCtrl", true);
+
+	CInput::GetInst()->SetKeyCallBack("F2", eKeyState::KeyState_Down, this, &CEditorManager::OnF2Down);
 	CInput::GetInst()->CreateKey("LMouseDrag", VK_LBUTTON);
 	CInput::GetInst()->SetKeyCallBack("LMouseDrag", eKeyState::KeyState_Down, this, &CEditorManager::OnMouseLButtonDown);
 	CInput::GetInst()->SetKeyCallBack("LMouseDrag", eKeyState::KeyState_Push, this, &CEditorManager::OnMouseLButtonPush);
@@ -115,6 +132,11 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	mDragObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CDragObject>("DragObject");
 	mDragObj->SetWorldScale(0.f, 0.f, 1.f);
 	mDragObj->Init();
+	mDragObj->ExcludeFromSave(true);
+
+	// Hierachy Update
+	mObjectHierachyWindow->RefreshObjectList();
+
 	return true;
 }
 
@@ -126,6 +148,18 @@ void CEditorManager::CreateDefaultSceneMode()
 int CEditorManager::Run()
 {
 	return CEngine::GetInst()->Run();
+}
+
+// 씬 로드될 때 씬에서 Obj List Clear 해버리기 떄문에 다시 생성한다.
+void CEditorManager::RecreateEditorCameraDragObj()
+{
+	mCameraObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CCameraObject>("CameraObj");
+	mCameraObj->ExcludeFromSave(true);
+
+	mDragObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CDragObject>("DragObject");
+	mDragObj->SetWorldScale(0.f, 0.f, 1.f);
+	mDragObj->Init();
+	mDragObj->ExcludeFromSave(true);
 }
 
 void CEditorManager::OnCreateSceneMode(CScene* scene, size_t type)
@@ -140,22 +174,27 @@ class CGameObject* CEditorManager::OnCreateObject(CScene* scene, size_t type)
 {
 	if (type == typeid(CGameObject).hash_code())
 	{
-		CGameObject* obj = scene->LoadGameObjectByType<CGameObject>();
+		CGameObject* obj = scene->CreateEmptyObjectByType<CGameObject>();
+		return obj;
+	}
+	else if (type == typeid(CCameraObject).hash_code())
+	{
+		CCameraObject* obj = scene->CreateEmptyObjectByType<CCameraObject>();
 		return obj;
 	}
 	else if (type == typeid(CDragObject).hash_code())
 	{
-		CDragObject* obj = scene->LoadGameObjectByType<CDragObject>();
+		CDragObject* obj = scene->CreateEmptyObjectByType<CDragObject>();
 		return obj;
 	}
 	else if (type == typeid(CSpriteEditObject).hash_code())
 	{
-		CSpriteEditObject* obj = scene->LoadGameObjectByType<CSpriteEditObject>();
+		CSpriteEditObject* obj = scene->CreateEmptyObjectByType<CSpriteEditObject>();
 		return obj;
 	}
 	else if (type == typeid(CPlayer2D).hash_code())
 	{
-		CPlayer2D* obj = scene->LoadGameObjectByType<CPlayer2D>();
+		CPlayer2D* obj = scene->CreateEmptyObjectByType<CPlayer2D>();
 		return obj;
 	}
 	else
@@ -227,6 +266,26 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 		CComponent* component = obj->LoadComponent<CNavAgentComponent>();
 		return component;
 	}
+	else if(type == typeid(CStateComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CStateComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2CharacterInfoComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2CharacterInfoComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2DataManagerComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2DataManagerComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2Projectile).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2Projectile>();
+		return component;
+	}
 	else
 	{
 		assert(false);
@@ -239,6 +298,18 @@ void CEditorManager::OnCreateAnimInstance(CSpriteComponent* comp, size_t type)
 	if (type == typeid(CAnimationSequence2DInstance).hash_code())
 	{
 		comp->SceneLoadAnimationInstance<CAnimationSequence2DInstance>();
+	}
+}
+
+void CEditorManager::OnCreateState(CStateComponent* comp, size_t type)
+{
+	if (type == typeid(CPlayerIdleState).hash_code())
+	{
+		comp->SetInitialState<CPlayerIdleState>();
+	}
+	else if (type == typeid(CPlayerRunState).hash_code())
+	{
+		comp->SetInitialState<CPlayerRunState>();
 	}
 }
 
@@ -356,22 +427,46 @@ void CEditorManager::OnShiftUpArrowKeydown(float deltaTime)
 
 void CEditorManager::OnScrollDown(float deltaTime)
 {
-	mCameraObj->AddWorldPos(0.f, -deltaTime * 500.f, 0.f);
+	if (mCameraObj)
+	{
+		mCameraObj->AddWorldPos(0.f, -deltaTime * 500.f, 0.f);
+	}
 }
 
 void CEditorManager::OnScrollUp(float deltaTime)
 {
-	mCameraObj->AddWorldPos(0.f, deltaTime * 500.f, 0.f);
+	if (mCameraObj)
+	{
+		mCameraObj->AddWorldPos(0.f, deltaTime * 500.f, 0.f);
+	}
 }
 
 void CEditorManager::OnScrollLeft(float deltaTime)
 {
-	mCameraObj->AddWorldPos(-deltaTime * 500.f, 0.f, 0.f);
+	if (mCameraObj)
+	{
+		mCameraObj->AddWorldPos(-deltaTime * 500.f, 0.f, 0.f);
+	}
 }
 
 void CEditorManager::OnScrollRight(float deltaTime)
 {
-	mCameraObj->AddWorldPos(deltaTime * 500.f, 0.f, 0.f);
+	if (mCameraObj)
+	{
+		mCameraObj->AddWorldPos(deltaTime * 500.f, 0.f, 0.f);
+	}
+}
+
+void CEditorManager::OnF2Down(float deltaTime)
+{
+	if (CEngine::GetInst()->IsDebugMode())
+	{
+		CEngine::GetInst()->SetDebugMode(false);
+	}
+	else
+	{
+		CEngine::GetInst()->SetDebugMode(true);
+	}
 }
 
 void CEditorManager::SetEditMode(eEditMode mode)

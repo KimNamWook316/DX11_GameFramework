@@ -15,10 +15,14 @@ public:
 
 public:
     void AddObjectList(const char* name);
+    void RefreshObjectList();
+    void RefreshComponentList();
 
 public:
     void OnSelectObject(int idx, const char* item);
     void OnSelectComponent(int idx, const char* item);
+    void OnClickDeleteObject();
+    void OnClickDeleteComponent();
 
 public:
     class CIMGUIListBox* GetObjectListBox() const
@@ -34,5 +38,8 @@ public:
 private:
     class CIMGUIListBox* mObjectListBox;
     class CIMGUIListBox* mComponentListBox;
+
+    class CIMGUIButton* mDeleteObjectButton;
+    class CIMGUIButton* mDeleteComponentButton;
 };
 

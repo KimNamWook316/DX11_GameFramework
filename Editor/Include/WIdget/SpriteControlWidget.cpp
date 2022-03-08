@@ -39,6 +39,24 @@ CSpriteControlWidget::CSpriteControlWidget()	:
 
 CSpriteControlWidget::~CSpriteControlWidget()
 {
+	std::vector<std::string> animNames;
+	mAnimInst->GetAnimationNames(animNames);
+
+	size_t size = animNames.size();
+
+	// 콜백 삭제
+	for (size_t i = 0; i < size; ++i)
+	{
+		CAnimationSequence2DData* data = mAnimInst->FindAnimation(animNames[i]);
+
+		int frameCount = data->GetAnimationSequence()->GetFrameCount();
+		
+		for (int j = 0; j < frameCount; ++j)
+		{
+			data->DeleteNotify(animNames[i]);
+		}
+	}
+
 }
 
 bool CSpriteControlWidget::Init()
@@ -86,6 +104,8 @@ bool CSpriteControlWidget::Init()
 
 	// Initial Value
 	CSpriteComponent* comp = (CSpriteComponent*)mComponent;
+	mAnimInst = comp->GetAnimationInstance();
+
 	Vector3 pos = comp->GetRelativePos();
 	Vector3 scale = comp->GetRelativeScale();
 	Vector3 rot = comp->GetRelativeRot();

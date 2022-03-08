@@ -30,8 +30,8 @@ public:
 public:
 	bool SaveGameObject(const std::string& objName, const char* fileName, const std::string& pathName = OBJECT_PATH);
 	bool SaveGameObjectFullPath(const std::string& objName, const char* fullPath);
-	void LoadGameObject(std::string& outName, const char* fileName, const std::string& pathName = OBJECT_PATH);
-	void LoadGameObjectFullPath(std::string& outName, const char* fullPath);
+	CGameObject* LoadGameObject(std::string& outName, const char* fileName, const std::string& pathName = OBJECT_PATH);
+	CGameObject* LoadGameObjectFullPath(std::string& outName, const char* fullPath);
 
 public:
 	CGameObject* FindObject(const std::string& name)
@@ -95,6 +95,11 @@ public:
 	void SetBeChange(bool bChange)
 	{
 		mbBeChange = bChange;
+	}
+
+	void SetPlayerObj(CGameObject* obj)
+	{
+		mMode->SetPlayerObj(obj);
 	}
 
 public:
@@ -169,6 +174,18 @@ public:
 		}
 		return obj;
 	}
+
+	// Start는 LoadScene함수에서 수행
+	template <typename T>
+	T* CreateEmptyObjectByType()
+	{
+		T* obj = new T;
+		obj->SetScene(this);
+		mObjList.push_back(obj);
+		
+		return obj;
+	}
+
 
 private:
 	CSharedPtr<CSceneMode> mMode;

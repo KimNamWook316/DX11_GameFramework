@@ -50,6 +50,7 @@ public:
 
 public:
 	void ClearCallBack();
+	void DeleteCallBack(const std::string& name, eKeyState state);
 
 public:
 	Vector2 GetMousePos() const
@@ -76,6 +77,22 @@ public:
 	{
 		return mbRButtonClicked;
 	}
+	
+	bool IsCtrlPressed() const
+	{
+		return mbIsCtrlPressed;
+	}
+
+	bool IsShiftPressed() const
+	{
+		return mbIsShiftPressed;
+	}
+
+	bool IsAltPressed() const
+	{
+		return mbIsAltPressed;
+	}
+
 public:
 	// KeyInfo에 CallBack 함수를 등록하는 함수
 	// 멤버 함수를 함수 포인터 형태로 전달

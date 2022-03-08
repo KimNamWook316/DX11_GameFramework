@@ -110,44 +110,44 @@ void CD2Object::SetSpriteDir(const Vector2& dir)
 
 	if (dirAngle <= 22.5f)
 	{
-		mCharInfo.SpriteDir = eSpriteDir::S;
+		mCharInfo.SpriteDir = eD2SpriteDir::S;
 	}
 	else if (dirAngle <= 67.5f)
 	{
 		if (dir.x < 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::SW;
+			mCharInfo.SpriteDir = eD2SpriteDir::SW;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::ES;
+			mCharInfo.SpriteDir = eD2SpriteDir::ES;
 		}
 	}
 	else if (dirAngle <= 112.5f)
 	{
 		if (dir.x < 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::W;
+			mCharInfo.SpriteDir = eD2SpriteDir::W;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::E;
+			mCharInfo.SpriteDir = eD2SpriteDir::E;
 		}
 	}
 	else if (dirAngle <= 157.5f)
 	{
 		if (dir.x < 0)
 		{
-			mCharInfo.SpriteDir = eSpriteDir::NW;
+			mCharInfo.SpriteDir = eD2SpriteDir::NW;
 		}
 		else
 		{
-			mCharInfo.SpriteDir = eSpriteDir::NE;
+			mCharInfo.SpriteDir = eD2SpriteDir::NE;
 		}
 	}
 	else if (dirAngle <= 202.5f)
 	{
-		mCharInfo.SpriteDir = eSpriteDir::N;
+		mCharInfo.SpriteDir = eD2SpriteDir::N;
 	}
 	else
 	{

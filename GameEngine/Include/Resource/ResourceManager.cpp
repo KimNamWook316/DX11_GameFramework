@@ -437,9 +437,19 @@ bool CResourceManager::LoadCSV(const char* fileName, const std::string& pathName
 	return mExcelManager->LoadCSV(fileName, pathName);
 }
 
+bool CResourceManager::LoadCSV(std::string& outName, const char* fileName, const std::string& pathName)
+{
+	return mExcelManager->LoadCSV(outName, fileName, pathName);
+}
+
 bool CResourceManager::LoadCSVFullPath(const char* fullPath)
 {
 	return mExcelManager->LoadCSVFullPath(fullPath);
+}
+
+bool CResourceManager::LoadCSVFullPath(std::string& outName, const char* fullPath)
+{
+	return mExcelManager->LoadCSVFullPath(outName, fullPath);
 }
 
 bool CResourceManager::CreateTileSet(const std::string& name)

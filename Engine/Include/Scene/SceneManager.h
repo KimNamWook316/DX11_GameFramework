@@ -55,6 +55,14 @@ public:
 		}
 	}
 
+	void CallCreateStateFunction(class CStateComponent* comp, size_t type)
+	{
+		if (mCreateStateCallBack)
+		{
+			mCreateStateCallBack(comp, type);
+		}
+	}
+
 public:
 	template<typename T>
 	bool CreateSceneMode(bool current = true)
@@ -103,6 +111,12 @@ public:
 		mCreateAnimInstanceCallBack = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
 	}
 
+	template<typename T>
+	void SetCreateStateCallBack(T* obj, void(T::* func)(class CStateComponent*, size_t))
+	{
+		mCreateStateCallBack = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2);
+	}
+
 private:
 	bool changeScene();
 
@@ -116,5 +130,6 @@ private:
 	std::function<CGameObject*(CScene*, size_t)> mCreateObjectCallBack;
 	std::function<class CComponent* (CGameObject*, size_t)> mCreateComponentCallBack;
 	std::function<void(class CSpriteComponent*, size_t)> mCreateAnimInstanceCallBack;
+	std::function<void(class CStateComponent*, size_t)> mCreateStateCallBack;
 };
 

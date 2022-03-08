@@ -22,6 +22,9 @@ public:
 	void AddNavResult(const NavResultData& navData);
 
 public:
+	int GetIndex(const Vector3& endPos);
+
+public:
 	template <typename T>
 	bool FindPath(T* obj, void(T::* func)(const std::list<Vector3>&),
 		const Vector3& start, const Vector3& end)

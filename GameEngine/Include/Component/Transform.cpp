@@ -3,6 +3,7 @@
 #include "../Scene/Scene.h"
 #include "../Scene/CameraManager.h"
 #include "CameraComponent.h"
+#include "../Engine.h"
 
 CTransform::CTransform()	:
 	mParentTransform(nullptr),
@@ -118,6 +119,13 @@ void CTransform::Update(const float deltaTime)
 
 void CTransform::PostUpdate(const float deltaTime)
 {
+	Vector3 worldPos = mWorldPos;
+
+	if (eEngineSpace::Space2D == CEngine::GetInst()->GetEngineSpace())
+	{
+		worldPos.z = worldPos.y / 30000.f * 1000.f;
+	}
+
 	if (mbUpdateScale)
 	{
 		mMatScale.Scaling(mWorldScale);
@@ -130,7 +138,7 @@ void CTransform::PostUpdate(const float deltaTime)
 
 	if (mbUpdatePos)
 	{
-		mMatPos.Translation(mWorldPos);
+		mMatPos.Translation(worldPos);
 	}
 
 	if (mbUpdateScale || mbUpdateRot || mbUpdatePos)

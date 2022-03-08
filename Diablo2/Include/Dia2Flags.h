@@ -1,6 +1,6 @@
 #pragma once
 
-enum class eSpriteDir
+enum class eD2SpriteDir
 {
 	S,
 	SSW,

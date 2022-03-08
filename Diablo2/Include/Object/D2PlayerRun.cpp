@@ -28,7 +28,7 @@ void CD2PlayerRun::Update(float deltaTime)
 			mTargetPos = info.Position;
 			Vector3 dir = Vector3(mTargetPos.x, mTargetPos.y, 0.f) - mOwnerObject->GetWorldPos();
 			dir.Normalize();
-			eSpriteDir prevSpriteDir = mOwnerObject->GetSpriteDir();
+			eD2SpriteDir prevSpriteDir = mOwnerObject->GetSpriteDir();
 			mOwnerObject->SetDirection(dir);
 			
 			if (prevSpriteDir != mOwnerObject->GetSpriteDir())

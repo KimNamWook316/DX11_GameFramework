@@ -88,3 +88,19 @@ void CAnimationSequence2DData::Load(FILE* fp)
 	fread(sequenceName, sizeof(char), length, fp);
 	mSequenceName = sequenceName;
 }
+
+void CAnimationSequence2DData::DeleteNotify(const std::string& name)
+{
+	auto iter = mVecNotify.begin();
+	auto iterEnd = mVecNotify.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->Name == name)
+		{
+			SAFE_DELETE((*iter));
+			mVecNotify.erase(iter);
+			return;
+		}
+	}
+}

@@ -74,3 +74,8 @@ void CNavigationManager::AddNavResult(const NavResultData& navData)
 {
 	mResultQueue.Push(navData);
 }
+
+int CNavigationManager::GetIndex(const Vector3& endPos)
+{
+	return mNavData->GetPathFindTileIndex(endPos);
+}

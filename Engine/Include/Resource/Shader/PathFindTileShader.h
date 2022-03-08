@@ -2,16 +2,17 @@
 
 #include "GraphicShader.h"
 
-class CSpaceShader :
+class CPathFindTileShader :
     public CGraphicShader
-{
+{   
     friend class CShaderManager;
 
 protected:
-    CSpaceShader();
-    virtual ~CSpaceShader();
+    CPathFindTileShader();
+    virtual ~CPathFindTileShader();
 
 public:
     virtual bool Init();
+
 };
 

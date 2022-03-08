@@ -67,7 +67,7 @@ public:
 		return mCharInfo;
 	}
 
-	eSpriteDir GetSpriteDir() const
+	eD2SpriteDir GetSpriteDir() const
 	{
 		return mCharInfo.SpriteDir;
 	}

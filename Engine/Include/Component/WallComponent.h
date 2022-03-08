@@ -43,7 +43,6 @@ public:
 
 private:
     bool createWallFromTile(CTile* tile);
-    static bool sortWall(const TileInfo& src, const TileInfo& dst);
 
 private:
     CSharedPtr<CSpriteMesh> mMesh;

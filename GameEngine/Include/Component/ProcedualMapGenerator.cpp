@@ -207,6 +207,11 @@ bool CProcedualMapGenerator::GenerateMap()
 		return false;
 	}
 
+	if (!GenerateTile())
+	{
+		return false;
+	}
+
 	if (!GenerateWall())
 	{
 		return false;
@@ -353,12 +358,12 @@ bool CProcedualMapGenerator::MakeRoom()
 		}
 	}
 
-	// 角力 鸥老甘 积己
-	if (!GenerateTile())
-	{
-		return false;
-	}
-
+ //	// 角力 鸥老甘 积己
+ //	if (!GenerateTile())
+ //	{
+ //		return false;
+ //	}
+ //
 	return true;
 }
 
@@ -387,10 +392,10 @@ bool CProcedualMapGenerator::ConnectRoom()
 		}
 	}
 
-	if (!GenerateTile())
-	{
-		return false;
-	}
+ //	if (!GenerateTile())
+ //	{
+ //		return false;
+ //	}
 
 	return true;
 }

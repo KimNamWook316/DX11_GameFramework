@@ -13,6 +13,7 @@ private:
 
 public:
 	void Start();
+	void Update();
 
 public:
 	void Save(FILE* fp);

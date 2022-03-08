@@ -129,7 +129,7 @@ void CMaterial::Save(FILE* fp)
 
 		if (bStateEnable)
 		{
-			std::string stateName = mShader->GetName();
+			std::string stateName = mRenderStateArray[i]->GetName();
 			int length = (int)stateName.length();
 			
 			fwrite(&length, sizeof(int), 1, fp);

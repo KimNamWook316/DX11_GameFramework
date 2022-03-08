@@ -30,12 +30,49 @@ public:
 		mMoveSpeed = speed;
 	}
 
+public:
+	bool IsPathExist()
+	{
+		return !mPathList.empty();
+	}
+
+	const Vector3& GetPathListFront() const
+	{
+		return mPathList.front();
+	}
+
 private:
 	void onFindPathResult(const std::list<Vector3>& pathList);
+
+public:
+	template<typename T>
+	void SetEndCallBack(T* obj, void(T::* func)())
+	{
+		mEndCallBack = std::bind(func, obj);
+	}
+
+	template<typename T>
+	void SetFrameCallBack(T* obj, void(T::* func)())
+	{
+		mFrameCallBack = std::bind(func, obj);
+	}
+
+	void DeleteEndCallBack()
+	{
+		mEndCallBack = nullptr;
+	}
+
+	void DeleteFrameCallBack()
+	{
+		mFrameCallBack = nullptr;
+	}
 
 private:
     CSharedPtr<class CSceneComponent> mUpdateComponent;
     std::list<Vector3> mPathList;
     float mMoveSpeed;
+	std::function<void()> mEndCallBack;
+	std::function<void()> mFrameCallBack;
+	int mPrevEndIdx;
 };
 

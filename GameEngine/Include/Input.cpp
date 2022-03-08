@@ -201,6 +201,18 @@ void CInput::ClearCallBack()
 	}
 }
 
+void CInput::DeleteCallBack(const std::string& name, eKeyState state)
+{
+	KeyInfo* info = findKeyInfo(name);
+
+	if (!info)
+	{
+		return;
+	}
+
+	info->CallBack[state] = nullptr;
+}
+
 KeyInfo* CInput::findKeyInfo(const std::string& name)
 {
 	auto iter = mMapKeyInfo.find(name);
@@ -491,68 +503,97 @@ void CInput::updateKeyInfo(float deltaTime)
 		// KeyInfo가 들고 있는 key값 받아와서
 		unsigned char key = iter->second->State.Key;
 
-		// 현재 눌려있는 ctrl, alt, shift값과 State 값과 KeyInfo의 값이 일치하면,
-		// 콜백 함수 호출한다.
-		if (mVecKeyState[key].State[KeyState_Down] &&
-			iter->second->bIsCtrl == mbIsCtrlPressed &&
-			iter->second->bIsAlt == mbIsAltPressed &&
-			iter->second->bIsShift == mbIsShiftPressed)
+		if (key == DIK_LCONTROL || key == DIK_LSHIFT || key == DIK_LALT)
 		{
-			// IMGUI 윈도우에 올라와 있는 상태에서 마우스 클릭 이벤트가 발생하면 콜백 호출 안 함
-			if (iter->second->CallBack[KeyState_Down])
+			if (mVecKeyState[key].State[KeyState_Down])
 			{
-				if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
-				{
-					if (!ImGui::GetIO().WantCaptureMouse)
-					{
-						iter->second->CallBack[KeyState_Down](deltaTime);
-					}
-				}
-				else
+				if (iter->second->CallBack[KeyState_Down])
 				{
 					iter->second->CallBack[KeyState_Down](deltaTime);
 				}
 			}
-		}
-
-		if (mVecKeyState[key].State[KeyState_Push] &&
-			iter->second->bIsCtrl == mbIsCtrlPressed &&
-			iter->second->bIsAlt == mbIsAltPressed &&
-			iter->second->bIsShift == mbIsShiftPressed)
-		{
-			if (iter->second->CallBack[KeyState_Push])
+			
+			if (mVecKeyState[key].State[KeyState_Push])
 			{
-				if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
-				{
-					if (!ImGui::GetIO().WantCaptureMouse)
-					{
-						iter->second->CallBack[KeyState_Push](deltaTime);
-					}
-				}
-				else
+				if (iter->second->CallBack[KeyState_Push])
 				{
 					iter->second->CallBack[KeyState_Push](deltaTime);
 				}
 			}
-		}
 
-		if (mVecKeyState[key].State[KeyState_Up] &&
-			iter->second->bIsCtrl == mbIsCtrlPressed &&
-			iter->second->bIsAlt == mbIsAltPressed &&
-			iter->second->bIsShift == mbIsShiftPressed)
-		{
-			if (iter->second->CallBack[KeyState_Up])
+			if (mVecKeyState[key].State[KeyState_Up])
 			{
-				if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
+				if (iter->second->CallBack[KeyState_Up])
 				{
-					if (!ImGui::GetIO().WantCaptureMouse)
+					iter->second->CallBack[KeyState_Up](deltaTime);
+				}
+			}
+		}
+		else
+		{
+			// 현재 눌려있는 ctrl, alt, shift값과 State 값과 KeyInfo의 값이 일치하면,
+			// 콜백 함수 호출한다.
+			if (mVecKeyState[key].State[KeyState_Down] &&
+				iter->second->bIsCtrl == mbIsCtrlPressed &&
+				iter->second->bIsAlt == mbIsAltPressed &&
+				iter->second->bIsShift == mbIsShiftPressed)
+			{
+				// IMGUI 윈도우에 올라와 있는 상태에서 마우스 클릭 이벤트가 발생하면 콜백 호출 안 함
+				if (iter->second->CallBack[KeyState_Down])
+				{
+					if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
+					{
+						if (!ImGui::GetIO().WantCaptureMouse)
+						{
+							iter->second->CallBack[KeyState_Down](deltaTime);
+						}
+					}
+					else
+					{
+						iter->second->CallBack[KeyState_Down](deltaTime);
+					}
+				}
+			}
+
+			if (mVecKeyState[key].State[KeyState_Push] &&
+				iter->second->bIsCtrl == mbIsCtrlPressed &&
+				iter->second->bIsAlt == mbIsAltPressed &&
+				iter->second->bIsShift == mbIsShiftPressed)
+			{
+				if (iter->second->CallBack[KeyState_Push])
+				{
+					if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
+					{
+						if (!ImGui::GetIO().WantCaptureMouse)
+						{
+							iter->second->CallBack[KeyState_Push](deltaTime);
+						}
+					}
+					else
+					{
+						iter->second->CallBack[KeyState_Push](deltaTime);
+					}
+				}
+			}
+
+			if (mVecKeyState[key].State[KeyState_Up] &&
+				iter->second->bIsCtrl == mbIsCtrlPressed &&
+				iter->second->bIsAlt == mbIsAltPressed &&
+				iter->second->bIsShift == mbIsShiftPressed)
+			{
+				if (iter->second->CallBack[KeyState_Up])
+				{
+					if ((key == DIK_MOUSELBUTTON || key == DIK_MOUSERBUTTON))
+					{
+						if (!ImGui::GetIO().WantCaptureMouse)
+						{
+							iter->second->CallBack[KeyState_Up](deltaTime);
+						}
+					}
+					else
 					{
 						iter->second->CallBack[KeyState_Up](deltaTime);
 					}
-				}
-				else
-				{
-					iter->second->CallBack[KeyState_Up](deltaTime);
 				}
 			}
 		}

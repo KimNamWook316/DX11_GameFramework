@@ -17,7 +17,7 @@ CIMGUIWidgetList::~CIMGUIWidgetList()
 
 bool CIMGUIWidgetList::Init()
 {
-    return false;
+	return true;
 }
 
 void CIMGUIWidgetList::Render()

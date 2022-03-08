@@ -209,7 +209,11 @@ void CSceneComponent::Load(FILE* fp)
 		
 		CComponent* component = CSceneManager::GetInst()->CallCreateComponentFunction(mObject, typeID);
 		component->Load(fp);
+		static_cast<CSceneComponent*>(component)->mParent = this;
 		mVecChild.push_back((CSceneComponent*)component);
+
+		mTransform->mVecChildTransform.push_back(mVecChild[i]->mTransform);
+		mVecChild[i]->mTransform->mParentTransform = mTransform;
 	}
 }
 

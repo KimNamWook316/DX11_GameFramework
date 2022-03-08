@@ -58,14 +58,14 @@ bool CNavigation::FindPath(const Vector3& start, const Vector3& end, std::list<V
 {
 	outListPath.clear();
 
-	int startIndex = mTileMap->GetTileIndex(start);
+	int startIndex = mTileMap->GetPathFindTileIndex(start);
 
 	if (-1 == startIndex)
 	{
 		return false;
 	}
 
-	int endIndex = mTileMap->GetTileIndex(end);
+	int endIndex = mTileMap->GetPathFindTileIndex(end);
 
 	if (-1 == endIndex)
 	{
@@ -203,25 +203,26 @@ bool CNavigation::findNode(NavNode* node, NavNode* endNode, const Vector3& end, 
 		}
 		else if (eTileShape::Rhombus == meNodeShape)
 		{
-			switch (*iter)
-			{
-			case eNodeDir::T:
-			case eNodeDir::B:
-			case eNodeDir::R:
-			case eNodeDir::L:
-				cost = node->Cost + node->Center.Distance(corner->Center);
-				break;
-			case eNodeDir::RT:
-			case eNodeDir::LB:
-				cost = node->Cost + abs(node->Center.x - corner->Center.x);
-			case eNodeDir::RB:
-			case eNodeDir::LT:
-				cost = node->Cost + abs(node->Center.y - corner->Center.y);
-				break;
-			default:
-				assert(false);
-				return false;
-			}
+			cost = node->Cost + node->Center.Distance(corner->Center);
+ //			switch (*iter)
+ //			{
+ //			case eNodeDir::T:
+ //			case eNodeDir::B:
+ //			case eNodeDir::R:
+ //			case eNodeDir::L:
+ //				cost = node->Cost + node->Center.Distance(corner->Center);
+ //				break;
+ //			case eNodeDir::RT:
+ //			case eNodeDir::LB:
+ //				cost = node->Cost + abs(node->Center.x - corner->Center.x);
+ //			case eNodeDir::RB:
+ //			case eNodeDir::LT:
+ //				cost = node->Cost + abs(node->Center.y - corner->Center.y);
+ //				break;
+ //			default:
+ //				assert(false);
+ //				return false;
+ //			}
 		}
 
 		// 찾은 노드가 이미 열린 목록에 들어가 있을 경우 비용 비교 후 교체
@@ -821,25 +822,25 @@ NavNode* CNavigation::getNodeLeftTop(NavNode* node, NavNode* endNode, const Vect
 			return nullptr;
 		}
 
-		int cornerX = idxX + 1;
-		int cornerY = idxY;
+		int cornerX = idxX;
+		int cornerY = idxY + 1;
 
 		if (cornerX < mCountX && cornerY + 1 < mCountY)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY + 1) * mCountX + cornerX ]->eTileType)
+				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType)
 			{
 				return checkNode;
 			}
 		}
 	
-		cornerX = idxX;
-		cornerY = idxY - 1;
+		cornerX = idxX - 1;
+		cornerY = idxY;
 
-		if (cornerY >= 0 && cornerX - 1 >= 0)
+		if (cornerY >= 0 && cornerX >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType)
+				eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType)
 			{
 				return checkNode;
 			}

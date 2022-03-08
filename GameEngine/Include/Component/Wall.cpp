@@ -7,7 +7,8 @@ CWall::CWall()	:
 	mOpacity(1.f),
 	mOwner(nullptr),
 	mParentTile(nullptr),
-	mbRender(false)
+	mbRender(false),
+	mSortY(0.f)
 {
 }
 
@@ -26,6 +27,20 @@ void CWall::Start()
 	makeWorldMatrix();
 }
 
+void CWall::Update()
+{
+	Vector3 ownerPos = mOwner->GetWorldPos();
+	Vector3 pos = ownerPos + mRenderPos;
+
+	pos.z = mSortY / 30000.f * 1000.f;
+
+	Matrix matScale, matTranslate;
+	matScale.Scaling(mSize.x, mSize.y, 1.f);
+	matTranslate.Translation(pos);
+
+	mMatWorld = matScale * matTranslate;
+}
+
 void CWall::Save(FILE* fp)
 {
 }
@@ -40,7 +55,7 @@ void CWall::SetInfo(class CWallComponent* owner, CTile* parent, eTileShape shape
 	mParentTile = parent;
 	SetShape(shape);
 	SetRenderPos(renderPos);
-	SetSortY(renderPos.y);
+	SetSortY(renderPos.y + 40.f);
 	SetSize(size);
 	parent->AddWall(this);
 }
@@ -48,25 +63,21 @@ void CWall::SetInfo(class CWallComponent* owner, CTile* parent, eTileShape shape
 void CWall::SetRenderPos(const Vector3& pos)
 {
 	mRenderPos = pos;
-	makeWorldMatrix();
 }
 
 void CWall::SetRenderPos(const float x, const float y)
 {
 	mRenderPos = Vector3(x, y, 0.f);
-	makeWorldMatrix();
 }
 
 void CWall::SetSize(const Vector2& size)
 {
 	mSize = size;
-	makeWorldMatrix();
 }
 
 void CWall::SetSize(const float x, const float y)
 {
 	mSize = Vector2(x, y);
-	makeWorldMatrix();
 }
 
 void CWall::makeWorldMatrix()
@@ -74,9 +85,11 @@ void CWall::makeWorldMatrix()
 	Vector3 ownerPos = mOwner->GetWorldPos();
 	Vector3 pos = ownerPos + mRenderPos;
 
+	pos.z = mSortY / 30000.f * 1000.f;
+
 	Matrix matScale, matTranslate;
 	matScale.Scaling(mSize.x, mSize.y, 1.f);
-	matTranslate.Translation(mRenderPos);
+	matTranslate.Translation(pos);
 
 	mMatWorld = matScale * matTranslate;
 }

@@ -140,6 +140,8 @@ public:
 		mTypeID = typeid(T).hash_code();
 	}
 
+	void DeleteNotify(const std::string& name);
+
 protected:
 	size_t mTypeID;
 	bool mbPlay;

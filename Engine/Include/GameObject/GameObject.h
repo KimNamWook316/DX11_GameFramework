@@ -16,6 +16,11 @@ public:
 	virtual void Destroy();
 
 public:
+	bool IsExcludeFromSave() const
+	{
+		return mbExcludeFromSave;
+	}
+
 	class CScene* GetScene() const
 	{
 		return mScene;
@@ -36,6 +41,7 @@ public:
 	void DeleteComponent(const std::string& name);
 	void GetAllSceneComponentsName(std::vector<FindComponentName>& outNames);
 	void GetAllComponentsPointer(std::vector<CComponent*>& outPointers);
+	void GetAllComponentsName(std::vector<FindComponentName>& outNames);
 
 public:
 	void SetScene(class CScene* scene);
@@ -48,6 +54,11 @@ public:
 	void SetLifeSpan(const float lifeSpan)
 	{
 		mLifeSpan = lifeSpan;
+	}
+
+	void ExcludeFromSave(bool bExclude)
+	{
+		mbExcludeFromSave = true;
 	}
 
 public:
@@ -226,6 +237,22 @@ public:
 			}
 		}
 
+		return nullptr;
+	}
+
+	template <typename T>
+	T* FindObjectComponentFromType()
+	{
+		auto iter = mVecObjectComponent.begin();
+		auto iterEnd = mVecObjectComponent.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->CheckType<T>())
+			{
+				return (T*)((*iter).Get());
+			}
+		}
 		return nullptr;
 	}
 
@@ -772,5 +799,6 @@ protected:
 	CGameObject* mParent;	// 부모 게임 오브젝트
 	std::vector<CSharedPtr<CGameObject>> mVecChildGameObj; // 자식 게임 오브젝트
 	float mLifeSpan;
+	bool mbExcludeFromSave; // 씬에서 저장 시 이 플래그가 true이면 저장에서 제외됨
 };
 

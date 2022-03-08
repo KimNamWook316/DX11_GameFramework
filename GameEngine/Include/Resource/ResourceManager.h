@@ -140,7 +140,9 @@ public: // ===================== Excel =====================
 	bool SaveCSV(const std::string& name, const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool SaveCSVFullPath(const std::string& name, const char* fullPath);
 	bool LoadCSV(const char* fileName, const std::string& pathName = EXCEL_PATH);
+	bool LoadCSV(std::string& outName, const char* fileName, const std::string& pathName = EXCEL_PATH);
 	bool LoadCSVFullPath(const char* fullPath);
+	bool LoadCSVFullPath(std::string& outName, const char* fullPath);
 
 public: // ===================== Excel =====================
 	bool CreateTileSet(const std::string& name);

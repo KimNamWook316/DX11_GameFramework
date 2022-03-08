@@ -406,8 +406,7 @@ struct TileInfo
 	Vector2 TileEnd;
 	Vector4 TileColor;
 	float Opacity;
-	float SortY;
-	Vector2 Dummy;
+	Vector3 Dummy;
 };
 
 struct ExcelInfo
@@ -466,4 +465,12 @@ struct ProcedualMapData
 
 	// Object
 	std::vector<eProcedualObjectType> ObjectInfo;
+};
+
+struct PathFindTileRenderInfo
+{
+	Vector4 Color;
+	Matrix MatVP;
+	Vector2 TileSize;
+	Vector2 Dummy;
 };

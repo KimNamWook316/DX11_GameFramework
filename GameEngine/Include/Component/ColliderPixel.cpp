@@ -8,6 +8,7 @@
 #include "../Collision/Collision.h"
 #include "ColliderBox2D.h"
 #include "ColliderCircle.h"
+#include "../Engine.h"
 
 CColliderPixel::CColliderPixel()
 {
@@ -62,6 +63,22 @@ bool CColliderPixel::Init()
 void CColliderPixel::Start()
 {
 	CColliderComponent::Start();
+
+	SetBoolInheritRotZ(true);
+	SetWorldScale((float)mInfo.Width, (float)mInfo.Height, 1.f);
+
+	if (!mMesh)
+	{
+		mMesh = mScene->GetResource()->FindMesh("Box2DMesh");
+	}
+	if (!mPixelMesh)
+	{
+		mPixelMesh = mScene->GetResource()->FindMesh("SpriteMesh");
+	}
+	if (!mPixelShader)
+	{
+		mPixelShader = mScene->GetResource()->FindShader("ColliderPixelShader");
+	}
 }
 
 void CColliderPixel::Update(float deltaTime)
@@ -96,47 +113,50 @@ void CColliderPixel::Render()
 {
 	CColliderComponent::Render();
 
-	CCameraComponent* cam = mScene->GetCameraManager()->GetCurrentCamera();
-
-	Matrix matWorld, matView, matProj, matWVP;
-	matView = cam->GetViewMatrix();
-	matProj = cam->GetProjMatrix();
-
-	Matrix matScale, matTrans;
-	matScale.Scaling((float)mInfo.Width, (float)mInfo.Height);
-	matTrans.Translation(mInfo.Box.Center);
-
-	matWorld = matScale * matTrans;
-	matWVP = matWorld * matView * matProj;
-	matWVP.Transpose();
-
-	mCBuffer->SetColliderWVP(matWVP);
-	
-	if (mPrevCollisionList.empty())
+	if (CEngine::GetInst()->IsDebugMode())
 	{
-		mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
-	}
-	else
-	{
-		mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
-	}
-	
-	if (mbMouseCollision)
-	{
-		mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
-	}
-	
-	mCBuffer->UpdateCBuffer();
+		CCameraComponent* cam = mScene->GetCameraManager()->GetCurrentCamera();
 
-	// Pixel 넘긴다.
-	CDevice::GetInst()->GetContext()->PSSetShaderResources(0, 1, &mInfo.SRV);
+		Matrix matWorld, matView, matProj, matWVP;
+		matView = cam->GetViewMatrix();
+		matProj = cam->GetProjMatrix();
 
-	// 텍스쳐 먼저 렌더링
-	mPixelShader->SetShader();
-	mPixelMesh->Render();
+		Matrix matScale, matTrans;
+		matScale.Scaling((float)mInfo.Width, (float)mInfo.Height);
+		matTrans.Translation(mInfo.Box.Center);
 
-	mShader->SetShader();
-	mMesh->Render();
+		matWorld = matScale * matTrans;
+		matWVP = matWorld * matView * matProj;
+		matWVP.Transpose();
+
+		mCBuffer->SetColliderWVP(matWVP);
+		
+		if (mPrevCollisionList.empty())
+		{
+			mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
+		}
+		else
+		{
+			mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
+		}
+		
+		if (mbMouseCollision)
+		{
+			mCBuffer->SetColliderColor(Vector4(1.f, 0.f, 0.f, 1.f));
+		}
+		
+		mCBuffer->UpdateCBuffer();
+
+		// Pixel 넘긴다.
+		CDevice::GetInst()->GetContext()->PSSetShaderResources(0, 1, &mInfo.SRV);
+
+		// 텍스쳐 먼저 렌더링
+		mPixelShader->SetShader();
+		mPixelMesh->Render();
+
+		mShader->SetShader();
+		mMesh->Render();
+	}
 }
 
 void CColliderPixel::PostRender()

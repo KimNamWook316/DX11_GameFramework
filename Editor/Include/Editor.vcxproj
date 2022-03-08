@@ -148,8 +148,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Diablo2\Component\D2CharacterInfoComponent.h" />
+    <ClInclude Include="Diablo2\Component\D2DataManager.h" />
+    <ClInclude Include="Diablo2\Component\D2DataManagerComponent.h" />
+    <ClInclude Include="Diablo2\Component\D2PlayerSkillComponent.h" />
+    <ClInclude Include="Diablo2\Component\D2ProjectTile.h" />
+    <ClInclude Include="Diablo2\D2Flag.h" />
+    <ClInclude Include="Diablo2\D2Info.h" />
+    <ClInclude Include="Diablo2\D2Util.h" />
+    <ClInclude Include="Diablo2\State\PlayerIdleState.h" />
+    <ClInclude Include="Diablo2\State\PlayerRunState.h" />
+    <ClInclude Include="Diablo2\State\PlayerWalkState.h" />
+    <ClInclude Include="EditorEnum.h" />
     <ClInclude Include="EditorInfo.h" />
     <ClInclude Include="EditorManager.h" />
+    <ClInclude Include="EditorUtil.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\DragObject.h" />
@@ -158,10 +171,16 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Widget\CameraControlWidget.h" />
     <ClInclude Include="Widget\ColliderControlWidget.h" />
     <ClInclude Include="WIdget\ComponentControlWidget.h" />
+    <ClInclude Include="Widget\D2CharInfoWidget.h" />
+    <ClInclude Include="Widget\D2DataManagerControlWidget.h" />
+    <ClInclude Include="Widget\D2ProjectileWidget.h" />
     <ClInclude Include="Widget\MapGeneratorWidget.h" />
+    <ClInclude Include="Widget\NavAgentControlWidget.h" />
     <ClInclude Include="WIdget\SpriteControlWidget.h" />
+    <ClInclude Include="Widget\StateControlWidget.h" />
     <ClInclude Include="Widget\TileMapControlWidget.h" />
     <ClInclude Include="Widget\WidgetControlWidget.h" />
     <ClInclude Include="Window\CollisionProfileWindow.h" />
@@ -172,17 +191,33 @@
     <ClInclude Include="Window\TileSetEditWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Diablo2\Component\D2CharacterInfoComponent.cpp" />
+    <ClCompile Include="Diablo2\Component\D2DataManager.cpp" />
+    <ClCompile Include="Diablo2\Component\D2DataManagerComponent.cpp" />
+    <ClCompile Include="Diablo2\Component\D2PlayerSkillComponent.cpp" />
+    <ClCompile Include="Diablo2\Component\D2ProjectTile.cpp" />
+    <ClCompile Include="Diablo2\D2Util.cpp" />
+    <ClCompile Include="Diablo2\State\PlayerIdleState.cpp" />
+    <ClCompile Include="Diablo2\State\PlayerRunState.cpp" />
+    <ClCompile Include="Diablo2\State\PlayerWalkState.cpp" />
     <ClCompile Include="EditorManager.cpp" />
+    <ClCompile Include="EditorUtil.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\CameraObject.cpp" />
     <ClCompile Include="Object\DragObject.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
+    <ClCompile Include="Widget\CameraControlWidget.cpp" />
     <ClCompile Include="Widget\ColliderControlWidget.cpp" />
     <ClCompile Include="WIdget\ComponentControlWidget.cpp" />
+    <ClCompile Include="Widget\D2CharInfoWidget.cpp" />
+    <ClCompile Include="Widget\D2DataManagerControlWidget.cpp" />
+    <ClCompile Include="Widget\D2ProjectileWidget.cpp" />
     <ClCompile Include="Widget\MapGeneratorWidget.cpp" />
+    <ClCompile Include="Widget\NavAgentControlWidget.cpp" />
     <ClCompile Include="WIdget\SpriteControlWidget.cpp" />
+    <ClCompile Include="Widget\StateControlWidget.cpp" />
     <ClCompile Include="Widget\TileMapControlWidget.cpp" />
     <ClCompile Include="Widget\WidgetControlWidget.cpp" />
     <ClCompile Include="Window\CollisionProfileWindow.cpp" />

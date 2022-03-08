@@ -1,12 +1,14 @@
 #include "GameObject.h"
 #include "../Scene/SceneManager.h"
+#include "../Scene/Scene.h"
 #include "../Component/NavAgentComponent.h"
 #include "../PathManager.h"
 
 CGameObject::CGameObject()	:
 	mScene(nullptr),
 	mParent(nullptr),
-	mLifeSpan(0.f)
+	mLifeSpan(0.f),
+	mbExcludeFromSave(false)
 {
 	SetTypeID<CGameObject>();
 }
@@ -44,7 +46,10 @@ void CGameObject::Destroy()
 {
 	CRef::Destroy();
 	
-	mRootSceneComponent->Destroy();
+	if (mRootSceneComponent)
+	{
+		mRootSceneComponent->Destroy();
+	}
 
 	size_t size = mVecObjectComponent.size();
 	for (size_t i = 0; i < size; ++i)
@@ -170,6 +175,20 @@ void CGameObject::GetAllComponentsPointer(std::vector<CComponent*>& outPointers)
 	for (size_t i = 0; i < size; ++i)
 	{
 		mVecObjectComponent[i]->GetAllComponentsPointer(outPointers);
+	}
+}
+
+void CGameObject::GetAllComponentsName(std::vector<FindComponentName>& outNames)
+{
+	GetAllSceneComponentsName(outNames);
+
+	size_t size = mVecObjectComponent.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		FindComponentName name;
+		name.Name = mVecObjectComponent[i]->GetName();
+		outNames.push_back(name);
 	}
 }
 
@@ -330,6 +349,15 @@ void CGameObject::Save(FILE* fp)
 {
 	CRef::Save(fp);
 
+	bool bIsPlayer = false;
+	
+	if (this == mScene->GetPlayerObj())
+	{
+		bIsPlayer = true;
+	}
+
+	fwrite(&bIsPlayer, sizeof(bool), 1, fp);
+
 	if (mRootSceneComponent)
 	{
 		bool bRootExist = true;
@@ -390,6 +418,14 @@ void CGameObject::SaveFullPath(const char* fullPath)
 void CGameObject::Load(FILE* fp)
 {
 	CRef::Load(fp);
+
+	bool bIsPlayer = false;
+	fread(&bIsPlayer, sizeof(bool), 1, fp);
+	
+	if (bIsPlayer)
+	{
+		mScene->SetPlayerObj(this);
+	}
 
 	bool bRootExist = false;
 	fread(&bRootExist, sizeof(bool), 1, fp);

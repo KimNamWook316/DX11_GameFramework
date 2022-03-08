@@ -15,12 +15,14 @@ public:
 	bool Init(HINSTANCE hInst);
 	void CreateDefaultSceneMode();
 	int Run();
+	void RecreateEditorCameraDragObj();
 
 public:
 	void OnCreateSceneMode(class CScene* scene, size_t type);
 	class CGameObject* OnCreateObject(class CScene* scene, size_t type);
 	class CComponent* OnCreateComponent(class CGameObject* obj, size_t type);
 	void OnCreateAnimInstance(class CSpriteComponent* comp, size_t type);
+	void OnCreateState(class CStateComponent* comp, size_t type);
 
 public:
 	void OnMouseLButtonDown(float deltaTime);
@@ -38,6 +40,7 @@ public:
 	void OnScrollUp(float deltaTime);
 	void OnScrollLeft(float deltaTime);
 	void OnScrollRight(float deltaTime);
+	void OnF2Down(float deltaTime);
 
 public:
 	eEditMode GetEditMode()
@@ -53,6 +56,11 @@ public:
 	bool GetLButtonPush() const
 	{
 		return mbMousePush;
+	}
+
+	void SetCamera(class CCameraObject* camera)
+	{
+		mCameraObj = camera;
 	}
 
 	void SetEditMode(eEditMode mode);

@@ -75,6 +75,17 @@ void CColliderComponent::Start()
 {
 	CSceneComponent::Start();
 
+	if (!mCBuffer)
+	{
+		mCBuffer = new CColliderConstantBuffer;
+		mCBuffer->Init();
+		mCBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
+	}
+	if (!mShader)
+	{
+		mShader = CResourceManager::GetInst()->FindShader("ColliderShader");
+	}
+
 	// 자신을 충돌 매니저에 등록
 	mScene->GetCollision()->AddCollider(this);
 }
@@ -123,6 +134,9 @@ void CColliderComponent::Save(FILE* fp)
 	fwrite(&mOffset, sizeof(Vector3), 1, fp);
 	fwrite(&mMinPos, sizeof(Vector3), 1, fp);
 	fwrite(&mMaxPos, sizeof(Vector3), 1, fp);
+	int length = mProfile->Name.length();
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(mProfile->Name.c_str(), sizeof(char), length, fp);
 }
 
 void CColliderComponent::Load(FILE* fp)
@@ -132,6 +146,12 @@ void CColliderComponent::Load(FILE* fp)
 	fread(&mOffset, sizeof(Vector3), 1, fp);
 	fread(&mMinPos, sizeof(Vector3), 1, fp);
 	fread(&mMaxPos, sizeof(Vector3), 1, fp);
+	
+	char profileName[128] = {};
+	int length = 0;
+	fread(&length, sizeof(int), 1, fp);
+	fread(profileName, sizeof(char), length, fp);
+	mProfile = CCollisionManager::GetInst()->FindProfile(profileName);
 }
 
 void CColliderComponent::CheckPrevCollisionSection()

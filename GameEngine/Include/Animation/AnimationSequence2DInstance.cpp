@@ -658,6 +658,18 @@ void CAnimationSequence2DInstance::SetCurrentFrame(const int idx)
 	mCurrentAnimation->mFrame = idx;
 }
 
+void CAnimationSequence2DInstance::DeleteNotify(const std::string& name)
+{
+	CAnimationSequence2DData* data = FindAnimation(name);
+
+	if (!data)
+	{
+		return;
+	}
+
+	data->DeleteNotify(name);
+}
+
 CAnimationSequence2DData* CAnimationSequence2DInstance::FindAnimation(const std::string& name)
 {
 	auto iter = mMapAnimation.find(name);

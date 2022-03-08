@@ -21,18 +21,23 @@ public:
     void OnClickPlay();
     void OnClickSaveObject();
     void OnClickLoadObject();
+    void OnClickInstanciate();
 
 private:
+    void refreshPrefabList();
+
+private:
+    class CIMGUIMainMenuBar* mMainMenuBar;
+
     class CIMGUIButton* mCreateObjectButton;
     class CIMGUIButton* mCreateComponentButton;
+    class CIMGUIButton* mInstanciatePrefabButton;
 
     class CIMGUITextInput* mObjectNameInput;
     class CIMGUITextInput* mComponentNameInput;
 
     class CIMGUIComboBox* mCreatableObjectsComboBox;
     class CIMGUIComboBox* mCreatableComponentsComboBox;
-    
-    class CIMGUIButton* mSaveObjectButton;
-    class CIMGUIButton* mLoadObjectButton;
+    class CIMGUIListBox* mCreatablePrefabsListBox;
 };
 

@@ -117,6 +117,15 @@ void CStaticMeshComponent::Save(FILE* fp)
 
 void CStaticMeshComponent::Load(FILE* fp)
 {
+	int length = 0;
+	fread(&length, sizeof(int), 1, fp);
+
+	char name[MAX_PATH] = {};
+	fread(name, sizeof(char), length, fp);
+	mMesh = (CStaticMesh*)mObject->GetScene()->GetResource()->FindMesh(name);
+
+	mMaterial = mScene->GetResource()->CreateMaterialEmpty<CMaterial>();
+	mMaterial->Load(fp);
 	CSceneComponent::Load(fp);
 }
 
