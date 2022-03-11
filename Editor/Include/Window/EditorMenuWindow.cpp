@@ -32,9 +32,19 @@
 #include "Component/ProcedualMapGenerator.h"
 #include "Component/StateComponent.h"
 #include "../Diablo2/Component/D2CharacterInfoComponent.h"
+#include "../Diablo2/Component/D2StateComponent.h"
 #include "../Diablo2/Component/D2DataManagerComponent.h"
 #include "../Diablo2/Component/D2ProjectTile.h"
-#include "Engine.h"
+#include "../Diablo2/Component/D2MeleeAttack.h"
+#include "../Diablo2/Component/D2PlayerSkillComponent.h"
+#include "../Diablo2/Component/D2Blaze.h"
+#include "../Diablo2/Component/D2FrozenOrb.h"
+#include "../Diablo2/Component/D2Meteor.h"
+#include "../Diablo2/Component/D2MeteorFire.h"
+#include "../Diablo2/Component/D2MeteorTarget.h"
+#include "../Diablo2/Component/D2Teleport.h"
+#include "../Diablo2/Component/D2PlayerSkillComponent.h"
+#include "../Diablo2/State/PlayerIdleState.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
 #include "../EditorInfo.h"
@@ -201,6 +211,9 @@ void CEditorMenuWindow::OnClickCreateComponent()
     // 엔진 내장 컴포넌트들
     switch ((eSceneComponentType)selectIdx)
     {
+    case eSceneComponentType::Scene:
+        sceneComp = obj->CreateComponent<CSceneComponent>(mComponentNameInput->GetTextMultiByte());
+        break;
     case eSceneComponentType::Sprite:
         sceneComp = obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
         break;
@@ -279,11 +292,47 @@ void CEditorMenuWindow::OnClickCreateComponent()
         case eD2ObjectComponentType::D2CharacterInfo:
             objComp = obj->CreateComponent<CD2CharacterInfoComponent>(mComponentNameInput->GetTextMultiByte());
             break;
+        case eD2ObjectComponentType::D2State:
+            objComp = obj->CreateComponent<CD2StateComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
         case eD2ObjectComponentType::D2DataManager:
             objComp = obj->CreateComponent<CD2DataManagerComponent>(mComponentNameInput->GetTextMultiByte());
             break;
         case eD2ObjectComponentType::D2Projectile:
             objComp = obj->CreateComponent<CD2Projectile>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2MeleeAttack:
+            objComp = obj->CreateComponent<CD2MeleeAttack>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2PlayerSkill:
+            objComp = obj->CreateComponent<CD2PlayerSkillComponent>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2Blaze:
+            objComp = obj->CreateComponent<CD2Blaze>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2FrozenOrb:
+            objComp = obj->CreateComponent<CD2FrozenOrb>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2Meteor:
+            objComp = obj->CreateComponent<CD2Meteor>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2MeteorFire:
+            objComp = obj->CreateComponent<CD2MeteorFire>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2MeteorTarget:
+            objComp = obj->CreateComponent<CD2MeteorTarget>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2Teleport:
+            objComp = obj->CreateComponent<CD2Teleport>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
             break;
         }
     }
@@ -472,7 +521,14 @@ void CEditorMenuWindow::OnClickInstanciate()
 
     std::string outName;
     std::string fileName = mCreatablePrefabsListBox->GetSelectItem();
-    CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, fileName.c_str());
+    CGameObject* obj = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, fileName.c_str());
+
+    // Script의 경우 이 버튼을 통해 생성할 경우 에디터 모드로 전환하게
+    CD2SkillObject* skillScript = static_cast<CD2SkillObject*>(obj->FindComponent("Script"));
+    if (skillScript)
+    {
+        skillScript->SetEditMode(true);
+    }
 
 	CObjectHierachyWindow* hierachy = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow(HIERACHY_WINDOW_NAME);
 	hierachy->GetObjectListBox()->AddItem(outName);

@@ -2,6 +2,19 @@
 
 #include "Component/ObjectComponent.h"
 #include "../D2Flag.h"
+#include "D2Skill.h"
+
+enum eCSVLabel
+{
+    Name,
+    AttackType,
+    TreeNo,
+    MaxLevel,
+    IsDefault,
+    ParentSkill,
+    PreSkillLevel,
+    PrefabPath
+};
 
 struct Skill
 {
@@ -31,6 +44,9 @@ public:
     virtual CD2PlayerSkillComponent* Clone() override;
 
 public:
+    bool LevelUp(eD2SkillTreeNo treeNo, const std::string& skillName);
+
+public:
     int GetLSkillType();
     int GetRSkillType();
 
@@ -41,18 +57,28 @@ public:
     void SetRSkill(const std::string& name);
 
 public:
-    CGameObject* DoLSkill(const Vector3& startPos);
-    CGameObject* DoRSkill(const Vector3& startPos);
+    CGameObject* DoLSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, class CGameObject* targetObj = nullptr);
+    CGameObject* DoRSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, class CGameObject* targetObj = nullptr);
+
+public:
+    void AddActiveSkill(CD2Skill* skill)
+    {
+        mVecAvailableSkill.push_back(skill);
+    }
 
 private:
     bool isValidIdx(const int idx);
     bool loadSkillList();
-    Skill* findSkill(const std::string& name);
+    CD2Skill* findSkill(const std::string& name);
     int findSkillIdx(const std::string& name);
 
-public:
+private:
     int mLSkillIdx;
     int mRSkillIdx;
-    std::vector<Skill*> mVecSkill;
-};
 
+    // Skill Tree
+    bool mbInit;
+    CD2Skill* mNormalAttack;
+    CD2Skill* mArrSkillTree[(int)eD2SkillTreeNo::Max];
+    std::vector<CD2Skill*> mVecAvailableSkill;
+};

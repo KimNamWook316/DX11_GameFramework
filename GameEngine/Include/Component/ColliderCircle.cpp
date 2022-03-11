@@ -41,7 +41,8 @@ CColliderCircle::CColliderCircle()
 	mbIsRender = true;
 }
 
-CColliderCircle::CColliderCircle(const CColliderCircle& com)
+CColliderCircle::CColliderCircle(const CColliderCircle& com)	:
+	CColliderComponent(com)
 {
 	mInfo = com.mInfo;
 	SetTypeID<CColliderCircle>();

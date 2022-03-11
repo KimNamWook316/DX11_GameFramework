@@ -20,7 +20,12 @@ CGameObject::CGameObject(const CGameObject& obj)
 
 	if (obj.mRootSceneComponent)
 	{
+		mRootSceneComponent = nullptr;
+		mSceneComponentList.clear();
+		
 		mRootSceneComponent = obj.mRootSceneComponent->Clone();
+
+		mRootSceneComponent->SetScene(mScene);
 
 		mRootSceneComponent->SetGameObject(this);
 
@@ -34,8 +39,11 @@ CGameObject::CGameObject(const CGameObject& obj)
 	for (size_t i = 0; i < size; ++i)
 	{
 		mVecObjectComponent.push_back(obj.mVecObjectComponent[i]->Clone());
+		mVecObjectComponent[i]->SetScene(mScene);
 		mVecObjectComponent[i]->SetGameObject(this);
 	}
+
+	mScene->AddObject(this);
 }
 
 CGameObject::~CGameObject()
@@ -74,7 +82,7 @@ CComponent* CGameObject::FindComponent(const std::string& name)
 	auto iterObj = mVecObjectComponent.begin();
 	auto iterObjEnd = mVecObjectComponent.end();
 
-	for (; iterObj != iterObjEnd; ++iter)
+	for (; iterObj != iterObjEnd; ++iterObj)
 	{
 		if (name == (*iterObj)->GetName())
 		{

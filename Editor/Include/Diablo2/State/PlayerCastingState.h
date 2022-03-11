@@ -2,13 +2,13 @@
 
 #include "Component/State.h"
 
-class CPlayerIdleState :
+class CPlayerCastingState :
     public CState
 {
 public:
-    CPlayerIdleState();
-    CPlayerIdleState(const CPlayerIdleState& state);
-    virtual ~CPlayerIdleState();
+    CPlayerCastingState();
+    CPlayerCastingState(const CPlayerCastingState& state);
+    virtual ~CPlayerCastingState();
 
 public:
     virtual bool Init() override;
@@ -21,14 +21,6 @@ public:
     virtual void ResetState() override;
 
 public:
-    void OnClickMouseR(float deltaTime);
-    void OnClickMouseL(float deltaTime);
-    void OnCtrlDown(float deltaTime);
-    void OnCtrlUp(float deltaTime);
-
-private:
-    bool mbRun;
-    bool mbCasting;
-    bool mbMelee;
+    void OnAnimEnd();
 };
 

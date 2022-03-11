@@ -38,6 +38,7 @@ public:
     void SetSpeed(const float speed);
     void SetDir(const Vector2& dir);
     void SetHp(const float hp);
+    void SetCC(eD2ElementType type);
 
 public:
     const D2CharInfo& GetInfo() const
@@ -86,7 +87,12 @@ private:
     void callEventCallBack(eD2CharInfoEventType eType);
 
 private:
+    CSharedPtr<class CSpriteComponent> mSprite;
+    CSharedPtr<class CNavAgentComponent> mNavAgent;
     D2CharInfo mCharInfo;
     std::list<EventCallBack> mEventCallBackList[(int)eD2CharInfoEventType::Max];
+
+    eD2ElementType meCC;
+    float mCCTime;
 };
 

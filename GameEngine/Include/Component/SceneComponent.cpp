@@ -40,6 +40,7 @@ CSceneComponent::CSceneComponent(const CSceneComponent& com)	:
 	mTransform->mOwnerComponent = this;
 	mParent = nullptr;
 
+	mVecChild.clear();
 	size_t size = com.mVecChild.size();
 
 	for (size_t i = 0; i < size; ++i)

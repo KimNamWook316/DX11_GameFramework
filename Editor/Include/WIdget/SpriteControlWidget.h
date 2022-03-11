@@ -51,6 +51,6 @@ protected:
     class CIMGUIButton* mAnimationPlayButton;
     class CIMGUIComboBox* mAnimationListWidget;
 
-    class CAnimationSequence2DInstance* mAnimInst;
+    //class CAnimationSequence2DInstance* mAnimInst;
 };
 

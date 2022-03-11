@@ -18,6 +18,7 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSequence2DInstance& anim)
 {
+	mTypeID = anim.GetTypeID();
 	mbPlay = anim.mbPlay;
 
 	auto iter = anim.mMapAnimation.begin();
@@ -60,6 +61,12 @@ void CAnimationSequence2DInstance::Start()
 	{
 		mOwner->SetTexture(0, 0, (int)eBufferShaderTypeFlags::Pixel,
 			mCurrentAnimation->mSequence->GetTexture()->GetName(), mCurrentAnimation->mSequence->GetTexture());
+	}
+
+	if (mScene)
+	{
+		mCBuffer = mScene->GetResource()->GetAnimation2DCBuffer();
+		mCBuffer->Init();
 	}
 }
 

@@ -31,6 +31,7 @@ CColliderComponent::CColliderComponent(const CColliderComponent& com) :
 	mShader = com.mShader;
 	
 	mCBuffer = com.mCBuffer->Clone();
+	mCBuffer->Init();
 }
 
 CColliderComponent::~CColliderComponent()

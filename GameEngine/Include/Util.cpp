@@ -330,6 +330,9 @@ std::string CUtil::SceneComponentTypeToString(eSceneComponentType eType)
 	std::string out;
 	switch (eType)
 	{
+	case eSceneComponentType::Scene:
+		out = "Scene";
+		break;
 	case eSceneComponentType::Sprite:
 		out = "Sprite";
 		break;

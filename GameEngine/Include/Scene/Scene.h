@@ -101,6 +101,11 @@ public:
 	{
 		mMode->SetPlayerObj(obj);
 	}
+	
+	void AddObject(CGameObject* obj)
+	{
+		mObjList.push_back(obj);
+	}
 
 public:
 	template <typename T>

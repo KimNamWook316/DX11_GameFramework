@@ -6,6 +6,7 @@
 #include "../Resource/TileSet/TileSet.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Collision/CollisionManager.h"
 
 CProcedualMapGenerator::CProcedualMapGenerator()	:
 	mMapCountX(0),

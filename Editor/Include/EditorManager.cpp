@@ -15,7 +15,16 @@
 #include "Component/StateComponent.h"
 #include "Diablo2/Component/D2CharacterInfoComponent.h"
 #include "Diablo2/Component/D2DataManagerComponent.h"
+#include "Diablo2/Component/D2StateComponent.h"
 #include "Diablo2/Component/D2ProjectTile.h"
+#include "Diablo2/Component/D2MeleeAttack.h"
+#include "Diablo2/Component/D2Blaze.h"
+#include "Diablo2/Component/D2FrozenOrb.h"
+#include "Diablo2/Component/D2Meteor.h"
+#include "Diablo2/Component/D2MeteorFire.h"
+#include "Diablo2/Component/D2MeteorTarget.h"
+#include "Diablo2/Component/D2Teleport.h"
+#include "Diablo2/Component/D2PlayerSkillComponent.h"
 #include "Diablo2/State/PlayerIdleState.h"
 #include "Diablo2/State/PlayerRunState.h"
 #include "Engine.h"
@@ -206,7 +215,12 @@ class CGameObject* CEditorManager::OnCreateObject(CScene* scene, size_t type)
 
 CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 {
-	if (type == typeid(CSpriteComponent).hash_code())
+	if (type == typeid(CSceneComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CSceneComponent>();
+		return component;
+	}
+	else if (type == typeid(CSpriteComponent).hash_code())
 	{
 		CComponent* component = obj->LoadComponent<CSpriteComponent>();
 		return component;
@@ -284,6 +298,51 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 	else if(type == typeid(CD2Projectile).hash_code())
 	{
 		CComponent* component = obj->LoadComponent<CD2Projectile>();
+		return component;
+	}
+	else if(type == typeid(CD2MeleeAttack).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2MeleeAttack>();
+		return component;
+	}
+	else if(type == typeid(CD2PlayerSkillComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2PlayerSkillComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2Blaze).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2Blaze>();
+		return component;
+	}
+	else if(type == typeid(CD2FrozenOrb).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2FrozenOrb>();
+		return component;
+	}
+	else if(type == typeid(CD2Meteor).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2Meteor>();
+		return component;
+	}
+	else if(type == typeid(CD2MeteorFire).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2MeteorFire>();
+		return component;
+	}
+	else if(type == typeid(CD2MeteorTarget).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2MeteorTarget>();
+		return component;
+	}
+	else if(type == typeid(CD2Teleport).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2Teleport>();
+		return component;
+	}
+	else if(type == typeid(CD2StateComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2StateComponent>();
 		return component;
 	}
 	else

@@ -29,7 +29,6 @@ public:
     void OnRun();
 
 private:
-    CSharedPtr<class CD2CharacterInfoComponent> mCharInfo;
     bool mbRunEnd;
     bool mbWalk;
     eD2SpriteDir mPrevDir;

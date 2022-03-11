@@ -160,7 +160,10 @@ void CRenderManager::Render()
 
 		for (; iter != iterEnd; ++iter)
 		{
-			(*iter)->PrevRender();
+			if ((*iter)->IsEnable())
+			{
+				(*iter)->PrevRender();
+			}
 		}
 	}
 

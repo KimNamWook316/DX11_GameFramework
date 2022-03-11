@@ -20,8 +20,11 @@
 #include "Component/NavAgentComponent.h"
 #include "Component/StateComponent.h"
 #include "Component/CameraComponent.h"
+#include "../Diablo2/Component/D2StateComponent.h"
 #include "../Diablo2/Component/D2CharacterInfoComponent.h"
 #include "../Diablo2/Component/D2ProjectTile.h"
+#include "../Diablo2/Component/D2MeleeAttack.h"
+#include "../Diablo2/Component/D2PlayerSkillComponent.h"
 #include "../Widget/ComponentControlWidget.h"
 #include "../Widget/SpriteControlWidget.h"
 #include "../Widget/ColliderControlWidget.h"
@@ -108,6 +111,11 @@ CComponentControlWidget* CDetailWindow::CreateControlWidget(CComponent* comp)
         return widget;
     }
     else if (comp->GetTypeID() == typeid(CStateComponent).hash_code())
+    {
+        CStateControlWidget* widget = new CStateControlWidget;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CD2StateComponent).hash_code())
     {
         CStateControlWidget* widget = new CStateControlWidget;
         return widget;

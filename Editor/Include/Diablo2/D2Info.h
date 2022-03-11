@@ -12,6 +12,7 @@ struct D2CharInfo
 	eD2SpriteDir eSpriteDir;
 	float Hp;
 	float MaxHp;
+	float MaxCCTime;
 };
 
 struct D2SkillInfo
@@ -21,4 +22,5 @@ struct D2SkillInfo
 	float Speed;
 	Vector2 Dir;
 	eD2ElementType eElementType;
+	float LifeTime;
 };

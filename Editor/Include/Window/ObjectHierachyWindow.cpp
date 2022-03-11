@@ -116,7 +116,7 @@ void CObjectHierachyWindow::OnSelectObject(int idx, const char* item)
 
 	std::vector<FindComponentName> vecNames;
 
-	obj->GetAllSceneComponentsName(vecNames);
+	obj->GetAllComponentsName(vecNames);
 	
 	mComponentListBox->Clear();
 

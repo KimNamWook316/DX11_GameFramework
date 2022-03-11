@@ -32,6 +32,5 @@ private:
     eD2SpriteDir mPrevDir;
     bool mbRun;
     bool mbWalkEnd;
-    CSharedPtr<class CD2CharacterInfoComponent> mCharInfo;
 };
 

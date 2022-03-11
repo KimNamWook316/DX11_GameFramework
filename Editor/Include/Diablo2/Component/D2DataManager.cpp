@@ -128,6 +128,7 @@ bool CD2DataManager::loadD2CharInfo()
 		info->MaxSpeed = std::stof((*iter->second)[1]);
 		info->MaxHp = std::stof((*iter->second)[2]);
 		info->Hp = info->MaxHp;
+		info->MaxCCTime = std::stof((*iter->second)[3]);
 
 		mMapCharInfo.insert(std::make_pair(info->Name, info));
 	}
@@ -159,6 +160,7 @@ bool CD2DataManager::loadD2SkillInfo()
 		info->Damage = std::stof((*iter->second)[1]);
 		info->Speed = std::stof((*iter->second)[2]);
 		info->eElementType = CD2Util::StringToElementType((*iter->second)[3]);
+		info->LifeTime = std::stof((*iter->second)[4]);
 		mMapSkillInfo.insert(std::make_pair(info->Name, info));
 	}
 

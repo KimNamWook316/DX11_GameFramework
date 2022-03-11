@@ -148,14 +148,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Diablo2\Component\D2Blaze.h" />
     <ClInclude Include="Diablo2\Component\D2CharacterInfoComponent.h" />
     <ClInclude Include="Diablo2\Component\D2DataManager.h" />
     <ClInclude Include="Diablo2\Component\D2DataManagerComponent.h" />
+    <ClInclude Include="Diablo2\Component\D2FrozenOrb.h" />
+    <ClInclude Include="Diablo2\Component\D2MeleeAttack.h" />
+    <ClInclude Include="Diablo2\Component\D2Meteor.h" />
+    <ClInclude Include="Diablo2\Component\D2MeteorFire.h" />
+    <ClInclude Include="Diablo2\Component\D2MeteorTarget.h" />
     <ClInclude Include="Diablo2\Component\D2PlayerSkillComponent.h" />
     <ClInclude Include="Diablo2\Component\D2ProjectTile.h" />
+    <ClInclude Include="Diablo2\Component\D2Skill.h" />
+    <ClInclude Include="Diablo2\Component\D2SkillObject.h" />
+    <ClInclude Include="Diablo2\Component\D2StateComponent.h" />
+    <ClInclude Include="Diablo2\Component\D2Teleport.h" />
     <ClInclude Include="Diablo2\D2Flag.h" />
     <ClInclude Include="Diablo2\D2Info.h" />
     <ClInclude Include="Diablo2\D2Util.h" />
+    <ClInclude Include="Diablo2\State\PlayerCastingState.h" />
     <ClInclude Include="Diablo2\State\PlayerIdleState.h" />
     <ClInclude Include="Diablo2\State\PlayerRunState.h" />
     <ClInclude Include="Diablo2\State\PlayerWalkState.h" />
@@ -191,12 +202,23 @@
     <ClInclude Include="Window\TileSetEditWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Diablo2\Component\D2Blaze.cpp" />
     <ClCompile Include="Diablo2\Component\D2CharacterInfoComponent.cpp" />
     <ClCompile Include="Diablo2\Component\D2DataManager.cpp" />
     <ClCompile Include="Diablo2\Component\D2DataManagerComponent.cpp" />
+    <ClCompile Include="Diablo2\Component\D2FrozenOrb.cpp" />
+    <ClCompile Include="Diablo2\Component\D2MeleeAttack.cpp" />
+    <ClCompile Include="Diablo2\Component\D2Meteor.cpp" />
+    <ClCompile Include="Diablo2\Component\D2MeteorFire.cpp" />
+    <ClCompile Include="Diablo2\Component\D2MeteorTarget.cpp" />
     <ClCompile Include="Diablo2\Component\D2PlayerSkillComponent.cpp" />
     <ClCompile Include="Diablo2\Component\D2ProjectTile.cpp" />
+    <ClCompile Include="Diablo2\Component\D2Skill.cpp" />
+    <ClCompile Include="Diablo2\Component\D2SkillObject.cpp" />
+    <ClCompile Include="Diablo2\Component\D2StateComponent.cpp" />
+    <ClCompile Include="Diablo2\Component\D2Teleport.cpp" />
     <ClCompile Include="Diablo2\D2Util.cpp" />
+    <ClCompile Include="Diablo2\State\PlayerCastingState.cpp" />
     <ClCompile Include="Diablo2\State\PlayerIdleState.cpp" />
     <ClCompile Include="Diablo2\State\PlayerRunState.cpp" />
     <ClCompile Include="Diablo2\State\PlayerWalkState.cpp" />

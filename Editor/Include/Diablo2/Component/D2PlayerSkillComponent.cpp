@@ -5,9 +5,13 @@
 #include "../D2Util.h"
 
 CD2PlayerSkillComponent::CD2PlayerSkillComponent()	:
-	mLSkillIdx(-1),
-	mRSkillIdx(-1)
+	mLSkillIdx(0),
+	mRSkillIdx(1),
+	mbInit(false),
+	mArrSkillTree{},
+	mNormalAttack(nullptr)
 {
+	SetTypeID<CD2PlayerSkillComponent>();
 }
 
 CD2PlayerSkillComponent::CD2PlayerSkillComponent(const CD2PlayerSkillComponent& com)	:
@@ -15,32 +19,38 @@ CD2PlayerSkillComponent::CD2PlayerSkillComponent(const CD2PlayerSkillComponent& 
 {
 	mLSkillIdx = com.mLSkillIdx;
 	mRSkillIdx = com.mRSkillIdx;
+
+	// TODO : 복사생성 될 일 있으면 구현
+	for (int i = 0; i < (int)eD2SkillTreeNo::Max; ++i)
+	{
+	}
 }
 
 CD2PlayerSkillComponent::~CD2PlayerSkillComponent()
 {
-	size_t size = mVecSkill.size();
+	SAFE_DELETE(mNormalAttack);
 
-	for (size_t i = 0; i < size; ++i)
+	for (int i = 0; i < (int)eD2SkillTreeNo::Max; ++i)
 	{
-		SAFE_DELETE(mVecSkill[i]);
+		SAFE_DELETE(mArrSkillTree[i]);
 	}
-	mVecSkill.clear();
 }
 
 bool CD2PlayerSkillComponent::Init()
 {
 	loadSkillList();
+	mbInit = true;
 	return true;
 }
 
 void CD2PlayerSkillComponent::Start()
 {
-	if (mVecSkill.empty())
+	CObjectComponent::Start();
+
+	if (!mbInit)
 	{
 		loadSkillList();
 	}
-	CObjectComponent::Start();
 }
 
 void CD2PlayerSkillComponent::Update(float deltaTime)
@@ -68,11 +78,29 @@ CD2PlayerSkillComponent* CD2PlayerSkillComponent::Clone()
 	return new CD2PlayerSkillComponent(*this);
 }
 
+bool CD2PlayerSkillComponent::LevelUp(eD2SkillTreeNo treeNo, const std::string& skillName)
+{
+	CD2Skill* skill = mArrSkillTree[(int)TreeNo];
+
+	if (!skill)
+	{
+		return false;
+	}
+
+	if (skill->mbLevelUpAvailable)
+	{
+		skill->LevelUp();
+		return true;
+	}
+
+	return false;
+}
+
 int CD2PlayerSkillComponent::GetLSkillType()
 {
 	if (isValidIdx(mLSkillIdx))
 	{
-		return (int)mVecSkill[mLSkillIdx]->Type;
+		return (int)mVecAvailableSkill[mLSkillIdx]->GetAttackType();
 	}
 	return -1;
 }
@@ -81,7 +109,7 @@ int CD2PlayerSkillComponent::GetRSkillType()
 {
 	if (isValidIdx(mRSkillIdx))
 	{
-		return (int)mVecSkill[mRSkillIdx]->Type;
+		return (int)mVecAvailableSkill[mRSkillIdx]->GetAttackType();
 	}
 	return -1;
 }
@@ -126,35 +154,27 @@ void CD2PlayerSkillComponent::SetRSkill(const std::string& name)
 	mRSkillIdx = idx;
 }
 
-CGameObject* CD2PlayerSkillComponent::DoLSkill(const Vector3& startPos)
+CGameObject* CD2PlayerSkillComponent::DoLSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, CGameObject* targetObj)
 {
 	if (isValidIdx(mLSkillIdx))
 	{ 
-		CGameObject* clone = mVecSkill[mLSkillIdx]->Object->Clone();
-		clone->Enable(true);
-		clone->Start();
-		clone->SetWorldPos(startPos);
-		return clone;
+		return mVecAvailableSkill[mLSkillIdx]->DoSkill(startPos, targetPos, dir, targetObj);
 	}
 	return nullptr;
 }
 
-CGameObject* CD2PlayerSkillComponent::DoRSkill(const Vector3& startPos)
+CGameObject* CD2PlayerSkillComponent::DoRSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, CGameObject* targetObj)
 {
 	if (isValidIdx(mRSkillIdx))
 	{ 
-		CGameObject* clone = mVecSkill[mRSkillIdx]->Object->Clone();
-		clone->Enable(true);
-		clone->Start();
-		clone->SetWorldPos(startPos);
-		return clone;
+		return mVecAvailableSkill[mRSkillIdx]->DoSkill(startPos, targetPos, dir, targetObj);
 	}
 	return nullptr;
 }
 
 bool CD2PlayerSkillComponent::isValidIdx(const int idx)
 {
-	if (idx < 0 || idx >= mVecSkill.size())
+	if (idx < 0 || idx >= mVecAvailableSkill.size())
 	{
 		return false;
 	}
@@ -173,47 +193,78 @@ bool CD2PlayerSkillComponent::loadSkillList()
 		return false;
 	}
 
-	// TODO : Melee Attack As Default LSkill
 	std::unordered_map<std::string, std::vector<std::string>*> table = data->GetTable();
 
-	Skill* skill = nullptr;
 	auto iter = table.begin();
 	auto iterEnd = table.end();
 
-	std::string outName;
+	std::vector<std::vector<std::vector<std::string>>> vecChildData;
+	vecChildData.resize((int)eD2SkillTreeNo::Max);
 
 	for (; iter != iterEnd; ++iter)
 	{
-		skill = new Skill;
-		skill->Name = (*iter->second)[0];
-		skill->Type = CD2Util::StringToAttackType((*iter->second)[1]);
-		CGameObject* obj = mScene->LoadGameObjectFullPath(outName, (*iter->second)[2].c_str());
+		eD2SkillTreeNo skillTreeNo = CD2Util::StringToSkilltreeNo((*iter->second)[2]);
 
-		if (!obj)
+		// 기본 공격
+		if ((*iter->second)[eCSVLabel::Name] == "MeleeAttack")
 		{
-			assert(false);
+			CD2Skill* normalAttack = new CD2Skill;
+			normalAttack->mOwner = this;
+			normalAttack->mName = (*iter->second)[eCSVLabel::Name];
+			normalAttack->meAttackType = CD2Util::StringToAttackType((*iter->second)[eCSVLabel::AttackType]);
+			normalAttack->mTreeNo = skillTreeNo;
+			normalAttack->mLevel = 1;
+			normalAttack->mMaxLevel = std::stoi((*iter->second)[eCSVLabel::MaxLevel]);
+			normalAttack->mPreSkillLevel = std::stoi((*iter->second)[eCSVLabel::PreSkillLevel]);
+			normalAttack->Start((*iter->second)[eCSVLabel::PrefabPath].c_str());
+			mNormalAttack = normalAttack;
+			AddActiveSkill(normalAttack);
+			continue;
 		}
 
-		obj->SetWorldPos(-1000.f, -1000.f, 0.f);
-		obj->Enable(false);
+		// Default 스킬인 경우 스킬트리 최상위 스킬임
+		if ((*iter->second)[eCSVLabel::IsDefault] == "TRUE")
+		{
+			mArrSkillTree[(int)(skillTreeNo)] = new CD2Skill;
+			mArrSkillTree[(int)(skillTreeNo)]->mOwner = this;
+			mArrSkillTree[(int)(skillTreeNo)]->mName = (*iter->second)[eCSVLabel::Name];
+			mArrSkillTree[(int)(skillTreeNo)]->meAttackType = CD2Util::StringToAttackType((*iter->second)[eCSVLabel::AttackType]);
+			mArrSkillTree[(int)(skillTreeNo)]->mTreeNo = skillTreeNo;
+			mArrSkillTree[(int)(skillTreeNo)]->mLevel = 1;
+			mArrSkillTree[(int)(skillTreeNo)]->mMaxLevel = std::stoi((*iter->second)[eCSVLabel::MaxLevel]);
+			mArrSkillTree[(int)(skillTreeNo)]->mPreSkillLevel = std::stoi((*iter->second)[eCSVLabel::PreSkillLevel]);
+			mArrSkillTree[(int)(skillTreeNo)]->Start((*iter->second)[eCSVLabel::PrefabPath].c_str());
 
-		skill->Object = obj;
-		mVecSkill.push_back(skill);
+			// Active 스킬에 추가
+			AddActiveSkill(mArrSkillTree[(int)(skillTreeNo)]);
+		}
+		// Default Skill이 아닌 경우, 선행 스킬이 있는 경우이므로, 타입에 따라 생성 데이터를 분류한다.
+		else
+		{
+			vecChildData[(int)skillTreeNo].push_back(*iter->second);
+		}
+
+	}
+
+	// 최상위 스킬들에서 자식 스킬들 생성
+	for (int i = 0; i < (int)eD2SkillTreeNo::Max; ++i)
+	{
+		mArrSkillTree[i]->LoadChildSkill(vecChildData[i]);
 	}
 
 	CResourceManager::GetInst()->DeleteCSV(csvName);
 	return true;
 }
 
-Skill* CD2PlayerSkillComponent::findSkill(const std::string& name)
+CD2Skill* CD2PlayerSkillComponent::findSkill(const std::string& name)
 {
-	size_t size = mVecSkill.size();
+	size_t size = mVecAvailableSkill.size();
 
 	for (size_t i = 0; i < size; ++i)
 	{
-		if (mVecSkill[i]->Name == name)
+		if (mVecAvailableSkill[i]->GetName() == name)
 		{
-			return mVecSkill[i];
+			return mVecAvailableSkill[i];
 		}
 	}
 	return nullptr;
@@ -221,11 +272,11 @@ Skill* CD2PlayerSkillComponent::findSkill(const std::string& name)
 
 int CD2PlayerSkillComponent::findSkillIdx(const std::string& name)
 {
-	size_t size = mVecSkill.size();
+	size_t size = mVecAvailableSkill.size();
 
 	for (size_t i = 0; i < size; ++i)
 	{
-		if (mVecSkill[i]->Name == name)
+		if (mVecAvailableSkill[i]->GetName() == name)
 		{
 			return (int)i;
 		}

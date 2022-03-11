@@ -22,6 +22,8 @@ CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)
 	if (com.mAnimation)
 	{
 		mAnimation = com.mAnimation->Clone();
+		mAnimation->SetOwner(this);
+		mAnimation->SetScene(mScene);
 	}
 
 	if (com.mMaterial)

@@ -32,25 +32,36 @@ CSpriteControlWidget::CSpriteControlWidget()	:
 	mAnimationNameWidget(nullptr),
 	mAnimationFrameWidget(nullptr),
 	mAnimationPlayButton(nullptr),
-	mAnimationListWidget(nullptr),
-	mAnimInst(nullptr)
+	mAnimationListWidget(nullptr)
 {
 }
 
 CSpriteControlWidget::~CSpriteControlWidget()
 {
+	if (!mComponent)
+	{
+		return;
+	}
+
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+
+	if (!animInst)
+	{
+		return;
+	}
+
 	std::vector<std::string> animNames;
-	mAnimInst->GetAnimationNames(animNames);
+	animInst->GetAnimationNames(animNames);
 
 	size_t size = animNames.size();
 
 	// 콜백 삭제
 	for (size_t i = 0; i < size; ++i)
 	{
-		CAnimationSequence2DData* data = mAnimInst->FindAnimation(animNames[i]);
+		CAnimationSequence2DData* data = animInst->FindAnimation(animNames[i]);
 
 		int frameCount = data->GetAnimationSequence()->GetFrameCount();
-		
+
 		for (int j = 0; j < frameCount; ++j)
 		{
 			data->DeleteNotify(animNames[i]);
@@ -104,7 +115,6 @@ bool CSpriteControlWidget::Init()
 
 	// Initial Value
 	CSpriteComponent* comp = (CSpriteComponent*)mComponent;
-	mAnimInst = comp->GetAnimationInstance();
 
 	Vector3 pos = comp->GetRelativePos();
 	Vector3 scale = comp->GetRelativeScale();
@@ -244,12 +254,12 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 		static_cast<CSpriteComponent*>(mComponent)->LoadAnimationInstanceFullPath(fullPath);
 
 		// Animation 초기화
-		mAnimInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
-		mAnimInst->Start();
-		mAnimInst->Play();
+		CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+		animInst->Start();
+		animInst->Play();
 
 		// Size 조절
-		Vector2 spriteSize = mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
+		Vector2 spriteSize = animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
 		static_cast<CSpriteComponent*>(mComponent)->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
 		mScaleWidget->SetX(spriteSize.x);
 		mScaleWidget->SetY(spriteSize.y);
@@ -262,7 +272,7 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 		mAnimationListWidget->Clear();
 
 		std::vector<std::string> animNames;
-		mAnimInst->GetAnimationNames(animNames);
+		animInst->GetAnimationNames(animNames);
 
 		size_t size = animNames.size();
 		for (size_t i = 0; i < size; ++i)
@@ -271,22 +281,22 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 		}
 		mAnimationListWidget->Sort(true);
 		
-		std::string curAnimName = mAnimInst->GetCurrentAnimation()->GetName();
+		std::string curAnimName = animInst->GetCurrentAnimation()->GetName();
 		mAnimationListWidget->SetCurrentItem(curAnimName);
 
 		// Frame Widget
-		mAnimationFrameWidget->SetMax(mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
+		mAnimationFrameWidget->SetMax(animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
 
 		// CallBack 등록
 		for (size_t i = 0; i < size; ++i)
 		{
-			CAnimationSequence2DData* data = mAnimInst->FindAnimation(animNames[i]);
+			CAnimationSequence2DData* data = animInst->FindAnimation(animNames[i]);
 
 			int frameCount = data->GetAnimationSequence()->GetFrameCount();
 			
 			for (int j = 0; j < frameCount; ++j)
 			{
-				mAnimInst->AddNotify(animNames[i], j, this, &CSpriteControlWidget::OnUpdateAnimInstFrame);
+				animInst->AddNotify(animNames[i], j, this, &CSpriteControlWidget::OnUpdateAnimInstFrame);
 			}
 		}
 	}
@@ -295,57 +305,68 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 void CSpriteControlWidget::OnChangeAnimationFrame(int frame)
 {
 	// Stop
-	mAnimInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
-	mAnimInst->Stop();
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	animInst->Stop();
 
 	// Set Frame
-	mAnimInst->SetCurrentFrame(frame);
+	animInst->SetCurrentFrame(frame);
 }
 
 void CSpriteControlWidget::OnClickPlayAnimation()
 {
-	if (!mAnimInst)
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+
+	if (!animInst)
 	{
 		return;
 	}
 
-	if (!mAnimInst->GetCurrentAnimation()->IsLoop() && mAnimInst->IsEndFrame())
+	if (!animInst->GetCurrentAnimation()->IsLoop() && animInst->IsEndFrame())
 	{
-		mAnimInst->Replay();
+		animInst->Replay();
 		return;
 	}
 	
-	bool bPlay = mAnimInst->IsPlay();
+	bool bPlay = animInst->IsPlay();
 
 	if (bPlay)
 	{
-		mAnimInst->Stop();
+		animInst->Stop();
 	}
 	else
 	{
-		mAnimInst->Play();
+		animInst->Play();
 	}
 }
 
 void CSpriteControlWidget::OnSelectAnimationList(int idx, const char* name)
 {
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
 	// Change Animation
 	std::string animName = name;
-	mAnimInst->ChangeAnimation(animName);
+	animInst->ChangeAnimation(animName);
 
 	// Size
-	Vector2 spriteSize = mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
+	Vector2 spriteSize = animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
 	static_cast<CSpriteComponent*>(mComponent)->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
 	mScaleWidget->SetX(spriteSize.x);
 	mScaleWidget->SetY(spriteSize.y);
 
 	// Frame
 	mAnimationFrameWidget->SetValue(0);
-	mAnimationFrameWidget->SetMax(mAnimInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
+	mAnimationFrameWidget->SetMax(animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameCount() - 1);
 }
 
 void CSpriteControlWidget::OnUpdateAnimInstFrame()
 {
-	int currentFrame = mAnimInst->GetCurrentAnimation()->GetCurrentFrame();
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+
+	if (!animInst)
+	{
+		return;
+	}
+
+	int currentFrame = animInst->GetCurrentAnimation()->GetCurrentFrame();
 	mAnimationFrameWidget->SetValue(currentFrame);
 }

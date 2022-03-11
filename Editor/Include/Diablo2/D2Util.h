@@ -29,5 +29,9 @@ public:
 	// SkillType
 	static std::string AttackTypeToString(eD2AttackType type);
 	static eD2AttackType StringToAttackType(const std::string& typeString);
+
+	// SkillTreeNo
+	static std::string SkilltreeNoToString(eD2SkillTreeNo no);
+	static eD2SkillTreeNo StringToSkilltreeNo(const std::string& noString);
 };
 

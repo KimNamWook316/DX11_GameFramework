@@ -1,9 +1,14 @@
 #include "D2CharacterInfoComponent.h"
 #include "D2DataManager.h"
 #include "../D2Util.h"
+#include "GameObject/GameObject.h"
+#include "Component/SpriteComponent.h"
+#include "Component/NavAgentComponent.h"
 
 CD2CharacterInfoComponent::CD2CharacterInfoComponent():
-	mCharInfo{}
+	mCharInfo{},
+	meCC(eD2ElementType::None),
+	mCCTime(0.f)
 {
 	SetTypeID<CD2CharacterInfoComponent>();
 }
@@ -13,6 +18,8 @@ CD2CharacterInfoComponent::CD2CharacterInfoComponent(const CD2CharacterInfoCompo
 {
 	mCharInfo = com.mCharInfo;
 	mCharInfo.Speed = 0.f;
+	meCC = eD2ElementType::None;
+	mCCTime = 0.f;
 }
 
 CD2CharacterInfoComponent::~CD2CharacterInfoComponent()
@@ -21,15 +28,64 @@ CD2CharacterInfoComponent::~CD2CharacterInfoComponent()
 
 bool CD2CharacterInfoComponent::Init()
 {
+	mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
+	mNavAgent = mObject->FindObjectComponentFromType<CNavAgentComponent>();
+
+	if (!mSprite)
+	{
+		assert(false);
+		return false;
+	}
+
 	return true;
 }
 
 void CD2CharacterInfoComponent::Start()
 {
+	if (!mSprite)
+	{
+		mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
+
+		if (!mSprite)
+		{
+			assert(false);
+			return;
+		}
+	}
+	if (!mNavAgent)
+	{
+		mNavAgent = mObject->FindObjectComponentFromType<CNavAgentComponent>();
+	}
 }
 
 void CD2CharacterInfoComponent::Update(float deltaTime)
 {
+	if (mCCTime >= mCharInfo.MaxCCTime)
+	{
+		mSprite->SetBaseColor(1.f, 1.f, 1.f, 1.f);
+		mCCTime = 0.f;
+		meCC = eD2ElementType::None;
+	}
+
+	switch (meCC)
+	{
+	case eD2ElementType::Fire:
+		mSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
+		SetHp(-mCharInfo.Hp * 0.01f);
+		break;
+	case eD2ElementType::Ice:
+		mSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
+		if (mNavAgent)
+		{
+			SetSpeed(mCharInfo.MaxSpeed * 0.3f);
+			mNavAgent->SetMoveSpeed(mCharInfo.Speed);
+		}
+		break;
+	case eD2ElementType::Lightning:
+		break;
+	}
+
+	mCCTime += deltaTime;
 }
 
 void CD2CharacterInfoComponent::PostUpdate(float deltaTime)
@@ -126,6 +182,14 @@ void CD2CharacterInfoComponent::SetHp(const float hp)
 	{
 		callEventCallBack(eD2CharInfoEventType::HpDec);
 	}
+}
+
+void CD2CharacterInfoComponent::SetCC(eD2ElementType type)
+{
+	mCCTime = 0.f;
+	meCC = type;
+
+	callEventCallBack(eD2CharInfoEventType::CC);
 }
 
 void CD2CharacterInfoComponent::DeleteEventCallBack(const std::string& name, eD2CharInfoEventType type)

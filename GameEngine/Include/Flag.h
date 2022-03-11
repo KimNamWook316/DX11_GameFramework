@@ -85,6 +85,7 @@ enum class eRenderStateType
 
 enum class eSceneComponentType
 {
+	Scene,
 	Sprite,
 	StaticMesh,
 	ColliderBox2D,

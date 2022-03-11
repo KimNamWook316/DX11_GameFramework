@@ -1,7 +1,7 @@
 #include "PlayerRunState.h"
 #include "Component/SpriteComponent.h"
 #include "Component/NavAgentComponent.h"
-#include "Component/StateComponent.h"
+#include "../Component/D2StateComponent.h"
 #include "../Component/D2CharacterInfoComponent.h"
 #include "PlayerWalkState.h"
 #include "GameObject/GameObject.h"
@@ -30,7 +30,6 @@ bool CPlayerRunState::Init()
 
 void CPlayerRunState::Start()
 {
-	mCharInfo = mOwner->GetGameObject()->FindObjectComponentFromType<CD2CharacterInfoComponent>();
 }
 
 void CPlayerRunState::PostUpdate(float deltaTime)
@@ -49,7 +48,7 @@ void CPlayerRunState::EnterStateFunction()
 	CInput::GetInst()->SetKeyCallBack("MouseL", eKeyState::KeyState_Push, this, &CPlayerRunState::OnPushMouseL);
 	CInput::GetInst()->SetKeyCallBack("MouseR", eKeyState::KeyState_Push, this, &CPlayerRunState::OnPushMouseR);
 
-	mPrevDir = mCharInfo->GetSpriteDir();
+	mPrevDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
 	static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->SetCurrentAnimation("Run" + std::to_string((int)mPrevDir));
 
 	mOwner->GetNavAgent()->SetFrameCallBack(this, &CPlayerRunState::OnRun);
@@ -66,7 +65,7 @@ CState* CPlayerRunState::StateFunction()
 	else if (mbWalk)
 	{
 		mbEnd = true;
-		mOwner->GetNavAgent()->SetMoveSpeed(mCharInfo->GetMaxSpeed() / 2.f);
+		mOwner->GetNavAgent()->SetMoveSpeed(static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetMaxSpeed() / 2.f);
 		return (CState*)(new CPlayerWalkState);
 	}
 	return nullptr;
@@ -112,9 +111,9 @@ void CPlayerRunState::OnRun()
 {
 	Vector3 direction = mOwner->GetNavAgent()->GetPathListFront() - mOwner->GetRootComponent()->GetWorldPos();
 	direction.Normalize();
-	mCharInfo->SetDir(Vector2(direction.x, direction.y));
+	static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->SetDir(Vector2(direction.x, direction.y));
 
-	eD2SpriteDir spriteDir = mCharInfo->GetSpriteDir();
+	eD2SpriteDir spriteDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
 	if (mPrevDir != spriteDir)
 	{
 		mPrevDir = spriteDir;

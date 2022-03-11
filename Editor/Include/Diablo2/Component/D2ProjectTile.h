@@ -1,9 +1,10 @@
 
 #include "Component/ObjectComponent.h"
+#include "D2SkillObject.h"
 #include "../D2Info.h"
 
 class CD2Projectile :
-    public CObjectComponent
+    public CD2SkillObject
 {
     friend class CGameObject;
 
@@ -15,28 +16,14 @@ protected:
 public:
     virtual bool Init() override;
     virtual void Start() override;
-    virtual void Update(float deltaTime) override;
-    virtual void PostUpdate(float deltaTime) override;
-    virtual void PrevRender() override;
-    virtual void Render() override;
-    virtual void PostRender() override;
     virtual CD2Projectile* Clone() override;
 
 public:
-    virtual void Save(FILE* fp) override;
-    virtual void Load(FILE* fp) override;
+    virtual void SetDir(const Vector2& dir);
+    
+public:
+    virtual void OnCollideEnter(const CollisionResult& result) override;
 
 public:
-    void SetInfo(const std::string& infoName);
-    virtual void OnCollideEnter(const CollisionResult& result);
-
-    const D2SkillInfo& GetInfo() const
-    {
-        return mInfo;
-    }
-
-protected:
-    D2SkillInfo mInfo;
-    CSharedPtr<class CSceneComponent> mRoot;
     CSharedPtr<class CColliderCircle> mCollider;
 };
