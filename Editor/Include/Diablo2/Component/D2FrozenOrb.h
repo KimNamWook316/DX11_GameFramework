@@ -28,8 +28,7 @@ private:
     float mExplodeTimer;
     float mFireTimer;
     float mFireInterval;
-    float mRotationSpeed;
+    float mbExplode;
     CSharedPtr<class CSceneComponent> mRotation;
-    class CGameObject* mIceBolt;
 };
 

@@ -7,7 +7,8 @@
 #include "D2DataManager.h"
 #include "../D2Util.h"
 
-CD2Projectile::CD2Projectile()
+CD2Projectile::CD2Projectile()	:
+	mDist(500.f)
 {
 	SetTypeID<CD2Projectile>();
 }
@@ -15,8 +16,7 @@ CD2Projectile::CD2Projectile()
 CD2Projectile::CD2Projectile(const CD2Projectile& com)	:
 	CD2SkillObject(com)
 {
-	mCollider = com.mObject->FindSceneComponentFromType<CColliderCircle>()->Clone();
-	mCollider->AddCollisionCallBack(eCollisionState::Enter, this, &CD2Projectile::OnCollideEnter);
+	mDist = com.mDist;
 }
 
 CD2Projectile::~CD2Projectile()
@@ -38,6 +38,18 @@ bool CD2Projectile::Init()
 
 
 	return true;
+}
+
+void CD2Projectile::Update(float deltaTime)
+{
+	CD2SkillObject::Update(deltaTime);
+
+	float dist = mStartPos.Distance(mObject->GetWorldPos());
+
+	if (dist >= mDist)
+	{
+		mObject->Destroy();
+	}
 }
 
 void CD2Projectile::Start()

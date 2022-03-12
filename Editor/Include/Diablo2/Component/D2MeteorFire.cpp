@@ -16,9 +16,8 @@ CD2MeteorFire::CD2MeteorFire()	:
 CD2MeteorFire::CD2MeteorFire(const CD2MeteorFire& com)	:
 	CD2SkillObject(com)
 {
-	mCollider = mObject->FindSceneComponentFromType<CColliderBox2D>();
-	mCollider->AddCollisionCallBack(eCollisionState::Enter, this, &CD2MeteorFire::OnCollideEnter);
-	mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
+	mTimer = 0.f;
+	mbEnd = false;
 }
 
 CD2MeteorFire::~CD2MeteorFire()

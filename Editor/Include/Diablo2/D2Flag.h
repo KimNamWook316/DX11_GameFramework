@@ -37,6 +37,7 @@ enum class eD2ObjectComponentType
 	D2CharacterInfo,
 	D2State,
 	D2DataManager,
+	D2ObjectPool,
 	D2PlayerSkill,
 	D2Projectile,
 	D2MeleeAttack,

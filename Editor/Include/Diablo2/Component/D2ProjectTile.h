@@ -15,6 +15,7 @@ protected:
 
 public:
     virtual bool Init() override;
+    virtual void Update(float deltaTime) override;
     virtual void Start() override;
     virtual CD2Projectile* Clone() override;
 
@@ -26,4 +27,5 @@ public:
 
 public:
     CSharedPtr<class CColliderCircle> mCollider;
+    float mDist;
 };

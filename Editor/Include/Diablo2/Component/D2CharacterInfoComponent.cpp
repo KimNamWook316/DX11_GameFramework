@@ -74,7 +74,7 @@ void CD2CharacterInfoComponent::Update(float deltaTime)
 		SetHp(-mCharInfo.Hp * 0.01f);
 		break;
 	case eD2ElementType::Ice:
-		mSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
+		mSprite->SetBaseColor(0.f, 0.f, 1.f, 1.f);
 		if (mNavAgent)
 		{
 			SetSpeed(mCharInfo.MaxSpeed * 0.3f);

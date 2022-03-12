@@ -22,5 +22,8 @@ public:
 
 public:
     void OnAnimEnd();
+
+private:
+    Vector3 mOriginSpriteScale;
 };
 

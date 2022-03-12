@@ -24,7 +24,6 @@ private:
     void spreadFire();
 
 private:
-    class CGameObject* mMeteorFire;
     CSharedPtr<class CColliderCircle> mCollider;
     bool mbEnd;
 };

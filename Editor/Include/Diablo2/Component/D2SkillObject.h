@@ -62,6 +62,11 @@ public:
         mTargetPos = pos;
     }
 
+    void SetStartPos(const Vector3& pos)
+    {
+        mStartPos = pos;
+    }
+
     void SetSpeed(const float speed)
     {
         mInfo.Speed = speed;
@@ -81,6 +86,7 @@ public:
 protected:
     class CGameObject* mSkillOwner;
     class CGameObject* mTargetObj;
+    Vector3 mStartPos;
     Vector3 mTargetPos;
     D2SkillInfo mInfo;
     CSharedPtr<class CSceneComponent> mRoot;

@@ -38,9 +38,12 @@ CState* CPlayerCastingState::Clone()
 void CPlayerCastingState::EnterStateFunction()
 {
 	eD2SpriteDir spriteDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
-	static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->SetCurrentAnimation("SpecialOne" + std::to_string((int)spriteDir));
 
-	static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->SetEndCallBack("SpecialOne" + std::to_string((int)spriteDir), this, &CPlayerCastingState::OnAnimEnd);
+	CSpriteComponent* com = static_cast<CSpriteComponent*>(mOwner->GetRootComponent());
+	com->SetCurrentAnimation("SpecialOne" + std::to_string((int)spriteDir));
+	com->SetEndCallBack("SpecialOne" + std::to_string((int)spriteDir), this, &CPlayerCastingState::OnAnimEnd);
+	mOriginSpriteScale = com->GetWorldScale();
+	com->SetWorldScale(mOriginSpriteScale.x + 10.f, mOriginSpriteScale.y + 11.6f, 1.f);
 }
 
 CState* CPlayerCastingState::StateFunction()
@@ -64,6 +67,8 @@ void CPlayerCastingState::OnAnimEnd()
 	dir.Normalize();
 
 	static_cast<CD2StateComponent*>(mOwner)->GetSkill()->DoRSkill(worldPos, Vector3(mousePos.x, mousePos.y, 0.f), dir);
+	CSpriteComponent* com = static_cast<CSpriteComponent*>(mOwner->GetRootComponent());
+	com->SetWorldScale(mOriginSpriteScale.x - 10.f, mOriginSpriteScale.y - 11.6f, 1.f);
 
 	mbEnd = true;
 }

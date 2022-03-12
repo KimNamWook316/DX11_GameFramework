@@ -34,6 +34,7 @@
 #include "../Diablo2/Component/D2CharacterInfoComponent.h"
 #include "../Diablo2/Component/D2StateComponent.h"
 #include "../Diablo2/Component/D2DataManagerComponent.h"
+#include "../Diablo2/Component/D2ObjectPoolComponent.h"
 #include "../Diablo2/Component/D2ProjectTile.h"
 #include "../Diablo2/Component/D2MeleeAttack.h"
 #include "../Diablo2/Component/D2PlayerSkillComponent.h"
@@ -205,10 +206,10 @@ void CEditorMenuWindow::OnClickCreateComponent()
     switch ((eSceneComponentType)selectIdx)
     {
     case eSceneComponentType::Scene:
-        sceneComp = obj->CreateComponent<CSceneComponent>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CSceneComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::Sprite:
-        sceneComp = obj->CreateComponent<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
+        sceneComp = obj->CreateComponentAddChild<CSpriteComponent>(mComponentNameInput->GetTextMultiByte());
         break;
     case eSceneComponentType::StaticMesh:
         sceneComp = obj->CreateComponentAddChild<CStaticMeshComponent>(mComponentNameInput->GetTextMultiByte());
@@ -290,6 +291,9 @@ void CEditorMenuWindow::OnClickCreateComponent()
             break;
         case eD2ObjectComponentType::D2DataManager:
             objComp = obj->CreateComponent<CD2DataManagerComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2ObjectPool:
+            objComp = obj->CreateComponent<CD2ObjectPoolComponent>(mComponentNameInput->GetTextMultiByte());
             break;
         case eD2ObjectComponentType::D2Projectile:
             objComp = obj->CreateComponent<CD2Projectile>(mComponentNameInput->GetTextMultiByte());

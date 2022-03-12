@@ -15,6 +15,7 @@
 #include "Component/StateComponent.h"
 #include "Diablo2/Component/D2CharacterInfoComponent.h"
 #include "Diablo2/Component/D2DataManagerComponent.h"
+#include "Diablo2/Component/D2ObjectPoolComponent.h"
 #include "Diablo2/Component/D2StateComponent.h"
 #include "Diablo2/Component/D2ProjectTile.h"
 #include "Diablo2/Component/D2MeleeAttack.h"
@@ -149,6 +150,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	
 	std::string outName;
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "DataManager.gobj");
+	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "ObjectPool.gobj");
 	CGameObject* randomMap = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "RandomMapGenerator.gobj");
 	randomMap->FindSceneComponentFromType<CProcedualMapGenerator>()->GenerateMap();
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "Player.gobj");
@@ -300,6 +302,11 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 	else if(type == typeid(CD2DataManagerComponent).hash_code())
 	{
 		CComponent* component = obj->LoadComponent<CD2DataManagerComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2ObjectPoolComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2ObjectPoolComponent>();
 		return component;
 	}
 	else if(type == typeid(CD2Projectile).hash_code())

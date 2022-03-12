@@ -2,13 +2,13 @@
 #include "GameObject/GameObject.h"
 #include "Scene/Scene.h"
 #include "Component/SpriteComponent.h"
+#include "D2ObjectPool.h"
 
 CD2FrozenOrb::CD2FrozenOrb() :
-	mRotationSpeed(60.f),
-	mFireInterval(0.05f),
-	mFireTimer(0.f),
+	mFireInterval(0.05),
+	mFireTimer(0.05f),
 	mExplodeTimer(0.f),
-	mIceBolt(nullptr)
+	mbExplode(false)
 {
 	SetTypeID<CD2FrozenOrb>();
 }
@@ -16,8 +16,10 @@ CD2FrozenOrb::CD2FrozenOrb() :
 CD2FrozenOrb::CD2FrozenOrb(const CD2FrozenOrb& com)	:
 	CD2SkillObject(com)
 {
-	mRotation = com.mRotation->Clone();
-	mIceBolt = com.mIceBolt->Clone();
+	mFireInterval = 0.05f;
+	mFireTimer = 0.05;
+	mExplodeTimer = 0.f;
+	mbExplode = false;
 }
 
 CD2FrozenOrb::~CD2FrozenOrb()
@@ -36,35 +38,38 @@ void CD2FrozenOrb::Update(float deltaTime)
 
 	if (!mbEditMode)
 	{
-		mRotation->AddWorldRot(0.f, 0.f, 60.f);
-
-		mFireTimer += deltaTime;
-		mExplodeTimer += deltaTime;
-
-		if (mExplodeTimer >= mInfo.LifeTime)
+		if (!mbExplode)
 		{
-			explode();
-		}
+			mRotation->AddWorldRot(0.f, 0.f, 45.f);
 
-		if (mFireTimer >= mFireInterval)
-		{
-			Vector3 axis = mRotation->GetWorldAxis(eAXIS::AXIS_X);
-			axis.Normalize();
-			fireIceBolt(axis);
+			mFireTimer += deltaTime;
+			mExplodeTimer += deltaTime;
+
+			if (mExplodeTimer >= mInfo.LifeTime)
+			{
+				explode();
+				mbExplode = true;
+			}
+
+			if (mFireTimer >= mFireInterval)
+			{
+				Vector3 axis = mRotation->GetWorldAxis(eAXIS::AXIS_X);
+				axis.Normalize();
+				fireIceBolt(axis);
+				mFireTimer = 0.f;
+			}
 		}
 	}
 }
 
 void CD2FrozenOrb::Start()
 {
+	CD2SkillObject::Start();
+
 	CSpriteComponent* com = mObject->FindSceneComponentFromType<CSpriteComponent>();
 	com->SetCurrentAnimation("FrozenOrb0");
 
 	mRotation = mObject->FindSceneComponentFromType<CSceneComponent>();
-	std::string outName;
-	mIceBolt = mObject->GetScene()->LoadGameObject(outName, "IceBolt.gobj");
-	mIceBolt->Enable(false);
-	mIceBolt->SetWorldPos(mObject->GetWorldPos());
 }
 
 CD2FrozenOrb* CD2FrozenOrb::Clone()
@@ -78,12 +83,13 @@ void CD2FrozenOrb::OnCollideEnter(const CollisionResult& result)
 
 void CD2FrozenOrb::fireIceBolt(const Vector3& dir)
 {
-	CGameObject* clone = mIceBolt->Clone();
+	CGameObject* clone = CD2ObjectPool::GetInst()->CloneSkillObj("IceBolt");
 	clone->Enable(true);
 	clone->SetWorldPos(mObject->GetWorldPos());
 
 	CD2SkillObject* script = static_cast<CD2SkillObject*>(clone->FindComponent("Script"));
 	script->SetDir(Vector2(dir.x, dir.y));
+	script->SetStartPos(mObject->GetWorldPos());
 	clone->Start();
 }
 
@@ -91,6 +97,7 @@ void CD2FrozenOrb::explode()
 {
 	CSpriteComponent* com = mObject->FindSceneComponentFromType<CSpriteComponent>();
 	com->SetCurrentAnimation("FrozenOrbExplode0");
+	com->GetAnimationInstance()->Play();
 	com->SetEndCallBack("FrozenOrbExplode0", this, &CD2FrozenOrb::onExplodeEnd);
 }
 
@@ -105,5 +112,6 @@ void CD2FrozenOrb::onExplodeEnd()
 		circlePos[i].y = sinf(DegToRad(12.f * i)) * 0.5f;
 
 		fireIceBolt(circlePos[i]);
+		mObject->Destroy();
 	}
 }

@@ -19,6 +19,6 @@ public:
 
 protected:
     float mTimer;
-    class CGameObject* mMeteorObj;
+    bool mbFirstFrame;
 };
 

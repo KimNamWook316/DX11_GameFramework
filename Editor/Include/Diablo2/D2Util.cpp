@@ -238,6 +238,9 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 	case eD2ObjectComponentType::D2DataManager:
 		out = "D2DataManager";
 		return out;
+	case eD2ObjectComponentType::D2ObjectPool:
+		out = "D2ObjectPool";
+		return out;
 	case eD2ObjectComponentType::D2Projectile:
 		out = "D2Projectile";
 		return out;
@@ -287,6 +290,10 @@ eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string&
 	else if (typeString == "D2DataManager")
 	{
 		return eD2ObjectComponentType::D2DataManager;
+	}
+	else if (typeString == "D2ObjectPool")
+	{
+		return eD2ObjectComponentType::D2ObjectPool;
 	}
 	else if (typeString == "D2Projectile")
 	{

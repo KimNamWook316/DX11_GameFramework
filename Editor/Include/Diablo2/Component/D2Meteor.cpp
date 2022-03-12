@@ -5,10 +5,10 @@
 #include "Scene/Scene.h"
 #include "Component/ColliderCircle.h"
 #include "D2CharacterInfoComponent.h"
+#include "D2ObjectPool.h"
 #include <time.h>
 
 CD2Meteor::CD2Meteor()  :
-    mMeteorFire(nullptr),
 	mbEnd(false)
 {
 	SetTypeID<CD2Meteor>();
@@ -17,9 +17,7 @@ CD2Meteor::CD2Meteor()  :
 CD2Meteor::CD2Meteor(const CD2Meteor& com)  :
     CD2SkillObject(com)
 {
-    mMeteorFire = com.mMeteorFire->Clone();
-	mCollider = mObject->FindSceneComponentFromType<CColliderCircle>();
-	mCollider->AddCollisionCallBack(eCollisionState::Enter, this, &CD2Meteor::OnCollideEnter);
+	mbEnd = false;
 }
 
 CD2Meteor::~CD2Meteor()
@@ -40,7 +38,7 @@ void CD2Meteor::Update(float deltaTime)
 	{
 		float dist = mObject->GetWorldPos().Distance(mTargetPos);
 
-		if (dist <= 0.1f)
+		if (dist <= 1.f)
 		{
 			mCollider->Enable(true);
 			mCollider->SetWorldPos(mObject->GetWorldPos());
@@ -59,21 +57,14 @@ void CD2Meteor::Update(float deltaTime)
 
 void CD2Meteor::Start()
 {
+	CD2SkillObject::Start();
+
 	mCollider = mObject->FindSceneComponentFromType<CColliderCircle>();
 	mCollider->AddCollisionCallBack(eCollisionState::Enter, this, &CD2Meteor::OnCollideEnter);
 	mCollider->Enable(false);
 
 	CSpriteComponent* sprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
 	sprite->SetCurrentAnimation("Meteor0");
-
-	if (!mbEditMode)
-	{
-		std::string outName;
-		mMeteorFire = mObject->GetScene()->LoadGameObject(outName, "SmallFire.gobj");
-		mMeteorFire->Start();
-		mMeteorFire->Enable(false);
-		mMeteorFire->SetWorldPos(mObject->GetWorldPos());
-	}
 }
 
 CD2Meteor* CD2Meteor::Clone()
@@ -110,11 +101,18 @@ void CD2Meteor::spreadFire()
 		float randomRad = 0.f;
 		randomRad = radiusMin + (rand() % (radiusMax - radiusMin));
 
-		Vector3 randomPos = randomDir * randomRad;
+		Vector3 randomPos = mObject->GetWorldPos() + randomDir * randomRad;
 
-		CGameObject* fireObj = mMeteorFire->Clone();
-		mMeteorFire->Enable(true);
-		mMeteorFire->SetWorldPos(randomPos);
-		mMeteorFire->Start();
+		CGameObject* fireObj = CD2ObjectPool::GetInst()->CloneSkillObj("MeteorFire");
+
+		if (!fireObj)
+		{
+			assert(false);
+			return;
+		}
+
+		fireObj->Enable(true);
+		fireObj->SetWorldPos(randomPos);
+		fireObj->Start();
 	}
 }

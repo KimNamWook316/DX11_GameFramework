@@ -14,7 +14,6 @@ private:
 	~CD2Skill();
 
 public:
-	void Start(const char* objPath);
 	class CGameObject* DoSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, class CGameObject* targetObj = nullptr);
 	void LoadChildSkill(std::vector<std::vector<std::string>>& vecChildData);
 
@@ -48,14 +47,10 @@ public:
 	CD2Skill* GetSkill(const std::string& name);
 
 private:
-	void loadSkillObject(const char* objPath);
-
-private:
 	class CD2PlayerSkillComponent* mOwner;
 	eD2SkillTreeNo mTreeNo;
 	std::string mName;
 	eD2AttackType meAttackType;
-	class CGameObject* mSkillObject;
 	int mLevel;
 	int mMaxLevel;
 	CD2Skill* mParentSkill;

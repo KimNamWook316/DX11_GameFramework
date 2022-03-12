@@ -13,7 +13,6 @@ enum eCSVLabel
     IsDefault,
     ParentSkill,
     PreSkillLevel,
-    PrefabPath
 };
 
 struct Skill

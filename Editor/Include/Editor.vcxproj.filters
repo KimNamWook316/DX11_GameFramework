@@ -58,6 +58,9 @@
     <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\02. PlayerSkill">
       <UniqueIdentifier>{f6b1f3f8-795b-4e5c-a628-7ca7837ff528}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\03. ObjectPool">
+      <UniqueIdentifier>{12ca6383-fdb5-4867-95eb-99955a77a195}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -216,6 +219,12 @@
     <ClInclude Include="Diablo2\State\PlayerCastingState.h">
       <Filter>98. Diablo2\00. State</Filter>
     </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ObjectPoolComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\03. ObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ObjectPool.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\03. ObjectPool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -355,6 +364,12 @@
     </ClCompile>
     <ClCompile Include="Diablo2\State\PlayerCastingState.cpp">
       <Filter>98. Diablo2\00. State</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ObjectPoolComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\03. ObjectPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ObjectPool.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\03. ObjectPool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

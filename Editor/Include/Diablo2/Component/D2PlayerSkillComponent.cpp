@@ -238,7 +238,6 @@ bool CD2PlayerSkillComponent::loadSkillList()
 			normalAttack->mLevel = 1;
 			normalAttack->mMaxLevel = std::stoi((*iter->second)[eCSVLabel::MaxLevel]);
 			normalAttack->mPreSkillLevel = std::stoi((*iter->second)[eCSVLabel::PreSkillLevel]);
-			normalAttack->Start((*iter->second)[eCSVLabel::PrefabPath].c_str());
 			mNormalAttack = normalAttack;
 			AddActiveSkill(normalAttack);
 			continue;
@@ -255,7 +254,6 @@ bool CD2PlayerSkillComponent::loadSkillList()
 			mArrSkillTree[(int)(skillTreeNo)]->mLevel = 1;
 			mArrSkillTree[(int)(skillTreeNo)]->mMaxLevel = std::stoi((*iter->second)[eCSVLabel::MaxLevel]);
 			mArrSkillTree[(int)(skillTreeNo)]->mPreSkillLevel = std::stoi((*iter->second)[eCSVLabel::PreSkillLevel]);
-			mArrSkillTree[(int)(skillTreeNo)]->Start((*iter->second)[eCSVLabel::PrefabPath].c_str());
 
 			// Active 스킬에 추가
 			AddActiveSkill(mArrSkillTree[(int)(skillTreeNo)]);
