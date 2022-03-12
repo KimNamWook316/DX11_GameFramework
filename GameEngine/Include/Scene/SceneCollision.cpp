@@ -362,6 +362,11 @@ void CSceneCollision::classifyColliderBySection()
 
 	for (; iter != iterEnd; ++iter)
 	{
+		if (!(*iter)->IsEnable())
+		{
+			continue;
+		}
+
 		CColliderComponent* collider = *iter;
 
 		Vector3 min = collider->GetMinPos();

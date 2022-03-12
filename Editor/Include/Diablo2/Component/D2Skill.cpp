@@ -130,6 +130,7 @@ void CD2Skill::LevelUp()
 {
 	if (mLevel == mMaxLevel)
 	{
+		mbLevelUpAvailable = false;
 		return;
 	}
 
@@ -150,6 +151,24 @@ void CD2Skill::LevelUp()
 		{
 			mVecChildSkill[i]->SetLevelUpAvailable(true);
 		}
+	}
+}
+
+void CD2Skill::LevelUpAll()
+{
+	if (mLevel == 0)
+	{
+		mOwner->AddActiveSkill(this);
+	}
+
+	mLevel = mMaxLevel;
+	mbLevelUpAvailable = false;
+
+	size_t size = mVecChildSkill.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecChildSkill[i]->LevelUpAll();
 	}
 }
 

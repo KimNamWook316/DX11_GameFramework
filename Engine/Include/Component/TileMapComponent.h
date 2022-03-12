@@ -53,6 +53,7 @@ public:
 	PathFindTileInfo* GetPathFindTile(const Vector3& pos);
 	PathFindTileInfo* GetPathFindTile(const int x, const int y);
 	PathFindTileInfo* GetPathFindTile(const int idx);
+	bool IsReachableTile(const Vector3& pos);
 
 public:
 	bool CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size);

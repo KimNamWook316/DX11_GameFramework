@@ -14,6 +14,7 @@ protected:
 	virtual ~CSceneComponent();
 
 public:
+	virtual void Enable(bool bEnable) override;
 	virtual void Destroy() override;
 	
 public:

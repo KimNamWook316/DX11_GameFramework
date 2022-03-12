@@ -82,6 +82,8 @@ void CScene::Update(float deltaTime)
 			// Active상태가 아니면 리스트에서 삭제
 			iter = mObjList.erase(iter);
 			iterEnd = mObjList.end();
+
+			callCreatCallBack();
 			continue;
 		}
 
@@ -117,6 +119,7 @@ void CScene::PostUpdate(float deltaTime)
 		{
 			iter = mObjList.erase(iter);
 			iterEnd = mObjList.end();
+			callCreatCallBack();
 			continue;
 		}
 
@@ -316,5 +319,19 @@ CGameObject* CScene::LoadGameObjectFullPath(std::string& outName, const char* fu
 	{
 		obj->Start();
 	}
+
+	callCreatCallBack();
+
 	return obj;
+}
+
+void CScene::callCreatCallBack()
+{
+	auto iter = mCreateObjectCallBackList.begin();
+	auto iterEnd = mCreateObjectCallBackList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)();
+	}
 }

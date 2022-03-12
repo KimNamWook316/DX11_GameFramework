@@ -72,6 +72,7 @@ void CD2Meteor::Start()
 		mMeteorFire = mObject->GetScene()->LoadGameObject(outName, "SmallFire.gobj");
 		mMeteorFire->Start();
 		mMeteorFire->Enable(false);
+		mMeteorFire->SetWorldPos(mObject->GetWorldPos());
 	}
 }
 

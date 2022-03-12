@@ -4,12 +4,17 @@
 #include "Animation/AnimationSequence2DInstance.h"
 #include "GameObject/GameObject.h"
 #include "D2CharacterInfoComponent.h"
+#include "Scene/NavigationManager.h"
+#include "Scene/Scene.h"
 
 CD2Blaze::CD2Blaze()	:
 	mTimer(0.f),
 	mbEnd(false),
-	mRegenDist(10.f),
-	mbRegen(false)
+	mbRegen(false),
+	mParent(nullptr),
+	mChild(nullptr),
+	mGlobalLifeTimer(0.f),
+	mTileIdx(-1)
 {
 	SetTypeID<CD2Blaze>();
 }
@@ -17,9 +22,11 @@ CD2Blaze::CD2Blaze()	:
 CD2Blaze::CD2Blaze(const CD2Blaze& com)	:
 	CD2SkillObject(com)
 {
-	mCollider = mObject->FindSceneComponentFromType<CColliderBox2D>();
-	mCollider->AddCollisionCallBack(eCollisionState::Enter, this, &CD2Blaze::OnCollideEnter);
-	mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
+	mTileIdx = -1;
+	mTimer = 0.f;
+	mbEnd = false;
+	mbRegen = false;
+	mGlobalLifeTimer = com.mGlobalLifeTimer;
 }
 
 CD2Blaze::~CD2Blaze()
@@ -51,6 +58,8 @@ void CD2Blaze::Update(float deltaTime)
 
 	if (!mbEditMode)
 	{
+		mGlobalLifeTimer += deltaTime;
+		
 		if (!mbEnd)
 		{
 			mTimer += deltaTime;
@@ -63,13 +72,19 @@ void CD2Blaze::Update(float deltaTime)
 			}
 		}
 
-		if (!mbRegen)
+		if (!mbRegen && mGlobalLifeTimer <= mInfo.LifeTime)
 		{
-			float dist = mSkillOwner->GetWorldPos().Distance(mObject->GetWorldPos());
-			if (dist >= mRegenDist)
+			int playerIdx = mScene->GetNavigationManager()->GetIndex(mSkillOwner->GetWorldPos());
+
+			if (playerIdx != mTileIdx)
 			{
 				CGameObject* obj = mObject->Clone();
+				CD2Blaze* com = obj->FindObjectComponentFromType<CD2Blaze>();
+				obj->Start();
 				obj->SetWorldPos(mSkillOwner->GetWorldPos());
+				mChild = com;
+				com->SetParent(this);
+				com->SetTileIdx(playerIdx);
 				mbRegen = true;
 			}
 		}
@@ -120,4 +135,11 @@ void CD2Blaze::OnStartAnimEnd()
 void CD2Blaze::OnEndAnimEnd()
 {
 	mObject->Destroy();
+}
+
+void CD2Blaze::SetSkillOwner(CGameObject* obj)
+{
+	CD2SkillObject::SetSkillOwner(obj);
+	mTileIdx = mScene->GetNavigationManager()->GetIndex(obj->GetWorldPos());
+	mObject->SetWorldPos(obj->GetWorldPos());
 }

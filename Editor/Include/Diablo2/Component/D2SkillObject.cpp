@@ -16,7 +16,6 @@ CD2SkillObject::CD2SkillObject(const CD2SkillObject& com)	:
 	CObjectComponent(com)
 {
 	mInfo = com.mInfo;
-	mRoot = com.mObject->GetRootSceneComponent()->Clone();
 	mSkillOwner = com.mSkillOwner;
 	mTargetObj = com.mTargetObj;
 	mTargetPos = com.mTargetPos;

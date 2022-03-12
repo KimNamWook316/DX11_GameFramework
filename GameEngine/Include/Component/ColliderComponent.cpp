@@ -20,7 +20,6 @@ CColliderComponent::CColliderComponent()
 CColliderComponent::CColliderComponent(const CColliderComponent& com) :
 	CSceneComponent(com)
 {
-	SetTypeID<CColliderComponent>();
 	meComponentType = eComponentType::SCENE_COMP;
 
 	mbMouseCollision = false;

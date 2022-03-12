@@ -584,6 +584,23 @@ PathFindTileInfo* CTileMapComponent::GetPathFindTile(const int idx)
 	return mVecPathFindTile[idx];
 }
 
+bool CTileMapComponent::IsReachableTile(const Vector3& pos)
+{
+	int index = GetPathFindTileIndex(pos);
+
+	if (index == -1)
+	{
+		return false;
+	}
+
+	if (mVecPathFindTile[index]->Type == eTileType::Wall)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 bool CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size)
 {
 	ClearTile();

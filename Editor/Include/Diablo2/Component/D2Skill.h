@@ -20,6 +20,7 @@ public:
 
 public:
 	void LevelUp();
+	void LevelUpAll(); // DEBUG
 
 	void SetLevelUpAvailable(bool bAvailable)
 	{

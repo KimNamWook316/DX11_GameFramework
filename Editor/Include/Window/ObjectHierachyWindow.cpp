@@ -56,6 +56,8 @@ bool CObjectHierachyWindow::Init()
 	mDeleteComponentButton = AddWidget<CIMGUIButton>("Delete Component", 0.f, 0.f);
 	mDeleteComponentButton->SetClickCallBack(this, &CObjectHierachyWindow::OnClickDeleteComponent);
 
+	CSceneManager::GetInst()->GetScene()->AddCreateCallBack(this, &CObjectHierachyWindow::RefreshObjectList);
+
 	return true;
 }
 

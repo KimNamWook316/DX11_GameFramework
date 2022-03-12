@@ -79,3 +79,8 @@ int CNavigationManager::GetIndex(const Vector3& endPos)
 {
 	return mNavData->GetPathFindTileIndex(endPos);
 }
+
+bool CNavigationManager::IsReachableTile(const Vector3 pos)
+{
+	return mNavData->IsReachableTile(pos);
+}

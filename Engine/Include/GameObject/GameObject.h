@@ -13,6 +13,7 @@ protected:
 	virtual ~CGameObject();
 
 public:
+	virtual void Enable(bool bEnable) override;
 	virtual void Destroy();
 
 public:

@@ -62,8 +62,18 @@ void CStateComponent::Update(float deltaTime)
 		
 		if (next)
 		{
-			mStateStack.top()->ExitStateFunction();
-			mStateStack.top()->ResetState();
+			if (current->IsEnd())
+			{
+				current->ExitStateFunction();
+				SAFE_DELETE(current);
+				mStateStack.pop();
+			}
+			else
+			{
+				current->ExitStateFunction();
+				current->ResetState();
+			}
+
 			mStateStack.push(next);
 			next->SetOwner(this);
 			next->Start();

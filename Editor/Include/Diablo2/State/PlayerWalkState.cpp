@@ -64,12 +64,7 @@ void CPlayerWalkState::EnterStateFunction()
 
 CState* CPlayerWalkState::StateFunction()
 {
-	if (mbWalkEnd)
-	{
-		mbEnd = true;
-		return (CState*)(new CPlayerIdleState);
-	}
-	else if (mbRun)
+	if (mbRun)
 	{
 		mbEnd = true;
 		mOwner->GetNavAgent()->SetMoveSpeed(static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetMaxSpeed());
@@ -110,6 +105,7 @@ void CPlayerWalkState::OnCtrlDown(float deltaTime)
 
 void CPlayerWalkState::OnWalkEnd()
 {
+	mbEnd = true;
 	mbWalkEnd = true;
 }
 

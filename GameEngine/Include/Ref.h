@@ -9,7 +9,7 @@ public:
 	virtual ~CRef();
 
 public:
-	void Enable(bool bEnable)
+	virtual void Enable(bool bEnable)
 	{
 		mEnable = bEnable;
 	}

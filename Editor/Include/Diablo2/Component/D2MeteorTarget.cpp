@@ -76,6 +76,7 @@ void CD2MeteorTarget::Start()
 		mMeteorObj = mObject->GetScene()->LoadGameObject(outName, "Meteor.gobj");
 		mMeteorObj->Start();
 		mMeteorObj->Enable(false);
+		mMeteorObj->SetWorldPos(mObject->GetWorldPos());
 	}
 }
 

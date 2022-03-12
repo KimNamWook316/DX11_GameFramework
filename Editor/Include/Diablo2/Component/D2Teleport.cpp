@@ -4,7 +4,8 @@
 #include "Component/ColliderBox2D.h"
 
 CD2Teleport::CD2Teleport()	:
-	mbIsCollide(false)
+	mbIsCollide(false),
+	mbStart(false)
 {
 	SetTypeID<CD2Teleport>();
 }
@@ -13,6 +14,7 @@ CD2Teleport::CD2Teleport(const CD2Teleport& com)	:
 	CD2SkillObject(com)
 {
 	mbIsCollide = false;
+	mbStart = false;
 }
 
 CD2Teleport::~CD2Teleport()
@@ -27,6 +29,20 @@ bool CD2Teleport::Init()
 
 void CD2Teleport::Update(float deltaTime)
 {
+	if (!mbStart)
+	{
+		mObject->SetWorldPos(mTargetPos);
+		mbStart = true;
+	}
+	else
+	{
+		if (mObject->GetScene()->GetNavigationManager()->IsReachableTile(mTargetPos))
+		{
+			mSkillOwner->SetWorldPos(mTargetPos);
+		}
+		
+		mObject->Destroy();
+	}
 }
 
 void CD2Teleport::Start()
@@ -43,22 +59,4 @@ CD2Teleport* CD2Teleport::Clone()
 void CD2Teleport::OnCollideEnter(const CollisionResult& result)
 {
 	mbIsCollide = true;
-}
-
-void CD2Teleport::OnAnimEnd()
-{
-	int targetIdx = mObject->GetScene()->GetNavigationManager()->GetIndex(mTargetPos);
-
-	if (-1 == targetIdx)
-	{
-		return;
-	}
-
-	// 타겟 위치에 몬스터나 오브젝트가 있다면
-	if (mbIsCollide)
-	{
-		return;
-	}
-
-	mSkillOwner->SetWorldPos(mTargetPos);
 }

@@ -23,6 +23,7 @@ public:
 
 public:
 	int GetIndex(const Vector3& endPos);
+	bool IsReachableTile(const Vector3 pos);
 
 public:
 	template <typename T>

@@ -167,13 +167,6 @@ void CEditorMenuWindow::OnClickCreateObject()
         assert(false);
         break;
     }
-
-    CObjectHierachyWindow* hierachyWindow = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("Hierachy");
-
-    if (hierachyWindow)
-    {
-        hierachyWindow->AddObjectList(mObjectNameInput->GetTextMultiByte());
-    }
 }
 
 void CEditorMenuWindow::OnClickCreateComponent()
@@ -529,9 +522,6 @@ void CEditorMenuWindow::OnClickInstanciate()
     {
         skillScript->SetEditMode(true);
     }
-
-	CObjectHierachyWindow* hierachy = (CObjectHierachyWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow(HIERACHY_WINDOW_NAME);
-	hierachy->GetObjectListBox()->AddItem(outName);
 }
 
 void CEditorMenuWindow::refreshPrefabList()

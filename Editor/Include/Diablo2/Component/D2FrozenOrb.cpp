@@ -64,6 +64,7 @@ void CD2FrozenOrb::Start()
 	std::string outName;
 	mIceBolt = mObject->GetScene()->LoadGameObject(outName, "IceBolt.gobj");
 	mIceBolt->Enable(false);
+	mIceBolt->SetWorldPos(mObject->GetWorldPos());
 }
 
 CD2FrozenOrb* CD2FrozenOrb::Clone()

@@ -23,12 +23,34 @@ public:
     void OnStartAnimEnd();
     void OnEndAnimEnd();
 
+public:
+    void SetParent(CD2Blaze* com)
+    {
+        mParent = com;
+    }
+
+    void SetTileIdx(const int idx)
+    {
+        mTileIdx = idx;
+    }
+
+    virtual void SetSkillOwner(class CGameObject* obj) override;
+
+public:
+    int GetTileIndex()
+    {
+        return mTileIdx;
+    }
+
 protected:
     CSharedPtr<class CColliderBox2D> mCollider;
     CSharedPtr<class CSpriteComponent> mSprite;
+    CD2Blaze* mParent;
+    CD2Blaze* mChild;
     float mTimer;
     bool mbEnd;
-    float mRegenDist;
     bool mbRegen;
+    int mTileIdx;
+    float mGlobalLifeTimer;
 };
 

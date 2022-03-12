@@ -42,7 +42,7 @@ public:
         mInfo.Dir = dir;
     }
 
-    void SetSkillOwner(class CGameObject* obj)
+    virtual void SetSkillOwner(class CGameObject* obj)
     {
         mSkillOwner = obj;
     }

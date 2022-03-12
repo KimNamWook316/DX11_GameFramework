@@ -3,10 +3,11 @@
 #include "Resource/ResourceManager.h"
 #include "Scene/Scene.h"
 #include "../D2Util.h"
+#include "Input.h"
 
 CD2PlayerSkillComponent::CD2PlayerSkillComponent()	:
 	mLSkillIdx(0),
-	mRSkillIdx(1),
+	mRSkillIdx(0),
 	mbInit(false),
 	mArrSkillTree{},
 	mNormalAttack(nullptr)
@@ -51,6 +52,9 @@ void CD2PlayerSkillComponent::Start()
 	{
 		loadSkillList();
 	}
+
+	CInput::GetInst()->SetKeyCallBack("SkillLevelUp", eKeyState::KeyState_Down, this, &CD2PlayerSkillComponent::LevelUpAll);
+	CInput::GetInst()->SetKeyCallBack("NextSkill", eKeyState::KeyState_Down, this, &CD2PlayerSkillComponent::SetNextRSkill);
 }
 
 void CD2PlayerSkillComponent::Update(float deltaTime)
@@ -76,6 +80,14 @@ void CD2PlayerSkillComponent::PostRender()
 CD2PlayerSkillComponent* CD2PlayerSkillComponent::Clone()
 {
 	return new CD2PlayerSkillComponent(*this);
+}
+
+void CD2PlayerSkillComponent::LevelUpAll(float deltaTime)
+{
+	for (int i = 0; i < (int)eD2SkillTreeNo::Max; ++i)
+	{
+		mArrSkillTree[i]->LevelUpAll();
+	}
 }
 
 bool CD2PlayerSkillComponent::LevelUp(eD2SkillTreeNo treeNo, const std::string& skillName)
@@ -112,6 +124,16 @@ int CD2PlayerSkillComponent::GetRSkillType()
 		return (int)mVecAvailableSkill[mRSkillIdx]->GetAttackType();
 	}
 	return -1;
+}
+
+void CD2PlayerSkillComponent::SetNextRSkill(float deltaTime)
+{
+	++mRSkillIdx;
+
+	if (mRSkillIdx >= mVecAvailableSkill.size())
+	{
+		mRSkillIdx = 0;
+	}
 }
 
 void CD2PlayerSkillComponent::SetLSkill(const int idx)

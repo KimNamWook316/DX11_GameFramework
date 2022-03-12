@@ -44,6 +44,7 @@ public:
     virtual CD2PlayerSkillComponent* Clone() override;
 
 public:
+    void LevelUpAll(float deltaTime);  // DEBUG
     bool LevelUp(eD2SkillTreeNo treeNo, const std::string& skillName);
 
 public:
@@ -51,6 +52,7 @@ public:
     int GetRSkillType();
 
 public:
+    void SetNextRSkill(float deltaTime); // DEBUG
     void SetLSkill(const int idx);
     void SetLSkill(const std::string& name);
     void SetRSkill(const int idx);

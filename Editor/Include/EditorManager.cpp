@@ -100,6 +100,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("MouseLCtrl", VK_LBUTTON);
 	CInput::GetInst()->SetCtrlKey("MouseLCtrl", true);
 
+	// Skill Debug Key
+	CInput::GetInst()->CreateKey("SkillLevelUp", VK_NUMPAD0);
+	CInput::GetInst()->CreateKey("NextSkill", VK_NUMPAD1);
+
 	CInput::GetInst()->SetKeyCallBack("F2", eKeyState::KeyState_Down, this, &CEditorManager::OnF2Down);
 	CInput::GetInst()->CreateKey("LMouseDrag", VK_LBUTTON);
 	CInput::GetInst()->SetKeyCallBack("LMouseDrag", eKeyState::KeyState_Down, this, &CEditorManager::OnMouseLButtonDown);
@@ -142,9 +146,12 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	mDragObj->SetWorldScale(0.f, 0.f, 1.f);
 	mDragObj->Init();
 	mDragObj->ExcludeFromSave(true);
-
-	// Hierachy Update
-	mObjectHierachyWindow->RefreshObjectList();
+	
+	std::string outName;
+	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "DataManager.gobj");
+	CGameObject* randomMap = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "RandomMapGenerator.gobj");
+	randomMap->FindSceneComponentFromType<CProcedualMapGenerator>()->GenerateMap();
+	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "Player.gobj");
 
 	return true;
 }

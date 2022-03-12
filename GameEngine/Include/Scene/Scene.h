@@ -105,6 +105,7 @@ public:
 	void AddObject(CGameObject* obj)
 	{
 		mObjList.push_back(obj);
+		callCreatCallBack();
 	}
 
 public:
@@ -163,6 +164,7 @@ public:
 			obj->Start();
 		}
 
+		callCreatCallBack();
 		return obj;
 	}
 
@@ -191,6 +193,15 @@ public:
 		return obj;
 	}
 
+	template <typename T>
+	void AddCreateCallBack(T* obj, void(T::* func)())
+	{
+		std::function<void()> callBack = std::bind(func, obj);
+		mCreateObjectCallBackList.push_back(callBack);
+	}
+
+private:
+	void callCreatCallBack();
 
 private:
 	CSharedPtr<CSceneMode> mMode;
@@ -203,5 +214,7 @@ private:
 	std::list<CSharedPtr<CGameObject>> mObjList;
 	bool mbIsStart;
 	bool mbBeChange;
+
+	std::list<std::function<void()>> mCreateObjectCallBackList;
 };
 

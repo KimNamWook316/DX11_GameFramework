@@ -50,6 +50,22 @@ CGameObject::~CGameObject()
 {
 }
 
+void CGameObject::Enable(bool bEnable)
+{
+	mEnable = bEnable;
+
+	if (mRootSceneComponent)
+	{
+		mRootSceneComponent->Enable(bEnable);
+	}
+	
+	size_t size = mVecObjectComponent.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecObjectComponent[i]->Enable(bEnable);
+	}
+}
+
 void CGameObject::Destroy()
 {
 	CRef::Destroy();

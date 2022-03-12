@@ -17,11 +17,9 @@ public:
     virtual CD2Teleport* Clone() override;
     virtual void OnCollideEnter(const CollisionResult& result) override;
 
-public:
-    void OnAnimEnd();
-
 private:
     CSharedPtr<class CColliderBox2D> mCollider;
     bool mbIsCollide;
+    bool mbStart;
 };
 
