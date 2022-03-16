@@ -424,6 +424,24 @@ public:
 		mTransform->AddWorldPos(x, y, z);
 	}
 
+public:
+	template<typename T>
+	void AddCallBack(const std::string& name, T* obj, void(T::* func)())
+	{
+		if (mTransform)
+		{
+			mTransform->AddCallBack(name, obj, func);
+		}
+	}
+
+	void DeleteCallBack(const std::string& name)
+	{
+		if (mTransform)
+		{
+			mTransform->DeleteCallBack(name);
+		}
+	}
+
 protected:
 	bool mbIsRender; // 렌더 되어야 하는 컴포넌트인지
 	CTransform* mTransform;	// 씬에 보여지는 컴포넌트이므로 위치 정보는 무조건 있어야 한다.

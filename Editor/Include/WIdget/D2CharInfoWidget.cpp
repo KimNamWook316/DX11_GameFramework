@@ -27,7 +27,7 @@ CD2CharInfoWidget::~CD2CharInfoWidget()
 
 bool CD2CharInfoWidget::Init()
 {
-	D2CharInfo info = static_cast<CD2CharacterInfoComponent*>(mComponent)->GetInfo();
+	D2CharInfo info = static_cast<CD2CharacterInfoComponent*>(mComponent.Get())->GetInfo();
 
 	// Widget
 	CIMGUIText* text =AddWidget<CIMGUIText>("text");
@@ -68,8 +68,8 @@ bool CD2CharInfoWidget::Init()
 
 void CD2CharInfoWidget::OnSelectDataSet(int idx, const char* label)
 {
-	static_cast<CD2CharacterInfoComponent*>(mComponent)->SetData(label);
-	D2CharInfo info = static_cast<CD2CharacterInfoComponent*>(mComponent)->GetInfo();
+	static_cast<CD2CharacterInfoComponent*>(mComponent.Get())->SetData(label);
+	D2CharInfo info = static_cast<CD2CharacterInfoComponent*>(mComponent.Get())->GetInfo();
 	
 	mDataSet->SetCurrentItem(info.Name);
 	mName->SetName(info.Name);

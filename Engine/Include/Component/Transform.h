@@ -2,6 +2,13 @@
 
 #include "../GameInfo.h"
 
+struct TransformCallBack
+{
+	std::string Name;
+	std::function<void()> Func;
+};
+
+
 class CTransform
 {
 	friend class CSceneComponent;
@@ -63,11 +70,13 @@ public: // setter
 	void SetPivot(const Vector3& pivot)
 	{
 		mPivot = pivot;
+		callStateCallBack();
 	}
 	
 	void SetPivot(const float& x, const float& y, const float& z)
 	{
 		mPivot = Vector3(x, y, z);
+		callStateCallBack();
 	}
 
 	void SetMeshSize(const Vector3& size)
@@ -221,6 +230,21 @@ public:
 	void SetInheritWorldRotValue(bool bIsCurrent);
 	void SetInheritWorldPosValue();
 
+public:
+	template<typename T>
+	void AddCallBack(const std::string& name, T* obj, void(T::* func)())
+	{
+		TransformCallBack callBack;
+		callBack.Name = name;
+		callBack.Func = std::bind(func, obj);
+		mListStateChangeCallBack.push_back(callBack);
+	}
+
+	void DeleteCallBack(const std::string& name);
+
+private:
+	void callStateCallBack();
+
 private:
 	class CScene* mScene;
 	class CGameObject* mObject;
@@ -230,6 +254,8 @@ private:
 
 	CTransform* mParentTransform;
 	std::vector<CTransform*> mVecChildTransform;
+	
+	std::list<TransformCallBack> mListStateChangeCallBack;
 
 private:
 	// 부모 Transform에 의해 영향을 받는지 판단하는 변수

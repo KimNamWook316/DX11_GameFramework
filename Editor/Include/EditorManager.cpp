@@ -13,8 +13,13 @@
 #include "Component/DissolveComponent.h"
 #include "Component/NavAgentComponent.h"
 #include "Component/StateComponent.h"
+#include "Diablo2/UI/D2FrameWidget.h"
 #include "Diablo2/Component/D2CharacterInfoComponent.h"
+#include "Diablo2/Component/D2PlayerCollider.h"
+#include "Diablo2/Component/D2EnemyCollider.h"
 #include "Diablo2/Component/D2DataManagerComponent.h"
+#include "Diablo2/Component/D2NavAgentComponent.h"
+#include "Diablo2/Component/D2EnemyNavAgentComponent.h"
 #include "Diablo2/Component/D2ObjectPoolComponent.h"
 #include "Diablo2/Component/D2StateComponent.h"
 #include "Diablo2/Component/D2ProjectTile.h"
@@ -25,9 +30,11 @@
 #include "Diablo2/Component/D2MeteorFire.h"
 #include "Diablo2/Component/D2MeteorTarget.h"
 #include "Diablo2/Component/D2Teleport.h"
+#include "Diablo2/Component/D2EnemyMeleeAttack.h"
 #include "Diablo2/Component/D2PlayerSkillComponent.h"
+#include "Diablo2/Component/D2EnemySkillComponent.h"
 #include "Diablo2/State/PlayerIdleState.h"
-#include "Diablo2/State/PlayerRunState.h"
+#include "Diablo2/State/D2EnemyIdleState.h"
 #include "Engine.h"
 #include "Resource.h"
 #include "Scene/SceneManager.h"
@@ -45,6 +52,7 @@
 #include "Object/Player2D.h"
 #include "Object/CameraObject.h"
 #include "Component/CameraComponent.h"
+#include "Collision/CollisionManager.h"
 
 DEFINITION_SINGLE(CEditorManager)
 
@@ -72,6 +80,12 @@ bool CEditorManager::Init(HINSTANCE hInst)
 
 	CEngine::GetInst()->SetPlay(true);
 	CEngine::GetInst()->SetDebugMode(true);
+
+	if (!CCollisionManager::GetInst()->LoadProfile("CollsionProfileInfo.csv"))
+	{
+		assert(false);
+		return false;
+	}
 	
 	mCameraObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CCameraObject>("CameraObj");
 	mCameraObj->ExcludeFromSave(true);
@@ -100,6 +114,8 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->SetCtrlKey("LCtrl", true);
 	CInput::GetInst()->CreateKey("MouseLCtrl", VK_LBUTTON);
 	CInput::GetInst()->SetCtrlKey("MouseLCtrl", true);
+	CInput::GetInst()->CreateKey("MouseRCtrl", VK_RBUTTON);
+	CInput::GetInst()->SetCtrlKey("MouseRCtrl", true);
 
 	// Skill Debug Key
 	CInput::GetInst()->CreateKey("SkillLevelUp", VK_NUMPAD0);
@@ -151,11 +167,18 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	std::string outName;
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "DataManager.gobj");
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "ObjectPool.gobj");
-	CGameObject* randomMap = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "RandomMapGenerator.gobj");
+ 	CGameObject* randomMap = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "RandomMapGenerator.gobj");
 	randomMap->FindSceneComponentFromType<CProcedualMapGenerator>()->GenerateMap();
-	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "Player.gobj");
+	CGameObject* player = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "Player.gobj");
+	CSceneManager::GetInst()->GetScene()->GetViewport()->CreateWidgetWindow<CD2FrameWidget>("FrameWidget");
 
 	return true;
+}
+
+void CEditorManager::Start()
+{
+	CGameObject* player = CSceneManager::GetInst()->GetScene()->FindObject("Player");
+	CSceneManager::GetInst()->GetScene()->SetPlayerObj(player);
 }
 
 void CEditorManager::CreateDefaultSceneMode()
@@ -304,6 +327,16 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 		CComponent* component = obj->LoadComponent<CD2DataManagerComponent>();
 		return component;
 	}
+	else if(type == typeid(CD2NavAgentComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2NavAgentComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2EnemyNavAgentComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2EnemyNavAgentComponent>();
+		return component;
+	}
 	else if(type == typeid(CD2ObjectPoolComponent).hash_code())
 	{
 		CComponent* component = obj->LoadComponent<CD2ObjectPoolComponent>();
@@ -359,6 +392,26 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 		CComponent* component = obj->LoadComponent<CD2StateComponent>();
 		return component;
 	}
+	else if(type == typeid(CD2PlayerCollider).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2PlayerCollider>();
+		return component;
+	}
+	else if(type == typeid(CD2EnemyCollider).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2EnemyCollider>();
+		return component;
+	}
+	else if(type == typeid(CD2EnemySkillComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2EnemySkillComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2EnemyMeleeAttack).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2EnemyMeleeAttack>();
+		return component;
+	}
 	else
 	{
 		assert(false);
@@ -380,9 +433,9 @@ void CEditorManager::OnCreateState(CStateComponent* comp, size_t type)
 	{
 		comp->SetInitialState<CPlayerIdleState>();
 	}
-	else if (type == typeid(CPlayerRunState).hash_code())
+	else if (type == typeid(CD2EnemyIdleState).hash_code())
 	{
-		comp->SetInitialState<CPlayerRunState>();
+		comp->SetInitialState<CD2EnemyIdleState>();
 	}
 }
 

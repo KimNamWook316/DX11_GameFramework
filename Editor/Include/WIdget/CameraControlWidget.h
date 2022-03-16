@@ -26,6 +26,8 @@ public:
 	void OnChangeViewPortRatioY(int val);
 	void OnClickViewPortCenter();
 
+	void OnChangeState();
+
 private:
 	class CIMGUIInputFloat3* mScale;
 	class CIMGUIInputFloat3* mPos;

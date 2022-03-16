@@ -15,6 +15,8 @@
 #include "../EditorInfo.h"
 #include "Scene/SceneManager.h"
 #include "ObjectHierachyWindow.h"
+#include "TileSetEditWindow.h"
+#include "CollisionProfileWindow.h"
 #include "SpriteWindow.h"
 #include "../Object/Player2D.h"
 #include "IMGUIManager.h"
@@ -32,12 +34,18 @@
 #include "Component/ProcedualMapGenerator.h"
 #include "Component/StateComponent.h"
 #include "../Diablo2/Component/D2CharacterInfoComponent.h"
+#include "../Diablo2/Component/D2PlayerCollider.h"
+#include "../Diablo2/Component/D2EnemyCollider.h"
 #include "../Diablo2/Component/D2StateComponent.h"
 #include "../Diablo2/Component/D2DataManagerComponent.h"
+#include "../Diablo2/Component/D2NavAgentComponent.h"
+#include "../Diablo2/Component/D2EnemyNavAgentComponent.h"
 #include "../Diablo2/Component/D2ObjectPoolComponent.h"
 #include "../Diablo2/Component/D2ProjectTile.h"
 #include "../Diablo2/Component/D2MeleeAttack.h"
+#include "../Diablo2/Component/D2EnemyMeleeAttack.h"
 #include "../Diablo2/Component/D2PlayerSkillComponent.h"
+#include "../Diablo2/Component/D2EnemySkillComponent.h"
 #include "../Diablo2/Component/D2Blaze.h"
 #include "../Diablo2/Component/D2FrozenOrb.h"
 #include "../Diablo2/Component/D2Meteor.h"
@@ -84,6 +92,13 @@ bool CEditorMenuWindow::Init()
     item->SetClickCallBack(this, &CEditorMenuWindow::OnClickSaveObject);
     item = beginMenu->AddWidget<CIMGUIMenuItem>("Load Object");
     item->SetClickCallBack(this, &CEditorMenuWindow::OnClickLoadObject);
+
+    beginMenu = mMainMenuBar->AddWidget<CIMGUIBeginMenu>("Edit");
+    item = beginMenu->AddWidget<CIMGUIMenuItem>("Sprite Editor");
+    mOpenCollsionProfileMenuButton = beginMenu->AddWidget<CIMGUIMenuItem>("Collision Profile Editor");
+    mOpenCollsionProfileMenuButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickOpenCollisionProfileEditor);
+    mOpenTileSetEditorMenuButton = beginMenu->AddWidget<CIMGUIMenuItem>("TileSet Editor");
+    mOpenTileSetEditorMenuButton->SetClickCallBack(this, &CEditorMenuWindow::OnClickOpenTileSetEditor);
 
     CIMGUIText* text = AddWidget<CIMGUIText>("text");
     text->SetText("Play/Stop");
@@ -283,6 +298,12 @@ void CEditorMenuWindow::OnClickCreateComponent()
 
         switch ((eD2ObjectComponentType)selectIdx)
         {
+        case eD2ObjectComponentType::D2PlayerCollider:
+            objComp = obj->CreateComponent<CD2PlayerCollider>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2EnemyCollider:
+            objComp = obj->CreateComponent<CD2EnemyCollider>(mComponentNameInput->GetTextMultiByte());
+            break;
         case eD2ObjectComponentType::D2CharacterInfo:
             objComp = obj->CreateComponent<CD2CharacterInfoComponent>(mComponentNameInput->GetTextMultiByte());
             break;
@@ -291,6 +312,12 @@ void CEditorMenuWindow::OnClickCreateComponent()
             break;
         case eD2ObjectComponentType::D2DataManager:
             objComp = obj->CreateComponent<CD2DataManagerComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2NavAgent:
+            objComp = obj->CreateComponent<CD2NavAgentComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2EnemyNavAgent:
+            objComp = obj->CreateComponent<CD2EnemyNavAgentComponent>(mComponentNameInput->GetTextMultiByte());
             break;
         case eD2ObjectComponentType::D2ObjectPool:
             objComp = obj->CreateComponent<CD2ObjectPoolComponent>(mComponentNameInput->GetTextMultiByte());
@@ -306,6 +333,9 @@ void CEditorMenuWindow::OnClickCreateComponent()
         case eD2ObjectComponentType::D2PlayerSkill:
             objComp = obj->CreateComponent<CD2PlayerSkillComponent>(mComponentNameInput->GetTextMultiByte());
             static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2EnemySkill:
+            objComp = obj->CreateComponent<CD2EnemySkillComponent>(mComponentNameInput->GetTextMultiByte());
             break;
         case eD2ObjectComponentType::D2Blaze:
             objComp = obj->CreateComponent<CD2Blaze>(mComponentNameInput->GetTextMultiByte());
@@ -329,6 +359,10 @@ void CEditorMenuWindow::OnClickCreateComponent()
             break;
         case eD2ObjectComponentType::D2Teleport:
             objComp = obj->CreateComponent<CD2Teleport>(mComponentNameInput->GetTextMultiByte());
+            static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2EnemyMeleeAttack:
+            objComp = obj->CreateComponent<CD2EnemyMeleeAttack>(mComponentNameInput->GetTextMultiByte());
             static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
             break;
         }
@@ -526,6 +560,22 @@ void CEditorMenuWindow::OnClickInstanciate()
     {
         skillScript->SetEditMode(true);
     }
+}
+
+void CEditorMenuWindow::OnClickOpenCollisionProfileEditor()
+{
+	if (!CIMGUIManager::GetInst()->FindIMGUIWindow(COLLSIONPROFILE_WINDOW_NAME))
+	{
+		CIMGUIManager::GetInst()->AddWindow<CCollisionProfileWindow>(COLLSIONPROFILE_WINDOW_NAME);
+	}
+}
+
+void CEditorMenuWindow::OnClickOpenTileSetEditor()
+{
+	if (!CIMGUIManager::GetInst()->FindIMGUIWindow(TILESETEDITOR_WINDOW_NAME))
+	{
+		CIMGUIManager::GetInst()->AddWindow<CTileSetEditWindow>(TILESETEDITOR_WINDOW_NAME);
+	}
 }
 
 void CEditorMenuWindow::refreshPrefabList()

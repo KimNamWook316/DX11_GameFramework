@@ -532,3 +532,54 @@ bool CCollision::CollisionPixelToPoint(CollisionResult& srcResult, CollisionResu
     }
     return false;
 }
+
+Box2DInfo CCollision::GetOverlapAreaAABB(const Box2DInfo& src, const Box2DInfo& dst)
+{
+    Box2DInfo overLap = {};
+
+    if (src.Min.x < dst.Min.x)
+    {
+        overLap.Min.x = dst.Min.x;
+
+        if (src.Max.x > dst.Max.x)
+        {
+            overLap.Max.x = dst.Max.x;
+        }
+        else
+        {
+            overLap.Max.x = src.Max.x;
+        }
+    }
+    else
+    {
+        overLap.Min.x = src.Min.x;
+        overLap.Max.x = dst.Max.x;
+    }
+
+    if (src.Min.y < dst.Min.y)
+    {
+        overLap.Min.y = dst.Min.y;
+
+        if (src.Max.y > dst.Max.y)
+        {
+            overLap.Max.y = dst.Max.y;
+        }
+        else
+        {
+            overLap.Max.y = src.Max.y;
+        }
+    }
+    else
+    {
+        overLap.Min.y = src.Min.y;
+        overLap.Max.y = dst.Max.y;
+    }
+
+    overLap.Length = Vector2((overLap.Max.x - overLap.Min.x) / 2.f, (overLap.Max.y - overLap.Min.y) / 2.f);
+    overLap.Center = overLap.Min + overLap.Length;
+    overLap.Axis[0] = Vector2(1.0f, 0.f);
+    overLap.Axis[1] = Vector2(0.f, 1.f);
+
+    return overLap;
+}
+

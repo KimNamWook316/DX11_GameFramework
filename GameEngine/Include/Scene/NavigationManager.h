@@ -22,8 +22,17 @@ public:
 	void AddNavResult(const NavResultData& navData);
 
 public:
+	void ChangeTile(const int idx, eTileType eType);
 	int GetIndex(const Vector3& endPos);
 	bool IsReachableTile(const Vector3 pos);
+	bool IsReachableTile(const int idx);
+	PathFindTileInfo* GetPathFindTile(const int idx);
+
+public:
+	CTileMapComponent* GetNavData() const
+	{
+		return mNavData;
+	}
 
 public:
 	template <typename T>

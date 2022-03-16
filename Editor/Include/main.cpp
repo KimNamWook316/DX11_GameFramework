@@ -23,6 +23,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	CEditorManager::GetInst()->CreateDefaultSceneMode();
 
+	CEditorManager::GetInst()->Start();
+
 	int Ret = CEditorManager::GetInst()->Run();
 
 	CEditorManager::DestroyInst();

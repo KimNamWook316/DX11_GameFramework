@@ -77,5 +77,6 @@ protected:
 	std::stack<class CState*> mStateStack;
 	CSharedPtr<class CSceneComponent> mRoot;
 	CSharedPtr<class CNavAgentComponent> mNavAgent;
+	bool mbStart;
 };
 

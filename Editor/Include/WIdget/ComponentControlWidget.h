@@ -17,6 +17,6 @@ public:
     virtual void Render() override;
 
 protected:
-    class CComponent* mComponent;
+    CSharedPtr<class CComponent> mComponent;
 };
 

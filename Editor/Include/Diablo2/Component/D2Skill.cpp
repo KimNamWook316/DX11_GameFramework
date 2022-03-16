@@ -47,7 +47,6 @@ class CGameObject* CD2Skill::DoSkill(const Vector3& startPos, const Vector3& tar
 		return nullptr;
 	}
 
-	static_cast<CD2SkillObject*>(obj->FindComponent("Script"))->SetSkillOwner(mOwner->GetGameObject());
 	obj->Start();
 	obj->Enable(true);
 	obj->SetWorldPos(startPos);

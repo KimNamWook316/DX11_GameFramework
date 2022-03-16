@@ -253,6 +253,7 @@ enum class eTileType
 	EntrySWRight,
 	EntryNWLeft,
 	EntryNWRight,
+	Reserved, // 몬스터 AI 목적지 지정을 위한 타일 타입
 	Max,
 };
 

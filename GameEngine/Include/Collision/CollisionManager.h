@@ -13,6 +13,7 @@ public:
 		eCollisionInteraction state);
 	CollisionProfile* FindProfile(const std::string& name);
 	void GetProfileNames(std::vector<std::string>& outNames);
+	bool LoadProfile(const char* fileName, const std::string& path = EXCEL_PATH);
 
 public:
 	bool MakeCSV();

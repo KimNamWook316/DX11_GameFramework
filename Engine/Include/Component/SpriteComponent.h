@@ -78,6 +78,7 @@ public:
 
 public:
 	void ChangeAnimation(const std::string& name);
+	void ChangeAnimationKeepFrame(const std::string& name);
 	void AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop = true,
 		const float playTime = 1.f, const float playScale = 1.f, bool bIsReverse = false);
 	bool CheckCurrentAnimation(const std::string& name);

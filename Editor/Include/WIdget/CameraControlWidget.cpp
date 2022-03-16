@@ -25,6 +25,7 @@ CCameraControlWidget::CCameraControlWidget()	:
 
 CCameraControlWidget::~CCameraControlWidget()
 {
+	static_cast<CSceneComponent*>(mComponent.Get())->DeleteCallBack("CameraWidget");
 }
 
 bool CCameraControlWidget::Init()
@@ -44,7 +45,7 @@ bool CCameraControlWidget::Init()
 	AddWidget<CIMGUISeperator>("sep");
 
 	// Initial Value
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	Vector3 scale = cam->GetScale();
 	mScale->SetVal(scale.x, scale.y, scale.z);
 	Vector3 pos = cam->GetWorldPos();
@@ -57,7 +58,7 @@ bool CCameraControlWidget::Init()
 
 	// 이 오브젝트가 플레이어 오브젝트일 경우
 	CGameObject* obj = mComponent->GetGameObject();
-	if (obj = obj->GetScene()->GetPlayerObj())
+	if (obj == obj->GetScene()->GetPlayerObj())
 	{
 		mIsPlayer->SetCheck(0, true);
 	}
@@ -84,32 +85,31 @@ bool CCameraControlWidget::Init()
 	mViewPortRatioY->SetCallBack(this, &CCameraControlWidget::OnChangeViewPortRatioY);
 	mViewPortCenter->SetClickCallBack(this, &CCameraControlWidget::OnClickViewPortCenter);
 
+	static_cast<CSceneComponent*>(mComponent.Get())->AddCallBack("CameraWidget", this, &CCameraControlWidget::OnChangeState);
+
 	return true;
 }
 
 void CCameraControlWidget::Render()
 {
 	CIMGUIWidgetList::Render();
-
-	Vector3 pos = static_cast<CCameraComponent*>(mComponent)->GetWorldPos();
-	mPos->SetVal(pos.x, pos.y, pos.z);
 }
 
 void CCameraControlWidget::OnChangeScale(float val[3])
 {
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	cam->SetScale(mScale->GetValue());
 }
 
 void CCameraControlWidget::OnChangePos(float val[3])
 {
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	cam->SetWorldPos(mPos->GetValue());
 }
 
 void CCameraControlWidget::OnClickReset()
 {
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	mScale->SetVal(1.f, 1.f, 1.f);
 	mPos->SetVal(0.f, 0.f, 0.f);
 	cam->SetScale(1.f, 1.f, 1.f);
@@ -118,7 +118,7 @@ void CCameraControlWidget::OnClickReset()
 
 void CCameraControlWidget::OnSelectCameraType(int idx, const char* label)
 {
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	cam->SetCameraType(CUtil::StringToCameraType(label));
 }
 
@@ -130,7 +130,7 @@ void CCameraControlWidget::OnCheckIsPlayer(int idx, bool bCheck)
 	{
 		obj->GetScene()->SetPlayerObj(obj);
 		obj->GetScene()->GetCameraManager()->KeepCamera();
-		obj->GetScene()->GetCameraManager()->SetCurrentCamera((CCameraComponent*)mComponent);
+		obj->GetScene()->GetCameraManager()->SetCurrentCamera((CCameraComponent*)mComponent.Get());
 	}
 	else
 	{
@@ -141,7 +141,7 @@ void CCameraControlWidget::OnCheckIsPlayer(int idx, bool bCheck)
 
 void CCameraControlWidget::OnChangeViewPortRatioX(int val)
 {
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	if (eCameraType::Camera2D == cam->GetCameraType())
 	{
 		cam->SetViewPortByRatio(val, cam->GetRatio().y);
@@ -150,7 +150,7 @@ void CCameraControlWidget::OnChangeViewPortRatioX(int val)
 
 void CCameraControlWidget::OnChangeViewPortRatioY(int val)
 {
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	if (eCameraType::Camera2D == cam->GetCameraType())
 	{
 		cam->SetViewPortByRatio(cam->GetRatio().x, val);
@@ -159,11 +159,21 @@ void CCameraControlWidget::OnChangeViewPortRatioY(int val)
 
 void CCameraControlWidget::OnClickViewPortCenter()
 {
-	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent);
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
 	if (eCameraType::Camera2D == cam->GetCameraType())
 	{
 		cam->OnViewportCenter();
 		mViewPortRatioX->SetValue(cam->GetRatio().x);
 		mViewPortRatioY->SetValue(cam->GetRatio().y);
 	}
+}
+
+void CCameraControlWidget::OnChangeState()
+{
+	CSceneComponent* com = static_cast<CSceneComponent*>(mComponent.Get());
+	Vector3 scale = com->GetWorldScale();
+	Vector3 pos = com->GetWorldPos();
+
+	mScale->SetVal(scale.x, scale.y, scale.z);
+	mPos->SetVal(pos.x, pos.y, pos.z);
 }

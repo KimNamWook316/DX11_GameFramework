@@ -53,7 +53,11 @@ public:
 	PathFindTileInfo* GetPathFindTile(const Vector3& pos);
 	PathFindTileInfo* GetPathFindTile(const int x, const int y);
 	PathFindTileInfo* GetPathFindTile(const int idx);
+	void SetPathFindTile(const Vector3& pos, eTileType eType);
+	void SetPathFindTile(const int x, const int y, eTileType eType);
+	void SetPathFindTile(const int idx, eTileType eType);
 	bool IsReachableTile(const Vector3& pos);
+	bool IsReachableTile(const int idx);
 
 public:
 	bool CreateTile(CTileSet* tileSet, const int countX, const int countY, const Vector2& size);
@@ -160,6 +164,11 @@ public:
 		return mPathFindTileCountY;
 	}
 
+	int GetPathFindTileCount() const
+	{
+		return mPathFindTileCount;
+	}
+
 	const Vector2& GetTileSize() const
 	{
 		return mTileSize;
@@ -188,7 +197,6 @@ public:
 private:
 	int getTileRenderIndexX(const Vector3& pos);
 	int getTileRenderIndexY(const Vector3& pos);
-	void setPathFindTileType(const int renderTileIdx);
 	bool createPathFindTileInfo();
 	void setPathFindRenderInfo();
 

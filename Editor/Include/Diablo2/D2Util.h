@@ -11,10 +11,10 @@ public:
 	static std::string SpriteDirToString(eD2SpriteDir dir);
 
 	// State
-	static std::string StateEnumToString(eD2StateType type);
-	static eD2StateType StringToStateEnum(const std::string& typeString);
+	static std::string StateEnumToString(eD2InitialStateType type);
+	static eD2InitialStateType StringToStateEnum(const std::string& typeString);
 	static std::string StateTypeToString(size_t type);
-	static size_t StateEnumToStateType(eD2StateType type);
+	static size_t StateEnumToStateType(eD2InitialStateType type);
 
 	// Component
 	static std::string D2SceneComponentTypeToString(eD2SceneComponentType type);
@@ -33,5 +33,7 @@ public:
 	// SkillTreeNo
 	static std::string SkilltreeNoToString(eD2SkillTreeNo no);
 	static eD2SkillTreeNo StringToSkilltreeNo(const std::string& noString);
+
+	static float CorrectSpeed(const Vector2& direction, const float speed);
 };
 

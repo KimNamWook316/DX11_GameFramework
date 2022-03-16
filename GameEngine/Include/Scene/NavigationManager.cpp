@@ -75,6 +75,24 @@ void CNavigationManager::AddNavResult(const NavResultData& navData)
 	mResultQueue.Push(navData);
 }
 
+void CNavigationManager::ChangeTile(const int idx, eTileType eType)
+{
+	if (idx < 0 || idx > mNavData->GetPathFindTileCount() - 1)
+	{
+		return;
+	}
+
+	size_t size = mVecNavigationThread.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecNavigationThread[i]->AddChangeData(idx, eType);
+	}
+
+	// 디버깅, 피킹을 위해 타일맵 자체도 변경해준다.
+	mNavData->SetPathFindTile(idx, eType);
+}
+
 int CNavigationManager::GetIndex(const Vector3& endPos)
 {
 	return mNavData->GetPathFindTileIndex(endPos);
@@ -84,3 +102,14 @@ bool CNavigationManager::IsReachableTile(const Vector3 pos)
 {
 	return mNavData->IsReachableTile(pos);
 }
+
+bool CNavigationManager::IsReachableTile(const int idx)
+{
+	return mNavData->IsReachableTile(idx);
+}
+
+PathFindTileInfo* CNavigationManager::GetPathFindTile(const int idx)
+{
+	return mNavData->GetPathFindTile(idx);
+}
+

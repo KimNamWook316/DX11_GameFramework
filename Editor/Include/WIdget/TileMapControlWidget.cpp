@@ -90,7 +90,7 @@ void CTileMapControlWidget::Render()
 	{
 		if (CEditorManager::GetInst()->GetLButtonPush())
 		{
-			CTileMapComponent* tileMap = static_cast<CTileMapComponent*>(mComponent);
+			CTileMapComponent* tileMap = static_cast<CTileMapComponent*>(mComponent.Get());
 			tileMap->EnableEditMode(true);
 
 			Vector2 mouseWorldPos = CInput::GetInst()->GetMouseWorld2DPos();
@@ -112,7 +112,7 @@ void CTileMapControlWidget::Render()
 
 void CTileMapControlWidget::OnClickCreateMap()
 {
-	if (!static_cast<CTileMapComponent*>(mComponent)->GetTileSet())
+	if (!static_cast<CTileMapComponent*>(mComponent.Get())->GetTileSet())
 	{
 		MessageBox(nullptr, TEXT("타일셋을 설정해야 합니다.."), TEXT("Creation Failed"), MB_OK);
 		return;
@@ -129,7 +129,7 @@ void CTileMapControlWidget::OnClickCreateMap()
 		return;
 	}
 
-	if (!static_cast<CTileMapComponent*>(mComponent)->CreateTile(countX, countY, Vector2(sizeX, sizeY)))
+	if (!static_cast<CTileMapComponent*>(mComponent.Get())->CreateTile(countX, countY, Vector2(sizeX, sizeY)))
 	{
 		MessageBox(nullptr, TEXT("타일맵 생성 실패."), TEXT("Creation Failed"), MB_OK);
 		return;
@@ -140,7 +140,7 @@ void CTileMapControlWidget::OnClickCreateMap()
 
 void CTileMapControlWidget::OnSelectTileList(int idx, const char* label)
 {
-	CTileMapComponent* comp =  static_cast<CTileMapComponent*>(mComponent);
+	CTileMapComponent* comp =  static_cast<CTileMapComponent*>(mComponent.Get());
 
 	TileSetInfo* info = comp->GetTileSet()->FindInfo(label);
 	
@@ -156,7 +156,7 @@ void CTileMapControlWidget::OnSelectTileList(int idx, const char* label)
 
 void CTileMapControlWidget::OnClickDefaultFrame()
 {
-	CTileMapComponent* comp =  static_cast<CTileMapComponent*>(mComponent);
+	CTileMapComponent* comp =  static_cast<CTileMapComponent*>(mComponent.Get());
 
 	if (-1 == mTileSetTileList->GetSelectIndex())
 	{
@@ -208,7 +208,7 @@ void CTileMapControlWidget::OnClickLoadTileSet()
 		WideCharToMultiByte(CP_ACP, 0, fileName, -1, convertFileName, length, 0, 0);
 
 		CSceneResource* resource = mComponent->GetGameObject()->GetScene()->GetResource();
-		CTileMapComponent* tileComp = static_cast<CTileMapComponent*>(mComponent);
+		CTileMapComponent* tileComp = static_cast<CTileMapComponent*>(mComponent.Get());
 
 		// 타일셋 로드
 		std::string tileSetName;

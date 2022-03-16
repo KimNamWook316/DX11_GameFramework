@@ -6,7 +6,8 @@
 #include "../Scene/SceneManager.h"
 
 CStateComponent::CStateComponent()	:
-	mInitialStateType(-1)
+	mInitialStateType(-1),
+	mbStart(false)
 {
 	SetTypeID<CStateComponent>();
 }
@@ -40,6 +41,12 @@ void CStateComponent::Update(float deltaTime)
 	{
 		mNavAgent = mObject->FindObjectComponentFromType<CNavAgentComponent>();
 		return;
+	}
+
+	if (!mbStart)
+	{
+		mStateStack.top()->EnterStateFunction();
+		mbStart = true;
 	}
 
 	if (!mStateStack.empty())

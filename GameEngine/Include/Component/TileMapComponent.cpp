@@ -234,6 +234,10 @@ void CTileMapComponent::PrevRender()
 						{
 							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Blue;
 						}
+						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+						{
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4(0.f, 1.f, 1.f, 1.f);
+						}
 						else if (mVecPathFindTile[idx1]->Type == eTileType::Wall)
 						{
 							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Red;
@@ -252,6 +256,10 @@ void CTileMapComponent::PrevRender()
 						if (idx2 == mSelectPathTileIdx)
 						{
 							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4::Blue;
+						}
+						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+						{
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4(0.f, 1.f, 1.f, 1.f);
 						}
 						else if (mVecPathFindTile[idx2]->Type == eTileType::Wall)
 						{
@@ -272,6 +280,10 @@ void CTileMapComponent::PrevRender()
 						{
 							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Blue;
 						}
+						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+						{
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4(0.f, 1.f, 1.f, 1.f);
+						}
 						else if (mVecPathFindTile[idx3]->Type == eTileType::Wall)
 						{
 							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Red;
@@ -290,6 +302,10 @@ void CTileMapComponent::PrevRender()
 						if (idx4 == mSelectPathTileIdx)
 						{
 							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4::Blue;
+						}
+						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+						{
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4(0.f, 1.f, 1.f, 1.f);
 						}
 						else if (mVecPathFindTile[idx4]->Type == eTileType::Wall)
 						{
@@ -492,7 +508,7 @@ int CTileMapComponent::GetPathFindTileIndexX(const Vector3& pos)
 		
 		int idxX = (int)((convertPos.x - mPathFindTileDiagonal) / mPathFindTileDiagonal);
 
-		if (idxX < 0 || idxX >= mPathFindTileSize.x)
+		if (idxX < 0 || idxX >= mPathFindTileCountX)
 		{
 			return -1;
 		}
@@ -584,6 +600,24 @@ PathFindTileInfo* CTileMapComponent::GetPathFindTile(const int idx)
 	return mVecPathFindTile[idx];
 }
 
+void CTileMapComponent::SetPathFindTile(const Vector3& pos, eTileType eType)
+{
+	PathFindTileInfo* info = GetPathFindTile(pos);
+	info->Type = eType;
+}
+
+void CTileMapComponent::SetPathFindTile(const int x, const int y, eTileType eType)
+{
+	PathFindTileInfo* info = GetPathFindTile(x, y);
+	info->Type = eType;
+}
+
+void CTileMapComponent::SetPathFindTile(const int idx, eTileType eType)
+{
+	PathFindTileInfo* info = GetPathFindTile(idx);
+	info->Type = eType;
+}
+
 bool CTileMapComponent::IsReachableTile(const Vector3& pos)
 {
 	int index = GetPathFindTileIndex(pos);
@@ -594,6 +628,21 @@ bool CTileMapComponent::IsReachableTile(const Vector3& pos)
 	}
 
 	if (mVecPathFindTile[index]->Type == eTileType::Wall)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool CTileMapComponent::IsReachableTile(const int idx)
+{
+	if (idx == -1)
+	{
+		return false;
+	}
+
+	if (mVecPathFindTile[idx]->Type == eTileType::Wall)
 	{
 		return false;
 	}
@@ -728,7 +777,7 @@ bool CTileMapComponent::CreateTileProcedual(const ProcedualMapData& mapData)
 
 	// 모든 타일 타입을 가진 타일이어야 생성할 수 있다.
 	// 타입에 맞는 타일셋 정보 가지고 있게
-	for (int i = 0; i < (int)eTileType::Max; ++i)
+	for (int i = 0; i < (int)eTileType::Reserved; ++i)
 	{
 		mArrTileSetInfo[i] = mTileSet->FindInfoByType((eTileType)i);
 		if (!mArrTileSetInfo[i])
@@ -926,7 +975,6 @@ void CTileMapComponent::SetTileDefaultInfo(const std::string& tileName)
 			mVecTile[i]->SetFrameStart(info->ImageStart);
 			mVecTile[i]->SetFrameEnd(info->ImageEnd);
 			mVecTile[i]->SetTileType(info->Type);
-			setPathFindTileType(i);
 		}
 	}
 }
@@ -944,7 +992,6 @@ void CTileMapComponent::SetTileInfo(const int idxX, const int idxY, const std::s
 	mVecTile[idxY * mCountX + idxX]->SetFrameStart(info->ImageStart);
 	mVecTile[idxY * mCountX + idxX]->SetFrameEnd(info->ImageEnd);
 	mVecTile[idxY * mCountX + idxX]->SetTileType(info->Type);
-	setPathFindTileType(idxY * mCountX + idxX);
 }
 
 void CTileMapComponent::SetTileInfo(const int idx, const std::string& tileName)
@@ -960,7 +1007,6 @@ void CTileMapComponent::SetTileInfo(const int idx, const std::string& tileName)
 	mVecTile[idx]->SetFrameStart(info->ImageStart);
 	mVecTile[idx]->SetFrameEnd(info->ImageEnd);
 	mVecTile[idx]->SetTileType(info->Type);
-	setPathFindTileType(idx);
 }
 
 void CTileMapComponent::SetTileInfo(const Vector3& pos, const std::string& tileName)
@@ -983,7 +1029,6 @@ void CTileMapComponent::SetTileInfo(const Vector3& pos, const std::string& tileN
 	mVecTile[idx]->SetFrameStart(info->ImageStart);
 	mVecTile[idx]->SetFrameEnd(info->ImageEnd);
 	mVecTile[idx]->SetTileType(info->Type);
-	setPathFindTileType(idx);
 }
 
 void CTileMapComponent::SetTileOpacity(const int idxX, const int idxY, const float opacity)
@@ -1281,44 +1326,6 @@ int CTileMapComponent::getTileRenderIndexY(const Vector3& pos)
 		return idxY;
 	}
 	return 0;
-}
-
-// TODO : 렌더되는 실제 타일 인덱스 받아서, 해당 타입별로 교체
-void CTileMapComponent::setPathFindTileType(const int renderTileIdx)
-{
-	eTileType type = mVecTile[renderTileIdx]->GetTileType();
-
-	switch (type)
-	{
-	case eTileType::Normal:
-		break;
-	case eTileType::Wall:
-		break;
-	case eTileType::CornerN:
-		break;
-	case eTileType::CornerE:
-		break;
-	case eTileType::CornerS:
-		break;
-	case eTileType::CornerW:
-		break;
-	case eTileType::WallNE:
-		break;
-	case eTileType::WallSE:
-		break;
-	case eTileType::WallSW:
-		break;
-	case eTileType::WallNW:
-		break;
-	case eTileType::EntryNELeft:
-		break;
-	case eTileType::EntryNERight:
-		break;
-	case eTileType::EntryNWLeft:
-		break;
-	case eTileType::EntryNWRight:
-		break;	
-	}
 }
 
 bool CTileMapComponent::createPathFindTileInfo()

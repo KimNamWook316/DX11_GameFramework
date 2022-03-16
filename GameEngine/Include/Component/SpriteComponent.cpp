@@ -261,6 +261,14 @@ void CSpriteComponent::ChangeAnimation(const std::string& name)
 	}
 }
 
+void CSpriteComponent::ChangeAnimationKeepFrame(const std::string& name)
+{
+	if (mAnimation)
+	{
+		mAnimation->ChangeAnimationKeepFrame(name);
+	}
+}
+
 void CSpriteComponent::AddAnimation(const std::string& sequenceName, const std::string& name, bool bIsLoop, const float playTime, const float playScale, bool bIsReverse)
 {
 	if (mAnimation)

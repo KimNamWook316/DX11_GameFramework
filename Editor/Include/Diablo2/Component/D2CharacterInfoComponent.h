@@ -39,6 +39,7 @@ public:
     void SetDir(const Vector2& dir);
     void SetHp(const float hp);
     void SetCC(eD2ElementType type);
+    void SetMp(const float mp);
 
 public:
     const D2CharInfo& GetInfo() const
@@ -92,6 +93,7 @@ private:
     D2CharInfo mCharInfo;
     std::list<EventCallBack> mEventCallBackList[(int)eD2CharInfoEventType::Max];
 
+    float mPrevSpeed;
     eD2ElementType meCC;
     float mCCTime;
 };

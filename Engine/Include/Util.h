@@ -6,8 +6,10 @@ class CUtil
 {
 public:
 	static std::string CollisionChannelToString(eCollisionChannel eChan);
+	static eCollisionChannel StringToCollisionChannel(const std::string& str);
 
 	static std::string CollsionInteractionToString(eCollisionInteraction eInterAction);
+	static eCollisionInteraction StringToCollisionInteraction(const std::string& str);
 
 	static std::string TileShapeToString(eTileShape eTileShape);
 	static eTileShape  StringToTileShape(const std::string& str);

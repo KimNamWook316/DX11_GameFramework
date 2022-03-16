@@ -1,16 +1,19 @@
 #include "Navigation.h"
 #include "../Component/TileMapComponent.h"
 #include "../Component/Tile.h"
+#include "../Sync.h"
 
 CNavigation::CNavigation()	:
 	mCountX(0),
 	mCountY(0),
 	meNodeShape(eTileShape::Rect)
 {
+	InitializeCriticalSection(&mCrt);
 }
 
 CNavigation::~CNavigation()
 {
+	DeleteCriticalSection(&mCrt);
 	size_t size = mVecNode.size();
 	for (size_t i = 0; i < size; ++i)
 	{
@@ -52,6 +55,12 @@ void CNavigation::CreateNavigationNodes(CTileMapComponent* tileMap)
 
 		mVecNode.push_back(node);
 	}
+}
+
+void CNavigation::ChangeNode(const int idx, eTileType eType)
+{
+	CSync sync(&mCrt);
+	mVecNode[idx]->eTileType = eType;
 }
 
 bool CNavigation::FindPath(const Vector3& start, const Vector3& end, std::list<Vector3>& outListPath)
@@ -151,7 +160,7 @@ bool CNavigation::findNode(NavNode* node, NavNode* endNode, const Vector3& end, 
 
 	for (; iter != iterEnd; ++iter)
 	{
-		NavNode* corner = getCorner(*iter, node, endNode, end, outListPath);
+		NavNode* corner = getCorner(*iter, node, endNode, end);
 
 		if (!corner)
 		{
@@ -171,6 +180,8 @@ bool CNavigation::findNode(NavNode* node, NavNode* endNode, const Vector3& end, 
 				outListPath.push_front(pathNode->Center);
 				pathNode = pathNode->Parent;
 			}
+
+			outListPath.pop_front();
 
 			return true;
 		}
@@ -204,25 +215,6 @@ bool CNavigation::findNode(NavNode* node, NavNode* endNode, const Vector3& end, 
 		else if (eTileShape::Rhombus == meNodeShape)
 		{
 			cost = node->Cost + node->Center.Distance(corner->Center);
- //			switch (*iter)
- //			{
- //			case eNodeDir::T:
- //			case eNodeDir::B:
- //			case eNodeDir::R:
- //			case eNodeDir::L:
- //				cost = node->Cost + node->Center.Distance(corner->Center);
- //				break;
- //			case eNodeDir::RT:
- //			case eNodeDir::LB:
- //				cost = node->Cost + abs(node->Center.x - corner->Center.x);
- //			case eNodeDir::RB:
- //			case eNodeDir::LT:
- //				cost = node->Cost + abs(node->Center.y - corner->Center.y);
- //				break;
- //			default:
- //				assert(false);
- //				return false;
- //			}
 		}
 
 		// 찾은 노드가 이미 열린 목록에 들어가 있을 경우 비용 비교 후 교체
@@ -253,26 +245,26 @@ bool CNavigation::findNode(NavNode* node, NavNode* endNode, const Vector3& end, 
 	return false;
 }
 
-NavNode* CNavigation::getCorner(eNodeDir dir, NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getCorner(eNodeDir dir, NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	switch (dir)
 	{
 	case eNodeDir::T:
-		return getNodeTop(node, endNode, end, outListPath);
+		return getNodeTop(node, endNode, end);
 	case eNodeDir::RT:
-		return getNodeRightTop(node, endNode, end, outListPath);
+		return getNodeRightTop(node, endNode, end);
 	case eNodeDir::R:
-		return getNodeRight(node, endNode, end, outListPath);
+		return getNodeRight(node, endNode, end);
 	case eNodeDir::RB:
-		return getNodeRightBottom(node, endNode, end, outListPath);
+		return getNodeRightBottom(node, endNode, end);
 	case eNodeDir::B:
-		return getNodeBottom(node, endNode, end, outListPath);
+		return getNodeBottom(node, endNode, end);
 	case eNodeDir::LB:
-		return getNodeLeftBottom(node, endNode, end, outListPath);
+		return getNodeLeftBottom(node, endNode, end);
 	case eNodeDir::L:
-		return getNodeLeft(node, endNode, end, outListPath);
+		return getNodeLeft(node, endNode, end);
 	case eNodeDir::LT:
-		return getNodeLeftTop(node, endNode, end, outListPath);
+		return getNodeLeftTop(node, endNode, end);
 	default:
 		assert(false);
 	}
@@ -339,7 +331,7 @@ void CNavigation::addDir(eNodeDir dir, NavNode* node)
 	}
 }
 
-NavNode* CNavigation::getNodeTop(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeTop(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxY = node->indexY;
 
@@ -374,8 +366,10 @@ NavNode* CNavigation::getNodeTop(NavNode* node, NavNode* endNode, const Vector3&
 
 		if (cornerX < mCountX && cornerY + 1 <= mCountY)
 		{
+			// 몬스터 이동 예약 타일의 경우 갈 수 있는 타일과 똑같이 취급한다.
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType || 
+					eTileType::Reserved == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
@@ -387,7 +381,8 @@ NavNode* CNavigation::getNodeTop(NavNode* node, NavNode* endNode, const Vector3&
 		if (cornerX >= 0 && cornerY + 1 <= mCountY)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType || 
+					eTileType::Reserved == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
@@ -397,7 +392,7 @@ NavNode* CNavigation::getNodeTop(NavNode* node, NavNode* endNode, const Vector3&
 	return nullptr;
 }
 
-NavNode* CNavigation::getNodeRightTop(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeRightTop(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxX = node->indexX;
 	int idxY = node->indexY;
@@ -435,7 +430,8 @@ NavNode* CNavigation::getNodeRightTop(NavNode* node, NavNode* endNode, const Vec
 		if (cornerX >= 0 && cornerY + 1 < mCountY)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType || 
+					eTileType::Reserved == mVecNode[(cornerY + 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
@@ -447,20 +443,21 @@ NavNode* CNavigation::getNodeRightTop(NavNode* node, NavNode* endNode, const Vec
 		if (cornerY >= 0 && cornerX + 1 < mCountX)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType || 
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType))
 			{
 				return checkNode;
 			}
 		}
 
-		NavNode* subSearch = getNodeRight(checkNode, endNode, end, outListPath);
+		NavNode* subSearch = getNodeRight(checkNode, endNode, end);
 
 		if (subSearch)
 		{
 			return checkNode;
 		}
 
-		subSearch = getNodeTop(checkNode, endNode, end, outListPath);
+		subSearch = getNodeTop(checkNode, endNode, end);
 
 		if (subSearch)
 		{
@@ -470,7 +467,7 @@ NavNode* CNavigation::getNodeRightTop(NavNode* node, NavNode* endNode, const Vec
 	return nullptr;
 }
 
-NavNode* CNavigation::getNodeRight(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeRight(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxX = node->indexX;
 
@@ -506,7 +503,8 @@ NavNode* CNavigation::getNodeRight(NavNode* node, NavNode* endNode, const Vector
 		if (cornerY < mCountY && cornerX + 1 < mCountX)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType ||
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType))
 			{
 				return checkNode;
 			}
@@ -518,7 +516,8 @@ NavNode* CNavigation::getNodeRight(NavNode* node, NavNode* endNode, const Vector
 		if (cornerY >= 0 && cornerX + 1 < mCountX)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType || 
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType))
 			{
 				return checkNode;
 			}
@@ -528,7 +527,7 @@ NavNode* CNavigation::getNodeRight(NavNode* node, NavNode* endNode, const Vector
 	return nullptr;
 }
 
-NavNode* CNavigation::getNodeRightBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeRightBottom(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxX = node->indexX;
 	int idxY = node->indexY;
@@ -566,7 +565,8 @@ NavNode* CNavigation::getNodeRightBottom(NavNode* node, NavNode* endNode, const 
 		if (cornerY < mCountY && cornerX + 1 > mCountX)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType ||
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType))
 			{
 				return checkNode;
 			}
@@ -578,20 +578,21 @@ NavNode* CNavigation::getNodeRightBottom(NavNode* node, NavNode* endNode, const 
 		if (cornerX >= 0 && cornerY - 1 >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType || 
+					eTileType::Reserved == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
 		}
 
-		NavNode* subSearch = getNodeRight(checkNode, endNode, end, outListPath);
+		NavNode* subSearch = getNodeRight(checkNode, endNode, end);
 
 		if (subSearch)
 		{
 			return checkNode;
 		}
 
-		subSearch = getNodeBottom(checkNode, endNode, end, outListPath);
+		subSearch = getNodeBottom(checkNode, endNode, end);
 
 		if (subSearch)
 		{
@@ -601,7 +602,7 @@ NavNode* CNavigation::getNodeRightBottom(NavNode* node, NavNode* endNode, const 
 	return nullptr;
 }
 
-NavNode* CNavigation::getNodeBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeBottom(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxY = node->indexY;
 
@@ -637,7 +638,8 @@ NavNode* CNavigation::getNodeBottom(NavNode* node, NavNode* endNode, const Vecto
 		if (cornerX < mCountX && cornerY - 1 >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType || 
+					eTileType::Reserved == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
@@ -649,7 +651,8 @@ NavNode* CNavigation::getNodeBottom(NavNode* node, NavNode* endNode, const Vecto
 		if (cornerX >= 0 && cornerY - 1 >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType ||
+					eTileType::Reserved == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
@@ -659,7 +662,7 @@ NavNode* CNavigation::getNodeBottom(NavNode* node, NavNode* endNode, const Vecto
 	return nullptr;
 }
 
-NavNode* CNavigation::getNodeLeftBottom(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeLeftBottom(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxX = node->indexX;
 	int idxY = node->indexY;
@@ -697,7 +700,8 @@ NavNode* CNavigation::getNodeLeftBottom(NavNode* node, NavNode* endNode, const V
 		if (cornerY < mCountY && cornerX - 1 >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType || 
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType))
 			{
 				return checkNode;
 			}
@@ -709,20 +713,21 @@ NavNode* CNavigation::getNodeLeftBottom(NavNode* node, NavNode* endNode, const V
 		if (cornerX < mCountX && cornerY - 1 >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType ||
+					eTileType::Reserved == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
 		}
 
-		NavNode* subSearch = getNodeLeft(checkNode, endNode, end, outListPath);
+		NavNode* subSearch = getNodeLeft(checkNode, endNode, end);
 
 		if (subSearch)
 		{
 			return checkNode;
 		}
 
-		subSearch = getNodeBottom(checkNode, endNode, end, outListPath);
+		subSearch = getNodeBottom(checkNode, endNode, end);
 
 		if (subSearch)
 		{
@@ -732,7 +737,7 @@ NavNode* CNavigation::getNodeLeftBottom(NavNode* node, NavNode* endNode, const V
 	return nullptr;
 }
 
-NavNode* CNavigation::getNodeLeft(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeLeft(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxX = node->indexX;
 
@@ -768,7 +773,8 @@ NavNode* CNavigation::getNodeLeft(NavNode* node, NavNode* endNode, const Vector3
 		if (cornerY < mCountY && cornerX - 1 >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType ||
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType))
 			{
 				return checkNode;
 			}
@@ -780,7 +786,8 @@ NavNode* CNavigation::getNodeLeft(NavNode* node, NavNode* endNode, const Vector3
 		if (cornerY >= 0 && cornerX - 1 >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType || 
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX - 1)]->eTileType))
 			{
 				return checkNode;
 			}
@@ -790,7 +797,7 @@ NavNode* CNavigation::getNodeLeft(NavNode* node, NavNode* endNode, const Vector3
 	return nullptr;
 }
 
-NavNode* CNavigation::getNodeLeftTop(NavNode* node, NavNode* endNode, const Vector3& end, std::list<Vector3>& outListPath)
+NavNode* CNavigation::getNodeLeftTop(NavNode* node, NavNode* endNode, const Vector3& end)
 {
 	int idxX = node->indexX;
 	int idxY = node->indexY;
@@ -828,7 +835,8 @@ NavNode* CNavigation::getNodeLeftTop(NavNode* node, NavNode* endNode, const Vect
 		if (cornerX < mCountX && cornerY + 1 < mCountY)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType)
+				(eTileType::Normal == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType ||
+					eTileType::Reserved == mVecNode[cornerY * mCountX + (cornerX + 1)]->eTileType))
 			{
 				return checkNode;
 			}
@@ -840,20 +848,21 @@ NavNode* CNavigation::getNodeLeftTop(NavNode* node, NavNode* endNode, const Vect
 		if (cornerY >= 0 && cornerX >= 0)
 		{
 			if (eTileType::Wall == mVecNode[cornerY * mCountX + cornerX]->eTileType &&
-				eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType)
+				(eTileType::Normal == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType ||
+					eTileType::Reserved == mVecNode[(cornerY - 1) * mCountX + cornerX]->eTileType))
 			{
 				return checkNode;
 			}
 		}
 
-		NavNode* subSearch = getNodeLeft(checkNode, endNode, end, outListPath);
+		NavNode* subSearch = getNodeLeft(checkNode, endNode, end);
 
 		if (subSearch)
 		{
 			return checkNode;
 		}
 
-		subSearch = getNodeTop(checkNode, endNode, end, outListPath);
+		subSearch = getNodeTop(checkNode, endNode, end);
 
 		if (subSearch)
 		{

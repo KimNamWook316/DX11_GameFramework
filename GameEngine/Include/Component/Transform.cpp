@@ -176,6 +176,8 @@ void CTransform::SetRelativeScale(const Vector3& scale)
 	mWorldScale = scale;
 
 	SetInheritScaleValue();
+
+	callStateCallBack();
 }
 
 void CTransform::SetRelativeScale(const float& x, const float& y, const float& z)
@@ -190,6 +192,8 @@ void CTransform::SetRelativeRot(const Vector3& rot)
 
 	// 첫 회전일 경우 true
 	SetInheritRotValue(true);
+
+	callStateCallBack();
 }
 
 void CTransform::SetRelativeRot(const float& x, const float& y, const float& z)
@@ -221,6 +225,7 @@ void CTransform::SetRelativePos(const Vector3& pos)
 	mWorldPos = pos;
 
 	SetInheritPosValue();
+	callStateCallBack();
 }
 
 void CTransform::SetRelativePos(const float& x, const float& y, const float& z)
@@ -234,6 +239,7 @@ void CTransform::SetWorldScale(const Vector3& scale)
 	mWorldScale = scale;
 	mRelativeScale = scale;
 	SetInheritWorldScaleValue();
+	callStateCallBack();
 }
 
 void CTransform::SetWorldScale(const float& x, const float& y, const float& z)
@@ -247,6 +253,7 @@ void CTransform::SetWorldRot(const Vector3& rot)
 	mWorldRot = rot;
 	mRelativeRot = rot;
 	SetInheritWorldRotValue(true);
+	callStateCallBack();
 }
 
 void CTransform::SetWorldRot(const float& x, const float& y, const float& z)
@@ -278,6 +285,7 @@ void CTransform::SetWorldPos(const Vector3& pos)
 	mWorldPos = pos;
 	mRelativePos = pos;
 	SetInheritPosValue();
+	callStateCallBack();
 }
 
 void CTransform::SetWorldPos(const float& x, const float& y, const float& z)
@@ -291,6 +299,7 @@ void CTransform::AddRelativeScale(const Vector3& scale)
 	mRelativeScale += scale;
 	mWorldScale = mRelativeScale;
 	SetInheritScaleValue();
+	callStateCallBack();
 }
 
 void CTransform::AddRelativeScale(const float& x, const float& y, const float& z)
@@ -304,6 +313,7 @@ void CTransform::AddRelativeRot(const Vector3 rot)
 	mRelativeRot += rot;
 	mWorldRot = mRelativeRot;
 	SetInheritRotValue(true);
+	callStateCallBack();
 }
 
 void CTransform::AddRelativeRot(const float& x, const float& y, const float& z)
@@ -335,6 +345,7 @@ void CTransform::AddRelativePos(const Vector3& pos)
 	mRelativePos += pos;
 	mWorldPos = mRelativePos;
 	SetInheritPosValue();
+	callStateCallBack();
 }
 
 void CTransform::AddRelativePos(const float& x, const float& y, const float& z)
@@ -348,6 +359,7 @@ void CTransform::AddWorldScale(const Vector3& scale)
 	mWorldScale += scale;
 	mRelativeScale = mWorldScale;
 	SetInheritWorldScaleValue();
+	callStateCallBack();
 }
 
 void CTransform::AddWorldScale(const float& x, const float& y, const float& z)
@@ -361,6 +373,7 @@ void CTransform::AddWorldRot(const Vector3 rot)
 	mWorldRot += rot;
 	mRelativeRot = mWorldRot;
 	SetInheritWorldRotValue(true);
+	callStateCallBack();
 }
 
 void CTransform::AddWorldRot(const float& x, const float& y, const float& z)
@@ -392,6 +405,7 @@ void CTransform::AddWorldPos(const Vector3& pos)
 	mWorldPos += pos;
 	mRelativePos = mWorldPos;
 	SetInheritPosValue();
+	callStateCallBack();
 }
 
 void CTransform::AddWorldPos(const float& x, const float& y, const float& z)
@@ -446,6 +460,7 @@ void CTransform::SetInheritRotValue(bool bIsCurrent)
 		{
 			// 상위 트랜스폼의 회전을 적용받는 경우, 위치도 바뀌어야 함 ( 공전 )
 			SetInheritPosValue();
+			callStateCallBack();
 		}
 	}
 
@@ -538,10 +553,12 @@ void CTransform::SetInheritPosValue()
 			memcpy(&matRot._41, &parentPos, sizeof(Vector3));
 			
 			mWorldPos = mRelativePos.TransformCoord(matRot);
+			callStateCallBack();
 		}
 		else
 		{
 			mWorldPos = mRelativePos + mParentTransform->GetWorldPos();
+			callStateCallBack();
 			//mRelativePos = mWorldPos - mParentTransform->GetWorldPos();
 		}
 	}
@@ -601,6 +618,7 @@ void CTransform::SetInheritWorldRotValue(bool bIsCurrent)
 		{
 			// 상위 트랜스폼의 회전을 적용받는 경우, 위치도 바뀌어야 함 ( 공전 )
 			SetInheritPosValue();
+			callStateCallBack();
 		}
 	}
 
@@ -694,10 +712,12 @@ void CTransform::SetInheritWorldPosValue()
 			// 상대 위치 = 월드 위치 * 부모 월드 변환의 역행렬이다.
 			matRot.Inverse();
 			mRelativePos = mWorldPos.TransformCoord(matRot);
+			callStateCallBack();
 		}
 		else
 		{
 			mWorldPos = mRelativePos + mParentTransform->GetWorldPos();
+			callStateCallBack();
 		}
 	}
 
@@ -708,5 +728,31 @@ void CTransform::SetInheritWorldPosValue()
 	for (size_t i = 0; i < size; ++i)
 	{
 		mVecChildTransform[i]->SetInheritPosValue();
+	}
+}
+
+void CTransform::DeleteCallBack(const std::string& name)
+{
+	auto iter = mListStateChangeCallBack.begin();
+	auto iterEnd = mListStateChangeCallBack.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (iter->Name == name)
+		{
+			mListStateChangeCallBack.erase(iter);
+			return;
+		}
+	}
+}
+
+void CTransform::callStateCallBack()
+{
+	auto iter = mListStateChangeCallBack.begin();
+	auto iterEnd = mListStateChangeCallBack.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		iter->Func();
 	}
 }

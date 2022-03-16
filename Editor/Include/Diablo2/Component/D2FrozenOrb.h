@@ -22,6 +22,7 @@ public:
 private:
     void fireIceBolt(const Vector3& dir);
     void explode();
+    void onExplode();
     void onExplodeEnd();
 
 private:

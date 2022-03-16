@@ -86,7 +86,7 @@ bool CColliderControlWidget::Init()
 		mEditBox2DWidth->SetStep(1.f);
 		mEditBox2DHeight->SetStep(1.f);
 
-		Box2DInfo boxInfo = static_cast<CColliderBox2D*>(mComponent)->GetInfo();
+		Box2DInfo boxInfo = static_cast<CColliderBox2D*>(mComponent.Get())->GetInfo();
 		mEditBox2DWidth->SetVal(boxInfo.Length.x);
 		mEditBox2DHeight->SetVal(boxInfo.Length.y);
 
@@ -101,7 +101,7 @@ bool CColliderControlWidget::Init()
 		mEditCircleRadius = AddWidget<CIMGUIInputFloat>("Radius");
 		mEditCircleRadius->SetStep(1.f);
 
-		CircleInfo circleInfo = static_cast<CColliderCircle*>(mComponent)->GetInfo();
+		CircleInfo circleInfo = static_cast<CColliderCircle*>(mComponent.Get())->GetInfo();
 		mEditCircleRadius->SetVal(circleInfo.Radius);
 
 		mEditCircleRadius->SetCallBack(this, &CColliderControlWidget::OnChangeCircleRadius);
@@ -140,7 +140,7 @@ bool CColliderControlWidget::Init()
 		break;
 	}
 
-	Vector3 offset = static_cast<CColliderComponent*>(mComponent)->GetOffset();
+	Vector3 offset = static_cast<CColliderComponent*>(mComponent.Get())->GetOffset();
 	mOffsetWidget->SetVal(offset.x, offset.y, offset.z);
 
 	std::vector<std::string> profiles;
@@ -151,14 +151,14 @@ bool CColliderControlWidget::Init()
 		mCollsionProfileWidget->AddItem(profiles[i]);
 	}
 
-	CollisionProfile* profile = static_cast<CColliderComponent*>(mComponent)->GetCollisionProfile();
+	CollisionProfile* profile = static_cast<CColliderComponent*>(mComponent.Get())->GetCollisionProfile();
 	if (profile)
 	{
 		mCollsionProfileWidget->SetCurrentItem(profile->Name);
 	}
 	else
 	{
-		static_cast<CColliderComponent*>(mComponent)->SetCollisionProfile("Object");
+		static_cast<CColliderComponent*>(mComponent.Get())->SetCollisionProfile("Object");
 		mCollsionProfileWidget->SetCurrentItem("Object");
 	}
 
@@ -201,12 +201,12 @@ void CColliderControlWidget::OnSelectColliderType(int idx, const char* label)
 
 void CColliderControlWidget::OnChangeOffsetWidget(float val[3])
 {
-	static_cast<CColliderComponent*>(mComponent)->SetOffset(val[0], val[1], val[2]);
+	static_cast<CColliderComponent*>(mComponent.Get())->SetOffset(val[0], val[1], val[2]);
 }
 
 void CColliderControlWidget::OnSelectCollisionProfile(int idx, const char* label)
 {
-	static_cast<CColliderComponent*>(mComponent)->SetCollisionProfile(label);
+	static_cast<CColliderComponent*>(mComponent.Get())->SetCollisionProfile(label);
 }
 
 void CColliderControlWidget::OnClickEditProfile()
@@ -216,17 +216,17 @@ void CColliderControlWidget::OnClickEditProfile()
 
 void CColliderControlWidget::OnChangeBoxWidth(float val)
 {
-	static_cast<CColliderBox2D*>(mComponent)->SetWidth(val);
+	static_cast<CColliderBox2D*>(mComponent.Get())->SetWidth(val);
 }
 
 void CColliderControlWidget::OnChangeBoxHeight(float val)
 {
-	static_cast<CColliderBox2D*>(mComponent)->SetHeight(val);
+	static_cast<CColliderBox2D*>(mComponent.Get())->SetHeight(val);
 }
 
 void CColliderControlWidget::OnChangeCircleRadius(float val)
 {
-	static_cast<CColliderCircle*>(mComponent)->SetRadius(val);
+	static_cast<CColliderCircle*>(mComponent.Get())->SetRadius(val);
 }
 
 void CColliderControlWidget::changeType(eColliderType type)
@@ -234,7 +234,7 @@ void CColliderControlWidget::changeType(eColliderType type)
 	CGameObject* obj = mComponent->GetGameObject();
 
 	// Collider List에서 제거
-	mComponent->GetScene()->GetCollision()->DeleteCollider((CColliderComponent*)mComponent);
+	mComponent->GetScene()->GetCollision()->DeleteCollider((CColliderComponent*)mComponent.Get());
 
 	switch (type)
 	{
@@ -252,7 +252,7 @@ void CColliderControlWidget::changeType(eColliderType type)
 		break;
 	}
 	mComponent->Start();
-	static_cast<CColliderComponent*>(mComponent)->SetOffset(mOffsetWidget->GetX(), mOffsetWidget->GetY(), 0.f);
+	static_cast<CColliderComponent*>(mComponent.Get())->SetOffset(mOffsetWidget->GetX(), mOffsetWidget->GetY(), 0.f);
 
 	// 이전 타입 위젯 삭제
 	switch (meType)
@@ -281,7 +281,7 @@ void CColliderControlWidget::changeType(eColliderType type)
 		mEditBox2DWidth = AddWidget<CIMGUIInputFloat>("Width");
 		mEditBox2DHeight = AddWidget<CIMGUIInputFloat>("Height");
 
-		Box2DInfo boxInfo = static_cast<CColliderBox2D*>(mComponent)->GetInfo();
+		Box2DInfo boxInfo = static_cast<CColliderBox2D*>(mComponent.Get())->GetInfo();
 		mEditBox2DWidth->SetVal(boxInfo.Length.x);
 		mEditBox2DHeight->SetVal(boxInfo.Length.y);
 		mEditBox2DWidth->SetStep(1.f);
@@ -296,7 +296,7 @@ void CColliderControlWidget::changeType(eColliderType type)
 		mEditCircleRadius = AddWidget<CIMGUIInputFloat>("Radius");
 		mEditCircleRadius->SetStep(1.f);
 
-		CircleInfo circleInfo = static_cast<CColliderCircle*>(mComponent)->GetInfo();
+		CircleInfo circleInfo = static_cast<CColliderCircle*>(mComponent.Get())->GetInfo();
 
 		mEditCircleRadius->SetVal(circleInfo.Radius);
 		mEditCircleRadius->SetCallBack(this, &CColliderControlWidget::OnChangeCircleRadius);

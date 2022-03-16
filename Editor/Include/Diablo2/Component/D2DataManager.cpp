@@ -129,6 +129,8 @@ bool CD2DataManager::loadD2CharInfo()
 		info->MaxHp = std::stof((*iter->second)[2]);
 		info->Hp = info->MaxHp;
 		info->MaxCCTime = std::stof((*iter->second)[3]);
+		info->MaxMp = std::stof((*iter->second)[4]);
+		info->Mp = info->MaxMp;
 
 		mMapCharInfo.insert(std::make_pair(info->Name, info));
 	}

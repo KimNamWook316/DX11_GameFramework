@@ -24,7 +24,7 @@ public:
 
 public:
 	void SetUpdateComponent(class CSceneComponent* updateComponent);
-	bool Move(const Vector3& endPos);
+	virtual bool Move(const Vector3& endPos);
 	void SetMoveSpeed(const float speed)
 	{
 		mMoveSpeed = speed;
@@ -41,8 +41,8 @@ public:
 		return mPathList.front();
 	}
 
-private:
-	void onFindPathResult(const std::list<Vector3>& pathList);
+protected:
+	virtual void onFindPathResult(const std::list<Vector3>& pathList);
 
 public:
 	template<typename T>
@@ -67,7 +67,7 @@ public:
 		mFrameCallBack = nullptr;
 	}
 
-private:
+protected:
     CSharedPtr<class CSceneComponent> mUpdateComponent;
     std::list<Vector3> mPathList;
     float mMoveSpeed;

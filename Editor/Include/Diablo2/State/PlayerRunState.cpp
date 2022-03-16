@@ -3,19 +3,25 @@
 #include "Component/NavAgentComponent.h"
 #include "../Component/D2StateComponent.h"
 #include "../Component/D2CharacterInfoComponent.h"
+#include "../Component/D2NavAgentComponent.h"
 #include "PlayerWalkState.h"
+#include "PlayerCastingState.h"
+#include "PlayerHitState.h"
 #include "GameObject/GameObject.h"
 #include "Input.h"
 #include "../D2Util.h"
+#include "Component/ColliderComponent.h"
 
 CPlayerRunState::CPlayerRunState()	:
 	mbRunEnd(false),
+	mbCasting(false),
+	mbWalk(false),
 	mPrevDir(eD2SpriteDir::S)
 {
 }
 
 CPlayerRunState::CPlayerRunState(const CPlayerRunState& state)	:
-	CState(state)
+	CD2State(state)
 {
 }
 
@@ -46,7 +52,7 @@ void CPlayerRunState::EnterStateFunction()
 	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Up, this, &CPlayerRunState::OnCtrlUp);
 	CInput::GetInst()->SetKeyCallBack("MouseLCtrl", eKeyState::KeyState_Push, this, &CPlayerRunState::OnPushMouseL);
 	CInput::GetInst()->SetKeyCallBack("MouseL", eKeyState::KeyState_Push, this, &CPlayerRunState::OnPushMouseL);
-	CInput::GetInst()->SetKeyCallBack("MouseR", eKeyState::KeyState_Push, this, &CPlayerRunState::OnPushMouseR);
+	CInput::GetInst()->SetKeyCallBack("MouseRCtrl", eKeyState::KeyState_Down, this, &CPlayerRunState::OnDownMouseRCtrl);
 
 	mPrevDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
 	static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->SetCurrentAnimation("Run" + std::to_string((int)mPrevDir));
@@ -57,7 +63,27 @@ void CPlayerRunState::EnterStateFunction()
 
 CState* CPlayerRunState::StateFunction()
 {
-	if (mbRunEnd)
+	CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+
+	if (mbIsHit)
+	{
+		mbEnd = true;
+		static_cast<CD2NavAgentComponent*>(mOwner->GetNavAgent())->CancleMove();
+		return (CState*)(new CPlayerHitState);
+	}
+	else if (mbCasting)
+	{
+		Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+		Vector3 rootPos = mOwner->GetRootComponent()->GetWorldPos();
+		Vector2 dir = mousePos - Vector2(rootPos.x, rootPos.y);
+		dir.Normalize();
+
+		state->GetCharInfo()->SetDir(dir);
+		state->GetCharInfo()->SetSpeed(0.f);
+		mbEnd = true;
+		return (CState*)(new CPlayerCastingState);
+	}
+	else if (mbRunEnd)
 	{
 		mbEnd = true;
 		return nullptr;
@@ -65,7 +91,7 @@ CState* CPlayerRunState::StateFunction()
 	else if (mbWalk)
 	{
 		mbEnd = true;
-		mOwner->GetNavAgent()->SetMoveSpeed(static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetMaxSpeed() / 2.f);
+		state->GetCharInfo()->SetSpeed(state->GetCharInfo()->GetMaxSpeed() / 2.f);
 		return (CState*)(new CPlayerWalkState);
 	}
 	return nullptr;
@@ -76,6 +102,7 @@ void CPlayerRunState::ExitStateFunction()
 	CInput::GetInst()->DeleteCallBack("LCtrl", eKeyState::KeyState_Down);
 	CInput::GetInst()->DeleteCallBack("LCtrl", eKeyState::KeyState_Up);
 	CInput::GetInst()->DeleteCallBack("MouseLCtrl", eKeyState::KeyState_Push);
+	CInput::GetInst()->DeleteCallBack("MouseRCtrl", eKeyState::KeyState_Down);
 	CInput::GetInst()->DeleteCallBack("MouseL", eKeyState::KeyState_Push);
 	CInput::GetInst()->DeleteCallBack("MouseR", eKeyState::KeyState_Push);
 	mOwner->GetNavAgent()->DeleteFrameCallBack();
@@ -84,17 +111,35 @@ void CPlayerRunState::ExitStateFunction()
 
 void CPlayerRunState::ResetState()
 {
-	CState::ResetState();
+	CD2State::ResetState();
 	mbRunEnd = false;
 	mbWalk = false;
+	mbCasting = false;
 }
 
-void CPlayerRunState::OnPushMouseR(float deltaTime)
+void CPlayerRunState::OnDownMouseRCtrl(float deltaTime)
 {
+	// 이전 마우스 위치 저장
+	CD2PlayerSkillComponent* com = static_cast<CD2StateComponent*>(mOwner)->GetSkill();
+	static_cast<CD2StateComponent*>(mOwner)->SaveMousePos(CInput::GetInst()->GetMouseWorld2DPos());
+
+	if ((int)(eD2AttackType::Projectile) == com->GetRSkillType())
+	{
+		mbCasting = true;
+	}
+	else if ((int)(eD2AttackType::Melee) == com->GetRSkillType())
+	{
+	}
+	else if ((int)(eD2AttackType::Casting) == com->GetRSkillType())
+	{
+		mbCasting = true;
+	}
 }
 
 void CPlayerRunState::OnPushMouseL(float deltaTime)
 {
+	Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+	mOwner->GetNavAgent()->Move(Vector3(mousePos.x, mousePos.y, 0.f));
 }
 
 void CPlayerRunState::OnCtrlUp(float delatTime)
@@ -111,12 +156,29 @@ void CPlayerRunState::OnRun()
 {
 	Vector3 direction = mOwner->GetNavAgent()->GetPathListFront() - mOwner->GetRootComponent()->GetWorldPos();
 	direction.Normalize();
-	static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->SetDir(Vector2(direction.x, direction.y));
+	CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+	state->GetCharInfo()->SetDir(Vector2(direction.x, direction.y));
 
 	eD2SpriteDir spriteDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
 	if (mPrevDir != spriteDir)
 	{
 		mPrevDir = spriteDir;
-		static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->SetCurrentAnimation("Run" + std::to_string((int)mPrevDir));
+		static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->ChangeAnimationKeepFrame("Run" + std::to_string((int)mPrevDir));
 	}
+}
+
+void CPlayerRunState::OnCollideEnter(const CollisionResult& result)
+{
+	CollisionProfile* profile = result.Dest->GetCollisionProfile();
+	// 몬스터 공격에 맞은 경우, Hit상태로 변화
+	switch (profile->Channel)
+	{
+	case eCollisionChannel::MonsterAttack:
+		mbIsHit = true;
+		break;
+	}
+}
+
+void CPlayerRunState::OnCollideExit(const CollisionResult& result)
+{
 }

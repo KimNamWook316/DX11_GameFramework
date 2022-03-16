@@ -32,6 +32,7 @@ public:
     void OnSelectAnimationList(int idx, const char* name);
 
     void OnUpdateAnimInstFrame();
+    void OnChangeTransform();
 
 protected:
     class CIMGUIInputFloat3* mPositionWidget;

@@ -58,6 +58,7 @@ public:
 		bool bIsLoop = true, const float playTime = 1.f, const float playScale = 1.f, bool bIsReverse = false);
 	void DeleteAnimation(const std::string& name);
 	void ChangeAnimation(const std::string& name);
+	void ChangeAnimationKeepFrame(const std::string& name);
 	bool CheckCurrentAnimation(const std::string& name);
 	CAnimationSequence2DData* FindAnimation(const std::string& name);
 

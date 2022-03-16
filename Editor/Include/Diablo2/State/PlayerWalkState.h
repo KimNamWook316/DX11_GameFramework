@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Component/State.h"
+#include "D2State.h"
 #include "../D2Info.h"
 
 class CPlayerWalkState :
-    public CState
+    public CD2State
 {
 public:
     CPlayerWalkState();
@@ -22,9 +22,14 @@ public:
     virtual void ResetState() override;
 
 public:
+    virtual void OnCollideEnter(const CollisionResult& result) override;
+    virtual void OnCollideExit(const CollisionResult& result) override;
+
+public:
     void OnPushMouseR(float deltaTime);
     void OnPushMouseL(float deltaTime);
     void OnCtrlDown(float deltaTime);
+    void OnCtrlUp(float deltaTime);
     void OnWalkEnd();
     void OnWalk();
 
@@ -32,5 +37,6 @@ private:
     eD2SpriteDir mPrevDir;
     bool mbRun;
     bool mbWalkEnd;
+    bool mbCasting;
 };
 

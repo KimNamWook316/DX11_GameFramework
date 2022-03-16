@@ -4,25 +4,30 @@
 #include "../Component/D2CharacterInfoComponent.h"
 #include "Component/StateComponent.h"
 #include "Component/SpriteComponent.h"
-#include "Component/NavAgentComponent.h"
+#include "../Component/D2NavAgentComponent.h"
 #include "../Component/D2StateComponent.h"
 #include "../Component/D2CharacterInfoComponent.h"
 #include "GameObject/GameObject.h"
 #include "Input.h"
 #include "../D2Util.h"
+#include "PlayerCastingState.h"
+#include "PlayerHitState.h"
+#include "Component/ColliderComponent.h"
 
 CPlayerWalkState::CPlayerWalkState()	:
 	mbRun(false),
 	mbWalkEnd(false),
+	mbCasting(false),
 	mPrevDir(eD2SpriteDir::S)
 {
 }
 
 CPlayerWalkState::CPlayerWalkState(const CPlayerWalkState& state)	:
-	CState(state)
+	CD2State(state)
 {
 	mbRun = false;
 	mbWalkEnd = false;
+	mbCasting = false;
 	mPrevDir = eD2SpriteDir::S;
 }
 
@@ -51,6 +56,7 @@ CPlayerWalkState* CPlayerWalkState::Clone()
 void CPlayerWalkState::EnterStateFunction()
 {
 	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Down, this, &CPlayerWalkState::OnCtrlDown);
+	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Up, this, &CPlayerWalkState::OnCtrlUp);
 	CInput::GetInst()->SetKeyCallBack("MouseLCtrl", eKeyState::KeyState_Push, this, &CPlayerWalkState::OnPushMouseL);
 	CInput::GetInst()->SetKeyCallBack("MouseL", eKeyState::KeyState_Push, this, &CPlayerWalkState::OnPushMouseL);
 	CInput::GetInst()->SetKeyCallBack("MouseR", eKeyState::KeyState_Push, this, &CPlayerWalkState::OnPushMouseR);
@@ -64,10 +70,30 @@ void CPlayerWalkState::EnterStateFunction()
 
 CState* CPlayerWalkState::StateFunction()
 {
+	CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+
+	if (mbIsHit)
+	{
+		mbEnd = true;
+		static_cast<CD2NavAgentComponent*>(mOwner->GetNavAgent())->CancleMove();
+		return (CState*)(new CPlayerHitState);
+	}
+	else if (mbCasting)
+	{
+		Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+		Vector3 rootPos = mOwner->GetRootComponent()->GetWorldPos();
+		Vector2 dir = mousePos - Vector2(rootPos.x, rootPos.y);
+		dir.Normalize();
+
+		state->GetCharInfo()->SetDir(dir);
+		state->GetCharInfo()->SetSpeed(0.f);
+		mbEnd = true;
+		return (CState*)(new CPlayerCastingState);
+	}
 	if (mbRun)
 	{
 		mbEnd = true;
-		mOwner->GetNavAgent()->SetMoveSpeed(static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetMaxSpeed());
+		state->GetCharInfo()->SetSpeed(state->GetCharInfo()->GetMaxSpeed());
 		return (CState*)(new CPlayerRunState);
 	}
 	return nullptr;
@@ -76,6 +102,7 @@ CState* CPlayerWalkState::StateFunction()
 void CPlayerWalkState::ExitStateFunction()
 {
 	CInput::GetInst()->DeleteCallBack("LCtrl", eKeyState::KeyState_Down);
+	CInput::GetInst()->DeleteCallBack("LCtrl", eKeyState::KeyState_Up);
 	CInput::GetInst()->DeleteCallBack("MouseLCtrl", eKeyState::KeyState_Push);
 	CInput::GetInst()->DeleteCallBack("MouseL", eKeyState::KeyState_Push);
 	CInput::GetInst()->DeleteCallBack("MouseR", eKeyState::KeyState_Push);
@@ -85,22 +112,44 @@ void CPlayerWalkState::ExitStateFunction()
 
 void CPlayerWalkState::ResetState()
 {
-	CState::ResetState();
+	CD2State::ResetState();
 	mbWalkEnd = false;
 	mbRun = false;
 }
 
 void CPlayerWalkState::OnPushMouseR(float deltaTime)
 {
+	// 이전 마우스 위치 저장
+	CD2PlayerSkillComponent* com = static_cast<CD2StateComponent*>(mOwner)->GetSkill();
+	static_cast<CD2StateComponent*>(mOwner)->SaveMousePos(CInput::GetInst()->GetMouseWorld2DPos());
+
+	if ((int)(eD2AttackType::Projectile) == com->GetRSkillType())
+	{
+		mbCasting = true;
+	}
+	else if ((int)(eD2AttackType::Melee) == com->GetRSkillType())
+	{
+	}
+	else if ((int)(eD2AttackType::Casting) == com->GetRSkillType())
+	{
+		mbCasting = true;
+	}
 }
 
 void CPlayerWalkState::OnPushMouseL(float deltaTime)
 {
+	Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+	mOwner->GetNavAgent()->Move(Vector3(mousePos.x, mousePos.y, 0.f));
 }
 
 void CPlayerWalkState::OnCtrlDown(float deltaTime)
 {
 	mbRun = true;
+}
+
+void CPlayerWalkState::OnCtrlUp(float deltaTime)
+{
+	mbRun = false;
 }
 
 void CPlayerWalkState::OnWalkEnd()
@@ -113,12 +162,29 @@ void CPlayerWalkState::OnWalk()
 {
 	Vector3 direction = mOwner->GetNavAgent()->GetPathListFront() - mOwner->GetRootComponent()->GetWorldPos();
 	direction.Normalize();
-	static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->SetDir(Vector2(direction.x, direction.y));
+	CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+	state->GetCharInfo()->SetDir(Vector2(direction.x, direction.y));
 
 	eD2SpriteDir spriteDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
 	if (mPrevDir != spriteDir)
 	{
 		mPrevDir = spriteDir;
-		static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->SetCurrentAnimation("Walk" + std::to_string((int)mPrevDir));
+		static_cast<CSpriteComponent*>(mOwner->GetRootComponent())->ChangeAnimationKeepFrame("Walk" + std::to_string((int)mPrevDir));
 	}
+}
+
+void CPlayerWalkState::OnCollideEnter(const CollisionResult& result)
+{
+	CollisionProfile* profile = result.Dest->GetCollisionProfile();
+	// 몬스터 공격에 맞은 경우, Hit상태로 변화
+	switch (profile->Channel)
+	{
+	case eCollisionChannel::MonsterAttack:
+		mbIsHit = true;
+		break;
+	}
+}
+
+void CPlayerWalkState::OnCollideExit(const CollisionResult& result)
+{
 }

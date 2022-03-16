@@ -21,8 +21,26 @@ void CNavigationThread::Run()
 {
 	while(true)
 	{
+		// 타일 변화 정보 업데이트
+		if (!mChangeQueue.Empty())
+		{
+			NavChangeData data = mChangeQueue.Front();
+			mChangeQueue.Pop();
+
+			mNavigation->ChangeNode(data.Index, data.Type);
+		}
+
 		if (!mWorkQueue.Empty())
 		{
+			// 타일 변화 정보 업데이트
+			if (!mChangeQueue.Empty())
+			{
+				NavChangeData data = mChangeQueue.Front();
+				mChangeQueue.Pop();
+
+				mNavigation->ChangeNode(data.Index, data.Type);
+			}
+
 			// 일을 가져온다 
 			NavWorkData work = mWorkQueue.Front();
 			mWorkQueue.Pop();

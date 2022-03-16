@@ -2,13 +2,16 @@
 #include "Component/SpriteComponent.h"
 #include "Component/NavAgentComponent.h"
 #include "../Component/D2StateComponent.h"
+#include "../Component/D2NavAgentComponent.h"
 #include "PlayerRunState.h"
 #include "PlayerWalkState.h"
+#include "PlayerHitState.h"
 #include "PlayerCastingState.h"
 #include "GameObject/GameObject.h"
 #include "../Component/D2CharacterInfoComponent.h"
 #include "Input.h"
 #include "../D2Util.h"
+#include "Component/ColliderComponent.h"
 
 CPlayerIdleState::CPlayerIdleState()	:
 	mbRun(false),
@@ -18,7 +21,7 @@ CPlayerIdleState::CPlayerIdleState()	:
 }
 
 CPlayerIdleState::CPlayerIdleState(const CPlayerIdleState& state)	:
-	CState(state)
+	CD2State(state)
 {
 	mbRun = false;
 	mbCasting = false;
@@ -52,7 +55,7 @@ void CPlayerIdleState::EnterStateFunction()
 	CInput::GetInst()->SetKeyCallBack("MouseL", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnClickMouseL);
 	CInput::GetInst()->SetKeyCallBack("MouseLCtrl", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnClickMouseL);
 	CInput::GetInst()->SetKeyCallBack("MouseR", eKeyState::KeyState_Down, this, &CPlayerIdleState::OnClickMouseR);
-	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Down, this, &CPlayerIdleState::OnCtrlDown);
+	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnCtrlDown);
 	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Up, this, &CPlayerIdleState::OnCtrlUp);
 
 	eD2SpriteDir spriteDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
@@ -62,7 +65,13 @@ void CPlayerIdleState::EnterStateFunction()
 CState* CPlayerIdleState::StateFunction()
 {
 	CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
-	if (mbCasting)
+
+	if (mbIsHit)
+	{
+		static_cast<CD2NavAgentComponent*>(mOwner->GetNavAgent())->CancleMove();
+		return (CState*)(new CPlayerHitState);
+	}
+	else if (mbCasting)
 	{
 		Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
 		Vector3 rootPos = mOwner->GetRootComponent()->GetWorldPos();
@@ -71,7 +80,6 @@ CState* CPlayerIdleState::StateFunction()
 
 		state->GetCharInfo()->SetDir(dir);
 		state->GetCharInfo()->SetSpeed(0.f);
-		mOwner->GetNavAgent()->SetMoveSpeed(state->GetCharInfo()->GetSpeed());
 		return (CState*)(new CPlayerCastingState);
 	}
 	else if (mOwner->GetNavAgent()->IsPathExist())
@@ -81,18 +89,17 @@ CState* CPlayerIdleState::StateFunction()
 		Vector2 dir = mousePos - Vector2(rootPos.x, rootPos.y);
 
 		dir.Normalize();
-		state->GetCharInfo()->SetDir(dir);
 
 		if (mbRun)
 		{
 			state->GetCharInfo()->SetSpeed(state->GetCharInfo()->GetMaxSpeed());
-			mOwner->GetNavAgent()->SetMoveSpeed(state->GetCharInfo()->GetSpeed());
+			state->GetCharInfo()->SetDir(dir);
 			return (CState*)(new CPlayerRunState);
 		}
 		else
 		{
 			state->GetCharInfo()->SetSpeed(state->GetCharInfo()->GetMaxSpeed() / 2.f);
-			mOwner->GetNavAgent()->SetMoveSpeed(state->GetCharInfo()->GetSpeed());
+			state->GetCharInfo()->SetDir(dir);
 			return (CState*)(new CPlayerWalkState);
 		}
 	}
@@ -101,7 +108,7 @@ CState* CPlayerIdleState::StateFunction()
 
 void CPlayerIdleState::ExitStateFunction()
 {
-	CInput::GetInst()->DeleteCallBack("LCtrl", eKeyState::KeyState_Down);
+	CInput::GetInst()->DeleteCallBack("LCtrl", eKeyState::KeyState_Push);
 	CInput::GetInst()->DeleteCallBack("LCtrl", eKeyState::KeyState_Up);
 	CInput::GetInst()->DeleteCallBack("MouseL", eKeyState::KeyState_Push);
 	CInput::GetInst()->DeleteCallBack("MouseR", eKeyState::KeyState_Down);
@@ -110,7 +117,7 @@ void CPlayerIdleState::ExitStateFunction()
 
 void CPlayerIdleState::ResetState()
 {
-	CState::ResetState();
+	CD2State::ResetState();
 
 	mbRun = false;
 	mbMelee = false;
@@ -119,7 +126,9 @@ void CPlayerIdleState::ResetState()
 
 void CPlayerIdleState::OnClickMouseR(float deltaTime)
 {
+	// 이전 마우스 위치 저장
 	CD2PlayerSkillComponent* com = static_cast<CD2StateComponent*>(mOwner)->GetSkill();
+	static_cast<CD2StateComponent*>(mOwner)->SaveMousePos(CInput::GetInst()->GetMouseWorld2DPos());
 
 	if ((int)(eD2AttackType::Projectile) == com->GetRSkillType())
 	{
@@ -148,4 +157,20 @@ void CPlayerIdleState::OnCtrlDown(float deltaTime)
 void CPlayerIdleState::OnCtrlUp(float deltaTime)
 {
 	mbRun = false;
+}
+
+void CPlayerIdleState::OnCollideEnter(const CollisionResult& result)
+{
+	CollisionProfile* profile = result.Dest->GetCollisionProfile();
+	// 몬스터 공격에 맞은 경우, Hit상태로 변화
+	switch (profile->Channel)
+	{
+	case eCollisionChannel::MonsterAttack:
+		mbIsHit = true;
+		break;
+	}
+}
+
+void CPlayerIdleState::OnCollideExit(const CollisionResult& result)
+{
 }

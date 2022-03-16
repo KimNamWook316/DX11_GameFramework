@@ -28,5 +28,8 @@ public:
 		const CircleInfo& circleInfo, const Vector2& point);
 	static bool CollisionPixelToPoint(CollisionResult& srcResult, CollisionResult& destResult,
 		const PixelInfo& pixelInfo, const Vector2& point);
+
+	// 이미 충돌처리 되고, 겹치는 범위를 얻을 때 사용
+	static Box2DInfo GetOverlapAreaAABB(const Box2DInfo& src, const Box2DInfo& dst);
 };
 

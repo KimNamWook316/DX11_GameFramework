@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Component/State.h"
+#include "D2State.h"
 
 class CPlayerCastingState :
-    public CState
+    public CD2State
 {
 public:
     CPlayerCastingState();
@@ -19,6 +19,10 @@ public:
     virtual CState* StateFunction() override;
     virtual void ExitStateFunction() override;
     virtual void ResetState() override;
+
+public:
+    virtual void OnCollideEnter(const CollisionResult& result) override;
+    virtual void OnCollideExit(const CollisionResult& result) override;
 
 public:
     void OnAnimEnd();

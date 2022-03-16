@@ -474,3 +474,9 @@ struct PathFindTileRenderInfo
 	Vector2 TileSize;
 	Vector2 Dummy;
 };
+
+struct NavChangeData
+{
+	int Index;
+	eTileType Type;
+};

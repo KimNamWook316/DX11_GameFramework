@@ -13,6 +13,8 @@ struct D2CharInfo
 	float Hp;
 	float MaxHp;
 	float MaxCCTime;
+	float Mp;
+	float MaxMp;
 };
 
 struct D2SkillInfo

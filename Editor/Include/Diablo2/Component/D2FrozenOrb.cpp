@@ -5,7 +5,7 @@
 #include "D2ObjectPool.h"
 
 CD2FrozenOrb::CD2FrozenOrb() :
-	mFireInterval(0.05),
+	mFireInterval(0.05f),
 	mFireTimer(0.05f),
 	mExplodeTimer(0.f),
 	mbExplode(false)
@@ -40,7 +40,7 @@ void CD2FrozenOrb::Update(float deltaTime)
 	{
 		if (!mbExplode)
 		{
-			mRotation->AddWorldRot(0.f, 0.f, 45.f);
+			mRotation->AddWorldRot(0.f, 0.f, 33.f);
 
 			mFireTimer += deltaTime;
 			mExplodeTimer += deltaTime;
@@ -96,22 +96,28 @@ void CD2FrozenOrb::fireIceBolt(const Vector3& dir)
 void CD2FrozenOrb::explode()
 {
 	CSpriteComponent* com = mObject->FindSceneComponentFromType<CSpriteComponent>();
-	com->SetCurrentAnimation("FrozenOrbExplode0");
+	com->ChangeAnimation("FrozenOrbExplode0");
 	com->GetAnimationInstance()->Play();
+	com->AddNotify("FrozenOrbExplode0", 0, this, &CD2FrozenOrb::onExplode);
 	com->SetEndCallBack("FrozenOrbExplode0", this, &CD2FrozenOrb::onExplodeEnd);
+	com->SetWorldScale(100.f, 100.f, 1.f);
+}
+
+void CD2FrozenOrb::onExplode()
+{
+	Vector3 circlePos[17] = {};
+	circlePos[0] = Vector3(0.5f, 0.f, 0.f);
+
+	for (int i = 1; i < 17; ++i)
+	{
+		circlePos[i].x = cosf(DegToRad(22.5f * i)) * 0.5f;
+		circlePos[i].y = sinf(DegToRad(22.5f * i)) * 0.5f;
+
+		fireIceBolt(circlePos[i]);
+	}
 }
 
 void CD2FrozenOrb::onExplodeEnd()
 {
-	Vector3 circlePos[31] = {};
-	circlePos[0] = Vector3(0.5f, 0.f, 0.f);
-
-	for (int i = 1; i < 31; ++i)
-	{
-		circlePos[i].x = cosf(DegToRad(12.f * i)) * 0.5f;
-		circlePos[i].y = sinf(DegToRad(12.f * i)) * 0.5f;
-
-		fireIceBolt(circlePos[i]);
-		mObject->Destroy();
-	}
+	mObject->Destroy();
 }

@@ -4,6 +4,8 @@
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/NavAgentComponent.h"
+#include "D2NavAgentComponent.h"
+#include "D2EnemyNavAgentComponent.h"
 
 CD2CharacterInfoComponent::CD2CharacterInfoComponent():
 	mCharInfo{},
@@ -29,7 +31,12 @@ CD2CharacterInfoComponent::~CD2CharacterInfoComponent()
 bool CD2CharacterInfoComponent::Init()
 {
 	mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
-	mNavAgent = mObject->FindObjectComponentFromType<CNavAgentComponent>();
+	mNavAgent = mObject->FindObjectComponentFromType<CD2NavAgentComponent>();
+
+	if (!mNavAgent)
+	{
+		mNavAgent = mObject->FindObjectComponentFromType<CD2EnemyNavAgentComponent>();
+	}
 
 	if (!mSprite)
 	{
@@ -42,19 +49,20 @@ bool CD2CharacterInfoComponent::Init()
 
 void CD2CharacterInfoComponent::Start()
 {
+	mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
+
 	if (!mSprite)
 	{
-		mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
-
-		if (!mSprite)
-		{
-			assert(false);
-			return;
-		}
+		assert(false);
+		return;
 	}
+
+	mSprite = mObject->FindSceneComponentFromType<CSpriteComponent>();
+	mNavAgent = mObject->FindObjectComponentFromType<CD2NavAgentComponent>();
+
 	if (!mNavAgent)
 	{
-		mNavAgent = mObject->FindObjectComponentFromType<CNavAgentComponent>();
+		mNavAgent = mObject->FindObjectComponentFromType<CD2EnemyNavAgentComponent>();
 	}
 }
 
@@ -62,9 +70,15 @@ void CD2CharacterInfoComponent::Update(float deltaTime)
 {
 	if (mCCTime >= mCharInfo.MaxCCTime)
 	{
+		SetSpeed(mPrevSpeed);
 		mSprite->SetBaseColor(1.f, 1.f, 1.f, 1.f);
 		mCCTime = 0.f;
 		meCC = eD2ElementType::None;
+	}
+
+	if (meCC != eD2ElementType::None)
+	{
+		mCCTime += deltaTime;
 	}
 
 	switch (meCC)
@@ -75,17 +89,12 @@ void CD2CharacterInfoComponent::Update(float deltaTime)
 		break;
 	case eD2ElementType::Ice:
 		mSprite->SetBaseColor(0.f, 0.f, 1.f, 1.f);
-		if (mNavAgent)
-		{
-			SetSpeed(mCharInfo.MaxSpeed * 0.3f);
-			mNavAgent->SetMoveSpeed(mCharInfo.Speed);
-		}
+		SetSpeed(mCharInfo.MaxSpeed * 0.3f);
 		break;
 	case eD2ElementType::Lightning:
 		break;
-	}
 
-	mCCTime += deltaTime;
+	}
 }
 
 void CD2CharacterInfoComponent::PostUpdate(float deltaTime)
@@ -186,10 +195,46 @@ void CD2CharacterInfoComponent::SetHp(const float hp)
 
 void CD2CharacterInfoComponent::SetCC(eD2ElementType type)
 {
+	if (meCC == eD2ElementType::None)
+	{
+		if (type == eD2ElementType::Ice)
+		{
+			mPrevSpeed = mCharInfo.Speed;
+		}
+	}
 	mCCTime = 0.f;
 	meCC = type;
 
 	callEventCallBack(eD2CharInfoEventType::CC);
+}
+
+void CD2CharacterInfoComponent::SetMp(const float mp)
+{
+	mCharInfo.Mp += mp;
+
+	if (mCharInfo.Mp >= mCharInfo.MaxMp)
+	{
+		mCharInfo.Mp = mCharInfo.MaxMp;
+	}
+
+	if (mCharInfo.Mp < 0)
+	{
+		mCharInfo.Mp = 0;
+	}
+
+	if (mp == 0)
+	{
+		return;
+	}
+
+	if (mp > 0)
+	{
+		callEventCallBack(eD2CharInfoEventType::MpInc);
+	}
+	else
+	{
+		callEventCallBack(eD2CharInfoEventType::MpDec);
+	}
 }
 
 void CD2CharacterInfoComponent::DeleteEventCallBack(const std::string& name, eD2CharInfoEventType type)

@@ -117,14 +117,14 @@ bool CCollisionManager::MakeCSV()
 
 	CExcelData* csv = CResourceManager::GetInst()->FindCSV("CollisionProfileInfo");
 	csv->Clear();
-	
+
 	csv->AddLabel("Channel");
 
 	for (int i = 0; i < (int)eCollisionChannel::Max; ++i)
 	{
 		csv->AddLabel(CUtil::CollisionChannelToString((eCollisionChannel)i));
 	}
-	
+
 	std::vector<std::string> profileData;
 	auto iter = mMapProfile.begin();
 	auto iterEnd = mMapProfile.end();
@@ -136,10 +136,47 @@ bool CCollisionManager::MakeCSV()
 			std::string bCollision;
 			profileData.push_back(CUtil::CollsionInteractionToString(iter->second->vecInteraction[i]));
 		}
-		
+
 		csv->SetData(iter->first, profileData);
 		profileData.clear();
 	}
 
 	return true;
 }
+
+bool CCollisionManager::LoadProfile(const char* fileName, const std::string& path)
+{
+	auto iter = mMapProfile.begin();
+	auto iterEnd = mMapProfile.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE(iter->second);
+	}
+
+	mMapProfile.clear();
+
+	std::string outName;
+	if (!CResourceManager::GetInst()->LoadCSV(outName, fileName))
+	{
+		return false;
+	}
+
+	std::unordered_map<std::string, std::vector<std::string>*> table = CResourceManager::GetInst()->FindCSV(outName)->GetTable();
+
+	auto iterCSV = table.begin();
+	auto iterEndCSV = table.end();
+
+	for (; iterCSV != iterEndCSV; ++iterCSV)
+	{
+		CreateProfile(iterCSV->first, CUtil::StringToCollisionChannel((*iterCSV->second)[0]), true);
+
+		for (int i = 1; i <= 15; ++i)
+		{
+			SetCollisionState(iterCSV->first, (eCollisionChannel)(i - 1), CUtil::StringToCollisionInteraction((*iterCSV->second)[i]));
+		}
+	}
+
+	CResourceManager::GetInst()->DeleteCSV(outName);
+}
+

@@ -38,12 +38,15 @@ CSpriteControlWidget::CSpriteControlWidget()	:
 
 CSpriteControlWidget::~CSpriteControlWidget()
 {
+
 	if (!mComponent)
 	{
 		return;
 	}
 
-	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	static_cast<CSpriteComponent*>(mComponent.Get())->DeleteCallBack("SpriteWidget");
+
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent.Get())->GetAnimationInstance();
 
 	if (!animInst)
 	{
@@ -114,7 +117,7 @@ bool CSpriteControlWidget::Init()
 	mAnimationListWidget->SetSelectCallBack(this, &CSpriteControlWidget::OnSelectAnimationList);
 
 	// Initial Value
-	CSpriteComponent* comp = (CSpriteComponent*)mComponent;
+	CSpriteComponent* comp = (CSpriteComponent*)mComponent.Get();
 
 	Vector3 pos = comp->GetRelativePos();
 	Vector3 scale = comp->GetRelativeScale();
@@ -154,62 +157,64 @@ bool CSpriteControlWidget::Init()
 	mInheritPosWidget->SetCheck(1, comp->GetInheritPosY());
 	mInheritPosWidget->SetCheck(2, comp->GetInheritPosZ());
 
+	static_cast<CSpriteComponent*>(mComponent.Get())->AddCallBack("SpriteWidget", this, &CSpriteControlWidget::OnChangeTransform);
+
 	return true;
 }
 
 void CSpriteControlWidget::OnChangePosition(float value[3])
 {
-	static_cast<CSceneComponent*>(mComponent)->SetRelativePos(value[0], value[1], value[2]);
+	static_cast<CSceneComponent*>(mComponent.Get())->SetRelativePos(value[0], value[1], value[2]);
 }
 
 void CSpriteControlWidget::OnChangeScale(float value[3])
 {
-	static_cast<CSceneComponent*>(mComponent)->SetRelativeScale(value[0], value[1], value[2]);
+	static_cast<CSceneComponent*>(mComponent.Get())->SetRelativeScale(value[0], value[1], value[2]);
 }
 
 void CSpriteControlWidget::OnChangeRot(float value[3])
 {
-	static_cast<CSceneComponent*>(mComponent)->SetRelativeRot(value[0], value[1], value[2]);
+	static_cast<CSceneComponent*>(mComponent.Get())->SetRelativeRot(value[0], value[1], value[2]);
 }
 
 void CSpriteControlWidget::OnChangePivot(float value[3])
 {
-	static_cast<CSceneComponent*>(mComponent)->SetPivot(value[0], value[1], value[2]);
+	static_cast<CSceneComponent*>(mComponent.Get())->SetPivot(value[0], value[1], value[2]);
 }
 
 void CSpriteControlWidget::OnChangeBaseColor(float val[4])
 {
-	static_cast<CSpriteComponent*>(mComponent)->GetMaterial()->SetBaseColor(val[0], val[1], val[2], val[3]);
+	static_cast<CSpriteComponent*>(mComponent.Get())->GetMaterial()->SetBaseColor(val[0], val[1], val[2], val[3]);
 }
 
 void CSpriteControlWidget::OnChangeTransparency(const char* tag, bool bChecked)
 {
-	static_cast<CSpriteComponent*>(mComponent)->GetMaterial()->SetTransparency(bChecked);
+	static_cast<CSpriteComponent*>(mComponent.Get())->GetMaterial()->SetTransparency(bChecked);
 }
 
 void CSpriteControlWidget::OnChangeOpacity(float val)
 {
-	static_cast<CSpriteComponent*>(mComponent)->GetMaterial()->SetOpacity(val);
+	static_cast<CSpriteComponent*>(mComponent.Get())->GetMaterial()->SetOpacity(val);
 }
 
 void CSpriteControlWidget::OnChangeInheritScale(const char* tag, bool bChecked)
 {
-	static_cast<CSpriteComponent*>(mComponent)->SetBoolInheritScale(bChecked);
+	static_cast<CSpriteComponent*>(mComponent.Get())->SetBoolInheritScale(bChecked);
 }
 
 void CSpriteControlWidget::OnChangeInheritRot(const char* tag, bool bChecked)
 {
 	if (strcmp(tag, "RotX") == 0)
 	{
-		static_cast<CSpriteComponent*>(mComponent)->SetBoolInheritRotX(bChecked);
+		static_cast<CSpriteComponent*>(mComponent.Get())->SetBoolInheritRotX(bChecked);
 	}
 	else if (strcmp(tag, "RotY") == 0)
 	{
-		static_cast<CSpriteComponent*>(mComponent)->SetBoolInheritRotY(bChecked);
+		static_cast<CSpriteComponent*>(mComponent.Get())->SetBoolInheritRotY(bChecked);
 	}
 	else if (strcmp(tag, "RotX") == 0)
 	{
-		static_cast<CSpriteComponent*>(mComponent)->SetBoolInheritRotZ(bChecked);
+		static_cast<CSpriteComponent*>(mComponent.Get())->SetBoolInheritRotZ(bChecked);
 	}
 }
 
@@ -217,15 +222,15 @@ void CSpriteControlWidget::OnChangeInheritPos(const char* tag, bool bChecked)
 {
 	if (strcmp(tag, "PosX") == 0)
 	{
-		static_cast<CSpriteComponent*>(mComponent)->SetBoolInheritPosX(bChecked);
+		static_cast<CSpriteComponent*>(mComponent.Get())->SetBoolInheritPosX(bChecked);
 	}
 	else if (strcmp(tag, "PosY") == 0)
 	{
-		static_cast<CSpriteComponent*>(mComponent)->SetBoolInheritPosY(bChecked);
+		static_cast<CSpriteComponent*>(mComponent.Get())->SetBoolInheritPosY(bChecked);
 	}
 	else if (strcmp(tag, "PosX") == 0)
 	{
-		static_cast<CSpriteComponent*>(mComponent)->SetBoolInheritPosZ(bChecked);
+		static_cast<CSpriteComponent*>(mComponent.Get())->SetBoolInheritPosZ(bChecked);
 	}
 }
 
@@ -251,16 +256,16 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 		int length = WideCharToMultiByte(CP_ACP, 0, filePath, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, filePath, -1, fullPath, length, 0, 0);
 
-		static_cast<CSpriteComponent*>(mComponent)->LoadAnimationInstanceFullPath(fullPath);
+		static_cast<CSpriteComponent*>(mComponent.Get())->LoadAnimationInstanceFullPath(fullPath);
 
 		// Animation 초기화
-		CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+		CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent.Get())->GetAnimationInstance();
 		animInst->Start();
 		animInst->Play();
 
 		// Size 조절
 		Vector2 spriteSize = animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
-		static_cast<CSpriteComponent*>(mComponent)->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
+		static_cast<CSpriteComponent*>(mComponent.Get())->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
 		mScaleWidget->SetX(spriteSize.x);
 		mScaleWidget->SetY(spriteSize.y);
 
@@ -305,8 +310,8 @@ void CSpriteControlWidget::OnClickLoadAnimation()
 void CSpriteControlWidget::OnChangeAnimationFrame(int frame)
 {
 	// Stop
-	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
-	animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent.Get())->GetAnimationInstance();
+	animInst = static_cast<CSpriteComponent*>(mComponent.Get())->GetAnimationInstance();
 	animInst->Stop();
 
 	// Set Frame
@@ -315,7 +320,7 @@ void CSpriteControlWidget::OnChangeAnimationFrame(int frame)
 
 void CSpriteControlWidget::OnClickPlayAnimation()
 {
-	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent.Get())->GetAnimationInstance();
 
 	if (!animInst)
 	{
@@ -342,14 +347,14 @@ void CSpriteControlWidget::OnClickPlayAnimation()
 
 void CSpriteControlWidget::OnSelectAnimationList(int idx, const char* name)
 {
-	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent.Get())->GetAnimationInstance();
 	// Change Animation
 	std::string animName = name;
 	animInst->ChangeAnimation(animName);
 
 	// Size
 	Vector2 spriteSize = animInst->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
-	static_cast<CSpriteComponent*>(mComponent)->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
+	static_cast<CSpriteComponent*>(mComponent.Get())->SetWorldScale(spriteSize.x, spriteSize.y, 1.f);
 	mScaleWidget->SetX(spriteSize.x);
 	mScaleWidget->SetY(spriteSize.y);
 
@@ -360,7 +365,7 @@ void CSpriteControlWidget::OnSelectAnimationList(int idx, const char* name)
 
 void CSpriteControlWidget::OnUpdateAnimInstFrame()
 {
-	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent)->GetAnimationInstance();
+	CAnimationSequence2DInstance* animInst = static_cast<CSpriteComponent*>(mComponent.Get())->GetAnimationInstance();
 
 	if (!animInst)
 	{
@@ -369,4 +374,16 @@ void CSpriteControlWidget::OnUpdateAnimInstFrame()
 
 	int currentFrame = animInst->GetCurrentAnimation()->GetCurrentFrame();
 	mAnimationFrameWidget->SetValue(currentFrame);
+}
+
+void CSpriteControlWidget::OnChangeTransform()
+{
+	CSpriteComponent* com = static_cast<CSpriteComponent*>(mComponent.Get());
+
+	Vector3 worldPos = com->GetWorldPos();
+	Vector3 scale = com->GetWorldScale();
+	Vector3 rot = com->GetWorldRot();
+	mPositionWidget->SetVal(worldPos.x, worldPos.y, worldPos.z);
+	mScaleWidget->SetVal(scale.x, scale.y, scale.z);
+	mRotWidget->SetVal(rot.x, rot.y, rot.z);
 }

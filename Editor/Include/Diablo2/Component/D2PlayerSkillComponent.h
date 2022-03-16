@@ -67,6 +67,12 @@ public:
         mVecAvailableSkill.push_back(skill);
     }
 
+public:
+    const std::string& GetCurrentSkillName()
+    {
+        return mVecAvailableSkill[mRSkillIdx]->mName;
+    }
+
 private:
     bool isValidIdx(const int idx);
     bool loadSkillList();

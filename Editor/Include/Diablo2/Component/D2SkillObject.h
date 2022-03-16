@@ -37,10 +37,7 @@ public:
         mInfo = info;
     }
 
-    virtual void SetDir(const Vector2& dir)
-    {
-        mInfo.Dir = dir;
-    }
+    virtual void SetDir(const Vector2& dir);
 
     virtual void SetSkillOwner(class CGameObject* obj)
     {
@@ -82,6 +79,9 @@ public:
     {
         return mInfo.Damage;
     }
+
+protected:
+    void correctSpeed();
 
 protected:
     class CGameObject* mSkillOwner;

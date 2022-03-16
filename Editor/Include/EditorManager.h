@@ -13,6 +13,7 @@ class CEditorManager
 {
 public:
 	bool Init(HINSTANCE hInst);
+	void Start();
 	void CreateDefaultSceneMode();
 	int Run();
 	void RecreateEditorCameraDragObj();

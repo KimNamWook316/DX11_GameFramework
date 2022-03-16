@@ -2,6 +2,7 @@
 #include "GameObject/GameObject.h"
 #include "Component/ColliderComponent.h"
 #include "D2DataManager.h"
+#include "../D2Util.h"
 
 CD2SkillObject::CD2SkillObject() :
 	mSkillOwner(nullptr),
@@ -77,3 +78,10 @@ void CD2SkillObject::SetInfo(const std::string& name)
 	D2SkillInfo* info = CD2DataManager::GetInst()->FindSkillInfo(name);
 	mInfo = *info;
 }
+
+void CD2SkillObject::SetDir(const Vector2& dir)
+{
+	mInfo.Dir = dir;
+	mInfo.Speed = CD2Util::CorrectSpeed(mInfo.Dir, mInfo.Speed);
+}
+

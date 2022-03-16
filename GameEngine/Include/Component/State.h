@@ -12,7 +12,7 @@ public:
 public:
 	virtual bool Init() = 0;
 	virtual void Start() = 0;
-	CState* Update(float deltaTime);
+	virtual CState* Update(float deltaTime);
 	virtual void PostUpdate(float deltaTime) = 0;
 	virtual CState* Clone() = 0;
 	

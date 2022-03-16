@@ -30,12 +30,12 @@ bool CStateControlWidget::Init()
 	CIMGUISeperator* sep = AddWidget<CIMGUISeperator>("sep");
 
 	// Initial Value
-	for(int i = 0; i < (int)eD2StateType::MAX; ++i)
+	for(int i = 0; i < (int)eD2InitialStateType::MAX; ++i)
 	{
-		mInitialStateComoboBox->AddItem(CD2Util::StateEnumToString((eD2StateType)i));
+		mInitialStateComoboBox->AddItem(CD2Util::StateEnumToString((eD2InitialStateType)i));
 	}
 
-	CStateComponent* stateComp = static_cast<CStateComponent*>(mComponent);
+	CStateComponent* stateComp = static_cast<CStateComponent*>(mComponent.Get());
 	if (!stateComp->IsStateEmpty())
 	{
 		mInitialStateComoboBox->SetCurrentItem(CD2Util::StateTypeToString(stateComp->GetInitialStateType()));
@@ -54,8 +54,8 @@ void CStateControlWidget::OnClickSetInitialState()
 		return;
 	}
 
-	static_cast<CStateComponent*>(mComponent)->Clear();
+	static_cast<CStateComponent*>(mComponent.Get())->Clear();
 
 	size_t stateType = CD2Util::StateEnumToStateType(CD2Util::StringToStateEnum(mInitialStateComoboBox->GetSelectItem()));
-	CSceneManager::GetInst()->CallCreateStateFunction((CStateComponent*)mComponent, stateType);
+	CSceneManager::GetInst()->CallCreateStateFunction((CStateComponent*)mComponent.Get(), stateType);
 }

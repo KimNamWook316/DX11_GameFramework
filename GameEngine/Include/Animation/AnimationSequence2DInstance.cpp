@@ -116,7 +116,7 @@ void CAnimationSequence2DInstance::Update(float deltaTime)
 		{
 			++mCurrentAnimation->mFrame;
 
-			if (mCurrentAnimation->mFrame == mCurrentAnimation->mSequence->GetFrameCount())
+			if (mCurrentAnimation->mFrame >= mCurrentAnimation->mSequence->GetFrameCount())
 			{
 				bIsAnimEnd = true;
 			}
@@ -532,6 +532,11 @@ void CAnimationSequence2DInstance::DeleteAnimation(const std::string& name)
 	{
 		return;
 	}
+
+	if (mCurrentAnimation == iter)
+	{
+		mCurrentAnimation = nullptr;
+	}
 	
 	SAFE_DELETE(iter);
 	mMapAnimation.erase(name);
@@ -564,6 +569,44 @@ void CAnimationSequence2DInstance::ChangeAnimation(const std::string& name)
 
 	mCurrentAnimation->mFrame = 0;
 	mCurrentAnimation->mTime = 0.f;
+	
+	if (mOwner)
+	{
+		mOwner->SetTexture(0, 0, (int)eBufferShaderTypeFlags::Pixel,
+			mCurrentAnimation->mSequence->GetTexture()->GetName(), mCurrentAnimation->mSequence->GetTexture());
+	}
+}
+
+void CAnimationSequence2DInstance::ChangeAnimationKeepFrame(const std::string& name)
+{
+	if (mCurrentAnimation->mName == name)
+	{
+		return;
+	}
+
+	int prevAnimationFrame = mCurrentAnimation->GetCurrentFrame();
+	float prevAnimationTime = mCurrentAnimation->GetAnimationTime();
+
+	mCurrentAnimation->mFrame = 0;
+	mCurrentAnimation->mTime = 0.f;
+
+	size_t size = mCurrentAnimation->mVecNotify.size();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mCurrentAnimation->mVecNotify[i]->bIsCalled = false;
+	}
+
+	mCurrentAnimation = FindAnimation(name);
+
+	if (!mCurrentAnimation)
+	{
+		assert(false);
+		return;
+	}
+
+	mCurrentAnimation->mFrame = prevAnimationFrame;
+	mCurrentAnimation->mTime = prevAnimationTime;
 	
 	if (mOwner)
 	{

@@ -87,7 +87,7 @@ bool CMapGeneratorWidget::Init()
 	mPartitionLevelInput->SetCallBack(this, &CMapGeneratorWidget::OnChangePartitionLevel);
 
 	// Initial Value
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 	mTileSetName->ReadOnly(true);
 	mTileSetName->SetHintText("TileSetName");
 	mWallTileSetName->ReadOnly(true);
@@ -141,7 +141,7 @@ void CMapGeneratorWidget::OnClickNextStep()
 	Vector2 tileCount = mTileCountInput->GetValue();
 	int partitionLevel = mPartitionLevelInput->GetVal();
 
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 
 	if (tileCount.x <= 0 || tileCount.y <= 0)
 	{
@@ -205,7 +205,7 @@ void CMapGeneratorWidget::OnClickCreateMap()
 	Vector2 tileCount = mTileCountInput->GetValue();
 	int partitionLevel = mPartitionLevelInput->GetVal();
 
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 
 	if (tileCount.x <= 0 || tileCount.y <= 0)
 	{
@@ -231,7 +231,7 @@ void CMapGeneratorWidget::OnClickCreateMap()
 	gen->SetMapCount((int)tileCount.x, (int)tileCount.y);
 	gen->SetPartitionLevel(partitionLevel);
 
-	static_cast<CProcedualMapGenerator*>(mComponent)->GenerateMap();
+	static_cast<CProcedualMapGenerator*>(mComponent.Get())->GenerateMap();
 }
 
 void CMapGeneratorWidget::OnClickLoadTileSet()
@@ -266,7 +266,7 @@ void CMapGeneratorWidget::OnClickLoadTileSet()
 		mTileSetImage->SetImageStart(0.f, 0.f);
 		mTileSetImage->SetImageEnd(texWidth, texHeight);
 
-		CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+		CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 		gen->SetTileSet(tileSet);
 
 		MessageBox(nullptr, TEXT("타일셋 로드 완료"), TEXT("Success"), MB_OK);
@@ -298,7 +298,7 @@ void CMapGeneratorWidget::OnClickLoadWallTileSet()
 
 		mWallTileSetName->SetText(outName.c_str());
 
-		CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+		CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 		gen->SetWallTileSet(wallTileSet);
 
 		unsigned int texWidth = wallTileSet->GetTexture()->GetWidth();
@@ -319,13 +319,13 @@ void CMapGeneratorWidget::OnChangeTileSize(int val[2])
 		return;
 	}
 
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 	gen->SetTileSize(Vector3(val[0], val[2], 0.f));
 }
 
 void CMapGeneratorWidget::OnChangeTileShape(int idx, const char* label)
 {
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 	gen->SetTileShape(CUtil::StringToTileShape(label));
 }
 
@@ -336,7 +336,7 @@ void CMapGeneratorWidget::OnChangeRoomSizeMin(int val)
 		return;
 	}
 
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 	gen->SetRoomSizeMin(val);
 }
 
@@ -347,7 +347,7 @@ void CMapGeneratorWidget::OnChangeTileCount(int val[2])
 		return;
 	}
 
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 	gen->SetMapCount(val[0], val[1]);
 }
 
@@ -358,6 +358,6 @@ void CMapGeneratorWidget::OnChangePartitionLevel(int val)
 		return;
 	}
 
-	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent);
+	CProcedualMapGenerator* gen = static_cast<CProcedualMapGenerator*>(mComponent.Get());
 	gen->SetPartitionLevel(val);
 }

@@ -25,6 +25,15 @@ public:
     }
 
 public:
+    void AddChangeData(const int idx, eTileType type)
+    {
+        NavChangeData data;
+        data.Index = idx;
+        data.Type = type;
+        mChangeQueue.Push(data);
+    }
+
+public:
     template <typename T>
     void AddWork(T* obj, void(T::* func)(const std::list<Vector3>&),
         const Vector3& start, const Vector3& end)
@@ -40,6 +49,7 @@ public:
 private:
     class CNavigationManager* mNavManager;
     CThreadQueue<NavWorkData> mWorkQueue;
+    CThreadQueue<NavChangeData> mChangeQueue;
     class CNavigation* mNavigation;
     HANDLE mExitEvent;
 };

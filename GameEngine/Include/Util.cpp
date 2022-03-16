@@ -59,9 +59,83 @@ std::string CUtil::CollisionChannelToString(eCollisionChannel eChan)
 	return out;
 }
 
+eCollisionChannel CUtil::StringToCollisionChannel(const std::string& str)
+{
+	if (str == "Object")
+	{
+		return eCollisionChannel::Object;
+	}
+	else if (str == "Player")
+	{
+		return eCollisionChannel::Player;
+	}
+	else if (str == "PlayerAttack")
+	{
+		return eCollisionChannel::PlayerAttack;
+	}
+	else if (str == "Monster")
+	{
+		return eCollisionChannel::Monster;
+	}
+	else if (str == "MonsterAttack")
+	{
+		return eCollisionChannel::MonsterAttack;
+	}
+	else if (str == "Custom1")
+	{
+		return eCollisionChannel::Custom1;
+	}
+	else if (str == "Custom2")
+	{
+		return eCollisionChannel::Custom2;
+	}
+	else if (str == "Custom3")
+	{
+		return eCollisionChannel::Custom3;
+	}
+	else if (str == "Custom4")
+	{
+		return eCollisionChannel::Custom4;
+	}
+	else if (str == "Custom5")
+	{
+		return eCollisionChannel::Custom5;
+	}
+	else if (str == "Custom6")
+	{
+		return eCollisionChannel::Custom6;
+	}
+	else if (str == "Custom7")
+	{
+		return eCollisionChannel::Custom7;
+	}
+	else if (str == "Custom8")
+	{
+		return eCollisionChannel::Custom8;
+	}
+	else if (str == "Custom9")
+	{
+		return eCollisionChannel::Custom9;
+	}
+	else if (str == "Custom10")
+	{
+		return eCollisionChannel::Custom10;
+	}
+	return (eCollisionChannel)(-1);
+}
+
 std::string CUtil::CollsionInteractionToString(eCollisionInteraction eInterAction)
 {
 	return eCollisionInteraction::Collision == eInterAction ? "TRUE" : "FALSE";
+}
+
+eCollisionInteraction CUtil::StringToCollisionInteraction(const std::string& str)
+{
+	if (str == "TRUE")
+	{
+		return eCollisionInteraction::Collision;
+	}
+	return eCollisionInteraction::Ignore;
 }
 
 std::string CUtil::TileShapeToString(eTileShape eTileShape)

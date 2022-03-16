@@ -30,6 +30,12 @@ public:
     }
 
 public:
+    bool IsSelected()
+    {
+        return mbSelect;
+    }
+
+public:
     template <typename T>
     void SetClickCallBack(T* obj, void(T::* func)())
     {

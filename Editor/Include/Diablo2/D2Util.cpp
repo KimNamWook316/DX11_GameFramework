@@ -1,7 +1,7 @@
 #include "D2Util.h"
 #include "../EditorInfo.h"
 #include "State/PlayerIdleState.h"
-#include "State/PlayerRunState.h"
+#include "State/D2EnemyIdleState.h"
 
 eD2SpriteDir CD2Util::GetSpriteDir(const Vector2 dir)
 {
@@ -156,34 +156,34 @@ std::string CD2Util::SpriteDirToString(eD2SpriteDir dir)
 	return out;
 }
 
-std::string CD2Util::StateEnumToString(eD2StateType type)
+std::string CD2Util::StateEnumToString(eD2InitialStateType type)
 {
 	std::string out;
 	switch (type)
 	{
-	case eD2StateType::D2PlayerIdle:
+	case eD2InitialStateType::D2PlayerIdle:
 		out = "D2PlayerIdle";
 		return out;
-	case eD2StateType::D2PlayerRun:
-		out = "D2PlayerRun";
+	case eD2InitialStateType::D2EnemyIdle:
+		out = "D2EnemyIdle";
 		return out;
 	}
 	return out;
 }
 
-eD2StateType CD2Util::StringToStateEnum(const std::string& typeString)
+eD2InitialStateType CD2Util::StringToStateEnum(const std::string& typeString)
 {
 	if (typeString == "D2PlayerIdle")
 	{
-		return eD2StateType::D2PlayerIdle;
+		return eD2InitialStateType::D2PlayerIdle;
 	}
-	else if (typeString == "D2PlayerRun")
+	else if (typeString == "D2EnemyIdle")
 	{
-		return eD2StateType::D2PlayerRun;
+		return eD2InitialStateType::D2EnemyIdle;
 	}
 	else
 	{
-		return (eD2StateType)(-1);
+		return (eD2InitialStateType)(-1);
 	}
 }
 
@@ -195,22 +195,22 @@ std::string CD2Util::StateTypeToString(size_t type)
 		out = "D2PlayerIdle";
 		return out;
 	}
-	else if (typeid(CPlayerRunState).hash_code() == type)
+	else if (typeid(CD2EnemyIdleState).hash_code() == type)
 	{
-		out = "D2PlayerRun";
+		out = "D2EnemyIdle";
 		return out;
 	}
 	return out;
 }
 
-size_t CD2Util::StateEnumToStateType(eD2StateType type)
+size_t CD2Util::StateEnumToStateType(eD2InitialStateType type)
 {
 	switch (type)
 	{
-	case eD2StateType::D2PlayerIdle:
+	case eD2InitialStateType::D2PlayerIdle:
 		return typeid(CPlayerIdleState).hash_code();
-	case eD2StateType::D2PlayerRun:
-		return typeid(CPlayerRunState).hash_code();
+	case eD2InitialStateType::D2EnemyIdle:
+		return typeid(CD2EnemyIdleState).hash_code();
 	}
 	return -1;
 }
@@ -229,6 +229,12 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 	std::string out;
 	switch (type)
 	{
+	case eD2ObjectComponentType::D2PlayerCollider:
+		out = "D2PlayerCollider";
+		return out;
+	case eD2ObjectComponentType::D2EnemyCollider:
+		out = "D2EnemyCollider";
+		return out;
 	case eD2ObjectComponentType::D2CharacterInfo:
 		out = "D2CharacterInfo";
 		return out;
@@ -238,6 +244,12 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 	case eD2ObjectComponentType::D2DataManager:
 		out = "D2DataManager";
 		return out;
+	case eD2ObjectComponentType::D2NavAgent:
+		out = "D2NavAgent";
+		return out;
+	case eD2ObjectComponentType::D2EnemyNavAgent:
+		out = "D2EnemyNavAgent";
+		break;
 	case eD2ObjectComponentType::D2ObjectPool:
 		out = "D2ObjectPool";
 		return out;
@@ -249,6 +261,9 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 		return out;
 	case eD2ObjectComponentType::D2PlayerSkill:
 		out = "D2PlayerSkill";
+		return out;
+	case eD2ObjectComponentType::D2EnemySkill:
+		out = "D2EnemySkill";
 		return out;
 	case eD2ObjectComponentType::D2Blaze:
 		out = "D2Blaze";
@@ -268,6 +283,9 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 	case eD2ObjectComponentType::D2Teleport:
 		out = "D2Teleport";
 		break;
+	case eD2ObjectComponentType::D2EnemyMeleeAttack:
+		out = "D2EnemyMeleeAttack";
+		break;
 	}
 	return out;
 }
@@ -279,7 +297,15 @@ eD2SceneComponentType CD2Util::StringToD2SceneComponentType(const std::string& t
 
 eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string& typeString)
 {
-	if (typeString == "D2CharacterInfo")
+	if (typeString == "D2PlayerCollider")
+	{
+		return eD2ObjectComponentType::D2PlayerCollider;
+	}
+	else if (typeString == "D2EnemyCollider")
+	{
+		return eD2ObjectComponentType::D2EnemyCollider;
+	}
+	else if (typeString == "D2CharacterInfo")
 	{
 		return eD2ObjectComponentType::D2CharacterInfo;
 	}
@@ -290,6 +316,14 @@ eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string&
 	else if (typeString == "D2DataManager")
 	{
 		return eD2ObjectComponentType::D2DataManager;
+	}
+	else if (typeString == "D2NavAgent")
+	{
+		return eD2ObjectComponentType::D2NavAgent;
+	}
+	else if (typeString == "D2EnemyNavAgent")
+	{
+		return eD2ObjectComponentType::D2EnemyNavAgent;
 	}
 	else if (typeString == "D2ObjectPool")
 	{
@@ -306,6 +340,10 @@ eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string&
 	else if (typeString == "D2PlayerSkill")
 	{
 		return eD2ObjectComponentType::D2PlayerSkill;
+	}
+	else if (typeString == "D2EnemySkill")
+	{
+		return eD2ObjectComponentType::D2EnemySkill;
 	}
 	else if (typeString == "D2Blaze")
 	{
@@ -330,6 +368,10 @@ eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string&
 	else if (typeString == "D2Teleport")
 	{
 		return eD2ObjectComponentType::D2Teleport;
+	}
+	else if (typeString == "D2EnemyMeleeAttack")
+	{
+		return eD2ObjectComponentType::D2EnemyMeleeAttack;
 	}
 	return (eD2ObjectComponentType)(-1);
 }
@@ -447,5 +489,32 @@ eD2SkillTreeNo CD2Util::StringToSkilltreeNo(const std::string& noString)
 	{
 		return (eD2SkillTreeNo)(-1);
 	}
+}
+
+float CD2Util::CorrectSpeed(const Vector2& direction, const float speed)
+{
+	Vector2 axis = Vector2(1.0f, 0.f);
+
+	float angle = direction.Angle(axis);
+
+	if (angle >= 180.f)
+	{
+		angle -= 180.f;
+	}
+
+	float coeff = 0.f;
+
+	if (angle <= 90.f)
+	{
+		angle = DegToRad(angle);
+		coeff = ((-1 / PI) * angle) + 1.f;
+	}
+	else
+	{
+		angle = DegToRad(angle);
+		coeff = angle / PI;
+	}
+
+	return speed * coeff;
 }
 

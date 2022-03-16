@@ -23,6 +23,9 @@ public:
     void OnClickLoadObject();
     void OnClickInstanciate();
 
+    void OnClickOpenCollisionProfileEditor();
+    void OnClickOpenTileSetEditor();
+
 private:
     void refreshPrefabList();
 
@@ -39,5 +42,8 @@ private:
     class CIMGUIComboBox* mCreatableObjectsComboBox;
     class CIMGUIComboBox* mCreatableComponentsComboBox;
     class CIMGUIListBox* mCreatablePrefabsListBox;
+
+    class CIMGUIMenuItem* mOpenCollsionProfileMenuButton;
+    class CIMGUIMenuItem* mOpenTileSetEditorMenuButton;
 };
 
