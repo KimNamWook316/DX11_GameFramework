@@ -27,7 +27,7 @@ private:
     bool findPath();
 
 protected:
-    CSharedPtr<class CD2CharacterInfoComponent> mCharInfo;
+    class CD2CharacterInfoComponent* mCharInfo;
     bool mbMoveLinear;
     int mCurOnIdx;
     int mPrevOnIdx;

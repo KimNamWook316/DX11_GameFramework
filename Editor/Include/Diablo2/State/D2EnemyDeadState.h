@@ -1,18 +1,20 @@
 #pragma once
+
 #include "D2State.h"
-class CD2EnemyMeleeAttackState :
+
+class CD2EnemyDeadState :
     public CD2State
 {
 public:
-    CD2EnemyMeleeAttackState();
-    CD2EnemyMeleeAttackState(const CD2EnemyMeleeAttackState& state);
-    virtual ~CD2EnemyMeleeAttackState();
+    CD2EnemyDeadState();
+    CD2EnemyDeadState(const CD2EnemyDeadState& state);
+    virtual ~CD2EnemyDeadState();
 
 public:
     virtual bool Init() override;
     virtual void Start() override;
     virtual void PostUpdate(float deltaTime) override;
-    virtual CD2EnemyMeleeAttackState* Clone() override;
+    virtual CD2EnemyDeadState* Clone() override;
     virtual void EnterStateFunction() override;
     virtual CState* StateFunction() override;
     virtual void ExitStateFunction() override;
@@ -21,12 +23,9 @@ public:
     virtual void ResetState() override;
 
 public:
-    void OnAnimEnd();
+    void OnDissolveEnd();
 
 private:
-    bool mbKeepAttack;
-    bool mbAnimEnd;
-    bool mbHit;
-    class CGameObject* mAttackObj;
+    class CDissolveComponent* mDissolve;
 };
 

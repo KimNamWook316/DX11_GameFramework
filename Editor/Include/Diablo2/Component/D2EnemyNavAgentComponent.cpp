@@ -241,6 +241,14 @@ void CD2EnemyNavAgentComponent::CancleMove()
 	mPathList.clear();
 }
 
+void CD2EnemyNavAgentComponent::OnDie()
+{
+	CNavigationManager* navMng = mScene->GetNavigationManager();
+	navMng->ChangeTile(mCurReserveIdx, eTileType::Normal);
+	navMng->ChangeTile(mCurOnIdx, eTileType::Normal);
+	mPathList.clear();
+}
+
 void CD2EnemyNavAgentComponent::onFindPathResult(const std::list<Vector3>& pathList)
 {
 	CNavAgentComponent::onFindPathResult(pathList);

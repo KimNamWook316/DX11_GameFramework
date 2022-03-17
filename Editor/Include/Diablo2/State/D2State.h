@@ -14,10 +14,12 @@ public:
 	virtual void ResetState() override;
 
 public:
+	virtual void OnDie();
 	virtual void OnCollideEnter(const CollisionResult& result) = 0;
 	virtual void OnCollideExit(const CollisionResult& result) = 0;
 
 protected:
 	bool mbIsHit;
+	bool mbDie;
 };
 

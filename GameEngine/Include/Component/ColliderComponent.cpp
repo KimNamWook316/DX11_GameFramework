@@ -269,7 +269,7 @@ void CColliderComponent::CallCollisionCallBack(eCollisionState state)
 
 	for (; iter != iterEnd; ++iter)
 	{
-		(*iter)(mResult);
+		(*iter).CallBack(mResult);
 	}
 }
 
@@ -285,7 +285,7 @@ void CColliderComponent::CallCollisionMouseCallBack(eCollisionState state)
 
 	for (; iter != iterEnd; ++iter)
 	{
-		(*iter)(mMouseResult);
+		(*iter).CallBack(mMouseResult);
 	}
 }
 
@@ -294,6 +294,36 @@ void CColliderComponent::ClearFrame()
 	mVecSectionIndex.clear();
 	mCurrentCollisionList.clear();
 	mbCheckCurrentSection = false;
+}
+
+void CColliderComponent::DeleteCollisionCallBack(void* obj, eCollisionState state)
+{
+	auto iter = mCollisionCallBack[(int)state].begin();
+	auto iterEnd = mCollisionCallBack[(int)state].end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter).Obj == obj)
+		{
+			iter = mCollisionCallBack[(int)state].erase(iter);
+			return;
+		}
+	}
+}
+
+void CColliderComponent::DeleteMouseCollisionCallBack(void* obj, eCollisionState state)
+{
+	auto iter = mCollisionMouseCallBack[(int)state].begin();
+	auto iterEnd = mCollisionMouseCallBack[(int)state].end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter).Obj == obj)
+		{
+			iter = mCollisionMouseCallBack[(int)state].erase(iter);
+			return;
+		}
+	}
 }
 
 void CColliderComponent::SetCollisionProfile(const std::string& name)

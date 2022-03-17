@@ -22,6 +22,6 @@ public:
     void OnCollideExit(const CollisionResult& result);
 
 private:
-    CSharedPtr<class CColliderBox2D> mCollider;
+    class CColliderBox2D* mCollider;
 };
 

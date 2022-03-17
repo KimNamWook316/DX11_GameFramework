@@ -68,7 +68,7 @@ public:
 	}
 
 protected:
-    CSharedPtr<class CSceneComponent> mUpdateComponent;
+    class CSceneComponent* mUpdateComponent;
     std::list<Vector3> mPathList;
     float mMoveSpeed;
 	std::function<void()> mEndCallBack;

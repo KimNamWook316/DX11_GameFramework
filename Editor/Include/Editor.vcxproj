@@ -174,6 +174,8 @@
     <ClInclude Include="Diablo2\D2Flag.h" />
     <ClInclude Include="Diablo2\D2Info.h" />
     <ClInclude Include="Diablo2\D2Util.h" />
+    <ClInclude Include="Diablo2\State\D2EnemyDeadState.h" />
+    <ClInclude Include="Diablo2\State\D2EnemyDieState.h" />
     <ClInclude Include="Diablo2\State\D2EnemyHitState.h" />
     <ClInclude Include="Diablo2\State\D2EnemyIdleState.h" />
     <ClInclude Include="Diablo2\State\D2EnemyMeleeAttackState.h" />
@@ -242,6 +244,8 @@
     <ClCompile Include="Diablo2\Component\D2StateComponent.cpp" />
     <ClCompile Include="Diablo2\Component\D2Teleport.cpp" />
     <ClCompile Include="Diablo2\D2Util.cpp" />
+    <ClCompile Include="Diablo2\State\D2EnemyDeadState.cpp" />
+    <ClCompile Include="Diablo2\State\D2EnemyDieState.cpp" />
     <ClCompile Include="Diablo2\State\D2EnemyHitState.cpp" />
     <ClCompile Include="Diablo2\State\D2EnemyIdleState.cpp" />
     <ClCompile Include="Diablo2\State\D2EnemyMeleeAttackState.cpp" />

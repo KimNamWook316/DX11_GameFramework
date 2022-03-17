@@ -291,6 +291,12 @@
     <ClInclude Include="Diablo2\Component\D2EnemyMeleeAttack.h">
       <Filter>98. Diablo2\01. Component\02.Skill\02. EnemySkill</Filter>
     </ClInclude>
+    <ClInclude Include="Diablo2\State\D2EnemyDieState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2EnemyDeadState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -478,6 +484,12 @@
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2EnemyMeleeAttack.cpp">
       <Filter>98. Diablo2\01. Component\02.Skill\02. EnemySkill</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2EnemyDieState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2EnemyDeadState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,7 @@ public:
     virtual bool Move(const Vector3& endPos = Vector3(0.f, 0.f, 0.f)) override;
     bool MoveBlockedFront();
     void CancleMove();
+    void OnDie();
 
 public:
     void SetWait(bool bWait)
@@ -40,7 +41,7 @@ private:
     int getAroundPlayerTileIndex();
 
 protected:
-    CSharedPtr<class CD2CharacterInfoComponent> mCharInfo;
+    class CD2CharacterInfoComponent* mCharInfo;
     int mCurOnIdx;
     int mPrevOnIdx;
     int mCurReserveIdx;

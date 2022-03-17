@@ -88,8 +88,8 @@ private:
     void callEventCallBack(eD2CharInfoEventType eType);
 
 private:
-    CSharedPtr<class CSpriteComponent> mSprite;
-    CSharedPtr<class CNavAgentComponent> mNavAgent;
+    class CSpriteComponent* mSprite;
+    class CNavAgentComponent* mNavAgent;
     D2CharInfo mCharInfo;
     std::list<EventCallBack> mEventCallBackList[(int)eD2CharInfoEventType::Max];
 

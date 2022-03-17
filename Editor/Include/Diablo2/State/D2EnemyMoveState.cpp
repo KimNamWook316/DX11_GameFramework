@@ -3,6 +3,7 @@
 #include "../Component/D2EnemyNavAgentComponent.h"
 #include "D2EnemyHitState.h"
 #include "D2EnemyMeleeAttackState.h"
+#include "D2EnemyDieState.h"
 #include "Component/ColliderComponent.h"
 #include "Component/SpriteComponent.h"
 #include "GameObject/GameObject.h"
@@ -62,7 +63,13 @@ void CD2EnemyMoveState::EnterStateFunction()
 
 CState* CD2EnemyMoveState::StateFunction()
 {
-	if (mTimer >= 0.5f)
+	if (mbDie)
+	{
+		CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+		state->GetCharInfo()->SetSpeed(0.f);
+		return (CState*)(new CD2EnemyDieState);
+	}
+	else if (mTimer >= 0.5f)
 	{
 		mTimer = 0.f;
 		CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);

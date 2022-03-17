@@ -75,6 +75,7 @@ enum class eD2CharInfoEventType
 	CC,
 	MpDec,
 	MpInc,
+	Die,
     Max
 };
 

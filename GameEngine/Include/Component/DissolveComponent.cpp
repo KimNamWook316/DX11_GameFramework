@@ -44,6 +44,11 @@ bool CDissolveComponent::Init()
 void CDissolveComponent::Start()
 {
 	CObjectComponent::Start();
+
+	if (!mDissolveTexture)
+	{
+		SetDissolveTexture("DefaultDissolveTexture", TEXT("DefaultPaperBurn.png"));
+	}
 }
 
 void CDissolveComponent::Update(float deltaTime)

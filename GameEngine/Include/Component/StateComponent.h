@@ -75,8 +75,8 @@ public:
 protected:
 	size_t mInitialStateType;
 	std::stack<class CState*> mStateStack;
-	CSharedPtr<class CSceneComponent> mRoot;
-	CSharedPtr<class CNavAgentComponent> mNavAgent;
+	class CSceneComponent* mRoot;
+	class CNavAgentComponent* mNavAgent;
 	bool mbStart;
 };
 

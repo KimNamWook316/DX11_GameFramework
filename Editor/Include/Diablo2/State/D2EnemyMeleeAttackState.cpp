@@ -1,5 +1,6 @@
 #include "D2EnemyMeleeAttackState.h"
 #include "D2EnemyHitState.h"
+#include "D2EnemyDieState.h"
 #include "Component/ColliderComponent.h"
 #include "../Component/D2StateComponent.h"
 #include "../Component/D2EnemyNavAgentComponent.h"
@@ -53,7 +54,17 @@ void CD2EnemyMeleeAttackState::EnterStateFunction()
 
 CState* CD2EnemyMeleeAttackState::StateFunction()
 {
-	if (mbAnimEnd && !mbKeepAttack)
+	if (mbDie)
+	{
+		if (mAttackObj)
+		{
+			mAttackObj->Destroy();
+		}
+		CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+		state->GetCharInfo()->SetSpeed(0.f);
+		return (CState*)(new CD2EnemyDieState);
+	}
+	else if (mbAnimEnd && !mbKeepAttack)
 	{
 		mbEnd = true;
 		return nullptr;
@@ -121,7 +132,7 @@ void CD2EnemyMeleeAttackState::OnAnimEnd()
 		Vector3 dir = playerPos - myPos;
 		static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->SetDir(Vector2(dir.x, dir.y));
 
-		static_cast<CD2StateComponent*>(mOwner)->GetEnemySkill()->DoSkill("EnemyMeleeAttack", playerPos, playerPos, Vector2(dir.x, dir.y));
+		mAttackObj = static_cast<CD2StateComponent*>(mOwner)->GetEnemySkill()->DoSkill("EnemyMeleeAttack", playerPos, playerPos, Vector2(dir.x, dir.y));
 
 		eD2SpriteDir spriteDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
 		std::string animName = mOwner->GetGameObject()->GetName() + "MeleeAttack" + std::to_string((int)spriteDir / 2);

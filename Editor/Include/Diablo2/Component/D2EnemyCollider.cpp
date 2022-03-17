@@ -16,6 +16,8 @@ CD2EnemyCollider::CD2EnemyCollider(const CD2EnemyCollider& com)	:
 
 CD2EnemyCollider::~CD2EnemyCollider()
 {
+	mCollider->DeleteCollisionCallBack((void*)this, eCollisionState::Enter);
+	mCollider->DeleteCollisionCallBack((void*)this, eCollisionState::Exit);
 }
 
 bool CD2EnemyCollider::Init()

@@ -40,6 +40,13 @@ void CD2StateComponent::Start()
 	}
 
 	mCollider = mObject->FindSceneComponentFromType<CColliderBox2D>();
+
+	mCharInfo->SetEventCallBack("Die", this, &CD2StateComponent::OnDie, eD2CharInfoEventType::Die);
+}
+
+void CD2StateComponent::OnDie()
+{
+	static_cast<CD2State*>(mStateStack.top())->OnDie();
 }
 
 void CD2StateComponent::OnCollideEnter(const CollisionResult& result)

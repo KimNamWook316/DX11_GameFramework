@@ -4,6 +4,7 @@
 #include "D2EnemyHitState.h"
 #include "D2EnemyMoveState.h"
 #include "D2EnemyMeleeAttackState.h"
+#include "D2EnemyDieState.h"
 #include "GameObject/GameObject.h"
 #include "Scene/Scene.h"
 #include "Component/ColliderComponent.h"
@@ -66,7 +67,13 @@ CState* CD2EnemyIdleState::StateFunction()
 		mbMove = false;
 	}
 
-	if (mbHit)
+	if (mbDie)
+	{
+		CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+		state->GetCharInfo()->SetSpeed(0.f);
+		return (CState*)(new CD2EnemyDieState);
+	}
+	else if (mbHit)
 	{
 		return (CState*)(new CD2EnemyHitState);
 	}

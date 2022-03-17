@@ -180,6 +180,7 @@ void CD2CharacterInfoComponent::SetHp(const float hp)
 
 	if (hp == 0)
 	{
+		callEventCallBack(eD2CharInfoEventType::Die);
 		return;
 	}
 

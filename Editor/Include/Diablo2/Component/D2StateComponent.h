@@ -19,6 +19,9 @@ public:
 	virtual void Start() override;
 
 public:
+	void OnDie();
+
+public:
 	void OnCollideEnter(const CollisionResult& result);
 	void OnCollideExit(const CollisionResult& result);
 
@@ -54,10 +57,10 @@ public:
 	}
 
 protected:
-	CSharedPtr<CD2CharacterInfoComponent> mCharInfo;
-	CSharedPtr<CD2PlayerSkillComponent> mSkill;
-	CSharedPtr<CD2EnemySkillComponent> mEnemySkill;
-	CSharedPtr<class CColliderBox2D> mCollider;
+	CD2CharacterInfoComponent* mCharInfo;
+	CD2PlayerSkillComponent* mSkill;
+	CD2EnemySkillComponent* mEnemySkill;
+	class CColliderBox2D* mCollider;
 	Vector2 mPrevStateMousePos;
 };
 

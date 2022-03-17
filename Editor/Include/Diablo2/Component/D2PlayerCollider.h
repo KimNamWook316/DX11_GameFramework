@@ -27,7 +27,7 @@ public:
 	void OnCollideExit(const CollisionResult& result);
 
 protected:
-	CSharedPtr<class CColliderBox2D> mCollider;
-	CSharedPtr<class CD2StateComponent> mState;
+	class CColliderBox2D* mCollider;
+	class CD2StateComponent* mState;
 };
 

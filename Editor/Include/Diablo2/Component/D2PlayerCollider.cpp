@@ -16,6 +16,8 @@ CD2PlayerCollider::CD2PlayerCollider(const CD2PlayerCollider& com)	:
 
 CD2PlayerCollider::~CD2PlayerCollider()
 {
+	mCollider->DeleteCollisionCallBack((void*)this ,eCollisionState::Enter);
+	mCollider->DeleteCollisionCallBack((void*)this, eCollisionState::Exit);
 }
 
 bool CD2PlayerCollider::Init()

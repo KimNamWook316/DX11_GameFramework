@@ -2,6 +2,12 @@
 
 #include "SceneComponent.h"
 
+struct ColliderCallBack
+{
+    void* Obj;
+    std::function<void(const CollisionResult&)> CallBack;
+};
+
 class CColliderComponent :
     public CSceneComponent
 {
@@ -45,14 +51,24 @@ public:
     template <typename T>
     void AddCollisionCallBack(eCollisionState state, T* obj, void(T::* func)(const CollisionResult&))
     {
-        mCollisionCallBack[(int)state].push_back(std::bind(func, obj, std::placeholders::_1));
+        ColliderCallBack callBack;
+        callBack.Obj = obj;
+        callBack.CallBack = std::bind(func, obj, std::placeholders::_1);
+        mCollisionCallBack[(int)state].push_back(callBack);
     }
 
     template <typename T>
     void AddCollisionMouseCallBack(eCollisionState state, T* obj, void(T::* func)(const CollisionResult&))
     {
-        mCollisionMouseCallBack[(int)state].push_back(std::bind(func, obj, std::placeholders::_1));
+        ColliderCallBack callBack;
+        callBack.Obj = obj;
+        callBack.CallBack = std::bind(func, obj, std::placeholders::_1);
+        mCollisionMouseCallBack[(int)state].push_back(callBack);
     }
+
+public:
+    void DeleteCollisionCallBack(void* obj, eCollisionState state);
+    void DeleteMouseCollisionCallBack(void* obj, eCollisionState state);
 
 public:
     eColliderType GetColliderType() const
@@ -135,8 +151,8 @@ protected:
     bool mbCheckCurrentSection;
     CollisionResult mResult;
     CollisionResult mMouseResult;
-    std::list<std::function<void(const CollisionResult&)>> mCollisionCallBack[(int)eCollisionState::Max];
-    std::list<std::function<void(const CollisionResult&)>> mCollisionMouseCallBack[(int)eCollisionState::Max];
+    std::list<ColliderCallBack> mCollisionCallBack[(int)eCollisionState::Max];
+    std::list<ColliderCallBack> mCollisionMouseCallBack[(int)eCollisionState::Max];
     bool mbMouseCollision;
 
     // 출력을 위한 Mesh와 Shader
