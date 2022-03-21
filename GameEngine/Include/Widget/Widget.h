@@ -58,6 +58,11 @@ public:
         return mPos;
     }
 
+    const Vector2& GetRenderPos() const
+    {
+        return mRenderPos;
+    }
+
     Vector2 GetWidgetSize() const
     {
         return mSize;

@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "PlayerHitState.h"
 #include "Component/ColliderComponent.h"
+#include "../Component/D2ObjectPool.h"
 
 CPlayerCastingState::CPlayerCastingState()
 {
@@ -42,12 +43,32 @@ CState* CPlayerCastingState::Clone()
 
 void CPlayerCastingState::EnterStateFunction()
 {
-	eD2SpriteDir spriteDir = static_cast<CD2StateComponent*>(mOwner)->GetCharInfo()->GetSpriteDir();
+	CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+
+	eD2SpriteDir spriteDir = state->GetCharInfo()->GetSpriteDir();
 	CSpriteComponent* com = static_cast<CSpriteComponent*>(mOwner->GetRootComponent());
 	com->SetCurrentAnimation("SpecialOne" + std::to_string((int)spriteDir));
 	com->SetEndCallBack("SpecialOne" + std::to_string((int)spriteDir), this, &CPlayerCastingState::OnAnimEnd);
 	mOriginSpriteScale = com->GetWorldScale();
 	com->AddWorldScale(10.f, 11.6f, 0.f);
+
+	eD2ElementType elementType = (eD2ElementType)state->GetSkill()->GetRSkillElementType();
+
+	Vector3	worldPos = mOwner->GetGameObject()->GetWorldPos();
+	worldPos.y -= 30.f;
+	CGameObject* effect = nullptr;
+	switch (elementType)
+	{
+	case eD2ElementType::Fire:
+		effect = CD2ObjectPool::GetInst()->ActiveEffect("FireCast", worldPos);
+		break;
+	case eD2ElementType::Ice:
+		effect = CD2ObjectPool::GetInst()->ActiveEffect("IceCast", worldPos);
+		break;
+	case eD2ElementType::Lightning:
+		effect = CD2ObjectPool::GetInst()->ActiveEffect("TeleportCast", worldPos);
+		break;
+	}
 }
 
 CState* CPlayerCastingState::StateFunction()
@@ -91,7 +112,9 @@ void CPlayerCastingState::OnAnimEnd()
 	Vector2 dir = mousePos - Vector2(worldPos.x, worldPos.y);
 	dir.Normalize();
 
-	static_cast<CD2StateComponent*>(mOwner)->GetSkill()->DoRSkill(worldPos, Vector3(mousePos.x, mousePos.y, 0.f), dir);
+	Vector3 reservedTarget = static_cast<CD2StateComponent*>(mOwner)->GetReserveSkillTargetPos();
+
+	static_cast<CD2StateComponent*>(mOwner)->GetSkill()->DoRSkill(worldPos, reservedTarget, dir);
 	CSpriteComponent* com = static_cast<CSpriteComponent*>(mOwner->GetRootComponent());
 	com->AddWorldScale(- 10.f, - 11.6f, 0.f);
 

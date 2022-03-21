@@ -6,11 +6,11 @@
 #include "Input.h"
 
 CD2PlayerSkillComponent::CD2PlayerSkillComponent()	:
-	mLSkillIdx(0),
+	mMeleeAttackIdx(0),
 	mRSkillIdx(0),
 	mbInit(false),
 	mArrSkillTree{},
-	mNormalAttack(nullptr)
+	mMeleeAtack(nullptr)
 {
 	SetTypeID<CD2PlayerSkillComponent>();
 }
@@ -18,7 +18,7 @@ CD2PlayerSkillComponent::CD2PlayerSkillComponent()	:
 CD2PlayerSkillComponent::CD2PlayerSkillComponent(const CD2PlayerSkillComponent& com)	:
 	CObjectComponent(com)
 {
-	mLSkillIdx = com.mLSkillIdx;
+	mMeleeAttackIdx = com.mMeleeAttackIdx;
 	mRSkillIdx = com.mRSkillIdx;
 
 	// TODO : 복사생성 될 일 있으면 구현
@@ -29,7 +29,7 @@ CD2PlayerSkillComponent::CD2PlayerSkillComponent(const CD2PlayerSkillComponent& 
 
 CD2PlayerSkillComponent::~CD2PlayerSkillComponent()
 {
-	SAFE_DELETE(mNormalAttack);
+	SAFE_DELETE(mMeleeAtack);
 
 	for (int i = 0; i < (int)eD2SkillTreeNo::Max; ++i)
 	{
@@ -108,20 +108,20 @@ bool CD2PlayerSkillComponent::LevelUp(eD2SkillTreeNo treeNo, const std::string& 
 	return false;
 }
 
-int CD2PlayerSkillComponent::GetLSkillType()
-{
-	if (isValidIdx(mLSkillIdx))
-	{
-		return (int)mVecAvailableSkill[mLSkillIdx]->GetAttackType();
-	}
-	return -1;
-}
-
 int CD2PlayerSkillComponent::GetRSkillType()
 {
 	if (isValidIdx(mRSkillIdx))
 	{
 		return (int)mVecAvailableSkill[mRSkillIdx]->GetAttackType();
+	}
+	return -1;
+}
+
+int CD2PlayerSkillComponent::GetRSkillElementType()
+{
+	if (isValidIdx(mRSkillIdx))
+	{
+		return (int)mVecAvailableSkill[mRSkillIdx]->GetElementType();
 	}
 	return -1;
 }
@@ -134,26 +134,6 @@ void CD2PlayerSkillComponent::SetNextRSkill(float deltaTime)
 	{
 		mRSkillIdx = 0;
 	}
-}
-
-void CD2PlayerSkillComponent::SetLSkill(const int idx)
-{
-	if (isValidIdx(mLSkillIdx))
-	{
-		mLSkillIdx = idx;
-	}
-}
-
-void CD2PlayerSkillComponent::SetLSkill(const std::string& name)
-{
-	int idx = findSkillIdx(name);
-
-	if (-1 == idx)
-	{
-		return;
-	}
-
-	mLSkillIdx = idx;
 }
 
 void CD2PlayerSkillComponent::SetRSkill(const int idx)
@@ -176,13 +156,9 @@ void CD2PlayerSkillComponent::SetRSkill(const std::string& name)
 	mRSkillIdx = idx;
 }
 
-CGameObject* CD2PlayerSkillComponent::DoLSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, CGameObject* targetObj)
+CGameObject* CD2PlayerSkillComponent::DoMeleeAttack(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, CGameObject* targetObj)
 {
-	if (isValidIdx(mLSkillIdx))
-	{ 
-		return mVecAvailableSkill[mLSkillIdx]->DoSkill(startPos, targetPos, dir, targetObj);
-	}
-	return nullptr;
+	return mMeleeAtack->DoSkill(startPos, targetPos, dir, targetObj);
 }
 
 CGameObject* CD2PlayerSkillComponent::DoRSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, CGameObject* targetObj)
@@ -238,8 +214,9 @@ bool CD2PlayerSkillComponent::loadSkillList()
 			normalAttack->mLevel = 1;
 			normalAttack->mMaxLevel = std::stoi((*iter->second)[eCSVLabel::MaxLevel]);
 			normalAttack->mPreSkillLevel = std::stoi((*iter->second)[eCSVLabel::PreSkillLevel]);
-			mNormalAttack = normalAttack;
-			AddActiveSkill(normalAttack);
+			normalAttack->mMp = std::stof((*iter->second)[eCSVLabel::Mp]);
+			normalAttack->mRange = std::stof((*iter->second)[eCSVLabel::Range]);
+			mMeleeAtack = normalAttack;
 			continue;
 		}
 
@@ -254,6 +231,8 @@ bool CD2PlayerSkillComponent::loadSkillList()
 			mArrSkillTree[(int)(skillTreeNo)]->mLevel = 1;
 			mArrSkillTree[(int)(skillTreeNo)]->mMaxLevel = std::stoi((*iter->second)[eCSVLabel::MaxLevel]);
 			mArrSkillTree[(int)(skillTreeNo)]->mPreSkillLevel = std::stoi((*iter->second)[eCSVLabel::PreSkillLevel]);
+			mArrSkillTree[(int)(skillTreeNo)]->mMp = std::stof((*iter->second)[eCSVLabel::Mp]);
+			mArrSkillTree[(int)(skillTreeNo)]->mRange = std::stof((*iter->second)[eCSVLabel::Range]);
 
 			// Active 스킬에 추가
 			AddActiveSkill(mArrSkillTree[(int)(skillTreeNo)]);

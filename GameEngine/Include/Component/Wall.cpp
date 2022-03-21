@@ -1,6 +1,8 @@
 #include "Wall.h"
 #include "Tile.h"
 #include "WallComponent.h"
+#include "../Scene/Scene.h"
+#include "../GameObject/GameObject.h"
 
 CWall::CWall()	:
 	meTileShape(eTileShape::Rect),
@@ -39,6 +41,19 @@ void CWall::Update()
 	matTranslate.Translation(pos);
 
 	mMatWorld = matScale * matTranslate;
+
+	Vector3 center = pos + Vector3(mSize.x / 2.f, mSize.y /2.f, 0.f);
+	Vector3 playerPos = mOwner->GetScene()->GetPlayerObj()->GetWorldPos();
+	float dist = center.Distance(playerPos);
+
+	if (playerPos.y < center.y && dist <= 200.f)
+	{
+		mOpacity = dist / 200.f;
+	}
+	else
+	{
+		mOpacity = 1.f;
+	}
 }
 
 void CWall::Save(FILE* fp)

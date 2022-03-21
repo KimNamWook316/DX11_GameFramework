@@ -480,3 +480,9 @@ struct NavChangeData
 	int Index;
 	eTileType Type;
 };
+
+struct CellRenderInfo
+{
+	Matrix MatWP;
+	Vector4 Tint;
+};

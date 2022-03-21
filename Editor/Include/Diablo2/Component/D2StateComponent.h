@@ -51,9 +51,19 @@ public:
 		mPrevStateMousePos = mousePos;
 	}
 
+	void ReserveSkillTargetPos(const Vector3& pos)
+	{
+		mReserveSkillTargetPos = pos;
+	}
+
 	const Vector2& GetPrevStateMousePos() const
 	{
 		return mPrevStateMousePos;
+	}
+
+	const Vector3& GetReserveSkillTargetPos() const
+	{
+		return mReserveSkillTargetPos;
 	}
 
 protected:
@@ -62,5 +72,6 @@ protected:
 	CD2EnemySkillComponent* mEnemySkill;
 	class CColliderBox2D* mCollider;
 	Vector2 mPrevStateMousePos;
+	Vector3 mReserveSkillTargetPos;
 };
 

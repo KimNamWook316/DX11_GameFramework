@@ -131,6 +131,8 @@ bool CD2DataManager::loadD2CharInfo()
 		info->MaxCCTime = std::stof((*iter->second)[3]);
 		info->MaxMp = std::stof((*iter->second)[4]);
 		info->Mp = info->MaxMp;
+		info->MeleeBonus = std::stof((*iter->second)[5]);
+		info->MagicBonus = std::stof((*iter->second)[6]);
 
 		mMapCharInfo.insert(std::make_pair(info->Name, info));
 	}

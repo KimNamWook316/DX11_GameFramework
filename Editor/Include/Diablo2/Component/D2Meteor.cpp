@@ -94,8 +94,8 @@ void CD2Meteor::spreadFire()
 	{
 		Vector3 randomDir;
 
-		randomDir.x = -1 + (rand() % 2);
-		randomDir.y = -1 + (rand() % 2);
+		randomDir.x = (-10.f + (float)(rand() % 21)) / 10.f;
+		randomDir.y = (-10.f + (float)(rand() % 21)) / 10.f;
 		randomDir.Normalize();
 
 		float randomRad = 0.f;
@@ -114,5 +114,7 @@ void CD2Meteor::spreadFire()
 		fireObj->Enable(true);
 		fireObj->SetWorldPos(randomPos);
 		fireObj->Start();
+
+		CD2ObjectPool::GetInst()->ActiveEffect("FireExplode", randomPos);
 	}
 }

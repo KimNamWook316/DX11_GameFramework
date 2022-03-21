@@ -10,7 +10,8 @@
 CD2CharacterInfoComponent::CD2CharacterInfoComponent():
 	mCharInfo{},
 	meCC(eD2ElementType::None),
-	mCCTime(0.f)
+	mCCTime(0.f),
+	mCCTick(0.f)
 {
 	SetTypeID<CD2CharacterInfoComponent>();
 }
@@ -73,23 +74,37 @@ void CD2CharacterInfoComponent::Update(float deltaTime)
 		SetSpeed(mPrevSpeed);
 		mSprite->SetBaseColor(1.f, 1.f, 1.f, 1.f);
 		mCCTime = 0.f;
+		mCCTick = 0.f;
 		meCC = eD2ElementType::None;
 	}
 
 	if (meCC != eD2ElementType::None)
 	{
 		mCCTime += deltaTime;
+		mCCTick += deltaTime;
 	}
 
 	switch (meCC)
 	{
 	case eD2ElementType::Fire:
 		mSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
-		SetHp(-mCharInfo.Hp * 0.01f);
+		if (mCCTick >= 1.f)
+		{
+			mCCTick = 0.f;
+			SetHp(-mCharInfo.Hp * 0.01f);
+		}
 		break;
 	case eD2ElementType::Ice:
 		mSprite->SetBaseColor(0.f, 0.f, 1.f, 1.f);
 		SetSpeed(mCharInfo.MaxSpeed * 0.3f);
+		break;
+	case eD2ElementType::Poison:
+		mSprite->SetBaseColor(0.f, 1.f, 0.f, 1.f);
+		if (mCCTick >= 1.f)
+		{
+			mCCTick = 0.f;
+			SetHp(-mCharInfo.Hp * 0.1f);
+		}
 		break;
 	case eD2ElementType::Lightning:
 		break;
@@ -194,6 +209,29 @@ void CD2CharacterInfoComponent::SetHp(const float hp)
 	}
 }
 
+void CD2CharacterInfoComponent::SetMaxHp(const float hp)
+{
+	mCharInfo.MaxHp += hp;
+
+	if (mCharInfo.MaxHp <= 0)
+	{
+		mCharInfo.MaxHp = 0;
+	}
+
+	if (hp > 0)
+	{
+		callEventCallBack(eD2CharInfoEventType::MaxHpInc);
+	}
+	else
+	{
+		if (mCharInfo.Hp > mCharInfo.MaxHp)
+		{
+			mCharInfo.Hp = mCharInfo.MaxHp;
+		}
+		callEventCallBack(eD2CharInfoEventType::MaxHpDec);
+	}
+}
+
 void CD2CharacterInfoComponent::SetCC(eD2ElementType type)
 {
 	if (meCC == eD2ElementType::None)
@@ -235,6 +273,57 @@ void CD2CharacterInfoComponent::SetMp(const float mp)
 	else
 	{
 		callEventCallBack(eD2CharInfoEventType::MpDec);
+	}
+}
+
+void CD2CharacterInfoComponent::SetMaxMp(const float mp)
+{
+	mCharInfo.MaxMp += mp;
+
+	if (mCharInfo.MaxMp <= 0)
+	{
+		mCharInfo.MaxMp = 0;
+	}
+
+	if (mp > 0)
+	{
+		callEventCallBack(eD2CharInfoEventType::MaxMpInc);
+	}
+	else
+	{
+		if (mCharInfo.Mp > mCharInfo.MaxMp)
+		{
+			mCharInfo.Mp = mCharInfo.MaxMp;
+		}
+		callEventCallBack(eD2CharInfoEventType::MaxMpDec);
+	}
+}
+
+void CD2CharacterInfoComponent::SetMeleeBonus(const float val)
+{
+	mCharInfo.MeleeBonus += val;
+
+	if (val > 0)
+	{
+		callEventCallBack(eD2CharInfoEventType::MeleeBonusInc);
+	}
+	else
+	{
+		callEventCallBack(eD2CharInfoEventType::MeleeBonusDec);
+	}
+}
+
+void CD2CharacterInfoComponent::SetMagicBonus(const float val)
+{
+	mCharInfo.MagicBonus += val;
+
+	if (val > 0)
+	{
+		callEventCallBack(eD2CharInfoEventType::MagicBonusInc);
+	}
+	else
+	{
+		callEventCallBack(eD2CharInfoEventType::MagicBonusDec);
 	}
 }
 

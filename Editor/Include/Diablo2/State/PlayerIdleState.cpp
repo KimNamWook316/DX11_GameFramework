@@ -12,6 +12,8 @@
 #include "Input.h"
 #include "../D2Util.h"
 #include "Component/ColliderComponent.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneCollision.h"
 
 CPlayerIdleState::CPlayerIdleState()	:
 	mbRun(false),
@@ -52,8 +54,9 @@ CState* CPlayerIdleState::Clone()
 
 void CPlayerIdleState::EnterStateFunction()
 {
-	CInput::GetInst()->SetKeyCallBack("MouseL", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnClickMouseL);
-	CInput::GetInst()->SetKeyCallBack("MouseLCtrl", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnClickMouseL);
+	CInput::GetInst()->SetKeyCallBack("MouseL", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnPushMouseL);
+	CInput::GetInst()->SetKeyCallBack("MouseL", eKeyState::KeyState_Down, this, &CPlayerIdleState::OnDownMouseL);
+	CInput::GetInst()->SetKeyCallBack("MouseLCtrl", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnPushMouseL);
 	CInput::GetInst()->SetKeyCallBack("MouseR", eKeyState::KeyState_Down, this, &CPlayerIdleState::OnClickMouseR);
 	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Push, this, &CPlayerIdleState::OnCtrlDown);
 	CInput::GetInst()->SetKeyCallBack("LCtrl", eKeyState::KeyState_Up, this, &CPlayerIdleState::OnCtrlUp);
@@ -127,23 +130,82 @@ void CPlayerIdleState::ResetState()
 void CPlayerIdleState::OnClickMouseR(float deltaTime)
 {
 	// 이전 마우스 위치 저장
-	CD2PlayerSkillComponent* com = static_cast<CD2StateComponent*>(mOwner)->GetSkill();
-	static_cast<CD2StateComponent*>(mOwner)->SaveMousePos(CInput::GetInst()->GetMouseWorld2DPos());
+	CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
+
+	CD2PlayerSkillComponent* com = state->GetSkill();
+	state->SaveMousePos(CInput::GetInst()->GetMouseWorld2DPos());
 
 	if ((int)(eD2AttackType::Projectile) == com->GetRSkillType())
 	{
-		mbCasting = true;
+		float curMp = state->GetCharInfo()->GetMp();
+		float skillMp = com->GetRSkillMp();
+
+		if (curMp >= skillMp)
+		{
+			state->GetCharInfo()->SetMp(-skillMp);
+			
+			float range = com->GetRSkillRange();
+			Vector2 mousePos = state->GetPrevStateMousePos();
+			float dist = mOwner->GetGameObject()->GetWorldPos().Distance(Vector3(mousePos.x, mousePos.y, 0.f));
+
+			mbCasting = true;
+
+			// 범위 이내면 지금 마우스 위치에 스킬 시전 
+			if (dist <= range)
+			{
+				state->ReserveSkillTargetPos(Vector3(mousePos.x, mousePos.y, 0.f));
+			}
+			// 범위를 벗어난다면, 최대 범위에 시전
+			else
+			{
+				Vector3 targetPos = Vector3(mousePos.x, mousePos.y, 0.f) - mOwner->GetGameObject()->GetWorldPos();
+				targetPos.Normalize();
+				targetPos *= range;
+				targetPos += mOwner->GetGameObject()->GetWorldPos();
+				state->ReserveSkillTargetPos(targetPos);
+			}
+		}
 	}
 	else if ((int)(eD2AttackType::Melee) == com->GetRSkillType())
 	{
 	}
 	else if ((int)(eD2AttackType::Casting) == com->GetRSkillType())
 	{
-		mbCasting = true;
+		float curMp = state->GetCharInfo()->GetMp();
+		float skillMp = com->GetRSkillMp();
+
+		if (curMp >= skillMp)
+		{
+			state->GetCharInfo()->SetMp(-skillMp);
+
+			float range = com->GetRSkillRange();
+			Vector2 mousePos = state->GetPrevStateMousePos();
+			float dist = mOwner->GetGameObject()->GetWorldPos().Distance(Vector3(mousePos.x, mousePos.y, 0.f));
+
+			mbCasting = true;
+
+			if (dist <= range)
+			{
+				state->ReserveSkillTargetPos(Vector3(mousePos.x, mousePos.y, 0.f));
+			}
+			// 범위를 벗어난다면, 최대 범위에 시전
+			else
+			{
+				Vector3 targetPos = Vector3(mousePos.x, mousePos.y, 0.f) - mOwner->GetGameObject()->GetWorldPos();
+				targetPos.Normalize();
+				targetPos *= range;
+				targetPos += mOwner->GetGameObject()->GetWorldPos();
+				state->ReserveSkillTargetPos(targetPos);
+			}
+		}
 	}
 }
 
-void CPlayerIdleState::OnClickMouseL(float deltaTime)
+void CPlayerIdleState::OnDownMouseL(float deltaTime)
+{
+}
+
+void CPlayerIdleState::OnPushMouseL(float deltaTime)
 {
 	Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
 	mOwner->GetNavAgent()->Move(Vector3(mousePos.x, mousePos.y, 0.f));

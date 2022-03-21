@@ -87,6 +87,8 @@ void CD2Skill::LoadChildSkill(std::vector<std::vector<std::string>>& vecChildDat
 			child->mLevel = 0;
 			child->mMaxLevel = std::stoi(vecChildData[i][eCSVLabel::MaxLevel]);
 			child->mPreSkillLevel = std::stoi(vecChildData[i][eCSVLabel::PreSkillLevel]);
+			child->mMp = std::stof(vecChildData[i][eCSVLabel::Mp]);
+			child->mRange = std::stof(vecChildData[i][eCSVLabel::Range]);
 
 			mVecChildSkill.push_back(child);
 
@@ -162,6 +164,11 @@ void CD2Skill::SetOwner(CD2PlayerSkillComponent* owner)
 	{
 		mVecChildSkill[i]->SetOwner(owner);
 	}
+}
+
+eD2ElementType CD2Skill::GetElementType()
+{
+	return CD2DataManager::GetInst()->FindSkillInfo(mName)->eElementType;
 }
 
 CD2Skill* CD2Skill::GetSkill(const std::string& name)

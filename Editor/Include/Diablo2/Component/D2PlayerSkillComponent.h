@@ -13,6 +13,8 @@ enum eCSVLabel
     IsDefault,
     ParentSkill,
     PreSkillLevel,
+    Mp,
+    Range,
 };
 
 struct Skill
@@ -47,18 +49,37 @@ public:
     bool LevelUp(eD2SkillTreeNo treeNo, const std::string& skillName);
 
 public:
-    int GetLSkillType();
     int GetRSkillType();
+    int GetRSkillElementType();
 
 public:
     void SetNextRSkill(float deltaTime); // DEBUG
-    void SetLSkill(const int idx);
-    void SetLSkill(const std::string& name);
     void SetRSkill(const int idx);
     void SetRSkill(const std::string& name);
 
 public:
-    CGameObject* DoLSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, class CGameObject* targetObj = nullptr);
+    float GetRSkillMp()
+    {
+        if (!isValidIdx(mRSkillIdx))
+        {
+            return -1;
+        }
+
+        return mVecAvailableSkill[mRSkillIdx]->GetMp();
+    }
+
+    float GetRSkillRange()
+    {
+        if (!isValidIdx(mRSkillIdx))
+        {
+            return -1;
+        }
+
+        return mVecAvailableSkill[mRSkillIdx]->GetRange();
+    }
+
+public:
+    CGameObject* DoMeleeAttack(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, class CGameObject* targetObj = nullptr);
     CGameObject* DoRSkill(const Vector3& startPos, const Vector3& targetPos, const Vector2& dir, class CGameObject* targetObj = nullptr);
 
 public:
@@ -80,12 +101,12 @@ private:
     int findSkillIdx(const std::string& name);
 
 private:
-    int mLSkillIdx;
+    int mMeleeAttackIdx;
     int mRSkillIdx;
 
     // Skill Tree
     bool mbInit;
-    CD2Skill* mNormalAttack;
+    CD2Skill* mMeleeAtack;
     CD2Skill* mArrSkillTree[(int)eD2SkillTreeNo::Max];
     std::vector<CD2Skill*> mVecAvailableSkill;
 };

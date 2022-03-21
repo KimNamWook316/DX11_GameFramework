@@ -134,6 +134,7 @@
     <ClInclude Include="Resource\Shader\DissolveConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\GlobalConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\GraphicShader.h" />
+    <ClInclude Include="Resource\Shader\GridShader.h" />
     <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\Mesh2DShader.h" />
     <ClInclude Include="Resource\Shader\NumberShader.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Widget\Button.h" />
+    <ClInclude Include="Widget\Grid.h" />
     <ClInclude Include="Widget\Image.h" />
     <ClInclude Include="Widget\Number.h" />
     <ClInclude Include="Widget\ProgressBar.h" />
@@ -294,6 +296,7 @@
     <ClCompile Include="Resource\Shader\DissolveConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\GlobalConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\GraphicShader.cpp" />
+    <ClCompile Include="Resource\Shader\GridShader.cpp" />
     <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp" />
     <ClCompile Include="Resource\Shader\NumberShader.cpp" />
@@ -343,6 +346,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Widget\Button.cpp" />
+    <ClCompile Include="Widget\Grid.cpp" />
     <ClCompile Include="Widget\Image.cpp" />
     <ClCompile Include="Widget\Number.cpp" />
     <ClCompile Include="Widget\ProgressBar.cpp" />

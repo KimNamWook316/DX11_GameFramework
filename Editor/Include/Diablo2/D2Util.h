@@ -34,6 +34,9 @@ public:
 	static std::string SkilltreeNoToString(eD2SkillTreeNo no);
 	static eD2SkillTreeNo StringToSkilltreeNo(const std::string& noString);
 
+	// Item Use Type
+	static eD2ItemUseType StringToItemUseType(const std::string& str);
+
 	static float CorrectSpeed(const Vector2& direction, const float speed);
 };
 

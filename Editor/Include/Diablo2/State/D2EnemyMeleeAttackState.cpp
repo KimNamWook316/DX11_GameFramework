@@ -56,10 +56,6 @@ CState* CD2EnemyMeleeAttackState::StateFunction()
 {
 	if (mbDie)
 	{
-		if (mAttackObj)
-		{
-			mAttackObj->Destroy();
-		}
 		CD2StateComponent* state = static_cast<CD2StateComponent*>(mOwner);
 		state->GetCharInfo()->SetSpeed(0.f);
 		return (CState*)(new CD2EnemyDieState);

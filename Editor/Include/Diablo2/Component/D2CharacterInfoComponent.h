@@ -38,8 +38,12 @@ public:
     void SetSpeed(const float speed);
     void SetDir(const Vector2& dir);
     void SetHp(const float hp);
+    void SetMaxHp(const float hp);
     void SetCC(eD2ElementType type);
     void SetMp(const float mp);
+    void SetMaxMp(const float mp);
+    void SetMeleeBonus(const float val);
+    void SetMagicBonus(const float val);
 
 public:
     const D2CharInfo& GetInfo() const
@@ -65,6 +69,36 @@ public:
     float GetMaxSpeed() const
     {
         return mCharInfo.MaxSpeed;
+    }
+
+    float GetHp() const
+    {
+        return mCharInfo.Hp;
+    }
+
+    float GetMaxHp() const
+    {
+        return mCharInfo.MaxHp;
+    }
+
+    float GetMp() const
+    {
+        return mCharInfo.Mp;
+    }
+
+    float GetMaxMp() const
+    {
+        return mCharInfo.MaxMp;
+    }
+
+    float GetMeleeBonus() const
+    {
+        return mCharInfo.MeleeBonus;
+    }
+
+    float GetMagicBonus() const
+    {
+        return mCharInfo.MagicBonus;
     }
 
     eD2SpriteDir GetSpriteDir() const
@@ -96,5 +130,6 @@ private:
     float mPrevSpeed;
     eD2ElementType meCC;
     float mCCTime;
+    float mCCTick;
 };
 

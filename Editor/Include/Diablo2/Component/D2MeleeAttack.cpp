@@ -1,6 +1,7 @@
 #include "D2MeleeAttack.h"
 #include "D2CharacterInfoComponent.h"
 #include "GameObject/GameObject.h"
+#include "Component/ColliderBox2D.h"
 
 CD2MeleeAttack::CD2MeleeAttack()
 {
@@ -17,12 +18,15 @@ CD2MeleeAttack::~CD2MeleeAttack()
 {
 }
 
-void CD2MeleeAttack::OnAttackAnimEnd()
+void CD2MeleeAttack::Start()
 {
-	if (mTargetObj)
-	{
-		mTargetObj->FindObjectComponentFromType<CD2CharacterInfoComponent>()->SetHp(-mInfo.Damage);
-	}
+	CD2SkillObject::Start();
+
+	mCollider = mObject->FindSceneComponentFromType<CColliderBox2D>();
+	mCollider->AddCollisionCallBack(eCollisionState::Enter, this, &CD2MeleeAttack::OnCollideEnter);
+	mCollider->Enable(false);
+
+	mRoot->SetPivot(0.5f, 0.5f, 0.f);
 }
 
 CObjectComponent* CD2MeleeAttack::Clone()
@@ -32,5 +36,13 @@ CObjectComponent* CD2MeleeAttack::Clone()
 
 void CD2MeleeAttack::OnCollideEnter(const CollisionResult& result)
 {
-	// Collider ¾øÀ½
+ 	CD2CharacterInfoComponent* com = result.Dest->GetGameObject()->FindObjectComponentFromType<CD2CharacterInfoComponent>();
+
+	if (com)
+	{
+		com->SetHp(-mInfo.Damage);
+		com->SetCC(mInfo.eElementType);
+	}
+
+	mObject->Destroy();
 }

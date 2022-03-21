@@ -26,7 +26,8 @@ public:
 
 public:
     void OnClickMouseR(float deltaTime);
-    void OnClickMouseL(float deltaTime);
+    void OnDownMouseL(float deltaTime);
+    void OnPushMouseL(float deltaTime);
     void OnCtrlDown(float deltaTime);
     void OnCtrlUp(float deltaTime);
 

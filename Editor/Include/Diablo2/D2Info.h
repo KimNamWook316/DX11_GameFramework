@@ -15,6 +15,8 @@ struct D2CharInfo
 	float MaxCCTime;
 	float Mp;
 	float MaxMp;
+	float MeleeBonus;
+	float MagicBonus;
 };
 
 struct D2SkillInfo
@@ -25,4 +27,18 @@ struct D2SkillInfo
 	Vector2 Dir;
 	eD2ElementType eElementType;
 	float LifeTime;
+};
+
+struct D2ItemInfo
+{
+	std::string Name;
+	int UniqueID;
+	eD2ItemType eType;
+	int CellX;
+	int CellY;
+	eD2ItemUseType eUseType;
+	int Hp;
+	int Mp;
+	int Melee;
+	int Magic;
 };

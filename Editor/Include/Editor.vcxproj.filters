@@ -76,14 +76,29 @@
     <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy">
       <UniqueIdentifier>{429750c1-18fe-40cf-91dd-05502a0682f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="98. Diablo2\01. Component\02.Skill">
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\02. Skill">
       <UniqueIdentifier>{b09009c6-03f0-4d42-bdfe-823da91ebbfb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="98. Diablo2\01. Component\02.Skill\01. PlayerSkill">
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill">
       <UniqueIdentifier>{f6b1f3f8-795b-4e5c-a628-7ca7837ff528}</UniqueIdentifier>
     </Filter>
-    <Filter Include="98. Diablo2\01. Component\02.Skill\02. EnemySkill">
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\02. Skill\02. EnemySkill">
       <UniqueIdentifier>{2075f5ba-0672-44fd-aa7e-9b71ad96187a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal">
+      <UniqueIdentifier>{49bc68a8-1630-43c4-9b0a-e30cdbf411ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel">
+      <UniqueIdentifier>{f7ed40a2-19f5-4a1d-bc70-c04fee5543ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\07. Effect">
+      <UniqueIdentifier>{5c868ba9-054a-45fc-805e-a2c2226f2c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\08. Inventory">
+      <UniqueIdentifier>{49ac6805-1309-4f1f-afa5-e12af547924c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\09. ItemTable">
+      <UniqueIdentifier>{8fc44189-0df6-4d0c-8d71-82cf16718d09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -196,37 +211,37 @@
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\00. DataManager</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2PlayerSkillComponent.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2ProjectTile.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2Skill.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2SkillObject.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2MeleeAttack.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2Blaze.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2Meteor.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2MeteorTarget.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2MeteorFire.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2FrozenOrb.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2Teleport.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2ObjectPoolComponent.h">
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\03. ObjectPool</Filter>
@@ -273,29 +288,71 @@
     <ClInclude Include="Diablo2\Component\D2EnemyCollider.h">
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\05. Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Diablo2\State\D2EnemyIdleState.h">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Diablo2\State\D2EnemyMoveState.h">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Diablo2\State\D2EnemyHitState.h">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Diablo2\State\D2EnemyMeleeAttackState.h">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Diablo2\Component\D2EnemySkillComponent.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\02. EnemySkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\02. EnemySkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\Component\D2EnemyMeleeAttack.h">
-      <Filter>98. Diablo2\01. Component\02.Skill\02. EnemySkill</Filter>
-    </ClInclude>
-    <ClInclude Include="Diablo2\State\D2EnemyDieState.h">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\02. EnemySkill</Filter>
     </ClInclude>
     <ClInclude Include="Diablo2\State\D2EnemyDeadState.h">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2EnemyDieState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2EnemyHitState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2EnemyIdleState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2EnemyMeleeAttackState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2EnemyMoveState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2AndarielIdleState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2AndarielMoveState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2AndarielDeadState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2AndarielSprayState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2AndarielProjectileState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2AndarielMeleeAttackState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2AndarielDieState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2Effect.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\07. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2Inventory.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2Item.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ItemTableComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\09. ItemTable</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ItemTable.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\09. ItemTable</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2EquipItem.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2UsableItem.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,37 +447,37 @@
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\00. DataManager</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2PlayerSkillComponent.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2ProjectTile.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2Skill.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2SkillObject.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2MeleeAttack.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2Blaze.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2Meteor.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2MeteorTarget.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2MeteorFire.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2FrozenOrb.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2Teleport.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\01. PlayerSkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\01. PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2ObjectPoolComponent.cpp">
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\03. ObjectPool</Filter>
@@ -467,29 +524,71 @@
     <ClCompile Include="Diablo2\Component\D2EnemyCollider.cpp">
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\05. Collider</Filter>
     </ClCompile>
-    <ClCompile Include="Diablo2\State\D2EnemyIdleState.cpp">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Diablo2\State\D2EnemyMoveState.cpp">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Diablo2\State\D2EnemyHitState.cpp">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Diablo2\State\D2EnemyMeleeAttackState.cpp">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Diablo2\Component\D2EnemySkillComponent.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\02. EnemySkill</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\02. EnemySkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2EnemyMeleeAttack.cpp">
-      <Filter>98. Diablo2\01. Component\02.Skill\02. EnemySkill</Filter>
-    </ClCompile>
-    <ClCompile Include="Diablo2\State\D2EnemyDieState.cpp">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\02. Skill\02. EnemySkill</Filter>
     </ClCompile>
     <ClCompile Include="Diablo2\State\D2EnemyDeadState.cpp">
-      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy</Filter>
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2EnemyDieState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2EnemyHitState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2EnemyIdleState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2EnemyMeleeAttackState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2EnemyMoveState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\01. Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2AndarielIdleState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2AndarielMoveState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2AndarielDeadState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2AndarielSprayState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2AndarielProjectileState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2AndarielMeleeAttackState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2AndarielDieState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\02. Andariel</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2Effect.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\07. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2Inventory.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2Item.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ItemTableComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\09. ItemTable</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ItemTable.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\09. ItemTable</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2EquipItem.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2UsableItem.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

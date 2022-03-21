@@ -53,6 +53,7 @@
 #include "../Diablo2/Component/D2MeteorTarget.h"
 #include "../Diablo2/Component/D2Teleport.h"
 #include "../Diablo2/Component/D2PlayerSkillComponent.h"
+#include "../Diablo2/Component/D2Effect.h"
 #include "../Diablo2/State/PlayerIdleState.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
@@ -364,6 +365,9 @@ void CEditorMenuWindow::OnClickCreateComponent()
         case eD2ObjectComponentType::D2EnemyMeleeAttack:
             objComp = obj->CreateComponent<CD2EnemyMeleeAttack>(mComponentNameInput->GetTextMultiByte());
             static_cast<CD2SkillObject*>(objComp)->SetEditMode(true);
+            break;
+        case eD2ObjectComponentType::D2Effect:
+            objComp = obj->CreateComponent<CD2Effect>(mComponentNameInput->GetTextMultiByte());
             break;
         }
     }

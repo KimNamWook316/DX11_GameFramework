@@ -2,6 +2,8 @@
 
 #include "Widget/WidgetWindow.h"
 #include "Widget/Text.h"
+#include "Widget/Image.h"
+#include "Widget/Grid.h"
 
 class CD2FrameWidget :
     public CWidgetWindow
@@ -21,10 +23,19 @@ public:
     virtual void Render() override;
     virtual CD2FrameWidget* Clone();
 
+public:
+    void OnClickGrid(int idx);
+
 private:
     CSharedPtr<CText> mFPSText;
     CSharedPtr<CText> mPlayerSkill;
+    CSharedPtr<CText> mHp;
+    CSharedPtr<CText> mMp;
+    CSharedPtr<CImage> mImage;
+    CSharedPtr<CImage> mImage2;
+    CSharedPtr<CGrid> mGrid;
 
-    CSharedPtr<class CD2PlayerSkillComponent> mSkill;
+    class CD2PlayerSkillComponent* mSkill;
+    class CD2CharacterInfoComponent* mCharInfo;
 };
 

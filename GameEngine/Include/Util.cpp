@@ -500,3 +500,8 @@ eCameraType CUtil::StringToCameraType(const std::string& str)
 	}
 	return (eCameraType)(-1);
 }
+
+bool CUtil::StringToBool(const std::string& str)
+{
+	return (str == "TRUE");
+}

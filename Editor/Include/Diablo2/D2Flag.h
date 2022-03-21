@@ -24,6 +24,7 @@ enum class eD2InitialStateType
 {
 	D2PlayerIdle,
 	D2EnemyIdle,
+	D2AndarielIdle,
 	MAX
 };
 
@@ -53,6 +54,7 @@ enum class eD2ObjectComponentType
 	D2MeteorTarget,
 	D2Teleport,
 	D2EnemyMeleeAttack,
+	D2Effect,
 	Max,
 };
 
@@ -62,6 +64,7 @@ enum class eD2ElementType
 	Fire,
 	Ice,
 	Lightning,
+	Poison,
 	Max
 };
 
@@ -69,12 +72,20 @@ enum class eD2CharInfoEventType
 {
     HpDec,
     HpInc,
+	MaxHpDec,
+	MaxHpInc,
     SpeedUp,
     SpeedDown,
     ChangeDir,
 	CC,
 	MpDec,
 	MpInc,
+	MaxMpDec,
+	MaxMpInc,
+	MeleeBonusInc,
+	MeleeBonusDec,
+	MagicBonusInc,
+	MagicBonusDec,
 	Die,
     Max
 };
@@ -95,3 +106,23 @@ enum class eD2SkillTreeNo
     Max
 };
 
+enum class eD2ItemType
+{
+	Head,
+	Armor,
+	MainWeapon,
+	SubWeapon,
+	Belt,
+	Globe,
+	Boots,
+	Ring,
+	Etc,
+	Max
+};
+
+enum class eD2ItemUseType
+{
+	None,
+	Equip,
+	Usable
+};

@@ -755,6 +755,12 @@
     <ClInclude Include="IMGUIMenuItem.h">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\Grid.h">
+      <Filter>09. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\GridShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1224,6 +1230,12 @@
     </ClCompile>
     <ClCompile Include="IMGUIMenuItem.cpp">
       <Filter>01. Engine\08. IMGUI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Grid.cpp">
+      <Filter>09. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\GridShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. WidgetShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,5 +22,7 @@ public:
 
 	static std::string CameraTypeToString(eCameraType eType);
 	static eCameraType StringToCameraType(const std::string& str);
+
+	static bool StringToBool(const std::string& str);
 };
 

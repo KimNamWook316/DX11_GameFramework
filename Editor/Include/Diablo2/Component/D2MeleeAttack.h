@@ -13,10 +13,13 @@ protected:
     virtual ~CD2MeleeAttack();
 
 public:
-    void OnAttackAnimEnd();
+    virtual void Start() override;
 
 public:
     virtual CObjectComponent* Clone() override;
     virtual void OnCollideEnter(const CollisionResult& result) override;
+
+private:
+    class CColliderBox2D* mCollider;
 };
 

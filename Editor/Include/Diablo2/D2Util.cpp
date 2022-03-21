@@ -2,6 +2,7 @@
 #include "../EditorInfo.h"
 #include "State/PlayerIdleState.h"
 #include "State/D2EnemyIdleState.h"
+#include "State/D2AndarielIdleState.h"
 
 eD2SpriteDir CD2Util::GetSpriteDir(const Vector2 dir)
 {
@@ -167,6 +168,9 @@ std::string CD2Util::StateEnumToString(eD2InitialStateType type)
 	case eD2InitialStateType::D2EnemyIdle:
 		out = "D2EnemyIdle";
 		return out;
+	case eD2InitialStateType::D2AndarielIdle:
+		out = "D2AndarielIdle";
+		return out;
 	}
 	return out;
 }
@@ -180,6 +184,10 @@ eD2InitialStateType CD2Util::StringToStateEnum(const std::string& typeString)
 	else if (typeString == "D2EnemyIdle")
 	{
 		return eD2InitialStateType::D2EnemyIdle;
+	}
+	else if (typeString == "D2AndarielIdle")
+	{
+		return eD2InitialStateType::D2AndarielIdle;
 	}
 	else
 	{
@@ -211,6 +219,8 @@ size_t CD2Util::StateEnumToStateType(eD2InitialStateType type)
 		return typeid(CPlayerIdleState).hash_code();
 	case eD2InitialStateType::D2EnemyIdle:
 		return typeid(CD2EnemyIdleState).hash_code();
+	case eD2InitialStateType::D2AndarielIdle:
+		return typeid(CD2AndarielIdleState).hash_code();
 	}
 	return -1;
 }
@@ -285,6 +295,9 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 		break;
 	case eD2ObjectComponentType::D2EnemyMeleeAttack:
 		out = "D2EnemyMeleeAttack";
+		break;
+	case eD2ObjectComponentType::D2Effect:
+		out = "D2Effect";
 		break;
 	}
 	return out;
@@ -373,6 +386,10 @@ eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string&
 	{
 		return eD2ObjectComponentType::D2EnemyMeleeAttack;
 	}
+	else if (typeString == "D2Effect")
+	{
+		return eD2ObjectComponentType::D2Effect;
+	}
 	return (eD2ObjectComponentType)(-1);
 }
 
@@ -392,6 +409,9 @@ std::string CD2Util::ElementTypeToString(eD2ElementType type)
 		break;
 	case eD2ElementType::Lightning:
 		out = "Lightning";
+		break;
+	case eD2ElementType::Poison:
+		out = "Poison";
 		break;
 	}
 	return out;
@@ -414,6 +434,10 @@ eD2ElementType CD2Util::StringToElementType(const std::string& typeString)
 	else if (typeString == "Lightning")
 	{
 		return eD2ElementType::Lightning;
+	}
+	else if (typeString == "Poison")
+	{
+		return eD2ElementType::Poison;
 	}
 	return (eD2ElementType)(-1);
 }
@@ -488,6 +512,22 @@ eD2SkillTreeNo CD2Util::StringToSkilltreeNo(const std::string& noString)
 	else
 	{
 		return (eD2SkillTreeNo)(-1);
+	}
+}
+
+eD2ItemUseType CD2Util::StringToItemUseType(const std::string& str)
+{
+	if (str == "None")
+	{
+		return eD2ItemUseType::None;
+	}
+	else if (str == "Equip")
+	{
+		return eD2ItemUseType::Equip;
+	}
+	else if (str == "Usable")
+	{
+		return eD2ItemUseType::Usable;
 	}
 }
 

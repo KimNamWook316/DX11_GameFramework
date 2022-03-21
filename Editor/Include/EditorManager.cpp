@@ -33,8 +33,10 @@
 #include "Diablo2/Component/D2EnemyMeleeAttack.h"
 #include "Diablo2/Component/D2PlayerSkillComponent.h"
 #include "Diablo2/Component/D2EnemySkillComponent.h"
+#include "Diablo2/Component/D2Effect.h"
 #include "Diablo2/State/PlayerIdleState.h"
 #include "Diablo2/State/D2EnemyIdleState.h"
+#include "Diablo2/State/D2AndarielIdleState.h"
 #include "Engine.h"
 #include "Resource.h"
 #include "Scene/SceneManager.h"
@@ -72,7 +74,7 @@ CEditorManager::~CEditorManager()
 bool CEditorManager::Init(HINSTANCE hInst)
 {
 	if (!CEngine::GetInst()->Init(hInst, TEXT("GameEngine"),
-		1280, 720, IDI_SMALL))
+		800, 600, IDI_SMALL))
 	{
 		CEngine::DestroyInst();
 		return false;
@@ -412,6 +414,11 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 		CComponent* component = obj->LoadComponent<CD2EnemyMeleeAttack>();
 		return component;
 	}
+	else if(type == typeid(CD2Effect).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2Effect>();
+		return component;
+	}
 	else
 	{
 		assert(false);
@@ -436,6 +443,10 @@ void CEditorManager::OnCreateState(CStateComponent* comp, size_t type)
 	else if (type == typeid(CD2EnemyIdleState).hash_code())
 	{
 		comp->SetInitialState<CD2EnemyIdleState>();
+	}
+	else if (type == typeid(CD2AndarielIdleState).hash_code())
+	{
+		comp->SetInitialState<CD2AndarielIdleState>();
 	}
 }
 

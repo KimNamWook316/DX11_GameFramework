@@ -44,13 +44,27 @@ public:
 		return meAttackType;
 	}
 
+	eD2ElementType GetElementType();
+
 	CD2Skill* GetSkill(const std::string& name);
+
+	float GetMp() const
+	{
+		return mMp;
+	}
+
+	float GetRange() const
+	{
+		return mRange;
+	}
 
 private:
 	class CD2PlayerSkillComponent* mOwner;
 	eD2SkillTreeNo mTreeNo;
 	std::string mName;
 	eD2AttackType meAttackType;
+	float mMp;
+	float mRange;
 	int mLevel;
 	int mMaxLevel;
 	CD2Skill* mParentSkill;

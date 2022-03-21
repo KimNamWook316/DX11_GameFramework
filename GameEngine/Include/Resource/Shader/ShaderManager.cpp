@@ -13,6 +13,7 @@
 #include "SpaceRhombusShader.h"
 #include "TileMapShader.h"
 #include "PathFindTileShader.h"
+#include "GridShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -121,6 +122,14 @@ bool CShaderManager::Init()
 		assert(false);
 		return false;
 	}
+
+	// Grid UI Shader
+	if (!CreateShader<CGridShader>("GridShader"))
+	{
+		assert(false);
+		return false;
+	}
+
 
 	// 상수 버퍼 생성
 	CreateConstantBuffer("TransformBuffer", sizeof(TransformCBuffer), 0,

@@ -56,6 +56,12 @@ public:
 	void AddCollider(class CColliderComponent* collider);
 	void DeleteCollider(class CColliderComponent* collider);
 
+public:
+	class CColliderComponent* GetMouseCollision()
+	{
+		return mMouseCollision;
+	}
+
 private:
 	void classifyColliderBySection();
 

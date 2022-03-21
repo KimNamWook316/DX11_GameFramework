@@ -271,3 +271,11 @@ enum class eProcedualObjectType
 	Max
 };
 
+enum class eCellState
+{
+	Normal,
+	Hovered,
+	Clicked,
+	Occupied,
+	Max
+};

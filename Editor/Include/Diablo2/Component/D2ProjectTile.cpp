@@ -5,6 +5,7 @@
 #include "Component/SpriteComponent.h"
 #include "D2CharacterInfoComponent.h"
 #include "D2DataManager.h"
+#include "D2ObjectPool.h"
 #include "../D2Util.h"
 
 CD2Projectile::CD2Projectile()	:
@@ -95,6 +96,18 @@ void CD2Projectile::OnCollideEnter(const CollisionResult& result)
 	{
 		com->SetHp(-mInfo.Damage);
 		com->SetCC(mInfo.eElementType);
+	}
+
+	switch (mInfo.eElementType)
+	{
+	case eD2ElementType::Fire:
+		CD2ObjectPool::GetInst()->ActiveEffect("FireExplode" , mObject->GetWorldPos());
+		break;
+	case eD2ElementType::Ice:
+		CD2ObjectPool::GetInst()->ActiveEffect("IceExplode" , mObject->GetWorldPos());
+		break;
+	default:
+		break;
 	}
 
 	mObject->Destroy();

@@ -70,39 +70,39 @@ void CD2PlayerCollider::OnCollideEnter(const CollisionResult& result)
 	case eCollisionChannel::Object:
 	case eCollisionChannel::Monster:
 	{
-		Box2DInfo srcInfo = static_cast<CColliderBox2D*>(result.Src)->GetInfo();
-		Box2DInfo destInfo = static_cast<CColliderBox2D*>(result.Dest)->GetInfo();
-		Box2DInfo overLap = CCollision::GetOverlapAreaAABB(srcInfo, destInfo);
-
-		Vector3 colDir = result.Dest->GetWorldPos() - result.Src->GetWorldPos();
-
-		Vector2 moveAmount;
-
-		if (overLap.Length.x > overLap.Length.y)
-		{
-			if (colDir.y > 0)
-			{
-				moveAmount.y = -overLap.Length.y * 2.f;
-			}
-			else
-			{
-				moveAmount.y = overLap.Length.y * 2.f;
-			}
-		}
-		else
-		{
-			if (colDir.x > 0)
-			{
-				moveAmount.x = -overLap.Length.x * 2.f;
-			}
-			else
-			{
-				moveAmount.x = overLap.Length.x * 2.f;
-			}
-		}
-
-		mObject->AddWorldPos(moveAmount.x, moveAmount.y, 0.f);
-		break;
+ //		Box2DInfo srcInfo = static_cast<CColliderBox2D*>(result.Src)->GetInfo();
+ //		Box2DInfo destInfo = static_cast<CColliderBox2D*>(result.Dest)->GetInfo();
+ //		Box2DInfo overLap = CCollision::GetOverlapAreaAABB(srcInfo, destInfo);
+ //
+ //		Vector3 colDir = result.Dest->GetWorldPos() - result.Src->GetWorldPos();
+ //
+ //		Vector2 moveAmount;
+ //
+ //		if (overLap.Length.x > overLap.Length.y)
+ //		{
+ //			if (colDir.y > 0)
+ //			{
+ //				moveAmount.y = -overLap.Length.y * 2.f;
+ //			}
+ //			else
+ //			{
+ //				moveAmount.y = overLap.Length.y * 2.f;
+ //			}
+ //		}
+ //		else
+ //		{
+ //			if (colDir.x > 0)
+ //			{
+ //				moveAmount.x = -overLap.Length.x * 2.f;
+ //			}
+ //			else
+ //			{
+ //				moveAmount.x = overLap.Length.x * 2.f;
+ //			}
+ //		}
+ //
+ //		mObject->AddWorldPos(moveAmount.x, moveAmount.y, 0.f);
+ 		break;
 	}
 	case eCollisionChannel::MonsterAttack:
 	{
