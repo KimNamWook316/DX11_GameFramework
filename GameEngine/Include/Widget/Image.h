@@ -26,6 +26,8 @@ public:
         CWidget::Enable(bEnable);
     }
 
+    void SetTexture(CTexture* texture);
+
 public:
     bool SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
     bool SetTextureFullPath(const std::string& name, const TCHAR* fullPath);

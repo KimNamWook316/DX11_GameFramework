@@ -57,6 +57,27 @@ public:
     bool UnGrabQuickSlotItem(const int idx);
     bool UseQuickSlotItem(const int idx);
 
+public:
+    CD2Item* GetGrabItem()
+    {
+        return mGrabItem;
+    }
+    CD2Item* GetItem(const int idx)
+    {
+        return mInvenSlot[idx].Item;
+    }
+    CD2Item* GetEquipItem(eD2ItemType type);
+    CD2Item* GetOverlappedItem(const int idx);
+    int GetOverlappedItemRootIndex(const int idx);
+    int GetRootSlotIndex(const int idx);
+    bool GetItemOccupiedIndexes(const int idx, std::vector<int>& outVec);
+    bool IsRightEquipmentSlot(eD2ItemType type);
+
+public:
+    void GetEquipmentSlotState(std::vector<class CD2Item*>& outVecItem);
+    void GetInventorySlotState(std::vector<D2ItemSlotInfo>& outVecSlotInfo);
+    void GetQuickSlotState(std::vector<class CD2Item*>& outVecItem);
+
 private:
     bool isValidInvenIdx(const int idx);
     bool isValidQuickSlotIdx(const int idx);

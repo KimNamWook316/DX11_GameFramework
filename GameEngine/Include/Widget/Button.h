@@ -31,6 +31,7 @@ public:
     void SetTexture(eButtonState state, CTexture* texture)
     {
         mImageData[(int)state]->SetTexture(texture);
+        SetUseTexture(true);
     }
 
 public:
@@ -58,11 +59,25 @@ public:
         mClickCallBack = std::bind(func);
     }
 
+public:
+    template <typename T>
+    void SetHoverCallBack(T* obj, void(T::* func)())
+    {
+        mHoverCallBack = std::bind(func, obj);
+    }
+
+    template <typename T>
+    void SetHoverCallBack(void(T::* func)())
+    {
+        mHoverCallBack = std::bind(func);
+    }
+
 protected:
     eButtonState meCurState;
     CWidgetImageData* mImageData[(int)eButtonState::Max];
 
     std::function<void()> mClickCallBack;
+    std::function<void()> mHoverCallBack;
 
     CSharedPtr<class CSound> mSound[(int)eButtonSoundState::Max];
     bool mbHoverSoundPlaying;

@@ -62,6 +62,11 @@ void CButton::Update(float deltaTime)
 	{
 		if (mbMouseHovered)
 		{
+			if (mHoverCallBack)
+			{
+				mHoverCallBack();
+			}
+
 			if (!mbHoverSoundPlaying)
 			{
 				mbHoverSoundPlaying = true;

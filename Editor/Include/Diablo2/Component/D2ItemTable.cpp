@@ -73,6 +73,19 @@ CD2Item* CD2ItemTable::GenerateItem(const std::string& name)
 	return nullptr;
 }
 
+
+CTexture* CD2ItemTable::FindItemUITexture(CD2Item* item)
+{
+	std::string textureName = item->GetName() + "UITexture";
+	return CResourceManager::GetInst()->FindTexture(textureName);
+}
+
+CTexture* CD2ItemTable::FindItemObjTexture(CD2Item* item)
+{
+	std::string textureName = item->GetName() + "ObjTexture";
+	return CResourceManager::GetInst()->FindTexture(textureName);
+}
+
 bool CD2ItemTable::loadTable()
 {
 	std::string outName;
@@ -92,6 +105,7 @@ bool CD2ItemTable::loadTable()
 		info = new D2ItemInfo;
 		info->Name = (*row)[eCSVLabel::Name];
 		info->UniqueID = std::stoi((*row)[eCSVLabel::UniqueID]);
+		info->eType = CD2Util::StringToItemType((*row)[eCSVLabel::Type]);
 		info->CellX = std::stoi((*row)[eCSVLabel::CellXWidth]);
 		info->CellY = std::stoi((*row)[eCSVLabel::CellYWidth]);
 		info->eUseType = CD2Util::StringToItemUseType((*row)[eCSVLabel::UseType]);
@@ -104,17 +118,19 @@ bool CD2ItemTable::loadTable()
 		std::string uiTexturePath = (*row)[eCSVLabel::UITexturePath];
 		TCHAR convertName[256] = {};
 		int length = MultiByteToWideChar(CP_ACP, 0, uiTexturePath.c_str(), -1, nullptr, 0);
-		MultiByteToWideChar(CP_ACP, 0, uiTexturePath.c_str(), length, convertName, 0);
+		MultiByteToWideChar(CP_ACP, 0, uiTexturePath.c_str(), length, convertName, length);
 
 		// 아이템 UI 텍스쳐
-		CResourceManager::GetInst()->LoadTexture(info->Name, convertName);
+		std::string uiTextureName = info->Name + "UITexture";
+		CResourceManager::GetInst()->LoadTexture(uiTextureName, convertName);
 
 		std::string objTexturePath = (*row)[eCSVLabel::ObjTexturePath];
 		length = MultiByteToWideChar(CP_ACP, 0, objTexturePath.c_str(), -1, nullptr, 0);
-		MultiByteToWideChar(CP_ACP, 0, objTexturePath.c_str(), length, convertName, 0);
+		MultiByteToWideChar(CP_ACP, 0, objTexturePath.c_str(), length, convertName, length);
 
 		// 아이템 오브젝트 텍스쳐
-		CResourceManager::GetInst()->LoadTexture(info->Name, convertName);
+		std::string objTextureName = info->Name + "ObjTexture";
+		CResourceManager::GetInst()->LoadTexture(objTextureName, convertName);
 
 		mMapItemInfo.insert(std::make_pair(iter->first, info));
 	}

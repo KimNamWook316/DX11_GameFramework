@@ -54,6 +54,9 @@
 #include "../Diablo2/Component/D2Teleport.h"
 #include "../Diablo2/Component/D2PlayerSkillComponent.h"
 #include "../Diablo2/Component/D2Effect.h"
+#include "../Diablo2/Component/D2ItemTableComponent.h"
+#include "../Diablo2/Component/D2UIManagerComponent.h"
+#include "../Diablo2/Component/D2Inventory.h"
 #include "../Diablo2/State/PlayerIdleState.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
@@ -368,6 +371,15 @@ void CEditorMenuWindow::OnClickCreateComponent()
             break;
         case eD2ObjectComponentType::D2Effect:
             objComp = obj->CreateComponent<CD2Effect>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2Inventory:
+            objComp = obj->CreateComponent<CD2Inventory>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2UIManager:
+            objComp = obj->CreateComponent<CD2UIManagerComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2ItemTable:
+            objComp = obj->CreateComponent<CD2ItemTableComponent>(mComponentNameInput->GetTextMultiByte());
             break;
         }
     }

@@ -5,8 +5,21 @@
 
 struct Cell
 {
+    bool bOccupied;
     eCellState State;
     Vector3 Position;
+
+    Cell() :
+        bOccupied(false),
+        State(eCellState::Normal)
+    {
+    }
+};
+
+struct PrevCellState
+{
+    int Index;
+    eCellState State;
 };
 
 class CGrid :
@@ -29,14 +42,39 @@ public:
 
 public:
     bool OccupyCell(const int idx);
-    bool UnOccupycell(const int idx);
+    bool OccupyCell(const std::vector<int>& indexes);
+    bool UnOccupyCell(const int idx);
+    bool UnOccupyCell(const std::vector<int>& indexes);
     void SetCellCount(const int x, const int y);
     void SetCellSize(const Vector2& size);
     void SetCellSize(const int x, const int y);
     void SetTint(eCellState state, const Vector4& color);
+    void SetOccupiedTint(const Vector4& color);
     void SetSelectWidth(const int width);
     void SetSelectHeight(const int height);
     void SetSelectRange(const int width, const int height);
+
+public:
+    Vector2 GetCellPos(const int idx);
+    const Vector2& GetCellSize() const
+    {
+        return mCellSize;
+    }
+
+    int GetCellCountX() const
+    {
+        return mCellCountX;
+    }
+
+    int GetCellCountY() const
+    {
+        return mCellCountY;
+    }
+    
+    int GetCellCount() const
+    {
+        return mCellCount;
+    }
 
 public:
     template <typename T>
@@ -54,8 +92,9 @@ private:
     std::vector<CellRenderInfo> mVecCellRenderInfo;
     std::vector<Cell*> mVecCell;
     Vector4 mTint[(int)eCellState::Max];
+    Vector4 mOccupiedTint;
     Cell* mMouseOnCell;
-    std::vector<Cell*> mVecPrevMouseOn;
+    std::vector<PrevCellState> mVecPrevMouseOn;
     std::vector<Cell*> mVecCurMouseOn;
     int mCellCountX;
     int mCellCountY;
@@ -64,5 +103,6 @@ private:
     int mCellSelectWidth;
     int mCellSelectHeight;
     std::function<void(int)> mCallBack[(int)eCellState::Max];
+    bool mbIsMousePush;
 };
 

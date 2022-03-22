@@ -6,6 +6,7 @@
 class CD2Item
 {
 	friend class CD2ItemTable;
+	friend class CD2Inventory;
 
 protected:
 	CD2Item();
@@ -38,6 +39,11 @@ public:
 	eD2ItemType GetItemType() const
 	{
 		return mInfo.eType;
+	}
+
+	const std::string& GetName() const
+	{
+		return mInfo.Name;
 	}
 
 protected:

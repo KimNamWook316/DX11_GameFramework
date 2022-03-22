@@ -299,6 +299,15 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 	case eD2ObjectComponentType::D2Effect:
 		out = "D2Effect";
 		break;
+	case eD2ObjectComponentType::D2Inventory:
+		out = "D2Inventory";
+		break;
+	case eD2ObjectComponentType::D2ItemTable:
+		out = "D2ItemTable";
+		break;
+	case eD2ObjectComponentType::D2UIManager:
+		out = "D2UIManager";
+		break;
 	}
 	return out;
 }
@@ -389,6 +398,18 @@ eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string&
 	else if (typeString == "D2Effect")
 	{
 		return eD2ObjectComponentType::D2Effect;
+	}
+	else if (typeString == "D2Inventory")
+	{
+		return eD2ObjectComponentType::D2Inventory;
+	}
+	else if (typeString == "D2ItemTable")
+	{
+		return eD2ObjectComponentType::D2ItemTable;
+	}
+	else if (typeString == "D2UIManager")
+	{
+		return eD2ObjectComponentType::D2UIManager;
 	}
 	return (eD2ObjectComponentType)(-1);
 }
@@ -513,6 +534,44 @@ eD2SkillTreeNo CD2Util::StringToSkilltreeNo(const std::string& noString)
 	{
 		return (eD2SkillTreeNo)(-1);
 	}
+}
+
+eD2ItemType CD2Util::StringToItemType(const std::string& str)
+{
+	if (str == "Head")
+	{
+		return eD2ItemType::Head;
+	}
+	else if (str == "Armor")
+	{
+		return eD2ItemType::Armor;
+	}
+	else if (str == "MainWeapon")
+	{
+		return eD2ItemType::MainWeapon;
+	}
+	else if (str == "SubWeapon")
+	{
+		return eD2ItemType::SubWeapon;
+	}
+	else if (str == "Belt")
+	{
+		return eD2ItemType::Belt;
+	}
+	else if (str == "Globe")
+	{
+		return eD2ItemType::Globe;
+	}
+	else if (str == "Boots")
+	{
+		return eD2ItemType::Boots;
+	}
+	else if (str == "Etc")
+	{
+		return eD2ItemType::Etc;
+	}
+
+	return (eD2ItemType)(-1);
 }
 
 eD2ItemUseType CD2Util::StringToItemUseType(const std::string& str)

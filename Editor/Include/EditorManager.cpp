@@ -13,7 +13,8 @@
 #include "Component/DissolveComponent.h"
 #include "Component/NavAgentComponent.h"
 #include "Component/StateComponent.h"
-#include "Diablo2/UI/D2FrameWidget.h"
+#include "Diablo2/UI/D2MouseNormal.h"
+#include "Diablo2/UI/D2MouseItemSelect.h"
 #include "Diablo2/Component/D2CharacterInfoComponent.h"
 #include "Diablo2/Component/D2PlayerCollider.h"
 #include "Diablo2/Component/D2EnemyCollider.h"
@@ -34,6 +35,9 @@
 #include "Diablo2/Component/D2PlayerSkillComponent.h"
 #include "Diablo2/Component/D2EnemySkillComponent.h"
 #include "Diablo2/Component/D2Effect.h"
+#include "Diablo2/Component/D2ItemTableComponent.h"
+#include "Diablo2/Component/D2UIManagerComponent.h"
+#include "Diablo2/Component/D2Inventory.h"
 #include "Diablo2/State/PlayerIdleState.h"
 #include "Diablo2/State/D2EnemyIdleState.h"
 #include "Diablo2/State/D2AndarielIdleState.h"
@@ -119,6 +123,9 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("MouseRCtrl", VK_RBUTTON);
 	CInput::GetInst()->SetCtrlKey("MouseRCtrl", true);
 
+	// UIKey
+	CInput::GetInst()->CreateKey("ToggleInventory", 'I');
+
 	// Skill Debug Key
 	CInput::GetInst()->CreateKey("SkillLevelUp", VK_NUMPAD0);
 	CInput::GetInst()->CreateKey("NextSkill", VK_NUMPAD1);
@@ -169,10 +176,14 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	std::string outName;
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "DataManager.gobj");
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "ObjectPool.gobj");
+	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "UIManager.gobj");
+	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "ItemTable.gobj");
  	CGameObject* randomMap = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "RandomMapGenerator.gobj");
 	randomMap->FindSceneComponentFromType<CProcedualMapGenerator>()->GenerateMap();
 	CGameObject* player = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "Player.gobj");
-	CSceneManager::GetInst()->GetScene()->GetViewport()->CreateWidgetWindow<CD2FrameWidget>("FrameWidget");
+
+	CEngine::GetInst()->CreateMouse<CD2MouseNormal>(eMouseState::Normal, "MouseNormal");
+	CEngine::GetInst()->CreateMouse<CD2MouseItemSelect>(eMouseState::State1, "MouseItemSelect");
 
 	return true;
 }
@@ -417,6 +428,21 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 	else if(type == typeid(CD2Effect).hash_code())
 	{
 		CComponent* component = obj->LoadComponent<CD2Effect>();
+		return component;
+	}
+	else if(type == typeid(CD2UIManagerComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2UIManagerComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2ItemTableComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2ItemTableComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2Inventory).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2Inventory>();
 		return component;
 	}
 	else

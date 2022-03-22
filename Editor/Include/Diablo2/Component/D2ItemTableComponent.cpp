@@ -3,9 +3,11 @@
 
 CD2ItemTableComponent::CD2ItemTableComponent()
 {
+	SetTypeID<CD2ItemTableComponent>();
 }
 
-CD2ItemTableComponent::CD2ItemTableComponent(const CD2ItemTableComponent& com)
+CD2ItemTableComponent::CD2ItemTableComponent(const CD2ItemTableComponent& com)	:
+	CObjectComponent(com)
 {
 }
 
@@ -45,5 +47,5 @@ void CD2ItemTableComponent::PostRender()
 
 CD2ItemTableComponent* CD2ItemTableComponent::Clone()
 {
-	return nullptr;
+	return new CD2ItemTableComponent(*this);
 }

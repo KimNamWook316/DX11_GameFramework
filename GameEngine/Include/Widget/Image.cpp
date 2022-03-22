@@ -70,6 +70,12 @@ CImage* CImage::Clone()
 	return new CImage(*this);
 }
 
+void CImage::SetTexture(CTexture* texture)
+{
+	mImageData->SetTexture(texture);
+	SetUseTexture(true);
+}
+
 bool CImage::SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName)
 {
 	mImageData->SetTexture(name, fileName, pathName);

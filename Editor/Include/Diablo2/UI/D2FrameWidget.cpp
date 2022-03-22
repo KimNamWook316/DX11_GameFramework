@@ -78,7 +78,6 @@ bool CD2FrameWidget::Init()
 	mGrid->SetTint(eCellState::Normal, Vector4(1.f, 1.f, 1.f, 0.7f));
 	mGrid->SetTint(eCellState::Hovered, Vector4(0.f, 1.f, 0.f, 0.7f));
 	mGrid->SetTint(eCellState::Clicked, Vector4(0.f, 0.f, 1.f, 0.7f));
-	mGrid->SetTint(eCellState::Occupied, Vector4(1.f, 0.f, 1.f, 0.7f));
 	mGrid->OccupyCell(99);
 	mGrid->SetSelectRange(2, 3);
 	mGrid->SetCallBack(eCellState::Clicked, this, &CD2FrameWidget::OnClickGrid);

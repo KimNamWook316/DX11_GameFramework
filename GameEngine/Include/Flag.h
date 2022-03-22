@@ -276,6 +276,5 @@ enum class eCellState
 	Normal,
 	Hovered,
 	Clicked,
-	Occupied,
 	Max
 };

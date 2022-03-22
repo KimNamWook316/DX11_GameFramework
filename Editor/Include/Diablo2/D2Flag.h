@@ -55,6 +55,9 @@ enum class eD2ObjectComponentType
 	D2Teleport,
 	D2EnemyMeleeAttack,
 	D2Effect,
+	D2Inventory,
+	D2ItemTable,
+	D2UIManager,
 	Max,
 };
 
@@ -115,7 +118,6 @@ enum class eD2ItemType
 	Belt,
 	Globe,
 	Boots,
-	Ring,
 	Etc,
 	Max
 };

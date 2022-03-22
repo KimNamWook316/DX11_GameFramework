@@ -3,6 +3,10 @@
 #include "D2UsableItem.h"
 #include "D2EquipItem.h"
 
+#include "D2ItemTable.h"
+#include "Scene/Scene.h"
+#include "GameObject/GameObject.h"
+
 CD2Inventory::CD2Inventory()    :
     mGrabItem(nullptr),
     mQuickSlot{},
@@ -35,6 +39,38 @@ bool CD2Inventory::Init()
 
 void CD2Inventory::Start()
 {
+	// Test
+	CD2Item* dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultArmor");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
+
+	dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultHead");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
+
+	dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultBelt");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
+
+	dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultBoots");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
+
+	dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultMainWeapon");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
+
+	dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultMainWeapon");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
+
+	dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultBoots");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
+
+	dummy = CD2ItemTable::GetInst()->GenerateItem("DefaultArmor");
+    dummy->SetOwner(mScene->GetPlayerObj());
+	PushItem(dummy);
 }
 
 void CD2Inventory::Update(float deltaTime)
@@ -59,111 +95,126 @@ void CD2Inventory::PostRender()
 
 CD2Inventory* CD2Inventory::Clone()
 {
-    return new CD2Inventory(*this);
+	return new CD2Inventory(*this);
 }
 
 bool CD2Inventory::GrabItem(const int idx)
 {
-    // 이미 잡고 있는 아이템이 있을 경우
-    if (mGrabItem)
-    {
-        return false;
-    }
+	// 이미 잡고 있는 아이템이 있을 경우
+	if (mGrabItem)
+	{
+		return false;
+	}
 
-    if (isValidInvenIdx(idx))
-    {
-        return false;
-    }
+	if (!isValidInvenIdx(idx))
+	{
+		return false;
+	}
 
-    // 해당 슬롯에 아이템 없을 경우
-    if (mInvenSlot[idx].Item)
-    {
-        return false;
-    }
+	// 해당 슬롯에 아이템 없을 경우
+	if (!mInvenSlot[idx].Item)
+	{
+		return false;
+	}
 
-    CD2Item* grabItem = mInvenSlot[idx].Item;
+	CD2Item* grabItem = mInvenSlot[idx].Item;
 
 	mGrabItem = grabItem;
 
-    removeItemFromSlot(idx);
+	removeItemFromSlot(idx);
 
-    // 현재 인벤토리 목록에서 아이템 삭제.
-    mInventory.remove(grabItem);
+	// 현재 인벤토리 목록에서 아이템 삭제.
+	mInventory.remove(grabItem);
 
-    return true;
+	return true;
 }
 
 bool CD2Inventory::UnGrabItem(const int idx)
 {
-    if (!mGrabItem)
-    {
-        return false;
-    }
+	if (!mGrabItem)
+	{
+		return false;
+	}
 
-    CD2Item* overlapItem = nullptr;
-    int overlapItemSlotIndex = -1;
+	CD2Item* overlapItem = nullptr;
+	int overlapItemSlotIndex = -1;
 
-    int idxX = idx % INVEN_COUNTX;
-    int idxY = idx / INVEN_COUNTX;
+	int idxX = idx % INVEN_COUNTX;
+	int idxY = idx / INVEN_COUNTX;
 
-    int grabItemWidth = mGrabItem->GetCellWidth();
-    int grabItemHeight = mGrabItem->GetCellHeight();
+	int grabItemWidth = mGrabItem->GetCellWidth();
+	int grabItemHeight = mGrabItem->GetCellHeight();
 
-    // 현재 아이템을 놓고 싶은 범위 안을 탐색하여, 1개 이상의 아이템이 존재할 경우 Ungrab하지 못함.
-    for (int y = 0; y <= grabItemHeight; ++y)
-    {
-        for (int x = 0; x <= grabItemWidth; ++x)
-        {
-            int curIndex = ((idxY + y) * INVEN_COUNTX) + idxX + x;
-            CD2Item* slotItem = mInvenSlot[curIndex].Item;
+	// 현재 아이템을 놓고 싶은 범위 안을 탐색하여, 1개 이상의 아이템이 존재할 경우 Ungrab하지 못함.
+	for (int y = 0; y < grabItemHeight; ++y)
+	{
+		for (int x = 0; x < grabItemWidth; ++x)
+		{
+			int curIndex = ((idxY + y) * INVEN_COUNTX) + idxX + x;
+			CD2Item* slotItem = mInvenSlot[curIndex].Item;
 
-            // 현재 슬롯에 아이템이 있는 경우
-            if (slotItem)
-            {
-                if (overlapItem)
-                {
-                    // 슬롯 탐색 중, 2개 이상의 아이템이 범위에 존재하는 경우 Ungrab하지 못함.
-                    if (overlapItem != slotItem)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
+			// 현재 슬롯에 아이템이 있는 경우
+			if (slotItem)
+			{
+				if (overlapItem)
+				{
+					// 슬롯 탐색 중, 2개 이상의 아이템이 범위에 존재하는 경우 Ungrab하지 못함.
+					if (overlapItem != slotItem)
+					{
+						return false;
+					}
+				}
+				else
+				{
 					// 이 아이템이 슬롯 탐색에서 처음 검색된 아이템일 경우
-                    overlapItem = slotItem;
-                    overlapItemSlotIndex = curIndex;
-                }
-            }
-        }
-    }
+					overlapItem = slotItem;
+					overlapItemSlotIndex = curIndex;
+				}
+			}
+		}
+	}
 
-    // 현재 범위에 겹치는 아이템이 있을 경우, GrabItem을 겹친 아이템으로 변경하고,
-    // 현재 들고 있는 아이템을 입력된 인덱스 위치에 놓는다.
-    if (overlapItem)
-    {
-        CD2Item* temp = mGrabItem;
-        mGrabItem = overlapItem;
+	// 현재 범위에 겹치는 아이템이 있을 경우, GrabItem을 겹친 아이템으로 변경하고,
+	// 현재 들고 있는 아이템을 입력된 인덱스 위치에 놓는다.
+	if (overlapItem)
+	{
+		CD2Item* temp = mGrabItem;
+		mGrabItem = overlapItem;
 
-        // overlapItem이 차지하고 있는 슬롯 정보 지우고, 현재 들고 있는 아이템 정보를 슬롯에 쓴다.
-        removeItemFromSlot(overlapItemSlotIndex);
-        pushItemToSlot(temp, idx);
+		// overlapItem이 차지하고 있는 슬롯 정보 지우고, 현재 들고 있는 아이템 정보를 슬롯에 쓴다.
+		removeItemFromSlot(overlapItemSlotIndex);
+        removeItemFromInventoryList(overlapItem);
 
-        // 인벤토리 리스트에 위치에 맞게 넣는다.
-        pushItemToInventoryList(temp, idx);
-    }
-    // 겹치는 아이템이 없는 경우
-    else
-    {
-        pushItemToSlot(mGrabItem, idx);
-        pushItemToInventoryList(mGrabItem, idx);
-    }
+		// 인벤토리 리스트에 위치에 맞게 넣는다.
+		pushItemToSlot(temp, idx);
+		pushItemToInventoryList(temp, idx);
+	}
+	// 겹치는 아이템이 없는 경우
+	else
+	{
+		pushItemToSlot(mGrabItem, idx);
+		pushItemToInventoryList(mGrabItem, idx);
+        mGrabItem = nullptr;
+	}
 
-    return true;
+	return true;
 }
 
 bool CD2Inventory::PushItem(CD2Item* item)
 {
+	// 장비 아이템이고, 해당하는 장비칸이 비어있는 상태라면, 장비칸에 넣는다.
+	eD2ItemType type = item->GetItemType();
+
+	if ((int)type < (int)eD2ItemType::Etc)
+	{
+        if (mEquipment[(int)type] == nullptr)
+        {
+			mEquipment[(int)type] = item;
+			static_cast<CD2EquipItem*>(item)->Equip();
+            return true;
+        }
+    }
+
     int width = item->GetCellWidth();
     int height = item->GetCellHeight();
 
@@ -179,9 +230,9 @@ bool CD2Inventory::PushItem(CD2Item* item)
             int curIdxX = i % INVEN_COUNTX;
             int curIdxY = i / INVEN_COUNTX;
 
-            for (int y = 0; y <= height; ++y)
+            for (int y = 0; y < height; ++y)
             {
-                for (int x = 0; x <= width; ++x)
+                for (int x = 0; x < width; ++x)
                 {
                     // 아이템 크기 범위 내에 다른 아이템이 존재하는 경우, 지금 인덱스에 들어갈 수 없다.
                     if (mInvenSlot[(y + curIdxY) * INVEN_COUNTX + curIdxX + x].Item)
@@ -357,18 +408,12 @@ bool CD2Inventory::UnGrabEquipItem(eD2ItemType eType)
         return false;
     }
 
-    if (mEquipment[(int)grabItemType])
-    {
-        // 현재 장비하고 있는 아이템이 인벤토리로 들어가지 못한다면, 장착하지 못함
-        if (!PushItem(mEquipment[(int)grabItemType]))
-        {
-            return false;
-        }
-    }
+    CD2Item* prevEquipItem = mEquipment[(int)grabItemType];
 
     mEquipment[(int)grabItemType] = mGrabItem;
     static_cast<CD2EquipItem*>(mGrabItem)->Equip();
-    mGrabItem = nullptr;
+
+    mGrabItem = prevEquipItem;
 
     return true;
 }
@@ -429,6 +474,166 @@ bool CD2Inventory::UseQuickSlotItem(const int idx)
     return true;
 }
 
+CD2Item* CD2Inventory::GetEquipItem(eD2ItemType type)
+{
+    if (!isValidEquipmentEnum(type))
+    {
+        return nullptr;
+    }
+
+    return mEquipment[(int)type];
+}
+
+CD2Item* CD2Inventory::GetOverlappedItem(const int idx)
+{
+    if (!isValidInvenIdx(idx))
+    {
+        return nullptr;
+    }
+
+    if (!mGrabItem)
+    {
+        return nullptr;
+    }
+
+    int idxX = idx % INVEN_COUNTX;
+    int idxY = idx / INVEN_COUNTX;
+
+    int rangeX = mGrabItem->GetCellWidth();
+    int rangeY = mGrabItem->GetCellHeight();
+
+    for (int y = 0; y < rangeY; ++y)
+    {
+        for (int x = 0; x < rangeX; ++x)
+        {
+            if (mInvenSlot[(idxY + y) * INVEN_COUNTX + (idxX + x)].Item)
+            {
+                return mInvenSlot[(idxY + y) * INVEN_COUNTX + (idxX + x)].Item;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+int CD2Inventory::GetOverlappedItemRootIndex(const int idx)
+{
+	if (!isValidInvenIdx(idx))
+	{
+		return -1;
+	}
+
+    if (!mGrabItem)
+    {
+        return -1;
+    }
+
+    int idxX = idx % INVEN_COUNTX;
+    int idxY = idx / INVEN_COUNTX;
+
+    int rangeX = mGrabItem->GetCellWidth();
+    int rangeY = mGrabItem->GetCellHeight();
+
+    for (int y = 0; y < rangeY; ++y)
+    {
+        for (int x = 0; x < rangeX; ++x)
+        {
+            if (mInvenSlot[(idxY + y) * INVEN_COUNTX + (idxX + x)].Item)
+            {
+                return mInvenSlot[(idxY + y) * INVEN_COUNTX + (idxX + x)].RootSlotIndex;
+            }
+        }
+    }
+
+    return -1;
+}
+
+int CD2Inventory::GetRootSlotIndex(const int idx)
+{
+    if (!isValidInvenIdx(idx))
+    {
+        return -1;
+    }
+
+    if (!mInvenSlot[idx].Item)
+    {
+        return -1;
+    }
+
+    return mInvenSlot[idx].RootSlotIndex;
+}
+
+bool CD2Inventory::GetItemOccupiedIndexes(const int idx, std::vector<int>& outVec)
+{
+    if (!isValidInvenIdx(idx))
+    {
+        return false;
+    }
+
+    if (!mInvenSlot[idx].Item)
+    {
+        return false;
+    }
+
+    outVec = mInvenSlot[idx].VecSlotIndex;
+    return true;
+}
+
+bool CD2Inventory::IsRightEquipmentSlot(eD2ItemType type)
+{
+    if (!mGrabItem)
+    {
+        return true;
+    }
+
+    eD2ItemType grabItemType = mGrabItem->GetItemType();
+
+    if (!isValidEquipmentEnum(grabItemType))
+    {
+        return false;
+    }
+
+    if (type != grabItemType)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void CD2Inventory::GetEquipmentSlotState(std::vector<class CD2Item*>& outVecItem)
+{
+    outVecItem.resize((int)eD2ItemType::Etc);
+
+    for (int i = 0; i < (int)eD2ItemType::Etc; ++i)
+    {
+        outVecItem[i] = mEquipment[i];
+    }
+}
+
+void CD2Inventory::GetInventorySlotState(std::vector<D2ItemSlotInfo>& outVecSlotInfo)
+{
+    for (int i = 0; i < INVEN_COUNTX * INVEN_COUNTY; ++i)
+    {
+        if (mInvenSlot[i].bRootSlot)
+        {
+            D2ItemSlotInfo info;
+            info.Item = mInvenSlot[i].Item;
+            info.SlotRootIndex = i;
+            outVecSlotInfo.push_back(info);
+        }
+    }
+}
+
+void CD2Inventory::GetQuickSlotState(std::vector<class CD2Item*>& outVecItem)
+{
+    outVecItem.resize(4);
+    for (int i = 0; i < 4; ++i)
+    {
+        outVecItem[i] = mQuickSlot[i];
+    }
+}
+
 bool CD2Inventory::isValidInvenIdx(const int idx)
 {
     if (0 > idx || idx >= INVEN_COUNTX * INVEN_COUNTY)
@@ -449,7 +654,7 @@ bool CD2Inventory::isValidQuickSlotIdx(const int idx)
 
 bool CD2Inventory::isValidEquipmentEnum(eD2ItemType type)
 {
-    if ((int)type > (int)(eD2ItemType::Ring))
+    if ((int)type > (int)(eD2ItemType::Boots))
     {
         return false;
     }
@@ -466,8 +671,13 @@ void CD2Inventory::removeItemFromSlot(const int idx)
         mInvenSlot[index].bRootSlot = false;
         mInvenSlot[index].RootSlotIndex = -1;
         mInvenSlot[index].Item = nullptr;
-        mInvenSlot[index].VecSlotIndex.clear();
+
+        if (idx != index)
+        {
+			mInvenSlot[index].VecSlotIndex.clear();
+        }
     }
+    mInvenSlot[idx].VecSlotIndex.clear();
 }
 
 void CD2Inventory::pushItemToSlot(CD2Item* item, const int idx)
@@ -483,9 +693,9 @@ void CD2Inventory::pushItemToSlot(CD2Item* item, const int idx)
 
     std::vector<int> vecIdx;
 
-    for (int y = 0; y <= height; ++y)
+    for (int y = 0; y < height; ++y)
     {
-        for (int x = 0; x <= width; ++x)
+        for (int x = 0; x < width; ++x)
         {
             mInvenSlot[(idxY + y) * INVEN_COUNTX + idxX + x].Item = item;
             vecIdx.push_back((idxY + y) * INVEN_COUNTX + idxX + x);
@@ -496,7 +706,8 @@ void CD2Inventory::pushItemToSlot(CD2Item* item, const int idx)
 
     for (size_t i = 0; i < size; ++i)
     {
-        mInvenSlot[i].VecSlotIndex = vecIdx;
+        mInvenSlot[vecIdx[i]].VecSlotIndex = vecIdx;
+        mInvenSlot[vecIdx[i]].RootSlotIndex = idx;
     }
 }
 

@@ -177,6 +177,8 @@
     <ClInclude Include="Diablo2\Component\D2SkillObject.h" />
     <ClInclude Include="Diablo2\Component\D2StateComponent.h" />
     <ClInclude Include="Diablo2\Component\D2Teleport.h" />
+    <ClInclude Include="Diablo2\Component\D2UIManager.h" />
+    <ClInclude Include="Diablo2\Component\D2UIManagerComponent.h" />
     <ClInclude Include="Diablo2\Component\D2UsableItem.h" />
     <ClInclude Include="Diablo2\D2Flag.h" />
     <ClInclude Include="Diablo2\D2Info.h" />
@@ -201,6 +203,11 @@
     <ClInclude Include="Diablo2\State\PlayerRunState.h" />
     <ClInclude Include="Diablo2\State\PlayerWalkState.h" />
     <ClInclude Include="Diablo2\UI\D2FrameWidget.h" />
+    <ClInclude Include="Diablo2\UI\D2MouseItemSelect.h" />
+    <ClInclude Include="Diablo2\UI\D2MouseNormal.h" />
+    <ClInclude Include="Diablo2\UI\D2StatusBarWindow.h" />
+    <ClInclude Include="Diablo2\UI\D2InventoryWindow.h" />
+    <ClInclude Include="Diablo2\UI\D2MenuBorder.h" />
     <ClInclude Include="EditorEnum.h" />
     <ClInclude Include="EditorInfo.h" />
     <ClInclude Include="EditorManager.h" />
@@ -263,6 +270,8 @@
     <ClCompile Include="Diablo2\Component\D2SkillObject.cpp" />
     <ClCompile Include="Diablo2\Component\D2StateComponent.cpp" />
     <ClCompile Include="Diablo2\Component\D2Teleport.cpp" />
+    <ClCompile Include="Diablo2\Component\D2UIManager.cpp" />
+    <ClCompile Include="Diablo2\Component\D2UIManagerComponent.cpp" />
     <ClCompile Include="Diablo2\Component\D2UsableItem.cpp" />
     <ClCompile Include="Diablo2\D2Util.cpp" />
     <ClCompile Include="Diablo2\State\D2AndarielDeadState.cpp" />
@@ -285,6 +294,11 @@
     <ClCompile Include="Diablo2\State\PlayerRunState.cpp" />
     <ClCompile Include="Diablo2\State\PlayerWalkState.cpp" />
     <ClCompile Include="Diablo2\UI\D2FrameWidget.cpp" />
+    <ClCompile Include="Diablo2\UI\D2MouseItemSelect.cpp" />
+    <ClCompile Include="Diablo2\UI\D2MouseNormal.cpp" />
+    <ClCompile Include="Diablo2\UI\D2StatusBarWindow.cpp" />
+    <ClCompile Include="Diablo2\UI\D2InventoryWindow.cpp" />
+    <ClCompile Include="Diablo2\UI\D2MenuBorder.cpp" />
     <ClCompile Include="EditorManager.cpp" />
     <ClCompile Include="EditorUtil.cpp" />
     <ClCompile Include="main.cpp" />

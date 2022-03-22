@@ -42,3 +42,9 @@ struct D2ItemInfo
 	int Melee;
 	int Magic;
 };
+
+struct D2ItemSlotInfo
+{
+	class CD2Item* Item;
+	int SlotRootIndex;
+};

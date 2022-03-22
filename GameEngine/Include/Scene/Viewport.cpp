@@ -84,6 +84,10 @@ void CViewport::Render()
 
 	for (; iter != iterEnd; ++iter)
 	{
+		if (!(*iter)->IsEnable())
+		{
+			continue;
+		}
 		(*iter)->Render();
 	}
 }

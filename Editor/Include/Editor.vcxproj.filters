@@ -100,6 +100,9 @@
     <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\09. ItemTable">
       <UniqueIdentifier>{8fc44189-0df6-4d0c-8d71-82cf16718d09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\10. UI">
+      <UniqueIdentifier>{ad9ad08e-1794-4887-9c2d-7f5ad743943b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -354,6 +357,27 @@
     <ClInclude Include="Diablo2\Component\D2UsableItem.h">
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
     </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2InventoryWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2UIManager.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2StatusBarWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2MenuBorder.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2UIManagerComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2MouseNormal.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2MouseItemSelect.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -589,6 +613,27 @@
     </ClCompile>
     <ClCompile Include="Diablo2\Component\D2UsableItem.cpp">
       <Filter>98. Diablo2\01. Component\01. ObjectComponent\08. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2InventoryWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2StatusBarWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2UIManager.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2MenuBorder.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2UIManagerComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2MouseNormal.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2MouseItemSelect.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

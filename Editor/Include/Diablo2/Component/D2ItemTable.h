@@ -8,6 +8,7 @@ enum eCSVLabel
 {
 	Name,
 	UniqueID,
+	Type,
 	CellXWidth,
 	CellYWidth,
 	UseType,
@@ -29,6 +30,8 @@ public:
 
 public:
 	CD2Item* GenerateItem(const std::string& name);
+	class CTexture* FindItemUITexture(CD2Item* item);
+	class CTexture* FindItemObjTexture(CD2Item* item);
 
 private:
 	bool loadTable();

@@ -1,6 +1,7 @@
 #include "WidgetImageData.h"	
 #include "Widget.h"
 #include "../Scene/Scene.h"
+#include "../Scene/SceneManager.h"
 #include "../Scene/SceneResource.h"
 #include "../Render/RenderManager.h"
 #include "../Resource/Shader/Animation2DConstantBuffer.h"
@@ -166,12 +167,30 @@ void CWidgetImageData::SetShaderData()
 
 void CWidgetImageData::SetTexture(CTexture* texture)
 {
+	if (texture != mTexture)
+	{
+		mVecFrameData.clear();
+		mFrame = 0;
+		mTime = 0;
+		mFrameTime = 0.f;
+		mPlayTime = 1.f;
+		mPlayScale = 1.f;
+	}
+
 	mTexture = texture;
 }
 
 bool CWidgetImageData::SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName)
 {
-	CSceneResource* sceneResource = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource();
+	CSceneResource* sceneResource = nullptr;
+	if (mOwnerWidget->GetOwner()->GetViewport())
+	{
+		sceneResource = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource();
+	}
+	else
+	{
+		sceneResource = CSceneManager::GetInst()->GetScene()->GetResource();
+	}
 
 	if (!sceneResource->LoadTexture(name, fileName, pathName))
 	{
@@ -179,19 +198,52 @@ bool CWidgetImageData::SetTexture(const std::string& name, const TCHAR* fileName
 		return false;
 	}
 	
+	CTexture* texture = sceneResource->FindTexture(name);
+
+	if (texture != mTexture)
+	{
+		mVecFrameData.clear();
+		mFrame = 0;
+		mTime = 0;
+		mFrameTime = 0.f;
+		mPlayTime = 1.f;
+		mPlayScale = 1.f;
+	}
+
 	mTexture = sceneResource->FindTexture(name);
 	return true;
 }
 
 bool CWidgetImageData::SetTextureFullPath(const std::string& name, const TCHAR* fullPath)
 {
-	CSceneResource* sceneResource = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource();
- if (!sceneResource->LoadTextureFullPath(name, fullPath))
+	CSceneResource* sceneResource = nullptr;
+	if (mOwnerWidget->GetOwner()->GetViewport())
+	{
+		sceneResource = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource();
+	}
+	else
+	{
+		sceneResource = CSceneManager::GetInst()->GetScene()->GetResource();
+	}
+
+	if (!sceneResource->LoadTextureFullPath(name, fullPath))
 	{
 		assert(false);
 		return false;
 	}
 	
+	CTexture* texture = sceneResource->FindTexture(name);
+
+	if (texture != mTexture)
+	{
+		mVecFrameData.clear();
+		mFrame = 0;
+		mTime = 0;
+		mFrameTime = 0.f;
+		mPlayTime = 1.f;
+		mPlayScale = 1.f;
+	}
+
 	mTexture = sceneResource->FindTexture(name);
 	return true;
 }
@@ -205,12 +257,38 @@ bool CWidgetImageData::SetTexture(const std::string& name, const std::vector<TCH
 			assert(false);
 			return false;
 		}
-		mTexture = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource()->FindTexture(name);
+
+		CTexture* texture = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource()->FindTexture(name);
+
+		if (texture != mTexture)
+		{
+			mVecFrameData.clear();
+			mFrame = 0;
+			mTime = 0;
+			mFrameTime = 0.f;
+			mPlayTime = 1.f;
+			mPlayScale = 1.f;
+		}
+
+		mTexture = texture;
 	}
 	else
 	{
 		CResourceManager::GetInst()->LoadTexture(name, vecFileName, pathName);
-		mTexture = CResourceManager::GetInst()->FindTexture(name);
+
+		CTexture* texture = CResourceManager::GetInst()->FindTexture(name);
+
+		if (texture != mTexture)
+		{
+			mVecFrameData.clear();
+			mFrame = 0;
+			mTime = 0;
+			mFrameTime = 0.f;
+			mPlayTime = 1.f;
+			mPlayScale = 1.f;
+		}
+
+		mTexture = texture;
 	}
 	return true;
 }
@@ -224,12 +302,38 @@ bool CWidgetImageData::SetTextureFullPath(const std::string& name, const std::ve
 			assert(false);
 			return false;
 		}
-		mTexture = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource()->FindTexture(name);
+
+		CTexture* texture = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource()->FindTexture(name);
+
+		if (texture != mTexture)
+		{
+			mVecFrameData.clear();
+			mFrame = 0;
+			mTime = 0;
+			mFrameTime = 0.f;
+			mPlayTime = 1.f;
+			mPlayScale = 1.f;
+		}
+
+		mTexture = texture;
 	}
 	else
 	{
 		CResourceManager::GetInst()->LoadTexture(name, vecFullPath);
-		mTexture = CResourceManager::GetInst()->FindTexture(name);
+
+		CTexture* texture = CResourceManager::GetInst()->FindTexture(name);
+
+		if (texture != mTexture)
+		{
+			mVecFrameData.clear();
+			mFrame = 0;
+			mTime = 0;
+			mFrameTime = 0.f;
+			mPlayTime = 1.f;
+			mPlayScale = 1.f;
+		}
+
+		mTexture = texture;
 	}
 	return true;
 }

@@ -58,22 +58,27 @@ void CGrid::PostUpdate(float deltaTime)
 {
 	CWidget::PostUpdate(deltaTime);
 
-	// 이전에 선택되었던 셀들은 Normal 상태로
-	size_t sizePrev = mVecPrevMouseOn.size();
-	for (size_t i = 0; i < sizePrev; ++i)
+	// 현재 충돌하지 않은 경우는 이전 프레임의 셀들은 Normal상태로 돌려준다.
+	if (!mbMouseHovered)
 	{
-		mVecPrevMouseOn[i]->State = eCellState::Normal;
+		// 이전에 선택되었던 셀들은 Normal 상태로
+		size_t sizePrev = mVecPrevMouseOn.size();
+		for (size_t i = 0; i < sizePrev; ++i)
+		{
+			int index = mVecPrevMouseOn[i].Index;
+			mVecCell[index]->State = eCellState::Normal;
+		}
+		mVecPrevMouseOn.clear();
 	}
-	mVecPrevMouseOn.clear();
-
-	if (mbMouseHovered)
+	// 마우스와 충돌한 상태
+	else
 	{
 		Vector2 mousePos = CInput::GetInst()->GetMousePos();
 
 		mousePos -= mRenderPos;
 
 		int idxX = mousePos.x / mCellSize.x;
-		int idxY = (mCellCountY) - (mousePos.y / mCellSize.y);
+		int idxY = (mCellCountY)-(mousePos.y / mCellSize.y);
 
 		if (idxX < 0)
 		{
@@ -96,7 +101,7 @@ void CGrid::PostUpdate(float deltaTime)
 		mMouseOnCell = mVecCell[idx];
 
 		// 현재 선택 범위 체크
-		// 점유 상태 셀들이 포함되거나, 인덱스가 범위 밖인 경우
+		// 인덱스가 범위 밖인 경우
 		bool bOutOfRange = false;
 		for (int y = 0; y < mCellSelectHeight; ++y)
 		{
@@ -106,15 +111,14 @@ void CGrid::PostUpdate(float deltaTime)
 				int curIndex = (idxY + y) * mCellCountX + (idxX + x);
 				int curY = curIndex / mCellCountX;
 
-				// 같은 y 축을 벗어난 경우
-				if (curY != idxY + y)
+				if (curIndex < 0 || curIndex >= mCellCount)
 				{
 					bOutOfRange = true;
 					break;
 				}
 
-				if ((curIndex < 0 || curIndex >= mCellCount) ||
-					(mVecCell[curIndex]->State == eCellState::Occupied))
+				// 같은 y 축을 벗어난 경우
+				if (curY != idxY + y)
 				{
 					bOutOfRange = true;
 					break;
@@ -130,48 +134,154 @@ void CGrid::PostUpdate(float deltaTime)
 		// 범위를 벗어난 경우, 새로운 선택 처리 하지 않는다.
 		if (bOutOfRange)
 		{
+			// 이전에 선택되었던 셀들은 Normal 상태로
+			size_t sizePrev = mVecPrevMouseOn.size();
+			for (size_t i = 0; i < sizePrev; ++i)
+			{
+				int index = mVecPrevMouseOn[i].Index;
+				mVecCell[index]->State = eCellState::Normal;
+			}
+			mVecPrevMouseOn.clear();
 			return;
 		}
 
+		bool bIncludeOuccpiedCell = false;
 		// 현재 선택된 범위 셀들 처리
 		for (int y = 0; y < mCellSelectHeight; ++y)
 		{
 			for (int x = 0; x < mCellSelectWidth; ++x)
 			{
 				int curIndex = (idxY + y) * mCellCountX + (idxX + x);
-
-				mVecPrevMouseOn.push_back(mVecCell[curIndex]);
-
-				if (mVecCell[curIndex]->State == eCellState::Normal)
+				if (mVecCell[curIndex]->bOccupied)
 				{
-					if (CInput::GetInst()->GetMouseLButtonClicked())
-					{
-						mVecCell[curIndex]->State = eCellState::Clicked;
-					}
-					else
-					{
-						mVecCell[curIndex]->State = eCellState::Hovered;
-					}
+					bIncludeOuccpiedCell = true;
 				}
 			}
 		}
 
-		// 현재 마우스가 올라가 있는 셀 콜백처리
-		if (mMouseOnCell->State == eCellState::Hovered)
+		// Hover 처리
+		if (bIncludeOuccpiedCell)
 		{
-			if (mCallBack[(int)eCellState::Hovered])
+			if (mMouseOnCell->State != eCellState::Clicked)
 			{
-				mCallBack[(int)eCellState::Hovered](idx);
+				mMouseOnCell->State = eCellState::Hovered;
 			}
 		}
-		else if (mMouseOnCell->State == eCellState::Clicked)
+		else
 		{
-			if (mCallBack[(int)eCellState::Clicked])
+			for (int y = 0; y < mCellSelectHeight; ++y)
 			{
-				mCallBack[(int)eCellState::Clicked](idx);
+				for (int x = 0; x < mCellSelectWidth; ++x)
+				{
+					int curIndex = (idxY + y) * mCellCountX + (idxX + x);
+
+					if (x == 0 && y == 0)
+					{
+						continue;
+					}
+					mVecCell[curIndex]->State = eCellState::Hovered;
+				}
+			}
+
+			if (mMouseOnCell->State != eCellState::Clicked)
+			{
+				mMouseOnCell->State = eCellState::Hovered;
 			}
 		}
 
+		if (!CInput::GetInst()->GetMouseLButtonClicked())
+		{
+			mbIsMousePush = false;
+		}
+		
+		if (bIncludeOuccpiedCell)
+		{
+			if (!mbIsMousePush && CInput::GetInst()->GetMouseLButtonClicked())
+			{
+				mbIsMousePush = true;
+				mMouseOnCell->State = eCellState::Clicked;
+			}
+			else if (mMouseOnCell->State == eCellState::Clicked)
+			{
+				if (mCallBack[(int)eCellState::Clicked])
+				{
+					mCallBack[(int)eCellState::Clicked](idx);
+				}
+				mMouseOnCell->State = eCellState::Hovered;
+			}
+		}
+		else
+		{
+			if (mMouseOnCell->State == eCellState::Hovered)
+			{
+				if (!mbIsMousePush && CInput::GetInst()->GetMouseLButtonClicked())
+				{
+					mbIsMousePush = true;
+					mMouseOnCell->State = eCellState::Clicked;
+				}
+				else
+				{
+					if (mCallBack[(int)eCellState::Hovered])
+					{
+						mCallBack[(int)eCellState::Hovered](idx);
+					}
+				}
+			}
+			else if (mMouseOnCell->State == eCellState::Clicked)
+			{
+				if (mCallBack[(int)eCellState::Clicked])
+				{
+					mCallBack[(int)eCellState::Clicked](idx);
+				}
+				mMouseOnCell->State = eCellState::Hovered;
+			}
+		}
+
+		// 이전 선택된 셀들 처리
+		// 현재 범위에서 벗어난 셀들은 normal로 처리
+		{
+			int minX = idxX;
+			int minY = idxY;
+			int maxX = idxX + mCellSelectWidth - 1;
+			int maxY = idxY + mCellSelectHeight - 1;
+
+			size_t sizePrev = mVecPrevMouseOn.size();
+			for (size_t i = 0; i < sizePrev; ++i)
+			{
+				int index = mVecPrevMouseOn[i].Index;
+				int curIdxX = index % mCellCountX;
+				int curIdxY = index / mCellCountX;
+
+				if (curIdxX < minX || curIdxX > maxX || curIdxY < minY || curIdxY > maxY)
+				{
+					mVecCell[index]->State = eCellState::Normal;
+					continue;
+				}
+
+				if (bIncludeOuccpiedCell && mVecCell[index]->State == eCellState::Hovered)
+				{
+					mVecCell[index]->State = eCellState::Normal;
+				}
+			}
+			mVecPrevMouseOn.clear();
+		}
+
+		for (int y = 0; y < mCellSelectHeight; ++y)
+		{
+			for (int x = 0; x < mCellSelectWidth; ++x)
+			{
+				int curIndex = (idxY + y) * mCellCountX + (idxX + x);
+
+				if (curIndex < 0 || curIndex >= mCellCount)
+				{
+					continue;
+				}
+				PrevCellState state;
+				state.Index = curIndex;
+				state.State = mVecCell[curIndex]->State;
+				mVecPrevMouseOn.push_back(state);
+			}
+		}
 	}
 
 	// Render Info
@@ -200,7 +310,15 @@ void CGrid::PostUpdate(float deltaTime)
 	{
 		matTrans.Translation(mRenderPos.x + mVecCell[i]->Position.x, mRenderPos.y + mVecCell[i]->Position.y, 0.f);
 		mVecCellRenderInfo[i].MatWP = matScale * matTrans * cam->GetProjMatrix();
-		mVecCellRenderInfo[i].Tint = mTint[(int)mVecCell[i]->State];
+
+		if (mVecCell[i]->bOccupied)
+		{
+			mVecCellRenderInfo[i].Tint = mOccupiedTint;
+		}
+		else
+		{
+			mVecCellRenderInfo[i].Tint = mTint[(int)mVecCell[i]->State];
+		}
 
 		mVecCellRenderInfo[i].MatWP.Transpose();
 	}
@@ -231,7 +349,7 @@ bool CGrid::OccupyCell(const int idx)
 		return false;
 	}
 
-	if (mVecCell[idx]->State == eCellState::Occupied)
+	if (mVecCell[idx]->bOccupied)
 	{
 		return false;
 	}
@@ -247,7 +365,7 @@ bool CGrid::OccupyCell(const int idx)
 			int curIdx = (idxY + y) * mCellCountX + (idxX + x);
 
 			if (curIdx < 0 || idx >= mCellCount ||
-				mVecCell[curIdx]->State == eCellState::Occupied)
+				mVecCell[curIdx]->bOccupied)
 			{
 				return false;
 			}
@@ -259,49 +377,58 @@ bool CGrid::OccupyCell(const int idx)
 		for (int x = 0; x < mCellSelectWidth; ++x)
 		{
 			int curIdx = (idxY + y) * mCellCountX + (idxX + x);
-			mVecCell[curIdx]->State = eCellState::Occupied;
+			mVecCell[curIdx]->bOccupied = true;;
 		}
-	}
-
-	if (mCallBack[(int)eCellState::Occupied])
-	{
-		mCallBack[(int)eCellState::Occupied](idx);
 	}
 
 	return true;
 }
 
-bool CGrid::UnOccupycell(const int idx)
+bool CGrid::OccupyCell(const std::vector<int>& indexes)
+{
+	size_t size = indexes.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (indexes[i] < 0 || indexes[i] >= mCellCount)
+		{
+			return false;
+		}
+	}
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		mVecCell[indexes[i]]->bOccupied = true;;
+	}
+
+	return true;
+}
+
+bool CGrid::UnOccupyCell(const int idx)
 {
 	if (idx < 0 || idx >= mCellCount)
 	{
 		return false;
 	}
 
-	int idxX = idx % mCellCountX;
-	int idxY = idx / mCellCountX;
+	mVecCell[idx]->bOccupied = false;
 
-	// 범위를 벗어난 경우
-	for (int y = 0; y < mCellSelectHeight; ++y)
+	return true;
+}
+
+bool CGrid::UnOccupyCell(const std::vector<int>& indexes)
+{
+	size_t size = indexes.size();
+	for (size_t i = 0; i < size; ++i)
 	{
-		for (int x = 0; x < mCellSelectWidth; ++x)
+		if (indexes[i] < 0 || indexes[i] >= mCellCount)
 		{
-			int curIdx = (idxY + y) * mCellCountX + (idxX + x);
-
-			if (curIdx < 0 || idx >= mCellCount)
-			{
-				return false;
-			}
+			return false;
 		}
 	}
 
-	for (int y = 0; y < mCellSelectHeight; ++y)
+	for (size_t i = 0; i < size; ++i)
 	{
-		for (int x = 0; x < mCellSelectWidth; ++x)
-		{
-			int curIdx = (idxY + y) * mCellCountX + (idxX + x);
-			mVecCell[curIdx]->State = eCellState::Normal;
-		}
+		mVecCell[indexes[i]]->bOccupied = false;
 	}
 
 	return true;
@@ -338,6 +465,11 @@ void CGrid::SetTint(eCellState state, const Vector4& color)
 	mTint[(int)state] = color;
 }
 
+void CGrid::SetOccupiedTint(const Vector4& color)
+{
+	mOccupiedTint = color;
+}
+
 void CGrid::SetSelectWidth(const int width)
 {
 	mCellSelectWidth = width;
@@ -352,6 +484,11 @@ void CGrid::SetSelectRange(const int width, const int height)
 {
 	SetSelectWidth(width);
 	SetSelectHeight(height);
+}
+
+Vector2 CGrid::GetCellPos(const int idx)
+{
+	return Vector2(mVecCell[idx]->Position.x, mVecCell[idx]->Position.y);
 }
 
 void CGrid::makeCell()
@@ -385,6 +522,11 @@ void CGrid::makeCell()
 
 void CGrid::makeCellInfo()
 {
+	if (mCellCount <= 0)
+	{
+		return;
+	}
+
 	SAFE_DELETE(mCellInfoBuffer);
 
 	mCellInfoBuffer = new CStructuredBuffer;
