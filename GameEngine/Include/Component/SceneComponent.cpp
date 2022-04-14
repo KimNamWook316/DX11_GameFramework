@@ -30,6 +30,7 @@ CSceneComponent::CSceneComponent(const CSceneComponent& com)	:
 	mbIsRender(false)
 {
 	*this = com;
+	mRefCount = 0;
 
 	// 새로운 Transform Object생성 ( Transform은 공유될 필요가 없음 )
 	mTransform = com.mTransform->Clone();
@@ -95,6 +96,8 @@ bool CSceneComponent::Init()
 void CSceneComponent::Start()
 {
 	CComponent::Start();
+
+	mTransform->Start();
 
 	size_t size = mVecChild.size();
 

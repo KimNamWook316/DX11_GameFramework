@@ -22,7 +22,9 @@ CTransform::CTransform()	:
 	mbUpdateScale(true),
 	mbUpdateRot(true),
 	mbUpdatePos(true),
-	mCBuffer(nullptr)
+	mCBuffer(nullptr),
+	mbFixZ(false),
+	mFixZPos(999.99f)
 {
 	// 기본 회전축 설정
 	for (int i = 0; i < AXIS_MAX; ++i)
@@ -123,7 +125,14 @@ void CTransform::PostUpdate(const float deltaTime)
 
 	if (eEngineSpace::Space2D == CEngine::GetInst()->GetEngineSpace())
 	{
-		worldPos.z = worldPos.y / 30000.f * 1000.f;
+		if (mbFixZ)
+		{
+			worldPos.z = mFixZPos;
+		}
+		else
+		{
+			worldPos.z = worldPos.y / 30000.f * 1000.f;
+		}
 	}
 
 	if (mbUpdateScale)
@@ -283,7 +292,7 @@ void CTransform::SetWorldRotZ(const float& z)
 void CTransform::SetWorldPos(const Vector3& pos)
 {
 	mWorldPos = pos;
-	mRelativePos = pos;
+	//mRelativePos = pos;
 	SetInheritPosValue();
 	callStateCallBack();
 }

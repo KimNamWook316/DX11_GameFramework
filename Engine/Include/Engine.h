@@ -5,16 +5,16 @@
 #include "Resource/Texture/Texture.h"
 
 // 윈도우 생성 및 프로그램 로직, 디바이스 등 프로그램 전체를 관장하는 클래스
-class CEngine 
+class CEngine
 {
 public:
-	bool Init(HINSTANCE hInst, const TCHAR* name, 
-		unsigned int width, unsigned int height, int iconID, 
+	bool Init(HINSTANCE hInst, const TCHAR* name,
+		unsigned int width, unsigned int height, int iconID,
 		bool windowMode = true);
 
 	bool Init(HINSTANCE hInst, HWND hWnd, unsigned int Width,
 		unsigned int height, bool windowMode = true);
-	
+
 	int Run();
 	void Logic();
 
@@ -49,7 +49,7 @@ public:
 	{
 		return mbPlay;
 	}
-	
+
 	float GetFPS() const
 	{
 		return mTimer->GetFPS();
@@ -81,6 +81,14 @@ public:
 	void SetDebugMode(bool bDebug)
 	{
 		mbDebugMode = bDebug;
+	}
+
+	void SetClearColor(const float r, const float g, const float b, const float a)
+	{
+		mClearColor[0] = r;
+		mClearColor[1] = g;
+		mClearColor[2] = b;
+		mClearColor[3] = a;
 	}
 
 public:

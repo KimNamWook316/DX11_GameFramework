@@ -105,6 +105,11 @@ bool CResourceManager::Init()
 	return true;
 }
 
+void CResourceManager::Update()
+{
+	mSoundManager->Update();
+}
+
 CMesh* CResourceManager::FindMesh(const std::string& name)
 {	
 	return mMeshManager->FindMesh(name);

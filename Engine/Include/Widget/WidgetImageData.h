@@ -15,6 +15,7 @@ public:
 	void Start();
 	void Update(float deltaTime);
 	void SetShaderData();
+	CWidgetImageData* Clone();
 
 public:
 	CTexture* GetTexture() const
@@ -27,6 +28,11 @@ public:
 		return mTint;
 	}
 
+	int GetAnimationFrameCount() const
+	{
+		return (int)(mVecFrameData.size() - 1);
+	}
+
 public:
 	void SetTexture(CTexture* texture);
     bool SetTexture(const std::string& name, const TCHAR* fileName, const std::string& pathName = TEXTURE_PATH);
@@ -37,6 +43,7 @@ public:
     void SetTextureTint(const float r, const float g, const float b, const float a);
     void AddFrameData(const Vector2& start, const Vector2& size);
 	void AddFrameDataFrameTexture(const int count);
+	void SetCurrentFrame(const int frame);
 
 public:
 	void SetOwnerWidget(class CWidget* widget)

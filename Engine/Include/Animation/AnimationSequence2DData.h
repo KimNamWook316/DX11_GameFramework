@@ -73,6 +73,8 @@ public:
 		return mSequence;
 	}
 
+	class CTexture* GetTexture() const;
+
 public:
 	void SetPlayTime(const float time)
 	{

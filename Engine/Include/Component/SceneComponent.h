@@ -43,6 +43,17 @@ public:
 		return mbIsRender;
 	}
 
+	CTransform* GetTransform() const
+	{
+		return mTransform;
+	}
+
+public:
+	void RenderEnable(bool bEnable)
+	{
+		mbIsRender = bEnable;
+	}
+
 public:
 	// GameObject의 SceneComponent List에 자신을 추가
 	void SetThisToGameObject(class CGameObject* obj);

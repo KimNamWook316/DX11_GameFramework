@@ -17,7 +17,7 @@ CButton::CButton(const CButton& button)	:
 	CWidget(button)
 {
 	meCurState = eButtonState::Normal;
-	mClickCallBack = nullptr;
+	mLClickCallBack = nullptr;
 	mbHoverSoundPlaying = false;
 	mbClickSoundPlaying = false;
 }
@@ -60,6 +60,11 @@ void CButton::Update(float deltaTime)
 	// Sound
 	if (eButtonState::Disabled != meCurState)
 	{
+		if (!mOwner->IsWindowCollideMouse())
+		{
+			mbMouseHovered = false;
+		}
+
 		if (mbMouseHovered)
 		{
 			if (mHoverCallBack)
@@ -79,7 +84,7 @@ void CButton::Update(float deltaTime)
 
 			if (CInput::GetInst()->GetMouseLButtonClicked())
 			{
-				meCurState = eButtonState::Clicked;
+				meCurState = eButtonState::LClicked;
 
 				if (!mbClickSoundPlaying)
 				{
@@ -91,11 +96,35 @@ void CButton::Update(float deltaTime)
 					}
 				}
 			}
-			else if (eButtonState::Clicked == meCurState)
+			else if (CInput::GetInst()->GetMouseRButtonClicked())
 			{
-				if (mClickCallBack)
+				meCurState = eButtonState::RClicked;
+
+				if (!mbClickSoundPlaying)
 				{
-					mClickCallBack();
+					mbClickSoundPlaying = true;
+
+					if (mSound[(int)eButtonSoundState::Clicked])
+					{
+						mSound[(int)eButtonSoundState::Clicked]->Play();
+					}
+				}
+			}
+			else if (eButtonState::LClicked == meCurState)
+			{
+				if (mLClickCallBack)
+				{
+					mLClickCallBack();
+				}
+
+				meCurState = eButtonState::Hovered;
+				mbClickSoundPlaying = false;
+			}
+			else if (eButtonState::RClicked == meCurState)
+			{
+				if (mRClickCallBack)
+				{
+					mRClickCallBack();
 				}
 
 				meCurState = eButtonState::Hovered;

@@ -31,6 +31,8 @@ void CWall::Start()
 
 void CWall::Update()
 {
+	CGameObject* player = mOwner->GetScene()->GetPlayerObj();
+
 	Vector3 ownerPos = mOwner->GetWorldPos();
 	Vector3 pos = ownerPos + mRenderPos;
 
@@ -42,17 +44,20 @@ void CWall::Update()
 
 	mMatWorld = matScale * matTranslate;
 
-	Vector3 center = pos + Vector3(mSize.x / 2.f, mSize.y /2.f, 0.f);
-	Vector3 playerPos = mOwner->GetScene()->GetPlayerObj()->GetWorldPos();
-	float dist = center.Distance(playerPos);
+	if (player)
+	{
+		Vector3 center = pos + Vector3(mSize.x / 2.f, mSize.y /2.f, 0.f);
+		Vector3 playerPos = player->GetWorldPos();
+		float dist = center.Distance(playerPos);
 
-	if (playerPos.y < center.y && dist <= 200.f)
-	{
-		mOpacity = dist / 200.f;
-	}
-	else
-	{
-		mOpacity = 1.f;
+		if (playerPos.y < center.y && dist <= 200.f)
+		{
+			mOpacity = dist / 200.f;
+		}
+		else
+		{
+			mOpacity = 1.f;
+		}
 	}
 }
 

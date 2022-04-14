@@ -67,6 +67,7 @@ public:
 	bool CreateWall();
 	bool CreateWallComponent();
 	void SetNavigationData();
+	bool CreatePathFindTileInfo();
 
 	void SetWorldInfo();
 	void SetTileDefaultInfo(const std::string& tileName);
@@ -197,7 +198,6 @@ public:
 private:
 	int getTileRenderIndexX(const Vector3& pos);
 	int getTileRenderIndexY(const Vector3& pos);
-	bool createPathFindTileInfo();
 	void setPathFindRenderInfo();
 
 protected:

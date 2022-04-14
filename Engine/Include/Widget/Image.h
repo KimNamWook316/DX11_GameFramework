@@ -37,6 +37,11 @@ public:
     void SetTextureTint(const float r, const float g, const float b, const float a);
     void AddFrameData(const Vector2& start, const Vector2& size);
 	void AddFrameDataFrameTexture(const int count);
+	void SetCurrentFrame(const int frame);
+    void SetAnimationPlayScale(const float scale);
+
+public:
+    int GetAnimationFrameCount();
 
 public:
     template <typename T>

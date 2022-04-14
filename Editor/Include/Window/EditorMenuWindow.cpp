@@ -57,6 +57,13 @@
 #include "../Diablo2/Component/D2ItemTableComponent.h"
 #include "../Diablo2/Component/D2UIManagerComponent.h"
 #include "../Diablo2/Component/D2Inventory.h"
+#include "../Diablo2/Component/D2ItemObjectComponent.h"
+#include "../Diablo2/Component/D2ProcedualMapGenerator.h"
+#include "../Diablo2/Component/D2DungeonManagerComponent.h"
+#include "../Diablo2/Component/D2ShadowComponent.h"
+#include "../Diablo2/Component/D2PortalObject.h"
+#include "../Diablo2/Component/D2ClickableUIComponent.h"
+#include "../Diablo2/Component/D2ChestObject.h"
 #include "../Diablo2/State/PlayerIdleState.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
@@ -287,12 +294,21 @@ void CEditorMenuWindow::OnClickCreateComponent()
     }
     
     // 사용자 정의 컴포넌트
-    if (!objComp)
+    if (!sceneComp && !objComp)
     {
         selectIdx -= (int)(eObjectComponentType::Max);
 
         switch ((eD2SceneComponentType)selectIdx)
         {
+        case eD2SceneComponentType::D2ProcedualMapGenerator:
+            sceneComp = obj->CreateComponentAddChild<CD2ProcedualMapGenerator>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2SceneComponentType::D2Shadow:
+            sceneComp = obj->CreateComponentAddChild<CD2ShadowComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2SceneComponentType::D2ClickableUI:
+            sceneComp = obj->CreateComponentAddChild<CD2ClickableUIComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
         }
     }
 
@@ -380,6 +396,18 @@ void CEditorMenuWindow::OnClickCreateComponent()
             break;
         case eD2ObjectComponentType::D2ItemTable:
             objComp = obj->CreateComponent<CD2ItemTableComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2ItemObject:
+            objComp = obj->CreateComponent<CD2ItemObjectComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2DungeonManager:
+            objComp = obj->CreateComponent<CD2DungeonManagerComponent>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2PortalObject:
+            objComp = obj->CreateComponent<CD2PortalObject>(mComponentNameInput->GetTextMultiByte());
+            break;
+        case eD2ObjectComponentType::D2ChestObject:
+            objComp = obj->CreateComponent<CD2ChestObject>(mComponentNameInput->GetTextMultiByte());
             break;
         }
     }

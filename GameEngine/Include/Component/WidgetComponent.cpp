@@ -4,6 +4,8 @@
 #include "../Scene/CameraManager.h"
 #include "../Device.h"
 #include "../Engine.h"
+#include "../Render/RenderManager.h"
+#include "../Render/RenderState.h"
 
 CWidgetComponent::CWidgetComponent()
 {
@@ -18,7 +20,8 @@ CWidgetComponent::CWidgetComponent()
 	mbIsRender = true;
 }
 
-CWidgetComponent::CWidgetComponent(const CWidgetComponent& com)
+CWidgetComponent::CWidgetComponent(const CWidgetComponent& com)	:
+	CSceneComponent(com)
 {
 	meSpace = com.meSpace;
 
@@ -36,6 +39,8 @@ CWidgetComponent::CWidgetComponent(const CWidgetComponent& com)
 	}
 	mWidgetWindow = com.mWidgetWindow->Clone();
 	mWidgetWindow->mOwnerComponent = this;
+
+	mBlendState = com.mBlendState;
 }
 
 CWidgetComponent::~CWidgetComponent()
@@ -117,7 +122,17 @@ void CWidgetComponent::Render()
 {
 	CSceneComponent::Render();
 	
+	if (mBlendState)
+	{
+		mBlendState->SetState();
+	}
+
 	mWidgetWindow->Render();
+
+	if (mBlendState)
+	{
+		mBlendState->ResetState();
+	}
 }
 
 void CWidgetComponent::PostRender()
@@ -138,4 +153,16 @@ void CWidgetComponent::Load(FILE* fp)
 CWidgetComponent* CWidgetComponent::Clone()
 {
 	return new CWidgetComponent(*this);
+}
+
+void CWidgetComponent::EnableOpacity(bool bEnable)
+{
+	if (bEnable)
+	{
+		mBlendState = CRenderManager::GetInst()->FindRenderState("AlphaBlend");
+	}
+	else
+	{
+		mBlendState = nullptr;
+	}
 }

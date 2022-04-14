@@ -103,6 +103,54 @@
     <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\10. UI">
       <UniqueIdentifier>{ad9ad08e-1794-4887-9c2d-7f5ad743943b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. Diablo2\03. Scene">
+      <UniqueIdentifier>{16b6890f-fdd2-4972-9480-c7632e276cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton">
+      <UniqueIdentifier>{076a6993-796b-419f-8609-ae891e1a1322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\04. Resource">
+      <UniqueIdentifier>{855f7438-6f11-4d5d-b7cc-0611a0f6ccc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\04. Resource\01. Shader">
+      <UniqueIdentifier>{e83a00ad-8aae-425a-aa90-60a5de14addb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\04. Resource\01. Shader\01. hlsl">
+      <UniqueIdentifier>{5157b591-5c1d-4df2-9a85-20211ce44534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\04. Resource\01. Shader\02. ShaderClass">
+      <UniqueIdentifier>{e1f8a9c9-cbc6-43d6-ba8b-4f5a52546d5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\04. Resource\01. Shader\02. ShaderClass\01. ShadowShader">
+      <UniqueIdentifier>{47d14649-d527-431a-a421-584563f2215e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\04. Resource\02. Mesh">
+      <UniqueIdentifier>{591ada6f-9545-4d86-a2d6-251a8437e267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject">
+      <UniqueIdentifier>{cfd27f68-f4c8-459f-9016-6159d2ed527e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\12. ProcedualMapGeneartor">
+      <UniqueIdentifier>{61afb032-d272-46cb-9782-4512a03bbc17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\01. ItemObject">
+      <UniqueIdentifier>{01966646-a92c-4dc5-9b01-58cee665fd51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\02. PortalObject">
+      <UniqueIdentifier>{3e868a2b-1dad-48de-b942-da42ccbd52c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\00. SceneComponent\01. Shadow">
+      <UniqueIdentifier>{ff6571e4-ed5e-4229-bb1f-1e9bc5edc1d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\00. SceneComponent\02. ClickableObjectUI">
+      <UniqueIdentifier>{83535359-f51a-43b8-9dc6-27f9f72964c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\10. UI\11. DungeonManager">
+      <UniqueIdentifier>{844645ad-8342-4f16-9d26-66079cf039d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\03. Chest">
+      <UniqueIdentifier>{8f9a66f8-f423-4e94-b109-2f66f4d2265e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -378,6 +426,99 @@
     <ClInclude Include="Diablo2\UI\D2MouseItemSelect.h">
       <Filter>98. Diablo2\02. UI</Filter>
     </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ItemObjectComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\01. ItemObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ProcedualMapGenerator.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\12. ProcedualMapGeneartor</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2Space.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\12. ProcedualMapGeneartor</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2Room.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\12. ProcedualMapGeneartor</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\D2ProcedualMapGeneratorControlWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2DungeonManager.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI\11. DungeonManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2IntroWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2DungeonManagerComponent.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI\11. DungeonManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2LoadingWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Scene\D2MainScene.h">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Scene\D2IntroScene.h">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Scene\D2LoadingScene.h">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Scene\D2LoadingThread.h">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2SkillTreeWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2SkillSelectWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2MonsterStatusWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2SkeletonIdleState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2SkeletonMoveState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2SkeletonAttackState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Resource\Shader\D2ShadowShader.h">
+      <Filter>98. Diablo2\04. Resource\01. Shader\02. ShaderClass\01. ShadowShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Resource\Mesh\D2ShadowMesh.h">
+      <Filter>98. Diablo2\04. Resource\02. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2PortalObject.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\02. PortalObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Scene\D2EndingScene.h">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2EndingWidget.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\D2ShadowComponentWidget.h">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\State\D2SkeletonHitState.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ClickableObject.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\UI\D2ClickableObjectWindow.h">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ShadowComponent.h">
+      <Filter>98. Diablo2\01. Component\00. SceneComponent\01. Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ClickableUIComponent.h">
+      <Filter>98. Diablo2\01. Component\00. SceneComponent\02. ClickableObjectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Diablo2\Component\D2ChestObject.h">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\03. Chest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp">
@@ -635,6 +776,99 @@
     <ClCompile Include="Diablo2\UI\D2MouseItemSelect.cpp">
       <Filter>98. Diablo2\02. UI</Filter>
     </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ItemObjectComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\01. ItemObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ProcedualMapGenerator.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\12. ProcedualMapGeneartor</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2Space.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\12. ProcedualMapGeneartor</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2Room.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\12. ProcedualMapGeneartor</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\D2ProcedualMapGeneratorControlWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2DungeonManager.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI\11. DungeonManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2IntroWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2DungeonManagerComponent.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\10. UI\11. DungeonManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2LoadingWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Scene\D2MainScene.cpp">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Scene\D2IntroScene.cpp">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Scene\D2LoadingScene.cpp">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Scene\D2LoadingThread.cpp">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2SkillTreeWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2SkillSelectWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2MonsterStatusWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2SkeletonIdleState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2SkeletonAttackState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2SkeletonMoveState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Resource\Shader\D2ShadowShader.cpp">
+      <Filter>98. Diablo2\04. Resource\01. Shader\02. ShaderClass\01. ShadowShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Resource\Mesh\D2ShadowMesh.cpp">
+      <Filter>98. Diablo2\04. Resource\02. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2PortalObject.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\02. PortalObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Scene\D2EndingScene.cpp">
+      <Filter>98. Diablo2\03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2EndingWidget.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\D2ShadowComponentWidget.cpp">
+      <Filter>04. IMGUIWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\State\D2SkeletonHitState.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\06. State\00. State\02. Enemy\03. Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ClickableObject.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\UI\D2ClickableObjectWindow.cpp">
+      <Filter>98. Diablo2\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ShadowComponent.cpp">
+      <Filter>98. Diablo2\01. Component\00. SceneComponent\01. Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ClickableUIComponent.cpp">
+      <Filter>98. Diablo2\01. Component\00. SceneComponent\02. ClickableObjectUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Diablo2\Component\D2ChestObject.cpp">
+      <Filter>98. Diablo2\01. Component\01. ObjectComponent\13. ClickableObject\03. Chest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc">
@@ -651,5 +885,15 @@
     <Image Include="Icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\CopyEditor.bat">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\D2ShadowShader.fx">
+      <Filter>98. Diablo2\04. Resource\01. Shader\01. hlsl</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

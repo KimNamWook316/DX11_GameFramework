@@ -133,7 +133,6 @@ CMesh* CSceneResource::FindMesh(const std::string& name)
 
 		if (!findNotInScene)
 		{
-			assert(false);
 			return nullptr;
 		}
 
@@ -154,7 +153,6 @@ CShader* CSceneResource::FindShader(const std::string& name)
 
 		if (!findNotInScene)
 		{
-			assert(false);
 			return nullptr;
 		}
 

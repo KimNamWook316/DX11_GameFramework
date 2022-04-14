@@ -19,7 +19,8 @@ CCameraControlWidget::CCameraControlWidget()	:
 	mIsPlayer(nullptr),
 	mViewPortRatioX(nullptr),
 	mViewPortRatioY(nullptr),
-	mViewPortCenter(nullptr)
+	mViewPortCenter(nullptr),
+	mSetCurrentCameraButton(nullptr)
 {
 }
 
@@ -42,6 +43,7 @@ bool CCameraControlWidget::Init()
 	mViewPortRatioY = AddWidget<CIMGUISliderInt>("ViewPort Ratio Y");
 	mViewPortCenter = AddWidget<CIMGUIButton>("ViewPort Center", 0.f, 0.f);
 	mResetButton = AddWidget<CIMGUIButton>("Reset", 0.f, 0.f);
+	mSetCurrentCameraButton = AddWidget<CIMGUIButton>("SetCurrent", 0.f, 0.f);
 	AddWidget<CIMGUISeperator>("sep");
 
 	// Initial Value
@@ -84,6 +86,7 @@ bool CCameraControlWidget::Init()
 	mViewPortRatioX->SetCallBack(this, &CCameraControlWidget::OnChangeViewPortRatioX);
 	mViewPortRatioY->SetCallBack(this, &CCameraControlWidget::OnChangeViewPortRatioY);
 	mViewPortCenter->SetClickCallBack(this, &CCameraControlWidget::OnClickViewPortCenter);
+	mSetCurrentCameraButton->SetClickCallBack(this, &CCameraControlWidget::OnClickSetCurrentCamera);
 
 	static_cast<CSceneComponent*>(mComponent.Get())->AddCallBack("CameraWidget", this, &CCameraControlWidget::OnChangeState);
 
@@ -166,6 +169,14 @@ void CCameraControlWidget::OnClickViewPortCenter()
 		mViewPortRatioX->SetValue(cam->GetRatio().x);
 		mViewPortRatioY->SetValue(cam->GetRatio().y);
 	}
+}
+
+void CCameraControlWidget::OnClickSetCurrentCamera()
+{
+	CCameraComponent* cam = static_cast<CCameraComponent*>(mComponent.Get());
+
+	mComponent->GetScene()->GetCameraManager()->KeepCamera();
+	mComponent->GetScene()->GetCameraManager()->SetCurrentCamera(cam);
 }
 
 void CCameraControlWidget::OnChangeState()

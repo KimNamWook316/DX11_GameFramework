@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{82e9b4d2-e442-4e42-af46-1cf24c0e6d52}</ProjectGuid>
+    <RootNamespace>Diablo2</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../Bin/</OutDir>
+    <IntDir>../BinObj/</IntDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
+    <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Bin/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../Bin/</OutDir>
+    <IntDir>../BinObj/</IntDir>
+    <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Bin/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="ClientManager.cpp" />
+    <ClCompile Include="Component\D2Blaze.cpp" />
+    <ClCompile Include="Component\D2CharacterInfoComponent.cpp" />
+    <ClCompile Include="Component\D2DataManager.cpp" />
+    <ClCompile Include="Component\D2DataManagerComponent.cpp" />
+    <ClCompile Include="Component\D2DungeonManager.cpp" />
+    <ClCompile Include="Component\D2DungeonManagerComponent.cpp" />
+    <ClCompile Include="Component\D2Effect.cpp" />
+    <ClCompile Include="Component\D2EnemyCollider.cpp" />
+    <ClCompile Include="Component\D2EnemyMeleeAttack.cpp" />
+    <ClCompile Include="Component\D2EnemyNavAgentComponent.cpp" />
+    <ClCompile Include="Component\D2EnemySkillComponent.cpp" />
+    <ClCompile Include="Component\D2EquipItem.cpp" />
+    <ClCompile Include="Component\D2FrozenOrb.cpp" />
+    <ClCompile Include="Component\D2Inventory.cpp" />
+    <ClCompile Include="Component\D2Item.cpp" />
+    <ClCompile Include="Component\D2ItemObjectComponent.cpp" />
+    <ClCompile Include="Component\D2ItemTable.cpp" />
+    <ClCompile Include="Component\D2ItemTableComponent.cpp" />
+    <ClCompile Include="Component\D2MeleeAttack.cpp" />
+    <ClCompile Include="Component\D2Meteor.cpp" />
+    <ClCompile Include="Component\D2MeteorFire.cpp" />
+    <ClCompile Include="Component\D2MeteorTarget.cpp" />
+    <ClCompile Include="Component\D2NavAgentComponent.cpp" />
+    <ClCompile Include="Component\D2ObjectPool.cpp" />
+    <ClCompile Include="Component\D2ObjectPoolComponent.cpp" />
+    <ClCompile Include="Component\D2PlayerCollider.cpp" />
+    <ClCompile Include="Component\D2PlayerSkillComponent.cpp" />
+    <ClCompile Include="Component\D2ProcedualMapGenerator.cpp" />
+    <ClCompile Include="Component\D2ProjectTile.cpp" />
+    <ClCompile Include="Component\D2Room.cpp" />
+    <ClCompile Include="Component\D2Skill.cpp" />
+    <ClCompile Include="Component\D2SkillObject.cpp" />
+    <ClCompile Include="Component\D2Space.cpp" />
+    <ClCompile Include="Component\D2StateComponent.cpp" />
+    <ClCompile Include="Component\D2Teleport.cpp" />
+    <ClCompile Include="Component\D2UIManager.cpp" />
+    <ClCompile Include="Component\D2UIManagerComponent.cpp" />
+    <ClCompile Include="Component\D2UsableItem.cpp" />
+    <ClCompile Include="D2Util.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="State\D2AndarielDeadState.cpp" />
+    <ClCompile Include="State\D2AndarielDieState.cpp" />
+    <ClCompile Include="State\D2AndarielIdleState.cpp" />
+    <ClCompile Include="State\D2AndarielMeleeAttackState.cpp" />
+    <ClCompile Include="State\D2AndarielMoveState.cpp" />
+    <ClCompile Include="State\D2AndarielProjectileState.cpp" />
+    <ClCompile Include="State\D2AndarielSprayState.cpp" />
+    <ClCompile Include="State\D2EnemyDeadState.cpp" />
+    <ClCompile Include="State\D2EnemyDieState.cpp" />
+    <ClCompile Include="State\D2EnemyHitState.cpp" />
+    <ClCompile Include="State\D2EnemyIdleState.cpp" />
+    <ClCompile Include="State\D2EnemyMeleeAttackState.cpp" />
+    <ClCompile Include="State\D2EnemyMoveState.cpp" />
+    <ClCompile Include="State\D2State.cpp" />
+    <ClCompile Include="State\PlayerCastingState.cpp" />
+    <ClCompile Include="State\PlayerHitState.cpp" />
+    <ClCompile Include="State\PlayerIdleState.cpp" />
+    <ClCompile Include="State\PlayerRunState.cpp" />
+    <ClCompile Include="State\PlayerWalkState.cpp" />
+    <ClCompile Include="UI\D2FrameWidget.cpp" />
+    <ClCompile Include="UI\D2IntroWindow.cpp" />
+    <ClCompile Include="UI\D2InventoryWindow.cpp" />
+    <ClCompile Include="UI\D2MenuBorder.cpp" />
+    <ClCompile Include="UI\D2MouseItemSelect.cpp" />
+    <ClCompile Include="UI\D2MouseNormal.cpp" />
+    <ClCompile Include="UI\D2StatusBarWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClientManager.h" />
+    <ClInclude Include="Component\D2Blaze.h" />
+    <ClInclude Include="Component\D2CharacterInfoComponent.h" />
+    <ClInclude Include="Component\D2DataManager.h" />
+    <ClInclude Include="Component\D2DataManagerComponent.h" />
+    <ClInclude Include="Component\D2DungeonManager.h" />
+    <ClInclude Include="Component\D2DungeonManagerComponent.h" />
+    <ClInclude Include="Component\D2Effect.h" />
+    <ClInclude Include="Component\D2EnemyCollider.h" />
+    <ClInclude Include="Component\D2EnemyMeleeAttack.h" />
+    <ClInclude Include="Component\D2EnemyNavAgentComponent.h" />
+    <ClInclude Include="Component\D2EnemySkillComponent.h" />
+    <ClInclude Include="Component\D2EquipItem.h" />
+    <ClInclude Include="Component\D2FrozenOrb.h" />
+    <ClInclude Include="Component\D2Inventory.h" />
+    <ClInclude Include="Component\D2Item.h" />
+    <ClInclude Include="Component\D2ItemObjectComponent.h" />
+    <ClInclude Include="Component\D2ItemTable.h" />
+    <ClInclude Include="Component\D2ItemTableComponent.h" />
+    <ClInclude Include="Component\D2MeleeAttack.h" />
+    <ClInclude Include="Component\D2Meteor.h" />
+    <ClInclude Include="Component\D2MeteorFire.h" />
+    <ClInclude Include="Component\D2MeteorTarget.h" />
+    <ClInclude Include="Component\D2NavAgentComponent.h" />
+    <ClInclude Include="Component\D2ObjectPool.h" />
+    <ClInclude Include="Component\D2ObjectPoolComponent.h" />
+    <ClInclude Include="Component\D2PlayerCollider.h" />
+    <ClInclude Include="Component\D2PlayerSkillComponent.h" />
+    <ClInclude Include="Component\D2ProcedualMapGenerator.h" />
+    <ClInclude Include="Component\D2ProjectTile.h" />
+    <ClInclude Include="Component\D2Room.h" />
+    <ClInclude Include="Component\D2Skill.h" />
+    <ClInclude Include="Component\D2SkillObject.h" />
+    <ClInclude Include="Component\D2Space.h" />
+    <ClInclude Include="Component\D2StateComponent.h" />
+    <ClInclude Include="Component\D2Teleport.h" />
+    <ClInclude Include="Component\D2UIManager.h" />
+    <ClInclude Include="Component\D2UIManagerComponent.h" />
+    <ClInclude Include="Component\D2UsableItem.h" />
+    <ClInclude Include="D2Flag.h" />
+    <ClInclude Include="D2Info.h" />
+    <ClInclude Include="D2Util.h" />
+    <ClInclude Include="Dia2.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="State\D2AndarielDeadState.h" />
+    <ClInclude Include="State\D2AndarielDieState.h" />
+    <ClInclude Include="State\D2AndarielIdleState.h" />
+    <ClInclude Include="State\D2AndarielMeleeAttackState.h" />
+    <ClInclude Include="State\D2AndarielMoveState.h" />
+    <ClInclude Include="State\D2AndarielProjectileState.h" />
+    <ClInclude Include="State\D2AndarielSprayState.h" />
+    <ClInclude Include="State\D2EnemyDeadState.h" />
+    <ClInclude Include="State\D2EnemyDieState.h" />
+    <ClInclude Include="State\D2EnemyHitState.h" />
+    <ClInclude Include="State\D2EnemyIdleState.h" />
+    <ClInclude Include="State\D2EnemyMeleeAttackState.h" />
+    <ClInclude Include="State\D2EnemyMoveState.h" />
+    <ClInclude Include="State\D2State.h" />
+    <ClInclude Include="State\PlayerCastingState.h" />
+    <ClInclude Include="State\PlayerHitState.h" />
+    <ClInclude Include="State\PlayerIdleState.h" />
+    <ClInclude Include="State\PlayerRunState.h" />
+    <ClInclude Include="State\PlayerWalkState.h" />
+    <ClInclude Include="UI\D2FrameWidget.h" />
+    <ClInclude Include="UI\D2IntroWindow.h" />
+    <ClInclude Include="UI\D2InventoryWindow.h" />
+    <ClInclude Include="UI\D2MenuBorder.h" />
+    <ClInclude Include="UI\D2MouseItemSelect.h" />
+    <ClInclude Include="UI\D2MouseNormal.h" />
+    <ClInclude Include="UI\D2StatusBarWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Diablo2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -8,15 +8,23 @@ bool CCollision::CollisionBox2DToBox2D(CColliderBox2D* src, CColliderBox2D* dest
     CollisionResult srcResult;
     CollisionResult destResult;
 
+	srcResult.Src = src;
+	srcResult.Dest = dest;
+	destResult.Src = dest;
+	destResult.Dest = src;
+
+	src->mResult = srcResult;
+	dest->mResult = destResult;
+
     if (CollisionBox2DToBox2D(srcResult, destResult, src->GetInfo(), dest->GetInfo()))
     {
-        srcResult.Src = src;
-        srcResult.Dest = dest;
-        destResult.Src = dest;
-        destResult.Dest = src;
-
-        src->mResult = srcResult;
-        dest->mResult = destResult;
+ //        srcResult.Src = src;
+ //        srcResult.Dest = dest;
+ //        destResult.Src = dest;
+ //        destResult.Dest = src;
+ //
+ //        src->mResult = srcResult;
+ //        dest->mResult = destResult;
 
         return true;
     }
@@ -28,15 +36,23 @@ bool CCollision::CollisionCircleToCircle(CColliderCircle* src, CColliderCircle* 
     CollisionResult srcResult;
     CollisionResult destResult;
 
+    srcResult.Src = src;
+    srcResult.Dest = dest;
+    destResult.Src = dest;
+    destResult.Dest = src;
+
+    src->mResult = srcResult;
+    dest->mResult = destResult;
+
     if (CollisionCircleToCircle(srcResult, destResult, src->GetInfo(), dest->GetInfo()))
     {
-        srcResult.Src = src;
-        srcResult.Dest = dest;
-        destResult.Src = dest;
-        destResult.Dest = src;
-
-        src->mResult = srcResult;
-        dest->mResult = destResult;
+ //        srcResult.Src = src;
+ //        srcResult.Dest = dest;
+ //        destResult.Src = dest;
+ //        destResult.Dest = src;
+ //
+ //        src->mResult = srcResult;
+ //        dest->mResult = destResult;
 
         return true;
     }
@@ -48,15 +64,23 @@ bool CCollision::CollisionBox2DToCircle(CColliderBox2D* src, CColliderCircle* de
     CollisionResult srcResult;
     CollisionResult destResult;
 
+	srcResult.Src = src;
+	srcResult.Dest = dest;
+	destResult.Src = dest;
+	destResult.Dest = src;
+
+	src->mResult = srcResult;
+	dest->mResult = destResult;
+
     if (CollisionBox2DToCircle(srcResult, destResult, src->GetInfo(), dest->GetInfo()))
     {
-        srcResult.Src = src;
-        srcResult.Dest = dest;
-        destResult.Src = dest;
-        destResult.Dest = src;
-
-        src->mResult = srcResult;
-        dest->mResult = destResult;
+ //        srcResult.Src = src;
+ //        srcResult.Dest = dest;
+ //        destResult.Src = dest;
+ //        destResult.Dest = src;
+ //
+ //        src->mResult = srcResult;
+ //        dest->mResult = destResult;
 
         return true;
     }
@@ -68,15 +92,23 @@ bool CCollision::CollisionBox2DToPixel(CColliderBox2D* src, CColliderPixel* dest
     CollisionResult srcResult;
     CollisionResult destResult;
 
+	srcResult.Src = src;
+	srcResult.Dest = dest;
+	destResult.Src = dest;
+	destResult.Dest = src;
+
+	src->mResult = srcResult;
+	dest->mResult = destResult;
+    
     if (CollisionBox2DToPixel(srcResult, destResult, src->GetInfo(), dest->GetInfo()))
     {
-        srcResult.Src = src;
-        srcResult.Dest = dest;
-        destResult.Src = dest;
-        destResult.Dest = src;
-
-        src->mResult = srcResult;
-        dest->mResult = destResult;
+ //        srcResult.Src = src;
+ //        srcResult.Dest = dest;
+ //        destResult.Src = dest;
+ //        destResult.Dest = src;
+ //
+ //        src->mResult = srcResult;
+ //        dest->mResult = destResult;
 
         return true;
     }
@@ -88,15 +120,23 @@ bool CCollision::CollisionCircleToPixel(CColliderCircle* src, CColliderPixel* de
     CollisionResult srcResult;
     CollisionResult destResult;
 
+	srcResult.Src = src;
+	srcResult.Dest = dest;
+	destResult.Src = dest;
+	destResult.Dest = src;
+
+	src->mResult = srcResult;
+	dest->mResult = destResult;
+
     if (CollisionCircleToPixel(srcResult, destResult, src->GetInfo(), dest->GetInfo()))
     {
-        srcResult.Src = src;
-        srcResult.Dest = dest;
-        destResult.Src = dest;
-        destResult.Dest = src;
-
-        src->mResult = srcResult;
-        dest->mResult = destResult;
+ //        srcResult.Src = src;
+ //        srcResult.Dest = dest;
+ //        destResult.Src = dest;
+ //        destResult.Dest = src;
+ //
+ //        src->mResult = srcResult;
+ //        dest->mResult = destResult;
 
         return true;
     }

@@ -19,7 +19,7 @@ CNavigationThread::~CNavigationThread()
 
 void CNavigationThread::Run()
 {
-	while(true)
+	while(mbLoop)
 	{
 		// 타일 변화 정보 업데이트
 		if (!mChangeQueue.Empty())

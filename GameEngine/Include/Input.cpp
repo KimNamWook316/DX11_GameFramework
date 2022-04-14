@@ -358,7 +358,7 @@ void CInput::updateKeyState()
 			mbLButtonClicked = false;
 		}
 
-		if (mMouseState.rgbButtons[0] & 0x80)
+		if (mMouseState.rgbButtons[1] & 0x80)
 		{
 			mbRButtonClicked = true;
 		}
@@ -427,7 +427,7 @@ void CInput::updateKeyState()
 				// 오른쪽 클릭
 				if (mMouseState.rgbButtons[1] & 0x80 && !mbWidgetCollide)
 				{
-					mbLButtonClicked = true;
+					mbRButtonClicked = true;
 					bIsKeyPushed = true;
 				}
 				break;

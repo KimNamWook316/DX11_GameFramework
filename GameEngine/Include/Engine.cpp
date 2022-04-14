@@ -28,7 +28,7 @@ CEngine::CEngine()
 	mbDebugMode(false)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(271567);
+	//_CrtSetBreakAlloc(47300);
 }
 
 CEngine::~CEngine() 
@@ -203,6 +203,7 @@ void CEngine::Logic()
 	mGlobalCBuffer->UpdateCBuffer();
 
 	CInput::GetInst()->Update(deltaTime);
+	CResourceManager::GetInst()->Update();
 
 	CIMGUIManager::GetInst()->Update(deltaTime);
 	

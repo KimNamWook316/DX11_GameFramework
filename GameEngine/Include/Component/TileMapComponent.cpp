@@ -69,6 +69,7 @@ CTileMapComponent::CTileMapComponent(const CTileMapComponent& comp)	:
 CTileMapComponent::~CTileMapComponent()
 {
 	SAFE_DELETE(mTileInfoBuffer);
+	SAFE_DELETE(mPathFindTileRenderInfoBuffer);
 	SAFE_DELETE(mCBuffer);
 
 	size_t size = mVecTile.size();
@@ -212,113 +213,114 @@ void CTileMapComponent::PrevRender()
 					}
 
 #ifdef _DEBUG
-
 					// 길찾기 타일 렌더
 					if (CEngine::GetInst()->IsDebugMode())
 					{
-						Matrix matWorld;
+						if (!mVecPathFindTile.empty())
+						{
+							Matrix matWorld;
 
-						mPathFindTileRenderCount = mRenderCount * 4;
+							mPathFindTileRenderCount = mRenderCount * 4;
 
-						int idx1 = i * (mPathFindTileCountX * 2) + (j * 2);
-						int idx2 = i * (mPathFindTileCountX * 2) + (j * 2) + 1;
-						int idx3 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2);
-						int idx4 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2) + 1;
+							int idx1 = i * (mPathFindTileCountX * 2) + (j * 2);
+							int idx2 = i * (mPathFindTileCountX * 2) + (j * 2) + 1;
+							int idx3 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2);
+							int idx4 = (i * (mPathFindTileCountX * 2)) + mPathFindTileCountX + (j * 2) + 1;
 
-						// tile 1
-						matWorld.Translation(mVecPathFindTile[idx1]->Center);
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].MatVP = matWorld * matView * matProj;
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].MatVP.Transpose();
+							// tile 1
+							matWorld.Translation(mVecPathFindTile[idx1]->Center);
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].MatVP = matWorld * matView * matProj;
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].MatVP.Transpose();
 
-						if (idx1 == mSelectPathTileIdx)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Blue;
-						}
-						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4(0.f, 1.f, 1.f, 1.f);
-						}
-						else if (mVecPathFindTile[idx1]->Type == eTileType::Wall)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Red;
-						}
-						else
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Green;
-						}
+							if (idx1 == mSelectPathTileIdx)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Blue;
+							}
+							else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4(0.f, 1.f, 1.f, 1.f);
+							}
+							else if (mVecPathFindTile[idx1]->Type == eTileType::Wall)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Red;
+							}
+							else
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 3].Color = Vector4::Green;
+							}
 
-						// tile2
-						matWorld.Identity();
-						matWorld.Translation(mVecPathFindTile[idx2]->Center);
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].MatVP = matWorld * matView * matProj;
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].MatVP.Transpose();
+							// tile2
+							matWorld.Identity();
+							matWorld.Translation(mVecPathFindTile[idx2]->Center);
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].MatVP = matWorld * matView * matProj;
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].MatVP.Transpose();
 
-						if (idx2 == mSelectPathTileIdx)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4::Blue;
-						}
-						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4(0.f, 1.f, 1.f, 1.f);
-						}
-						else if (mVecPathFindTile[idx2]->Type == eTileType::Wall)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4::Red;
-						}
-						else
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4::Green;
-						}
+							if (idx2 == mSelectPathTileIdx)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4::Blue;
+							}
+							else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4(0.f, 1.f, 1.f, 1.f);
+							}
+							else if (mVecPathFindTile[idx2]->Type == eTileType::Wall)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4::Red;
+							}
+							else
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 2].Color = Vector4::Green;
+							}
 
-						// tile3
-						matWorld.Identity();
-						matWorld.Translation(mVecPathFindTile[idx3]->Center);
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].MatVP = matWorld * matView * matProj;
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].MatVP.Transpose();
+							// tile3
+							matWorld.Identity();
+							matWorld.Translation(mVecPathFindTile[idx3]->Center);
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].MatVP = matWorld * matView * matProj;
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].MatVP.Transpose();
 
-						if (idx3 == mSelectPathTileIdx)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Blue;
-						}
-						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4(0.f, 1.f, 1.f, 1.f);
-						}
-						else if (mVecPathFindTile[idx3]->Type == eTileType::Wall)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Red;
-						}
-						else
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Green;
-						}
+							if (idx3 == mSelectPathTileIdx)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Blue;
+							}
+							else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4(0.f, 1.f, 1.f, 1.f);
+							}
+							else if (mVecPathFindTile[idx3]->Type == eTileType::Wall)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Red;
+							}
+							else
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount - 1].Color = Vector4::Green;
+							}
 
-						// tile3
-						matWorld.Identity();
-						matWorld.Translation(mVecPathFindTile[idx4]->Center);
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount].MatVP = matWorld * matView * matProj;
-						mVecPathFindTileRenderInfo[mPathFindTileRenderCount].MatVP.Transpose();
+							// tile3
+							matWorld.Identity();
+							matWorld.Translation(mVecPathFindTile[idx4]->Center);
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].MatVP = matWorld * matView * matProj;
+							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].MatVP.Transpose();
 
-						if (idx4 == mSelectPathTileIdx)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4::Blue;
-						}
-						else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4(0.f, 1.f, 1.f, 1.f);
-						}
-						else if (mVecPathFindTile[idx4]->Type == eTileType::Wall)
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4::Red;
-						}
-						else
-						{
-							mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4::Green;
-						}
+							if (idx4 == mSelectPathTileIdx)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4::Blue;
+							}
+							else if (mVecPathFindTile[idx1]->Type == eTileType::Reserved)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4(0.f, 1.f, 1.f, 1.f);
+							}
+							else if (mVecPathFindTile[idx4]->Type == eTileType::Wall)
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4::Red;
+							}
+							else
+							{
+								mVecPathFindTileRenderInfo[mPathFindTileRenderCount].Color = Vector4::Green;
+							}
 
-						Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
-						mSelectPathTileIdx = GetPathFindTileIndex(Vector3(mousePos.x, mousePos.y, 0.f));
-
+							Vector2 mousePos = CInput::GetInst()->GetMouseWorld2DPos();
+							mSelectPathTileIdx = GetPathFindTileIndex(Vector3(mousePos.x, mousePos.y, 0.f));
+						}
 					}
 #endif // _DEBUG
 				}
@@ -326,7 +328,14 @@ void CTileMapComponent::PrevRender()
 		}
 
 		mTileInfoBuffer->UpdateBuffer(&mVecTileInfo[0], mRenderCount);
-		mPathFindTileRenderInfoBuffer->UpdateBuffer(&mVecPathFindTileRenderInfo[0], mPathFindTileRenderCount);
+		
+#ifdef _DEBUG
+		if (mPathFindTileRenderInfoBuffer)
+		{
+			mPathFindTileRenderInfoBuffer->UpdateBuffer(&mVecPathFindTileRenderInfo[0], mPathFindTileRenderCount);
+		}
+#endif // _DEBUG
+
 	}
 }
 
@@ -660,6 +669,13 @@ bool CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const in
 	mCountY = countY;
 	mTileSize = size;
 
+	size_t vecTileSize = mVecTile.size();
+	for (size_t i = 0; i < vecTileSize; ++i)
+	{
+		SAFE_DELETE(mVecTile[i]);
+	}
+	mVecTile.clear();
+
 	mVecTile.resize((size_t)mCountX * (size_t)mCountY);
 
 	for (int i = 0; i < mCountY; ++i)
@@ -750,12 +766,11 @@ bool CTileMapComponent::CreateTile(CTileSet* tileSet, const int countX, const in
 	}
 
 	// 길찾기를 위해 4등분한 타일 정보 생성
-	if (!createPathFindTileInfo())
+	if (!CreatePathFindTileInfo())
 	{
 		return false;
 	}
 
-	mScene->GetNavigationManager()->SetNavData(this);
 	return true;
 }
 
@@ -881,12 +896,6 @@ bool CTileMapComponent::CreateTileProcedual(const ProcedualMapData& mapData)
 		mVecTile[i]->SetFrameStart(info->ImageStart);
 		mVecTile[i]->SetFrameEnd(info->ImageEnd);
 		mVecTile[i]->SetTileType(info->Type);
-	}
-
-	// 길찾기를 위해 4등분한 타일 정보 생성
-	if (!createPathFindTileInfo())
-	{
-		return false;
 	}
 
 	return true;
@@ -1328,7 +1337,7 @@ int CTileMapComponent::getTileRenderIndexY(const Vector3& pos)
 	return 0;
 }
 
-bool CTileMapComponent::createPathFindTileInfo()
+bool CTileMapComponent::CreatePathFindTileInfo()
 {
 	size_t size = mVecPathFindTile.size();
 	for (size_t i = 0; i < size; ++i)
@@ -1608,6 +1617,9 @@ bool CTileMapComponent::createPathFindTileInfo()
 			}
 		}
 	}
+
+	mScene->GetNavigationManager()->SetNavData(this);
+
 	return true;
 }
 

@@ -68,6 +68,11 @@ public:
 		return mCurrentAnimation;
 	}
 
+	CTexture* GetCurrentAnimationTexture() const
+	{
+		return mCurrentAnimation->GetTexture();
+	}
+
 	int GetAnimationCount() const
 	{
 		return (int)mMapAnimation.size();

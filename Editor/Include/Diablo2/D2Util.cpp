@@ -3,6 +3,7 @@
 #include "State/PlayerIdleState.h"
 #include "State/D2EnemyIdleState.h"
 #include "State/D2AndarielIdleState.h"
+#include "State/D2SkeletonIdleState.h"
 
 eD2SpriteDir CD2Util::GetSpriteDir(const Vector2 dir)
 {
@@ -171,6 +172,9 @@ std::string CD2Util::StateEnumToString(eD2InitialStateType type)
 	case eD2InitialStateType::D2AndarielIdle:
 		out = "D2AndarielIdle";
 		return out;
+	case eD2InitialStateType::D2SkeletonIdle:
+		out = "D2SkeletonIdle";
+		return out;
 	}
 	return out;
 }
@@ -188,6 +192,10 @@ eD2InitialStateType CD2Util::StringToStateEnum(const std::string& typeString)
 	else if (typeString == "D2AndarielIdle")
 	{
 		return eD2InitialStateType::D2AndarielIdle;
+	}
+	else if (typeString == "D2SkeletonIdle")
+	{
+		return eD2InitialStateType::D2SkeletonIdle;
 	}
 	else
 	{
@@ -208,6 +216,11 @@ std::string CD2Util::StateTypeToString(size_t type)
 		out = "D2EnemyIdle";
 		return out;
 	}
+	else if (typeid(CD2SkeletonIdleState).hash_code() == type)
+	{
+		out = "D2SkeletonIdle";
+		return out;
+	}
 	return out;
 }
 
@@ -221,6 +234,8 @@ size_t CD2Util::StateEnumToStateType(eD2InitialStateType type)
 		return typeid(CD2EnemyIdleState).hash_code();
 	case eD2InitialStateType::D2AndarielIdle:
 		return typeid(CD2AndarielIdleState).hash_code();
+	case eD2InitialStateType::D2SkeletonIdle:
+		return typeid(CD2SkeletonIdleState).hash_code();
 	}
 	return -1;
 }
@@ -230,6 +245,15 @@ std::string CD2Util::D2SceneComponentTypeToString(eD2SceneComponentType type)
 	std::string out;
 	switch (type)
 	{
+	case eD2SceneComponentType::D2ProcedualMapGenerator:
+		out = "D2ProcedualMapGenerator";
+		return out;
+	case eD2SceneComponentType::D2Shadow:
+		out = "D2Shadow";
+		return out;
+	case eD2SceneComponentType::D2ClickableUI:
+		out = "D2ClickableUI";
+		return out;
 	}
 	return out;
 }
@@ -308,12 +332,36 @@ std::string CD2Util::D2ObjectComponentTypeToString(eD2ObjectComponentType type)
 	case eD2ObjectComponentType::D2UIManager:
 		out = "D2UIManager";
 		break;
+	case eD2ObjectComponentType::D2ItemObject:
+		out = "D2ItemObject";
+		break;
+	case eD2ObjectComponentType::D2DungeonManager:
+		out = "D2DungeonManager";
+		break;
+	case eD2ObjectComponentType::D2PortalObject:
+		out = "D2PortalObject";
+		break;
+	case eD2ObjectComponentType::D2ChestObject:
+		out = "D2ChestObject";
+		break;
 	}
 	return out;
 }
 
 eD2SceneComponentType CD2Util::StringToD2SceneComponentType(const std::string& typeString)
 {
+	if (typeString == "D2ProcedualMapGenerator")
+	{
+		return eD2SceneComponentType::D2ProcedualMapGenerator;
+	}
+	else if (typeString == "D2Shadow")
+	{
+		return eD2SceneComponentType::D2Shadow;
+	}
+	else if (typeString == "D2ClickableUI")
+	{
+		return eD2SceneComponentType::D2ClickableUI;
+	}
 	return (eD2SceneComponentType)(-1);
 }
 
@@ -410,6 +458,22 @@ eD2ObjectComponentType CD2Util::StringToD2ObjectComponentType(const std::string&
 	else if (typeString == "D2UIManager")
 	{
 		return eD2ObjectComponentType::D2UIManager;
+	}
+	else if (typeString == "D2ItemObject")
+	{
+		return eD2ObjectComponentType::D2ItemObject;
+	}
+	else if (typeString == "D2DungeonManager")
+	{
+		return eD2ObjectComponentType::D2DungeonManager;
+	}
+	else if (typeString == "D2PortalObject")
+	{
+		return eD2ObjectComponentType::D2PortalObject;
+	}
+	else if (typeString == "D2ChestObject")
+	{
+		return eD2ObjectComponentType::D2ChestObject;
 	}
 	return (eD2ObjectComponentType)(-1);
 }

@@ -8,14 +8,17 @@ CWidgetWindow::CWidgetWindow() :
 	mZOrder(0),
 	mSize(100.f, 100.f),
 	mbStart(false),
-	mbVisable(true)
+	mbVisable(true),
+	mbCollideMouse(false)
 {
 }
 
 CWidgetWindow::CWidgetWindow(const CWidgetWindow& window)
 {
 	*this = window;
+	mRefCount = 0;
 	mOwnerComponent = nullptr;
+	mWidgetList.clear();
 
 	auto iter = window.mWidgetList.begin();
 	auto iterEnd = window.mWidgetList.end();
@@ -158,21 +161,28 @@ bool CWidgetWindow::DoCollideMouse(const Vector2& mousePos)
 	// 윈도우 영역 안에 들어오는지 판단.
 	if (mousePos.x < mPos.x)
 	{
+		mbCollideMouse = false;
 		return false;
 	}
 	else if (mousePos.x > mPos.x + mSize.x)
 	{
+		mbCollideMouse = false;
 		return false;
 	}
 	else if (mousePos.y < mPos.y)
 	{
+		mbCollideMouse = false;
 		return false;
 	}
 	else if (mousePos.y > mPos.y + mSize.y)
 	{
+		mbCollideMouse = false;
 		return false;
 	}
 
+	mbCollideMouse = true;
+
+	bool bWidgetCollide = false;
 	auto iter = mWidgetList.rbegin();
 	auto iterEnd = mWidgetList.rend();
 
@@ -183,19 +193,26 @@ bool CWidgetWindow::DoCollideMouse(const Vector2& mousePos)
 			continue;
 		}
 
-		// Hovered 처리
-		if ((*iter)->DoCollideMouse(mousePos))
-		{
-			(*iter)->mbMouseHovered = true;
-			return true;
-		}
-		else 
+		if (bWidgetCollide)
 		{
 			(*iter)->mbMouseHovered = false;
 		}
+		else
+		{
+			// Hovered 처리
+			if ((*iter)->DoCollideMouse(mousePos))
+			{
+				bWidgetCollide = true;
+				(*iter)->mbMouseHovered = true;
+			}
+			else 
+			{
+				(*iter)->mbMouseHovered = false;
+			}
+		}
 	}
 
-	return false;
+	return bWidgetCollide;
 }
 
 bool CWidgetWindow::sortWidget(CSharedPtr<CWidget> src, CSharedPtr<CWidget> dest)

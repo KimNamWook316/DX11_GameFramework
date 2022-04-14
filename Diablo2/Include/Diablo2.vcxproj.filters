@@ -13,26 +13,35 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="01. SceneMode">
-      <UniqueIdentifier>{87af54b7-e502-4f78-afc0-33ef06bfca8f}</UniqueIdentifier>
+    <Filter Include="Diablo2">
+      <UniqueIdentifier>{ee5cff46-1bc9-4e7d-859f-42d638419089}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. D2Object">
-      <UniqueIdentifier>{3289cd78-5161-4b8f-80fb-bd0efb73fbef}</UniqueIdentifier>
+    <Filter Include="Diablo2\01. Component">
+      <UniqueIdentifier>{408effec-43d6-4c9c-8785-cc66888b73ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. D2Object\01. Player">
-      <UniqueIdentifier>{45cee635-8688-47c1-9967-c1764ead18c0}</UniqueIdentifier>
+    <Filter Include="Diablo2\02. Scene">
+      <UniqueIdentifier>{b8f7428d-54a1-4776-a2f2-2ea5cdf374ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. D2Object\00. ObjectState">
-      <UniqueIdentifier>{9c618da6-9345-41a6-8229-9816ebc98dc8}</UniqueIdentifier>
+    <Filter Include="Diablo2\03. State">
+      <UniqueIdentifier>{39c4b8f4-8a26-45ff-8eff-b46fe59b7bd0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. D2Object\00. ObjectState\01. PlayerState">
-      <UniqueIdentifier>{5ed51383-0141-4116-bb6d-dd5efb06bdf1}</UniqueIdentifier>
+    <Filter Include="Diablo2\04. UI">
+      <UniqueIdentifier>{9900ca50-a47c-4c4f-9282-d603f0a656cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. D2Component">
-      <UniqueIdentifier>{0b7e0601-6b7c-4f53-8488-6796ffb5772f}</UniqueIdentifier>
+    <Filter Include="Diablo2\05. Resource">
+      <UniqueIdentifier>{e497452d-247a-4595-9777-58dceff70fce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. D2Component\01. ObjectComponent">
-      <UniqueIdentifier>{644c6ac5-580d-41ec-a1be-1fd41a45b669}</UniqueIdentifier>
+    <Filter Include="Diablo2\05. Resource\01. Mesh">
+      <UniqueIdentifier>{84688a1d-f54d-423e-87e3-0be33f2aadea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Diablo2\05. Resource\02. Shader">
+      <UniqueIdentifier>{360aa943-b68a-4645-8283-4632f4fbf178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Diablo2\05. Resource\02. Shader\01. hlsl">
+      <UniqueIdentifier>{ceb5d8e0-0209-4f7f-b185-cf5834ff5130}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Diablo2\05. Resource\02. Shader\02. ShaderClass">
+      <UniqueIdentifier>{e82d1417-e74c-4681-ac17-85ac24211211}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,29 +51,266 @@
     <ClCompile Include="ClientManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\TestScene.cpp">
-      <Filter>01. SceneMode</Filter>
+    <ClCompile Include="D2Util.cpp">
+      <Filter>Diablo2</Filter>
     </ClCompile>
-    <ClCompile Include="Object\D2Object.cpp">
-      <Filter>02. D2Object</Filter>
+    <ClCompile Include="Scene\D2IntroScene.cpp">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Object\D2Player.cpp">
-      <Filter>02. D2Object\01. Player</Filter>
+    <ClCompile Include="Scene\D2LoadingScene.cpp">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Object\D2State.cpp">
-      <Filter>02. D2Object\00. ObjectState</Filter>
+    <ClCompile Include="Scene\D2LoadingThread.cpp">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Object\D2PlayerTownIdle.cpp">
-      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    <ClCompile Include="Scene\D2MainScene.cpp">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Object\D2PlayerRun.cpp">
-      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    <ClCompile Include="State\D2AndarielDeadState.cpp">
+      <Filter>Diablo2\03. State</Filter>
     </ClCompile>
-    <ClCompile Include="Object\D2PlayerSpecialOne.cpp">
-      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    <ClCompile Include="State\D2AndarielDieState.cpp">
+      <Filter>Diablo2\03. State</Filter>
     </ClCompile>
-    <ClCompile Include="Component\InputStackComponent.cpp">
-      <Filter>03. D2Component\01. ObjectComponent</Filter>
+    <ClCompile Include="State\D2AndarielIdleState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2AndarielMeleeAttackState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2AndarielMoveState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2AndarielProjectileState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2AndarielSprayState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2EnemyDeadState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2EnemyDieState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2EnemyHitState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2EnemyIdleState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2EnemyMeleeAttackState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2EnemyMoveState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2State.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\PlayerCastingState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\PlayerHitState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\PlayerIdleState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\PlayerRunState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\PlayerWalkState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2StatusBarWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2FrameWidget.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2IntroWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2InventoryWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2LoadingWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2MenuBorder.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2MouseItemSelect.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2MouseNormal.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2SkillSelectWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2SkillTreeWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2MonsterStatusWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh\D2ShadowMesh.cpp">
+      <Filter>Diablo2\05. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\D2ShadowShader.cpp">
+      <Filter>Diablo2\05. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2SkeletonIdleState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2SkeletonMoveState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2SkeletonAttackState.cpp">
+      <Filter>Diablo2\03. State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Editor\Include\Diablo2\Scene\D2EndingScene.cpp">
+      <Filter>Diablo2\02. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Editor\Include\Diablo2\UI\D2EndingWidget.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D2ClickableObjectWindow.cpp">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Room.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ShadowComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Skill.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2SkillObject.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Space.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2StateComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Teleport.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2UIManager.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2UIManagerComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2UsableItem.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Blaze.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2CharacterInfoComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ChestObject.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ClickableObject.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ClickableUIComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2DataManager.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2DataManagerComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2DungeonManager.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2DungeonManagerComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Effect.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2EnemyCollider.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2EnemyMeleeAttack.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2EnemyNavAgentComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2EnemySkillComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2EquipItem.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2FrozenOrb.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Inventory.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Item.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ItemObjectComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ItemTable.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ItemTableComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2MeleeAttack.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2Meteor.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2MeteorFire.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2MeteorTarget.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2NavAgentComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ObjectPool.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ObjectPoolComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2PlayerCollider.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2PlayerSkillComponent.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2PortalObject.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ProcedualMapGenerator.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\D2ProjectTile.cpp">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="State\D2SkeletonHitState.cpp">
+      <Filter>Diablo2\03. State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,35 +320,272 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TestScene.h">
-      <Filter>01. SceneMode</Filter>
+    <ClInclude Include="D2Info.h">
+      <Filter>Diablo2</Filter>
     </ClInclude>
-    <ClInclude Include="Dia2Info.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D2Util.h">
+      <Filter>Diablo2</Filter>
     </ClInclude>
-    <ClInclude Include="Dia2Flags.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D2Flag.h">
+      <Filter>Diablo2</Filter>
     </ClInclude>
-    <ClInclude Include="Object\D2Object.h">
-      <Filter>02. D2Object</Filter>
+    <ClInclude Include="Scene\D2MainScene.h">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Object\D2Player.h">
-      <Filter>02. D2Object\01. Player</Filter>
+    <ClInclude Include="Scene\D2IntroScene.h">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Object\D2State.h">
-      <Filter>02. D2Object\00. ObjectState</Filter>
+    <ClInclude Include="Scene\D2LoadingScene.h">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Object\D2PlayerTownIdle.h">
-      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    <ClInclude Include="Scene\D2LoadingThread.h">
+      <Filter>Diablo2\02. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Object\D2PlayerRun.h">
-      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    <ClInclude Include="State\PlayerWalkState.h">
+      <Filter>Diablo2\03. State</Filter>
     </ClInclude>
-    <ClInclude Include="Object\D2PlayerSpecialOne.h">
-      <Filter>02. D2Object\00. ObjectState\01. PlayerState</Filter>
+    <ClInclude Include="State\D2AndarielDeadState.h">
+      <Filter>Diablo2\03. State</Filter>
     </ClInclude>
-    <ClInclude Include="Component\InputStackComponent.h">
-      <Filter>03. D2Component\01. ObjectComponent</Filter>
+    <ClInclude Include="State\D2AndarielDieState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2AndarielIdleState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2AndarielMeleeAttackState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2AndarielMoveState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2AndarielProjectileState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2AndarielSprayState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2EnemyDeadState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2EnemyDieState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2EnemyHitState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2EnemyIdleState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2EnemyMeleeAttackState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2EnemyMoveState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2State.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\PlayerCastingState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\PlayerHitState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\PlayerIdleState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\PlayerRunState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2StatusBarWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2FrameWidget.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2IntroWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2InventoryWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2LoadingWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2MenuBorder.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2MouseItemSelect.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2MouseNormal.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2SkillSelectWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2SkillTreeWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2MonsterStatusWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\D2ShadowMesh.h">
+      <Filter>Diablo2\05. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\D2ShadowShader.h">
+      <Filter>Diablo2\05. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2SkeletonIdleState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2SkeletonMoveState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2SkeletonAttackState.h">
+      <Filter>Diablo2\03. State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Editor\Include\Diablo2\Scene\D2EndingScene.h">
+      <Filter>Diablo2\02. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Editor\Include\Diablo2\UI\D2EndingWidget.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D2ClickableObjectWindow.h">
+      <Filter>Diablo2\04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ProjectTile.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Room.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ShadowComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Skill.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2SkillObject.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Space.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2StateComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Teleport.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2UIManager.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2UIManagerComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2UsableItem.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Blaze.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2CharacterInfoComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ChestObject.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ClickableObject.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ClickableUIComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2DataManager.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2DataManagerComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2DungeonManager.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2DungeonManagerComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Effect.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2EnemyCollider.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2EnemyMeleeAttack.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2EnemyNavAgentComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2EnemySkillComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2EquipItem.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2FrozenOrb.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Inventory.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Item.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ItemObjectComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ItemTable.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ItemTableComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2MeleeAttack.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2Meteor.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2MeteorFire.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2MeteorTarget.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2NavAgentComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ObjectPool.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ObjectPoolComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2PlayerCollider.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2PlayerSkillComponent.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2PortalObject.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\D2ProcedualMapGenerator.h">
+      <Filter>Diablo2\01. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="State\D2SkeletonHitState.h">
+      <Filter>Diablo2\03. State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,5 +597,10 @@
     <Image Include="icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\D2ShadowShader.fx">
+      <Filter>Diablo2\05. Resource\02. Shader\01. hlsl</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

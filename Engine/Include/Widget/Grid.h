@@ -6,12 +6,12 @@
 struct Cell
 {
     bool bOccupied;
-    eCellState State;
+    eButtonState State;
     Vector3 Position;
 
     Cell() :
         bOccupied(false),
-        State(eCellState::Normal)
+        State(eButtonState::Normal)
     {
     }
 };
@@ -19,7 +19,7 @@ struct Cell
 struct PrevCellState
 {
     int Index;
-    eCellState State;
+    eButtonState State;
 };
 
 class CGrid :
@@ -48,7 +48,7 @@ public:
     void SetCellCount(const int x, const int y);
     void SetCellSize(const Vector2& size);
     void SetCellSize(const int x, const int y);
-    void SetTint(eCellState state, const Vector4& color);
+    void SetTint(eButtonState state, const Vector4& color);
     void SetOccupiedTint(const Vector4& color);
     void SetSelectWidth(const int width);
     void SetSelectHeight(const int height);
@@ -78,7 +78,7 @@ public:
 
 public:
     template <typename T>
-    void SetCallBack(eCellState state, T* obj, void(T::* func)(int))
+    void SetCallBack(eButtonState state, T* obj, void(T::* func)(int))
     {
         mCallBack[(int)state] = std::bind(func, obj, std::placeholders::_1);
     }
@@ -91,7 +91,7 @@ private:
     class CStructuredBuffer* mCellInfoBuffer;
     std::vector<CellRenderInfo> mVecCellRenderInfo;
     std::vector<Cell*> mVecCell;
-    Vector4 mTint[(int)eCellState::Max];
+    Vector4 mTint[(int)eButtonState::Max];
     Vector4 mOccupiedTint;
     Cell* mMouseOnCell;
     std::vector<PrevCellState> mVecPrevMouseOn;
@@ -102,7 +102,8 @@ private:
     Vector2 mCellSize;
     int mCellSelectWidth;
     int mCellSelectHeight;
-    std::function<void(int)> mCallBack[(int)eCellState::Max];
-    bool mbIsMousePush;
+    std::function<void(int)> mCallBack[(int)eButtonState::Max];
+    bool mbIsMouseLPush;
+    bool mbIsMouseRPush;
 };
 

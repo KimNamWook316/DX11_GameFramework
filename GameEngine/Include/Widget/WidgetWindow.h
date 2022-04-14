@@ -56,6 +56,11 @@ public:
         return mZOrder;
     }
 
+    bool IsWindowCollideMouse() const
+    {
+        return mbCollideMouse;
+    }
+
 public:
     void SetZorder(const int zOrder)
     {
@@ -129,5 +134,6 @@ protected:
     Vector2 mSize;
     std::list<CSharedPtr<CWidget>> mWidgetList;
     bool mbStart;
+    bool mbCollideMouse;
 };
 

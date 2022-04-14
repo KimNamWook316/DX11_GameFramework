@@ -167,7 +167,8 @@ enum class eButtonState
 {
 	Normal,
 	Hovered,
-	Clicked,
+	LClicked,
+	RClicked,
 	Disabled,
 	Max,
 };
@@ -271,10 +272,10 @@ enum class eProcedualObjectType
 	Max
 };
 
-enum class eCellState
+enum class eSplitDir
 {
-	Normal,
-	Hovered,
-	Clicked,
-	Max
+	None,
+    Vertical,
+    Horizontal
 };
+

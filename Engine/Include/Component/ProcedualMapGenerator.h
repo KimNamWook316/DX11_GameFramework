@@ -3,13 +3,6 @@
 #include "SceneComponent.h"
 #include "TileMapComponent.h"
 
-enum class eSplitDir
-{
-	None,
-    Vertical,
-    Horizontal
-};
-
 class CProcedualMapGenerator :
     public CSceneComponent
 {

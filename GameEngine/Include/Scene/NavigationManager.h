@@ -22,6 +22,7 @@ public:
 	void AddNavResult(const NavResultData& navData);
 
 public:
+	const Vector3& GetAroundEmptyTile(const Vector3& originPos);
 	void ChangeTile(const int idx, eTileType eType);
 	int GetIndex(const Vector3& endPos);
 	bool IsReachableTile(const Vector3 pos);

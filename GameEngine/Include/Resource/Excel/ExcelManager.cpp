@@ -108,7 +108,7 @@ bool CExcelManager::LoadCSV(const char* fileName, const std::string& pathName)
 	if (FindCSV(name))
 	{
 		SAFE_DELETE(data);
-		return false;
+		return true;
 	}
 	
 	mMapExcelData.insert(std::make_pair(data->GetName(), data));
@@ -129,8 +129,9 @@ bool CExcelManager::LoadCSV(std::string& outName, const char* fileName, const st
 	std::string name = data->GetName();
 	if (FindCSV(name))
 	{
+		outName = name;
 		SAFE_DELETE(data);
-		return false;
+		return true;
 	}
 	
 	outName = name;
@@ -172,6 +173,7 @@ bool CExcelManager::LoadCSVFullPath(std::string& outName, const char* fullPath)
 	std::string name = data->GetName();
 	if (FindCSV(name))
 	{
+		outName = name;
 		SAFE_DELETE(data);
 		return true;
 	}

@@ -22,6 +22,23 @@ private:
 public:
 	CMesh* FindMesh(const std::string& name);
 
+	template <typename T>
+	bool CreateMesh(const std::string& name)
+	{
+		if (FindMesh(name))
+		{
+			return true;
+		}
+
+		if (!CResourceManager::GetInst()->CreateMesh<T>(name))
+		{
+			return false;
+		}
+
+		mMapMesh.insert(std::make_pair(name, CResourceManager::GetInst()->FindMesh(name)));
+		return true;
+	}
+
 public:
 	CShader* FindShader(const std::string& name);
 

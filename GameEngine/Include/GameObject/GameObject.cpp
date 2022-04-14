@@ -20,7 +20,6 @@ CGameObject::CGameObject(const CGameObject& obj)
 
 	if (obj.mRootSceneComponent)
 	{
-		mRootSceneComponent = nullptr;
 		mSceneComponentList.clear();
 		
 		mRootSceneComponent = obj.mRootSceneComponent->Clone();

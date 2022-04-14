@@ -27,6 +27,13 @@ CGrid::CGrid(const CGrid& widget)	:
 
 CGrid::~CGrid()
 {
+	SAFE_DELETE(mCellInfoBuffer);
+	size_t size = mVecCell.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		SAFE_DELETE(mVecCell[i]);
+	}
+	mVecCell.clear();
 }
 
 bool CGrid::Init()
@@ -66,7 +73,7 @@ void CGrid::PostUpdate(float deltaTime)
 		for (size_t i = 0; i < sizePrev; ++i)
 		{
 			int index = mVecPrevMouseOn[i].Index;
-			mVecCell[index]->State = eCellState::Normal;
+			mVecCell[index]->State = eButtonState::Normal;
 		}
 		mVecPrevMouseOn.clear();
 	}
@@ -139,7 +146,7 @@ void CGrid::PostUpdate(float deltaTime)
 			for (size_t i = 0; i < sizePrev; ++i)
 			{
 				int index = mVecPrevMouseOn[i].Index;
-				mVecCell[index]->State = eCellState::Normal;
+				mVecCell[index]->State = eButtonState::Normal;
 			}
 			mVecPrevMouseOn.clear();
 			return;
@@ -162,9 +169,10 @@ void CGrid::PostUpdate(float deltaTime)
 		// Hover Ã³¸®
 		if (bIncludeOuccpiedCell)
 		{
-			if (mMouseOnCell->State != eCellState::Clicked)
+			if (mMouseOnCell->State == eButtonState::Normal ||
+				mMouseOnCell->State == eButtonState::Hovered)
 			{
-				mMouseOnCell->State = eCellState::Hovered;
+				mMouseOnCell->State = eButtonState::Hovered;
 			}
 		}
 		else
@@ -179,61 +187,93 @@ void CGrid::PostUpdate(float deltaTime)
 					{
 						continue;
 					}
-					mVecCell[curIndex]->State = eCellState::Hovered;
+					mVecCell[curIndex]->State = eButtonState::Hovered;
 				}
 			}
 
-			if (mMouseOnCell->State != eCellState::Clicked)
+			if (mMouseOnCell->State == eButtonState::Normal ||
+				mMouseOnCell->State == eButtonState::Hovered)
 			{
-				mMouseOnCell->State = eCellState::Hovered;
+				mMouseOnCell->State = eButtonState::Hovered;
 			}
 		}
 
 		if (!CInput::GetInst()->GetMouseLButtonClicked())
 		{
-			mbIsMousePush = false;
+			mbIsMouseLPush = false;
+		}
+
+		if (CInput::GetInst()->GetMouseRButtonClicked())
+		{
+			mbIsMouseRPush = false;
 		}
 		
 		if (bIncludeOuccpiedCell)
 		{
-			if (!mbIsMousePush && CInput::GetInst()->GetMouseLButtonClicked())
+			if (!mbIsMouseLPush && CInput::GetInst()->GetMouseLButtonClicked())
 			{
-				mbIsMousePush = true;
-				mMouseOnCell->State = eCellState::Clicked;
+				mbIsMouseLPush = true;
+				mMouseOnCell->State = eButtonState::LClicked;
 			}
-			else if (mMouseOnCell->State == eCellState::Clicked)
+			else if (!mbIsMouseRPush && CInput::GetInst()->GetMouseRButtonClicked())
 			{
-				if (mCallBack[(int)eCellState::Clicked])
+				mbIsMouseRPush = true;
+				mMouseOnCell->State = eButtonState::RClicked;
+			}
+			else if (mMouseOnCell->State == eButtonState::LClicked)
+			{
+				if (mCallBack[(int)eButtonState::LClicked])
 				{
-					mCallBack[(int)eCellState::Clicked](idx);
+					mCallBack[(int)eButtonState::LClicked](idx);
 				}
-				mMouseOnCell->State = eCellState::Hovered;
+				mMouseOnCell->State = eButtonState::Hovered;
+			}
+			else if (mMouseOnCell->State == eButtonState::RClicked)
+			{
+				if (mCallBack[(int)eButtonState::RClicked])
+				{
+					mCallBack[(int)eButtonState::RClicked](idx);
+				}
+				mMouseOnCell->State = eButtonState::Hovered;
 			}
 		}
 		else
 		{
-			if (mMouseOnCell->State == eCellState::Hovered)
+			if (mMouseOnCell->State == eButtonState::Hovered)
 			{
-				if (!mbIsMousePush && CInput::GetInst()->GetMouseLButtonClicked())
+				if (!mbIsMouseLPush && CInput::GetInst()->GetMouseLButtonClicked())
 				{
-					mbIsMousePush = true;
-					mMouseOnCell->State = eCellState::Clicked;
+					mbIsMouseLPush = true;
+					mMouseOnCell->State = eButtonState::LClicked;
+				}
+				else if (!mbIsMouseRPush && CInput::GetInst()->GetMouseRButtonClicked())
+				{
+					mbIsMouseRPush = true;
+					mMouseOnCell->State = eButtonState::RClicked;
 				}
 				else
 				{
-					if (mCallBack[(int)eCellState::Hovered])
+					if (mCallBack[(int)eButtonState::Hovered])
 					{
-						mCallBack[(int)eCellState::Hovered](idx);
+						mCallBack[(int)eButtonState::Hovered](idx);
 					}
 				}
 			}
-			else if (mMouseOnCell->State == eCellState::Clicked)
+			else if (mMouseOnCell->State == eButtonState::LClicked)
 			{
-				if (mCallBack[(int)eCellState::Clicked])
+				if (mCallBack[(int)eButtonState::LClicked])
 				{
-					mCallBack[(int)eCellState::Clicked](idx);
+					mCallBack[(int)eButtonState::LClicked](idx);
 				}
-				mMouseOnCell->State = eCellState::Hovered;
+				mMouseOnCell->State = eButtonState::Hovered;
+			}
+			else if (mMouseOnCell->State == eButtonState::RClicked)
+			{
+				if (mCallBack[(int)eButtonState::RClicked])
+				{
+					mCallBack[(int)eButtonState::RClicked](idx);
+				}
+				mMouseOnCell->State = eButtonState::Hovered;
 			}
 		}
 
@@ -254,13 +294,13 @@ void CGrid::PostUpdate(float deltaTime)
 
 				if (curIdxX < minX || curIdxX > maxX || curIdxY < minY || curIdxY > maxY)
 				{
-					mVecCell[index]->State = eCellState::Normal;
+					mVecCell[index]->State = eButtonState::Normal;
 					continue;
 				}
 
-				if (bIncludeOuccpiedCell && mVecCell[index]->State == eCellState::Hovered)
+				if (bIncludeOuccpiedCell && mVecCell[index]->State == eButtonState::Hovered)
 				{
-					mVecCell[index]->State = eCellState::Normal;
+					mVecCell[index]->State = eButtonState::Normal;
 				}
 			}
 			mVecPrevMouseOn.clear();
@@ -460,7 +500,7 @@ void CGrid::SetCellSize(const int x, const int y)
 	makeCell();
 }
 
-void CGrid::SetTint(eCellState state, const Vector4& color)
+void CGrid::SetTint(eButtonState state, const Vector4& color)
 {
 	mTint[(int)state] = color;
 }
@@ -509,7 +549,7 @@ void CGrid::makeCell()
 		for (int x = 0; x < mCellCountX; ++x)
 		{
 			cell = new Cell;
-			cell->State = eCellState::Normal;
+			cell->State = eButtonState::Normal;
 			cell->Position = Vector3(x * mCellSize.x,
 				mSize.y - ((y + 1) * mCellSize.y), 0.f);
 

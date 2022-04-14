@@ -17,6 +17,8 @@ CImage::CImage(const CImage& button)	:
 	CWidget(button)
 {
 	mClickCallBack = nullptr;
+	mImageData = button.mImageData->Clone();
+	mImageData->SetOwnerWidget(this);
 }
 
 CImage::~CImage()
@@ -122,4 +124,19 @@ void CImage::AddFrameData(const Vector2& start, const Vector2& size)
 void CImage::AddFrameDataFrameTexture(const int count)
 {
 	mImageData->AddFrameDataFrameTexture(count);
+}
+
+void CImage::SetCurrentFrame(const int frame)
+{
+	mImageData->SetCurrentFrame(frame);
+}
+
+void CImage::SetAnimationPlayScale(const float scale)
+{
+	mImageData->SetAnimationPlayScale(scale);
+}
+
+int CImage::GetAnimationFrameCount()
+{
+	return (int)mImageData->GetAnimationFrameCount();
 }

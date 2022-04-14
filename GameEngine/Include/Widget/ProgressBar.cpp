@@ -77,7 +77,10 @@ void CProgressBar::Update(float deltaTime)
 	if (mbMouseHovered && !mbStartMouseHover)
 	{
 		mbStartMouseHover = true;
-		mMouseHoverCallBack();
+		if (mMouseHoverCallBack)
+		{
+			mMouseHoverCallBack();
+		}
 	}
 	else if (!mbMouseHovered && mbStartMouseHover)
 	{

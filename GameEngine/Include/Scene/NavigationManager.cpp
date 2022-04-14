@@ -75,6 +75,45 @@ void CNavigationManager::AddNavResult(const NavResultData& navData)
 	mResultQueue.Push(navData);
 }
 
+const Vector3& CNavigationManager::GetAroundEmptyTile(const Vector3& originPos)
+{
+	if (!mNavData)
+	{
+		return Vector3::Zero;
+	}
+
+	int originIdx = mNavData->GetTileIndex(originPos);
+	int countX = mNavData->GetTileCountX();
+
+	int originIdxX = originIdx % countX;
+	int originIdxY = originIdx / countX;
+
+	CTile* tile = nullptr;
+	int emptyIdx = -1;
+	int idx = -1;
+	for (int y = -1; y <= 1; ++y)
+	{
+		for (int x = -1; x <= 1; ++x)
+		{
+			if (x == 0 && y == 0)
+			{
+				continue;
+			}
+
+			idx = (originIdxY + y) * countX + (originIdxX + x);
+
+			tile = mNavData->GetTile(idx);
+
+			if (tile && tile->GetTileType() == eTileType::Normal)
+			{
+				emptyIdx = idx;
+				return tile->GetCenter();
+			}
+		}
+	}
+	return Vector3::Zero;
+}
+
 void CNavigationManager::ChangeTile(const int idx, eTileType eType)
 {
 	if (idx < 0 || idx > mNavData->GetPathFindTileCount() - 1)

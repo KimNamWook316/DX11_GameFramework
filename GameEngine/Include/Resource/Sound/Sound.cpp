@@ -54,6 +54,7 @@ void CSound::Play()
 {
 	// mChannel에 현재 채널을 받아오며 재생시킨다.
 	mSystem->playSound(mSound, mGroup, false, &mChannel);
+	mbPlay = true;
 }
 
 void CSound::Stop()
@@ -101,4 +102,17 @@ void CSound::Resume()
 		}
 		mbPlay = true;
 	}
+}
+
+bool CSound::IsPlaying() const
+{
+	if (mChannel)
+	{
+		bool bPlaying = false;
+		mChannel->isPlaying(&bPlaying);
+
+		return bPlaying;
+	}
+
+	return false;
 }

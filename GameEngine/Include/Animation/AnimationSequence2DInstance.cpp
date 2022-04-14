@@ -34,6 +34,7 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSeque
 		data->mPlayScale = iter->second->mPlayScale;
 		data->mPlayTime = iter->second->mPlayTime;
 		data->mbIsReverse = iter->second->mbIsReverse;
+		data->mSequenceName = iter->second->mSequenceName;
 
 		if (anim.mCurrentAnimation->mName == iter->second->mName)
 		{

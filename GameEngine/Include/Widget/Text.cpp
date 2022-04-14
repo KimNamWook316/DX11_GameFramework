@@ -44,7 +44,21 @@ CText::CText()	:
 CText::CText(const CText& widget)	:
 	CWidget(widget)
 {
-	*this = widget;
+	mFont = widget.mFont;
+	mColorBrush = widget.mColorBrush;
+	m2DTarget = widget.m2DTarget;
+	mFontKey = widget.mFontKey;
+	mFontSize = widget.mFontSize;
+	mbAlphaEnable = widget.mbAlphaEnable;
+	mOpacity = widget.mOpacity;
+	mColor = widget.mColor;
+	mbShadowEnable = widget.mbShadowEnable;
+	mShadowColorBrush = widget.mShadowColorBrush;
+	mbShadowAlphaEnable = widget.mbShadowAlphaEnable;
+	mShadowColor = widget.mShadowColor;
+	mShadowOffset = widget.mShadowOffset;
+	meAlignH = widget.meAlignH;
+	meAlignV = widget.meAlignV;
 
 	mText = new TCHAR[mTextCapacity];
 	memset(mText, 0, sizeof(TCHAR) * mTextCapacity);

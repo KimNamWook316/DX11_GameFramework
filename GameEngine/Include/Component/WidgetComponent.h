@@ -59,6 +59,8 @@ public:
         mWidgetWindow->mOwnerComponent = this;
     }
 
+    void EnableOpacity(bool bEnable);
+
 public:
     eWidgetComponentSpace GetWidgetSpace() const
     {
@@ -88,6 +90,7 @@ public:
     }
 
 protected:
+    CSharedPtr<class CRenderState> mBlendState;  // 게임오브젝트에 종속되어 렌더되므로, 투명도가 적용될 경우 따로 필요하다.
     CSharedPtr<CWidgetWindow> mWidgetWindow;
     eWidgetComponentSpace meSpace;
 };

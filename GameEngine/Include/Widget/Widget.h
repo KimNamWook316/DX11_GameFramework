@@ -78,6 +78,11 @@ public:
         return mAngle;
     }
 
+    bool IsMouseHovered() const
+    {
+        return mbMouseHovered;
+    }
+
 public:
     void SetZorder(const int zOrder)
     {
@@ -112,6 +117,11 @@ public:
     void SetAngle(const float angle)
     {
         mAngle = angle;
+    }
+    
+    void SetOpacity(const float opacity)
+    {
+        mOpacity = opacity;
     }
 
     void SetShader(const std::string& name);

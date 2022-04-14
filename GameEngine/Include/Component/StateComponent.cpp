@@ -7,7 +7,9 @@
 
 CStateComponent::CStateComponent()	:
 	mInitialStateType(-1),
-	mbStart(false)
+	mbStart(false),
+	mNavAgent(nullptr),
+	mRoot(nullptr)
 {
 	SetTypeID<CStateComponent>();
 }
@@ -16,7 +18,11 @@ CStateComponent::CStateComponent(const CStateComponent& com)	:
 	CObjectComponent(com)
 {
 	mInitialStateType = com.mInitialStateType;
+	mbStart = false;
+	mNavAgent = nullptr;
+	mRoot = nullptr;
 	mStateStack.empty();
+	CSceneManager::GetInst()->CallCreateStateFunction(this, mInitialStateType);
 }
 
 CStateComponent::~CStateComponent()
@@ -45,8 +51,11 @@ void CStateComponent::Update(float deltaTime)
 
 	if (!mbStart)
 	{
-		mStateStack.top()->EnterStateFunction();
-		mbStart = true;
+		if (!mStateStack.empty())
+		{
+			mStateStack.top()->EnterStateFunction();
+			mbStart = true;
+		}
 	}
 
 	if (!mStateStack.empty())

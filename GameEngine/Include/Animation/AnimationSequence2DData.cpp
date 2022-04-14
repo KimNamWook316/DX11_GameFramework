@@ -89,6 +89,11 @@ void CAnimationSequence2DData::Load(FILE* fp)
 	mSequenceName = sequenceName;
 }
 
+CTexture* CAnimationSequence2DData::GetTexture() const
+{
+	return mSequence->GetTexture();
+}
+
 void CAnimationSequence2DData::DeleteNotify(const std::string& name)
 {
 	auto iter = mVecNotify.begin();

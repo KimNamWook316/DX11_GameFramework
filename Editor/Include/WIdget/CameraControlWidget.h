@@ -25,6 +25,7 @@ public:
 	void OnChangeViewPortRatioX(int val);
 	void OnChangeViewPortRatioY(int val);
 	void OnClickViewPortCenter();
+	void OnClickSetCurrentCamera();
 
 	void OnChangeState();
 
@@ -37,5 +38,6 @@ private:
 	class CIMGUISliderInt* mViewPortRatioY;
 	class CIMGUIButton* mViewPortCenter;
 	class CIMGUIButton* mResetButton;
+	class CIMGUIButton* mSetCurrentCameraButton;
 };
 

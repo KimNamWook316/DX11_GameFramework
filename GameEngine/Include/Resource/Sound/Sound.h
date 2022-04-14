@@ -20,10 +20,7 @@ public:
     void Resume();
 
 public:
-    bool IsPlaying() const
-    {
-        return mbPlay;
-    }
+    bool IsPlaying() const;
 
     bool IsLoop() const
     {

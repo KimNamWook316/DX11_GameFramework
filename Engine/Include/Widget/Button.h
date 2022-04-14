@@ -48,15 +48,27 @@ public:
 
 public:
     template <typename T>
-    void SetClickCallBack(T* obj, void(T::* func)())
+    void SetLClickCallBack(T* obj, void(T::* func)())
     {
-        mClickCallBack = std::bind(func, obj);
+        mLClickCallBack = std::bind(func, obj);
     }
 
     template <typename T>
-    void SetClickCallBack(void(T::* func)())
+    void SetLClickCallBack(void(T::* func)())
     {
-        mClickCallBack = std::bind(func);
+        mLClickCallBack = std::bind(func);
+    }
+
+    template <typename T>
+    void SetRClickCallBack(T* obj, void(T::* func)())
+    {
+        mLClickCallBack = std::bind(func, obj);
+    }
+
+    template <typename T>
+    void SetRClickCallBack(void(T::* func)())
+    {
+        mLClickCallBack = std::bind(func);
     }
 
 public:
@@ -76,7 +88,8 @@ protected:
     eButtonState meCurState;
     CWidgetImageData* mImageData[(int)eButtonState::Max];
 
-    std::function<void()> mClickCallBack;
+    std::function<void()> mLClickCallBack;
+    std::function<void()> mRClickCallBack;
     std::function<void()> mHoverCallBack;
 
     CSharedPtr<class CSound> mSound[(int)eButtonSoundState::Max];

@@ -22,11 +22,17 @@ class CResourceManager
 {
 public:
 	bool Init();
+	void Update();
 
 public: // ===================== Mesh =====================
 	class CMesh* FindMesh(const std::string& name);
 	void ReleaseMesh(const std::string& name);
 
+	template <typename T>
+	bool CreateMesh(const std::string& name)
+	{
+		return mMeshManager->CreateMesh<T>(name);
+	}
 
 public: // ===================== Shader =====================
 	class CShader* FindShader(const std::string& name);

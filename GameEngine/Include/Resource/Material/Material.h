@@ -94,6 +94,11 @@ public:
 		return mVecTextureInfo[textureIdx].Texture;
 	}
 
+	std::vector<MaterialTextureInfo> CloneTextureInfo()
+	{
+		return mVecTextureInfo;
+	}
+
 	unsigned int GetTextureWidth(const int textureIdx = 0) const
 	{
 		return mVecTextureInfo[textureIdx].Texture->GetWidth();

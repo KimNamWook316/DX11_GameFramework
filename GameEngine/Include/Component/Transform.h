@@ -89,6 +89,16 @@ public: // setter
 		mMeshSize = Vector3(x, y, z);
 	}
 
+	void FixZ(bool bFix)
+	{
+		mbFixZ = bFix;
+	}
+	
+	void SetFixZPos(const float pos)
+	{
+		mFixZPos = pos;
+	}
+
 	void SetRelativeScale(const Vector3& scale);
 	void SetRelativeScale(const float& x, const float& y, const float& z);
 	void SetRelativeRot(const Vector3& rot);
@@ -294,5 +304,10 @@ private: // Matrix
 	Matrix mMatRot;
 	Matrix mMatPos;
 	Matrix mMatWorld;
+
+	// 2D 전용, Z포지션 Fix해서 출력하는 경우
+private:
+	bool mbFixZ;
+	float mFixZPos;
 };
 

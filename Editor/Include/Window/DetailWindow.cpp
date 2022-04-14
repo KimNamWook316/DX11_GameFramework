@@ -25,6 +25,8 @@
 #include "../Diablo2/Component/D2ProjectTile.h"
 #include "../Diablo2/Component/D2MeleeAttack.h"
 #include "../Diablo2/Component/D2PlayerSkillComponent.h"
+#include "../Diablo2/Component/D2ProcedualMapGenerator.h"
+#include "../Diablo2/Component/D2ShadowComponent.h"
 #include "../Widget/ComponentControlWidget.h"
 #include "../Widget/SpriteControlWidget.h"
 #include "../Widget/ColliderControlWidget.h"
@@ -34,6 +36,8 @@
 #include "../Widget/CameraControlWidget.h"
 #include "../Widget/D2CharInfoWidget.h"
 #include "../Widget/D2ProjectileWidget.h"
+#include "../Widget/D2ProcedualMapGeneratorControlWidget.h"
+#include "../Widget/D2ShadowComponentWidget.h"
 
 CDetailWindow::CDetailWindow()
 {
@@ -133,6 +137,16 @@ CComponentControlWidget* CDetailWindow::CreateControlWidget(CComponent* comp)
     else if (comp->GetTypeID() == typeid(CD2Projectile).hash_code())
     {
         CD2ProjectileWidget* widget = new CD2ProjectileWidget;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CD2ProcedualMapGenerator).hash_code())
+    {
+        CD2ProcedualMapGeneratorControlWidget* widget = new CD2ProcedualMapGeneratorControlWidget;
+        return widget;
+    }
+    else if (comp->GetTypeID() == typeid(CD2ShadowComponent).hash_code())
+    {
+        CD2ShadowComponentWidget* widget = new CD2ShadowComponentWidget;
         return widget;
     }
     else

@@ -266,6 +266,9 @@ std::string CUtil::TileTypeToString(eTileType eTileType)
 	case eTileType::EntryNWRight:
 		out = "EntryNWRight";
 		break;
+	case eTileType::Reserved:
+		out = "Reserved";
+		break;
 	default:
 		assert(false);
 		break;

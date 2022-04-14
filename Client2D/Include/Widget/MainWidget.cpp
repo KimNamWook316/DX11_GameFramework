@@ -34,13 +34,13 @@ bool CMainWidget::Init()
 	mButton->SetSize(200.f, 50.f);
 	mButton->SetTexture(eButtonState::Normal, "StartButton", TEXT("Start.png"));
 	mButton->SetTexture(eButtonState::Hovered, "StartButton", TEXT("Start.png"));
-	mButton->SetTexture(eButtonState::Clicked, "StartButton", TEXT("Start.png"));
+	mButton->SetTexture(eButtonState::LClicked, "StartButton", TEXT("Start.png"));
 
 	mButton->SetTextureTint(eButtonState::Normal, 220, 220, 220, 255);
 	mButton->SetTextureTint(eButtonState::Hovered, 255, 255, 255, 255);
-	mButton->SetTextureTint(eButtonState::Clicked, 128, 128, 128, 128);
+	mButton->SetTextureTint(eButtonState::LClicked, 128, 128, 128, 128);
 
-	mButton->SetClickCallBack(this, &CMainWidget::onStartButtonClicked);
+	mButton->SetLClickCallBack(this, &CMainWidget::onStartButtonClicked);
 	
 	mButton->SetSound(eButtonSoundState::Hovered, "UI", "ButtonMouseOn", "TeemoSmile.mp3");
 	mButton->SetSound(eButtonSoundState::Clicked, "UI", "ButtonClick", "TeemoStartClicck.mp3");

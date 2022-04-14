@@ -13,7 +13,9 @@
 #include "Component/DissolveComponent.h"
 #include "Component/NavAgentComponent.h"
 #include "Component/StateComponent.h"
+#include "Diablo2/UI/D2FrameWidget.h"
 #include "Diablo2/UI/D2MouseNormal.h"
+#include "Diablo2/UI/D2IntroWindow.h"
 #include "Diablo2/UI/D2MouseItemSelect.h"
 #include "Diablo2/Component/D2CharacterInfoComponent.h"
 #include "Diablo2/Component/D2PlayerCollider.h"
@@ -38,9 +40,17 @@
 #include "Diablo2/Component/D2ItemTableComponent.h"
 #include "Diablo2/Component/D2UIManagerComponent.h"
 #include "Diablo2/Component/D2Inventory.h"
+#include "Diablo2/Component/D2ItemObjectComponent.h"
+#include "Diablo2/Component/D2ProcedualMapGenerator.h"
+#include "Diablo2/Component/D2DungeonManagerComponent.h"
+#include "Diablo2/Component/D2ShadowComponent.h"
+#include "Diablo2/Component/D2PortalObject.h"
+#include "Diablo2/Component/D2ClickableUIComponent.h"
+#include "Diablo2/Component/D2ChestObject.h"
 #include "Diablo2/State/PlayerIdleState.h"
 #include "Diablo2/State/D2EnemyIdleState.h"
 #include "Diablo2/State/D2AndarielIdleState.h"
+#include "Diablo2/State/D2SkeletonIdleState.h"
 #include "Engine.h"
 #include "Resource.h"
 #include "Scene/SceneManager.h"
@@ -59,6 +69,8 @@
 #include "Object/CameraObject.h"
 #include "Component/CameraComponent.h"
 #include "Collision/CollisionManager.h"
+#include "Diablo2/Resource/Shader/D2ShadowShader.h"
+#include "Diablo2/Resource/Mesh/D2ShadowMesh.h"
 
 DEFINITION_SINGLE(CEditorManager)
 
@@ -86,6 +98,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 
 	CEngine::GetInst()->SetPlay(true);
 	CEngine::GetInst()->SetDebugMode(true);
+
+	// Custom Mesh & Shader
+	CResourceManager::GetInst()->CreateShader<CD2ShadowShader>("ShadowShader");
+	CResourceManager::GetInst()->CreateMesh<CD2ShadowMesh>("ShadowMesh");
 
 	if (!CCollisionManager::GetInst()->LoadProfile("CollsionProfileInfo.csv"))
 	{
@@ -125,6 +141,9 @@ bool CEditorManager::Init(HINSTANCE hInst)
 
 	// UIKey
 	CInput::GetInst()->CreateKey("ToggleInventory", 'I');
+	CInput::GetInst()->CreateKey("ToggleSkillTree", 'K');
+	CInput::GetInst()->CreateKey("CloseMenu", VK_ESCAPE);
+	CInput::GetInst()->CreateKey("ClickableUI", VK_TAB);
 
 	// Skill Debug Key
 	CInput::GetInst()->CreateKey("SkillLevelUp", VK_NUMPAD0);
@@ -176,14 +195,19 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	std::string outName;
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "DataManager.gobj");
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "ObjectPool.gobj");
-	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "UIManager.gobj");
 	CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "ItemTable.gobj");
- 	CGameObject* randomMap = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "RandomMapGenerator.gobj");
-	randomMap->FindSceneComponentFromType<CProcedualMapGenerator>()->GenerateMap();
-	CGameObject* player = CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "Player.gobj");
+	//CSceneManager::GetInst()->GetScene()->LoadGameObject(outName, "DungeonManager.gobj");
+ 
+	// CSceneManager::GetInst()->GetScene()->GetViewport()->CreateWidgetWindow<CD2FrameWidget>("frame");
+ 
+	// CEngine::GetInst()->CreateMouse<CD2MouseNormal>(eMouseState::Normal, "MouseNormal");
+	// CEngine::GetInst()->CreateMouse<CD2MouseItemSelect>(eMouseState::State1, "MouseItemSelect");
 
-	CEngine::GetInst()->CreateMouse<CD2MouseNormal>(eMouseState::Normal, "MouseNormal");
-	CEngine::GetInst()->CreateMouse<CD2MouseItemSelect>(eMouseState::State1, "MouseItemSelect");
+	CResourceManager::GetInst()->CreateFontFile("Dia2Font", TEXT("Exocet2.ttf"));
+	const TCHAR* fontFace = CResourceManager::GetInst()->GetFontFaceName("Dia2Font");
+	CResourceManager::GetInst()->LoadFont("Dia2Font", fontFace, 300, 20.f, TEXT("eng"));
+
+	//CSceneManager::GetInst()->GetScene()->GetViewport()->CreateWidgetWindow<CD2IntroWindow>("Intro");
 
 	return true;
 }
@@ -445,6 +469,41 @@ CComponent* CEditorManager::OnCreateComponent(CGameObject* obj, size_t type)
 		CComponent* component = obj->LoadComponent<CD2Inventory>();
 		return component;
 	}
+	else if(type == typeid(CD2ItemObjectComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2ItemObjectComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2ProcedualMapGenerator).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2ProcedualMapGenerator>();
+		return component;
+	}
+	else if(type == typeid(CD2DungeonManagerComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2DungeonManagerComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2ShadowComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2ShadowComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2PortalObject).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2PortalObject>();
+		return component;
+	}
+	else if(type == typeid(CD2ClickableUIComponent).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2ClickableUIComponent>();
+		return component;
+	}
+	else if(type == typeid(CD2ChestObject).hash_code())
+	{
+		CComponent* component = obj->LoadComponent<CD2ChestObject>();
+		return component;
+	}
 	else
 	{
 		assert(false);
@@ -473,6 +532,10 @@ void CEditorManager::OnCreateState(CStateComponent* comp, size_t type)
 	else if (type == typeid(CD2AndarielIdleState).hash_code())
 	{
 		comp->SetInitialState<CD2AndarielIdleState>();
+	}
+	else if (type == typeid(CD2SkeletonIdleState).hash_code())
+	{
+		comp->SetInitialState<CD2SkeletonIdleState>();
 	}
 }
 

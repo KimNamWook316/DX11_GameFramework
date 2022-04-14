@@ -186,7 +186,11 @@ void CColliderComponent::CheckPrevCollisionSection()
 		{
 			// CallBack
 			CallCollisionCallBack(eCollisionState::Exit);
-			(*iter)->CallCollisionCallBack(eCollisionState::Exit);
+
+			if ((*iter)->IsEnable())
+			{
+				(*iter)->CallCollisionCallBack(eCollisionState::Exit);
+			}
 
 			// 충돌목록에서 삭제
 			(*iter)->DeletePrevCollision(this);
@@ -264,12 +268,20 @@ void CColliderComponent::AddCurrentFrameCollision(CColliderComponent* collider)
 
 void CColliderComponent::CallCollisionCallBack(eCollisionState state)
 {
-	auto iter = mCollisionCallBack[(int)state].begin();
-	auto iterEnd = mCollisionCallBack[(int)state].end();
-
-	for (; iter != iterEnd; ++iter)
+	if (!mResult.Dest->IsEnable())
 	{
-		(*iter).CallBack(mResult);
+		return;
+	}
+
+	if (mEnable)
+	{
+		auto iter = mCollisionCallBack[(int)state].begin();
+		auto iterEnd = mCollisionCallBack[(int)state].end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			(*iter).CallBack(mResult);
+		}
 	}
 }
 

@@ -27,6 +27,7 @@ CWidgetImageData::CWidgetImageData(const CWidgetImageData& data)
 {
 	*this = data;
 	mOwnerWidget = nullptr;
+	mTint = data.mTint;
 }
 
 CWidgetImageData::~CWidgetImageData()
@@ -35,14 +36,7 @@ CWidgetImageData::~CWidgetImageData()
 
 bool CWidgetImageData::Init()
 {
-	if (mOwnerWidget->GetOwner()->GetViewport())
-	{
-		mAnimationCBuffer = mOwnerWidget->GetOwner()->GetViewport()->GetScene()->GetResource()->GetAnimation2DCBuffer();
-	}
-	else
-	{
-		mAnimationCBuffer = CResourceManager::GetInst()->GetAnimation2DCBuffer();
-	}
+	mAnimationCBuffer = CResourceManager::GetInst()->GetAnimation2DCBuffer();
 	return true;
 }
 
@@ -163,6 +157,11 @@ void CWidgetImageData::SetShaderData()
 		CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(false);
 		CRenderManager::GetInst()->GetStandard2DCBuffer()->UpdateCBuffer();
 	}
+}
+
+CWidgetImageData* CWidgetImageData::Clone()
+{
+	return new CWidgetImageData(*this);
 }
 
 void CWidgetImageData::SetTexture(CTexture* texture)
@@ -371,4 +370,20 @@ void CWidgetImageData::AddFrameDataFrameTexture(const int count)
 	}
 	mFrameTime = mPlayTime / mVecFrameData.size();
 	SetUseAnimation(true);
+}
+
+void CWidgetImageData::SetCurrentFrame(const int frame)
+{
+	if (!mbUseAnimation)
+	{
+		return;
+	}
+
+	if (frame >= mVecFrameData.size())
+	{
+		return;
+	}
+
+	mFrame = frame;
+	mTime = 0.f;
 }
